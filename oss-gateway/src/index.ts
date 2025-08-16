@@ -7,7 +7,7 @@ const handler = {
   async fetch(request, env, ctx): Promise<Response> {
     const gatewayEnv: GatewayEnv = {
       githubSha: env.GITHUB_SHA,
-      keysDb: new ConfigDB(),
+      keysDb: new ConfigDB(env),
       limitDb: new LimitDbD1(env.limitsDB),
       kv: env.KV,
     }

@@ -7,6 +7,12 @@ dependencies = ["pydantic>=2.11.7", "ruamel-yaml>=0.18.14"]
 
 [dependency-groups]
 dev = ["basedpyright>=1.31.2", "ruff>=0.12.8"]
+examples = [
+    "devtools>=0.12.2",
+    "logfire[httpx]>=4.3.3",
+    "openai>=1.99.9",
+    "pydantic-ai>=0.7.2",
+]
 
 [tool.ruff]
 line-length = 120

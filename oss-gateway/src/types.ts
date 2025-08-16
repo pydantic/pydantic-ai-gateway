@@ -1,8 +1,35 @@
-import { Team, ProviderProxy, ApiKey } from '@pydantic/ai-gateway'
+import { ProviderProxy } from '@pydantic/ai-gateway'
 
 export interface Config {
   org: string
-  teams: Team[]
-  providers: ProviderProxy[]
-  apiKeys: ApiKey[]
+  teams: Record<string, Team>
+  providers: Record<string, ProviderProxy>
+  apiKeys: Record<string, ApiKey>
+}
+
+export interface Team {
+  name: string
+  users: Record<string, User>
+  spendingLimitDaily?: number
+  spendingLimitWeekly?: number
+  spendingLimitMonthly?: number
+}
+
+export interface User {
+  name: string
+  spendingLimitDaily?: number
+  spendingLimitWeekly?: number
+  spendingLimitMonthly?: number
+}
+
+export interface ApiKey {
+  team: string
+  user?: string
+  apiKey: string
+  expires?: number
+  spendingLimitDaily?: number
+  spendingLimitWeekly?: number
+  spendingLimitMonthly?: number
+  spendingLimitTotal?: number
+  providers: string[]
 }

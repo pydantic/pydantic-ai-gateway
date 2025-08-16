@@ -175,5 +175,4 @@ dist
 
 config.yaml
 config.schema.json
-services/gateway/src/config.ts
-/examples/
+oss-gateway/src/config.ts

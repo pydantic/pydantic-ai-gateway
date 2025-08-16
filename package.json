@@ -14,6 +14,7 @@
     "test": "npm run test --workspace=oss-gateway",
     "deploy": "npm run deploy --workspace=oss-gateway",
     "dev": "npm run dev --workspace=oss-gateway",
+    "limits-local-db": "npm run limits-local-db --workspace=oss-gateway",
     "typegen": "npm run typegen --workspace=oss-gateway"
   },
   "prettier": {

@@ -66,13 +66,6 @@ test: test-ts ## Run all tests
 config: ## Configure the OSS gateway
 	uv run config.py
 
-.PHONY: local-clean
-local-clean:  ## Clean up local database
-	rm -rf .wrangler
-
-.PHONY: local-reset
-local-reset: local-clean local-db  ## Reset local database
-
 .PHONY: all
 all: format typecheck test ## run format, typecheck and test
 

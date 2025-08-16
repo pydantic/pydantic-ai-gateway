@@ -7,7 +7,6 @@ export interface ApiKeyInfo {
   key: string
   // TODO this should be status: 'active' | 'expired' | 'limit-exceeded' | 'disabled'
   active: boolean
-  expires: number
   // limits per apiKey - note the extra field since keys can have a total limit
   keySpendingLimitDaily: number | null
   keySpendingLimitWeekly: number | null
@@ -24,14 +23,6 @@ export interface ApiKeyInfo {
   providers: { [name: string]: ProviderProxy }
 }
 
-export interface Team {
-  name: string
-  users: User[]
-  spendingLimitDaily?: number
-  spendingLimitWeekly?: number
-  spendingLimitMonthly?: number
-}
-
 export type ProxySchema = 'openai' | 'anthropic'
 
 export interface ProviderProxy {
@@ -39,23 +30,4 @@ export interface ProviderProxy {
   baseURL: string
   proxySchema: ProxySchema
   credentials: string
-}
-
-export interface User {
-  name: string
-  spendingLimitDaily?: number
-  spendingLimitWeekly?: number
-  spendingLimitMonthly?: number
-}
-
-export interface ApiKey {
-  team: string
-  user?: string
-  apiKey: string
-  expires?: Date
-  spendingLimitDaily?: number
-  spendingLimitWeekly?: number
-  spendingLimitMonthly?: number
-  spendingLimitTotal?: number
-  providers: string[]
 }

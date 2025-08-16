@@ -7,8 +7,8 @@ logfire.instrument_httpx(capture_all=True)
 
 client = OpenAI(
     api_key='VOE4JMpVGr71RgvEEidPCXd4ov42L24ODw9q5RI7uYc',
-    base_url='http://localhost:8787/gateway/openai',
-    # base_url='https://pydantic-ai-gateway.pydantic.workers.dev/gateway/openai',
+    base_url='http://localhost:8787/openai',
+    # base_url='https://pydantic-ai-gateway.pydantic.workers.dev/openai',
 )
 
 response = client.responses.create(

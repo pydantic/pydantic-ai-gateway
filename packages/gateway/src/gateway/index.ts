@@ -5,29 +5,28 @@ import type { GatewayEnv } from '..'
 import { apiKeyAuth, disableApiKeyAuth } from './auth'
 import { getProvider } from './providers'
 
-export async function gateway(request: Request, ctx: ExecutionContext, env: GatewayEnv): Promise<Response> {
-  const url = new URL(request.url)
+export async function gateway(request: Request, ctx: ExecutionContext, url: URL, env: GatewayEnv): Promise<Response> {
   const { pathname } = url
   const providerMatch = pathname.match(/^\/([^\/]+)\/(.*)$/)
   if (!providerMatch) {
     return textResponse(404, 'Path not found')
   }
-  const [, providerSlug, rest] = providerMatch as [string, string, string]
+  const [, provider, rest] = providerMatch as [string, string, string]
 
   const apiKey = await apiKeyAuth(request, env)
 
-  const provider = apiKey.providers[providerSlug]
-  if (!provider) {
-    return textResponse(404, `No provider found qroq '${providerSlug}'`)
+  const providerProxy = apiKey.providers[provider]
+  if (!providerProxy) {
+    return textResponse(404, `No provider found named '${provider}'`)
   }
 
-  const proxyCls = getProvider(provider.providerId)
+  const proxyCls = getProvider(providerProxy.providerId)
 
-  const proxy = new proxyCls(request, env, apiKey, provider, rest)
+  const proxy = new proxyCls(request, env, apiKey, providerProxy, rest)
 
   const result = await proxy.dispatch()
   if ('successResponse' in result) {
-    ctx.waitUntil(recordSpend(apiKey, result.spend, env))
+    ctx.waitUntil(recordSpend(apiKey, result.price, env))
     return result.successResponse
   } else if ('error' in result) {
     const { error, disableKey } = result

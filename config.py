@@ -91,6 +91,7 @@ class ProviderProxy(_Model):
     name: str
     base_url: str = Field(alias='baseUrl')
     provider_id: ProviderID = Field(alias='providerId')
+    inject_price: bool = Field(default=True, alias='injectPrice')
     credentials: str
 
 

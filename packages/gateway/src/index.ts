@@ -1,5 +1,5 @@
 import { gateway } from './gateway'
-import { ctHeader, response405, ResponseError, textResponse } from './utils'
+import { ctHeader, response405, ResponseError } from './utils'
 import type { KeysDb, LimitDb } from './db'
 
 export * from './db'
@@ -15,13 +15,11 @@ export interface GatewayEnv {
 
 export async function gatewayFetch(request: Request, ctx: ExecutionContext, env: GatewayEnv): Promise<Response> {
   const url = new URL(request.url)
-  const { pathname } = url
-
   try {
-    if (pathname === '/') {
+    if (url.pathname === '/') {
       return index(request, env)
     } else {
-      return await gateway(request, ctx, env)
+      return await gateway(request, ctx, url, env)
     }
   } catch (error) {
     if (error instanceof ResponseError) {

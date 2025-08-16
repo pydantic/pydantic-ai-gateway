@@ -1,3 +1,4 @@
+import * as logfire from '@pydantic/logfire-api'
 import { Usage, calcPrice, extractUsage, findProvider } from '@pydantic/genai-prices'
 
 import { ApiKeyInfo, ProviderProxy } from '../../types'
@@ -7,7 +8,7 @@ interface ProxySuccess {
   successResponse: Response
   model: string
   usage: Usage
-  spend: number
+  price: number
 }
 
 interface ProxyInvalidRequest {
@@ -24,11 +25,13 @@ interface Prepare {
   body: BodyInit | null
 }
 
+type JsonData = Record<string, unknown>
+
 interface ProcessResponse {
-  body: BodyInit | null
+  body: JsonData
   model: string
   usage: Usage
-  spend: number
+  price: number
 }
 
 export class DefaultProviderProxy {
@@ -60,6 +63,11 @@ export class DefaultProviderProxy {
     return undefined
   }
 
+  /* Check that the model being used is supported.
+    In particular that we can accurately determine the token usage from the response.
+    */
+  check(): ProxyInvalidRequest | void {}
+
   method(): string {
     return this.request.method
   }
@@ -83,21 +91,22 @@ export class DefaultProviderProxy {
 
   async extractUsage(response: Response): Promise<ProcessResponse | ProxyInvalidRequest> {
     try {
-      const body = await response.text()
-      const data = JSON.parse(body)
+      const bodyText = await response.text()
+      const body = JSON.parse(bodyText)
       const provider = findProvider({ providerId: this.providerId() })
       if (!provider) {
         return { error: 'invalid response JSON, provider not found' }
       }
-      const [model, usage] = extractUsage(provider, data, this.apiFlavour())
+      const [model, usage] = extractUsage(provider, body, this.apiFlavour())
 
       const price = calcPrice(usage, model, { provider })
       if (price) {
-        return { body, model, usage, spend: price.total_price }
+        return { body, model, usage, price: price.total_price }
       } else {
         return { error: 'Unable to calculate spend' }
       }
     } catch (error) {
+      logfire.reportError('Error extracting usage from response', error as Error)
       return { error: 'invalid response JSON, unable to extract usage' }
     }
   }
@@ -105,6 +114,11 @@ export class DefaultProviderProxy {
   responseHeaders(_headers: Headers): void {}
 
   async dispatch(): Promise<ProxySuccess | ProxyInvalidRequest | ProxyFailure> {
+    const checkResult = this.check()
+    if (checkResult) {
+      return checkResult
+    }
+
     const method = this.method()
     const url = this.url()
 
@@ -129,14 +143,18 @@ export class DefaultProviderProxy {
       if ('error' in processResponse) {
         return { ...processResponse, disableKey: true }
       }
-      const { body, usage, model, spend } = processResponse
+      const { body, usage, model, price } = processResponse
 
       // TODO we will want to remove some response headers, e.g. openai org
       const headers = new Headers(response.headers)
-      headers.set('pydantic-ai-gateway-spend-estimate', `${spend.toFixed(2)}USD`)
+      headers.set('pydantic-ai-gateway-price-estimate', `${price.toFixed(4)}USD`)
       this.responseHeaders(headers)
 
-      const successResponse = new Response(body, {
+      if (this.providerProxy.injectPrice && 'usage' in body && isMapping(body.usage)) {
+        body.usage.pydantic_ai_gateway = { price_estimate: price }
+      }
+
+      const successResponse = new Response(JSON.stringify(body), {
         status: response.status,
         headers,
       })
@@ -145,8 +163,12 @@ export class DefaultProviderProxy {
         successResponse,
         usage,
         model,
-        spend,
+        price,
       }
     }
   }
+}
+
+function isMapping(v: unknown): v is Record<string, unknown> {
+  return v !== null && !Array.isArray(v) && typeof v === 'object'
 }

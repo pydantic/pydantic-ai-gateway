@@ -3,7 +3,11 @@ name = "pydantic-ai-gateway"
 version = "0.0.0"
 description = "Config of pydantic-ai-gateway"
 requires-python = ">=3.11"
-dependencies = ["pydantic>=2.11.7", "ruamel-yaml>=0.18.14"]
+dependencies = [
+    "genai-prices>=0.0.22",
+    "pydantic>=2.11.7",
+ "ruamel-yaml>=0.18.14",
+]
 
 [dependency-groups]
 dev = ["basedpyright>=1.31.2", "ruff>=0.12.8"]

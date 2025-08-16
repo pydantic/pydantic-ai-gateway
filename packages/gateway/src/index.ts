@@ -18,12 +18,10 @@ export async function gatewayFetch(request: Request, ctx: ExecutionContext, env:
   const { pathname } = url
 
   try {
-    if (pathname.startsWith('/gateway')) {
-      return await gateway(request, ctx, env)
-    } else if (pathname === '/') {
+    if (pathname === '/') {
       return index(request, env)
     } else {
-      return textResponse(404, 'Path not found')
+      return await gateway(request, ctx, env)
     }
   } catch (error) {
     if (error instanceof ResponseError) {

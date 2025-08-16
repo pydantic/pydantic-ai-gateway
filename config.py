@@ -11,6 +11,7 @@ from enum import StrEnum
 from pathlib import Path
 from typing import cast
 
+from genai_prices.types import ProviderID
 from pydantic import BaseModel, Field, ValidationError, field_serializer, field_validator
 from pydantic_core.core_schema import ValidationInfo
 from ruamel.yaml import YAML
@@ -31,12 +32,12 @@ class ConfigPy(_Model):
     def teams_exist(cls, api_keys: list[ApiKey], info: ValidationInfo) -> list[ApiKey]:
         team_names: set[str] = set()
         user_names: set[str] = set()
-        for team in cast(list[TeamPy], info.data['teams']):
+        for team in cast(list[TeamPy], info.data.get('teams', [])):
             team_names.add(team.name)
             for user in team.users:
                 user_names.add(user.name)
 
-        providers: list[ProviderProxy] = info.data['providers']
+        providers: list[ProviderProxy] = info.data.get('providers', [])
         provider_names = set(provider.name for provider in providers)
         for key in api_keys:
             if key.team not in team_names:
@@ -88,8 +89,8 @@ class ProxySchema(StrEnum):
 
 class ProviderProxy(_Model):
     name: str
-    base_url: str = Field(alias='baseURL')
-    proxy_schema: ProxySchema = Field(alias='proxySchema')
+    base_url: str = Field(alias='baseUrl')
+    provider_id: ProviderID = Field(alias='providerId')
     credentials: str
 
 

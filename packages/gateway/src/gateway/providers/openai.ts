@@ -1,8 +1,8 @@
 import { ResponseError } from '../../utils'
 
-import { AbstractProviderProxy } from './base'
+import { DefaultProviderProxy } from './default'
 
-export class OpenResponsesAIProvider extends AbstractProviderProxy {
+export class OpenAIProvider extends DefaultProviderProxy {
   flavor: 'chat' | 'responses' = 'chat'
 
   check(): void {
@@ -13,36 +13,7 @@ export class OpenResponsesAIProvider extends AbstractProviderProxy {
     }
   }
 
-  providerId(): string {
-    return 'openai'
-  }
-
   apiFlavour(): string | undefined {
     return this.flavor
-  }
-
-  url() {
-    return `${this.provider.baseURL}/${this.restOfPath}`
-  }
-
-  requestHeaders(headers: Headers) {
-    headers.set('Authorization', `Bearer ${this.provider.credentials}`)
-  }
-
-  async prepRequest() {
-    // todo better error on invalid JSON
-    const body = await this.request.text()
-    let model
-    try {
-      const data = JSON.parse(body)
-      model = data.model
-    } catch (error) {
-      return { error: 'invalid request JSON' }
-    }
-    if (!model || typeof model !== 'string' || model.length === 0) {
-      return { error: 'invalid request, "model" not found' }
-    } else {
-      return { body, model }
-    }
   }
 }

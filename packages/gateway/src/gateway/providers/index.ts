@@ -1,8 +1,8 @@
-import { ApiKeyInfo, ProviderProxy, ProxySchema } from '../../types'
+import { ApiKeyInfo, ProviderProxy, ProviderID } from '../../types'
 import { GatewayEnv } from '../..'
 
-import { AbstractProviderProxy } from './base'
-import { OpenResponsesAIProvider } from './openai'
+import { OpenAIProvider } from './openai'
+import { DefaultProviderProxy } from './default'
 
 type providerSig = new (
   request: Request,
@@ -10,16 +10,13 @@ type providerSig = new (
   apiKey: ApiKeyInfo,
   provider: ProviderProxy,
   restOfPath: string,
-) => AbstractProviderProxy
+) => DefaultProviderProxy
 
-export function getProvider(providerId: ProxySchema): providerSig {
+export function getProvider(providerId: ProviderID): providerSig {
   switch (providerId) {
     case 'openai':
-      return OpenResponsesAIProvider
-    case 'anthropic':
-      throw new Error('Anthropic provider not yet implemented')
+      return OpenAIProvider
     default:
-      const exhaustive: never = providerId
-      throw new Error(`No provider found with providerId='${exhaustive}'`)
+      return DefaultProviderProxy
   }
 }

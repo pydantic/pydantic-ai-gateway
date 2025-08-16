@@ -8,7 +8,7 @@ import { getProvider } from './providers'
 export async function gateway(request: Request, ctx: ExecutionContext, env: GatewayEnv): Promise<Response> {
   const url = new URL(request.url)
   const { pathname } = url
-  const providerMatch = pathname.match(/^\/gateway\/([^\/]+)\/(.*)$/)
+  const providerMatch = pathname.match(/^\/([^\/]+)\/(.*)$/)
   if (!providerMatch) {
     return textResponse(404, 'Path not found')
   }
@@ -21,7 +21,7 @@ export async function gateway(request: Request, ctx: ExecutionContext, env: Gate
     return textResponse(404, `No provider found qroq '${providerSlug}'`)
   }
 
-  const proxyCls = getProvider(provider.proxySchema)
+  const proxyCls = getProvider(provider.providerId)
 
   const proxy = new proxyCls(request, env, apiKey, provider, rest)
 

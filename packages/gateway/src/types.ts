@@ -23,11 +23,27 @@ export interface ApiKeyInfo {
   providers: { [name: string]: ProviderProxy }
 }
 
-export type ProxySchema = 'openai' | 'anthropic'
+export type ProviderID =
+  | 'avian'
+  | 'groq'
+  | 'openai'
+  | 'novita'
+  | 'fireworks'
+  | 'deepseek'
+  | 'mistral'
+  | 'x-ai'
+  | 'google'
+  | 'perplexity'
+  | 'aws'
+  | 'together'
+  | 'anthropic'
+  | 'azure'
+  | 'cohere'
+  | 'openrouter'
 
 export interface ProviderProxy {
   name: string
-  baseURL: string
-  proxySchema: ProxySchema
+  baseUrl: string
+  providerId: ProviderID
   credentials: string
 }

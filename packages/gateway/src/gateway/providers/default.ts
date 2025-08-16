@@ -18,12 +18,10 @@ interface ProxyInvalidRequest {
 
 interface ProxyFailure {
   failResponse: Response
-  model: string
 }
 
 interface Prepare {
   body: BodyInit | null
-  model: string
 }
 
 interface ProcessResponse {
@@ -33,46 +31,55 @@ interface ProcessResponse {
   spend: number
 }
 
-export abstract class AbstractProviderProxy {
+export class DefaultProviderProxy {
   request: Request
   env: GatewayEnv
   apiKey: ApiKeyInfo
-  provider: ProviderProxy
+  providerProxy: ProviderProxy
   restOfPath: string
 
-  constructor(request: Request, env: GatewayEnv, apiKey: ApiKeyInfo, provider: ProviderProxy, restOfPath: string) {
+  constructor(
+    request: Request,
+    env: GatewayEnv,
+    apiKey: ApiKeyInfo,
+    providerProxy: ProviderProxy,
+    restOfPath: string,
+  ) {
     this.request = request
     this.env = env
     this.apiKey = apiKey
-    this.provider = provider
+    this.providerProxy = providerProxy
     this.restOfPath = restOfPath
   }
 
-  abstract providerId(): string
+  providerId(): string {
+    return this.providerProxy.providerId
+  }
 
   apiFlavour(): string | undefined {
     return undefined
   }
 
-  /* Check that the model being used is supported.
-    In particular that we can accurately determine the token usage from the response.
-    */
-  abstract check(): ProxyInvalidRequest | void
-
   method(): string {
     return this.request.method
   }
 
-  abstract url(): string
+  url() {
+    return `${this.providerProxy.baseUrl}/${this.restOfPath}`
+  }
 
   userAgent(): string {
     const userAgent = this.request.headers.get('user-agent')
     return `${userAgent} via Pydantic AI Gateway ${this.env.githubSha.substring(0, 7)}, contact engineering@pydantic.dev`
   }
 
-  abstract requestHeaders(headers: Headers): void
+  requestHeaders(headers: Headers) {
+    headers.set('Authorization', `Bearer ${this.providerProxy.credentials}`)
+  }
 
-  abstract prepRequest(): Promise<Prepare | ProxyInvalidRequest>
+  async prepRequest(): Promise<Prepare | ProxyInvalidRequest> {
+    return { body: this.request.body }
+  }
 
   async extractUsage(response: Response): Promise<ProcessResponse | ProxyInvalidRequest> {
     try {
@@ -95,13 +102,9 @@ export abstract class AbstractProviderProxy {
     }
   }
 
-  responseHeaders(headers: Headers): void {}
+  responseHeaders(_headers: Headers): void {}
 
   async dispatch(): Promise<ProxySuccess | ProxyInvalidRequest | ProxyFailure> {
-    const checkResult = this.check()
-    if (checkResult) {
-      return checkResult
-    }
     const method = this.method()
     const url = this.url()
 
@@ -115,12 +118,12 @@ export abstract class AbstractProviderProxy {
     if ('error' in prepResult) {
       return prepResult
     }
-    const { body, model: requestModel } = prepResult
+    const { body } = prepResult
     const response = await fetch(url, { method, headers, body })
 
     if (!response.ok) {
       // CAUTION: can we be charged in any way for failed requests?
-      return { failResponse: response, model: requestModel }
+      return { failResponse: response }
     } else {
       const processResponse = await this.extractUsage(response)
       if ('error' in processResponse) {

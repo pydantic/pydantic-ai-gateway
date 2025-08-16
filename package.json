@@ -1,0 +1,33 @@
+{
+  "name": "pydantic-gateway-root",
+  "version": "0.0.0",
+  "private": true,
+  "license": "???",
+  "workspaces": [
+    "packages/gateway",
+    "oss-gateway"
+  ],
+  "scripts": {
+    "format": "prettier --write -- .",
+    "lint": "prettier --check -- .",
+    "typecheck": "npm run typecheck --workspaces",
+    "test": "npm run test --workspace=oss-gateway",
+    "deploy": "npm run deploy --workspace=oss-gateway",
+    "dev": "npm run dev --workspace=oss-gateway",
+    "typegen": "npm run typegen --workspace=oss-gateway"
+  },
+  "prettier": {
+    "singleQuote": true,
+    "semi": false,
+    "trailingComma": "all",
+    "tabWidth": 2,
+    "printWidth": 119,
+    "bracketSpacing": true
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20250712.0",
+    "prettier": "^3.6.2",
+    "typescript": "^5.5.2",
+    "vitest": "~3.2.0"
+  }
+}

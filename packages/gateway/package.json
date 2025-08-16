@@ -1,0 +1,13 @@
+{
+  "name": "@pydantic/ai-gateway",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@pydantic/genai-prices": "^0.0.22",
+    "@pydantic/logfire-api": "^0.5.0",
+    "@pydantic/logfire-cf-workers": "^0.5.0"
+  }
+}

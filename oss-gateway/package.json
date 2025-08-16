@@ -1,0 +1,24 @@
+{
+  "name": "pydantic-gateway",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "typecheck": "tsc --noEmit && cd test && tsc --noEmit",
+    "deploy": "wrangler deploy",
+    "dev": "wrangler dev",
+    "test": "vitest",
+    "typegen": "wrangler types --strict-vars false --include-runtime false && prettier worker-configuration.d.ts --write"
+  },
+  "devDependencies": {
+    "@cloudflare/vitest-pool-workers": "^0.8.19",
+    "@cloudflare/workers-types": "^4.20250712.0",
+    "typescript": "^5.5.2",
+    "vitest": "~3.2.0",
+    "wrangler": "^4.27.0"
+  },
+  "dependencies": {
+    "@pydantic/genai-prices": "^0.0.22",
+    "@pydantic/logfire-api": "^0.5.0",
+    "@pydantic/logfire-cf-workers": "^0.5.0"
+  }
+}

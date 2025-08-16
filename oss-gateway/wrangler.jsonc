@@ -1,0 +1,36 @@
+// https://developers.cloudflare.com/workers/wrangler/configuration/
+{
+  "$schema": "../node_modules/wrangler/config-schema.json",
+  "name": "pydantic-ai-gateway",
+  "main": "src/index.ts",
+  "compatibility_date": "2025-07-12",
+  "compatibility_flags": ["nodejs_compat"],
+  // "observability": { "enabled": true },
+  "vars": {
+    "GITHUB_SHA": "unknown",
+    // if you set `LOGFIRE_TOKEN=pylf...` in .dev.vars, also set `LOGFIRE_ENVIRONMENT=dev`
+    "LOGFIRE_ENVIRONMENT": "prod",
+  },
+  "d1_databases": [
+    {
+      "binding": "limitsDB",
+      "database_name": "pydantic-ai-gateway-limits",
+      "database_id": "5937ac58-9a7a-4500-bfa2-2e7e2548c3d0",
+    },
+  ],
+  "kv_namespaces": [
+    {
+      "binding": "KV",
+      "id": "d1ae86ce76874a2584a1670ec8cdc6ee",
+    },
+  ],
+  // https://developers.cloudflare.com/workers/configuration/smart-placement/#smart-placement
+  "placement": { "mode": "smart" },
+
+  // bindings https://developers.cloudflare.com/workers/runtime-apis/bindings/
+
+  // static assets https://developers.cloudflare.com/workers/static-assets/binding/
+  // "assets": { "directory": "./public/", "binding": "ASSETS" },
+
+  // service bindings https://developers.cloudflare.com/workers/wrangler/configuration/#service-bindings
+}

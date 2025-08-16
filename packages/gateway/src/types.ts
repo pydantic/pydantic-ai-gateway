@@ -1,0 +1,61 @@
+// Info about an API key returned by the DB during a request
+export interface ApiKeyInfo {
+  id: string
+  user: string | null
+  team: string
+  org: string
+  key: string
+  // TODO this should be status: 'active' | 'expired' | 'limit-exceeded' | 'disabled'
+  active: boolean
+  expires: number
+  // limits per apiKey - note the extra field since keys can have a total limit
+  keySpendingLimitDaily: number | null
+  keySpendingLimitWeekly: number | null
+  keySpendingLimitMonthly: number | null
+  keySpendingLimitTotal: number | null
+  // limits per team
+  teamSpendingLimitDaily: number | null
+  teamSpendingLimitWeekly: number | null
+  teamSpendingLimitMonthly: number | null
+  // limits per user
+  userSpendingLimitDaily: number | null
+  userSpendingLimitWeekly: number | null
+  userSpendingLimitMonthly: number | null
+  providers: { [name: string]: ProviderProxy }
+}
+
+export interface Team {
+  name: string
+  users: User[]
+  spendingLimitDaily?: number
+  spendingLimitWeekly?: number
+  spendingLimitMonthly?: number
+}
+
+export type ProxySchema = 'openai' | 'anthropic'
+
+export interface ProviderProxy {
+  name: string
+  baseURL: string
+  proxySchema: ProxySchema
+  credentials: string
+}
+
+export interface User {
+  name: string
+  spendingLimitDaily?: number
+  spendingLimitWeekly?: number
+  spendingLimitMonthly?: number
+}
+
+export interface ApiKey {
+  team: string
+  user?: string
+  apiKey: string
+  expires?: Date
+  spendingLimitDaily?: number
+  spendingLimitWeekly?: number
+  spendingLimitMonthly?: number
+  spendingLimitTotal?: number
+  providers: string[]
+}

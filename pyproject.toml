@@ -1,0 +1,38 @@
+[project]
+name = "pydantic-ai-gateway"
+version = "0.0.0"
+description = "Config of pydantic-ai-gateway"
+requires-python = ">=3.11"
+dependencies = ["pydantic>=2.11.7", "ruamel-yaml>=0.18.14"]
+
+[dependency-groups]
+dev = ["basedpyright>=1.31.2", "ruff>=0.12.8"]
+
+[tool.ruff]
+line-length = 120
+target-version = "py312"
+
+[tool.ruff.lint]
+extend-select = ["Q", "RUF100", "C90", "UP", "I"]
+flake8-quotes = { inline-quotes = "single", multiline-quotes = "double" }
+isort = { combine-as-imports = true }
+mccabe = { max-complexity = 18 }
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+
+[tool.ruff.format]
+# don't format python in docstrings, pytest-examples takes care of it
+docstring-code-format = false
+quote-style = "single"
+
+[tool.pyright]
+pythonVersion = "3.12"
+typeCheckingMode = "strict"
+reportUnnecessaryTypeIgnoreComment = true
+reportIgnoreCommentWithoutRule = true
+reportUnusedParameter = true
+reportIncompatibleUnannotatedOverride = true
+reportImplicitAbstractClass = true
+include = ["config.py"]
+venv = ".venv"

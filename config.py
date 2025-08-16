@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import hashlib
 import json
 import re
 import secrets
@@ -203,6 +204,8 @@ def main() -> int:
 // Edit {config_file} to configure the gateway, then run `make config` to write this file
 
 import type {{ Config }} from './types'
+
+export const CONFIG_HASH = '{hashlib.sha1(config_json.encode()).hexdigest()}'
 
 export function getConfig(env: Env): Config {{
   return {config_json}

@@ -1,6 +1,7 @@
 import * as logfire from '@pydantic/logfire-api'
 import { instrument } from '@pydantic/logfire-cf-workers'
 import { gatewayFetch, GatewayEnv, LimitDbD1 } from '@pydantic/ai-gateway'
+import { CONFIG_HASH } from './config'
 import { ConfigDB } from './db'
 
 const handler = {
@@ -10,6 +11,7 @@ const handler = {
       keysDb: new ConfigDB(env),
       limitDb: new LimitDbD1(env.limitsDB),
       kv: env.KV,
+      kvVersion: `${env.GITHUB_SHA.substring(0, 7)}-${CONFIG_HASH}`,
     }
     try {
       return await gatewayFetch(request, ctx, gatewayEnv)

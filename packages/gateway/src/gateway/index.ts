@@ -18,7 +18,7 @@ export async function gateway(request: Request, ctx: ExecutionContext, env: Gate
 
   const provider = apiKey.providers[providerSlug]
   if (!provider) {
-    return textResponse(404, `No provider found for '${providerSlug}'`)
+    return textResponse(404, `No provider found qroq '${providerSlug}'`)
   }
 
   const proxyCls = getProvider(provider.proxySchema)

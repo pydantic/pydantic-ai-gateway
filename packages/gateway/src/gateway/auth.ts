@@ -23,7 +23,7 @@ export async function apiKeyAuth(request: Request, env: GatewayEnv): Promise<Api
     throw new ResponseError(401, 'Unauthorized - Key too long')
   }
 
-  let cacheKey = apiKeyCacheKey(key)
+  let cacheKey = apiKeyCacheKey(key, env)
   const cacheResult = await env.kv.getWithMetadata<ApiKeyInfo, number>(cacheKey, { type: 'json' })
 
   let apiKey
@@ -49,11 +49,11 @@ export async function apiKeyAuth(request: Request, env: GatewayEnv): Promise<Api
 
 export async function disableApiKeyAuth(apiKey: ApiKeyInfo, env: GatewayEnv) {
   apiKey.active = false
-  const cacheKey = apiKeyCacheKey(apiKey.key)
+  const cacheKey = apiKeyCacheKey(apiKey.key, env)
   await env.kv.put(cacheKey, JSON.stringify(apiKey), {
     metadata: CACHE_VERSION,
     expirationTtl: CACHE_TTL, // TODO this need to be customed to the disabled time
   })
 }
 
-const apiKeyCacheKey = (key: string) => `apiKeyAuth:${key}`
+const apiKeyCacheKey = (key: string, env: GatewayEnv) => `apiKeyAuth:${env.kvVersion}:${key}`

@@ -10,6 +10,7 @@ export interface GatewayEnv {
   keysDb: KeysDb
   limitDb: LimitDb
   kv: KVNamespace
+  kvVersion: string
 }
 
 export async function gatewayFetch(request: Request, ctx: ExecutionContext, env: GatewayEnv): Promise<Response> {

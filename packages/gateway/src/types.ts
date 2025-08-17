@@ -21,6 +21,7 @@ export interface ApiKeyInfo {
   userSpendingLimitWeekly: number | null
   userSpendingLimitMonthly: number | null
   providers: { [name: string]: ProviderProxy }
+  otelSettings: OtelSettings | null
 }
 
 export type ProviderID =
@@ -47,4 +48,11 @@ export interface ProviderProxy {
   providerId: ProviderID
   injectPrice: boolean
   credentials: string
+}
+
+export interface OtelSettings {
+  // if writeToken is unset, no authorization header is set
+  writeToken?: string
+  // if unset the baseUrl is derived from the Pydantic Logfire writeToken
+  baseUrl?: string
 }

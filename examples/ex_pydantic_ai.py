@@ -16,7 +16,7 @@ class Person(BaseModel, use_attribute_docstrings=True):
     name: str
     """The name of the person."""
     dob: date
-    """The date of birth of the person."""
+    """The date of birth of the person. MUST BE A VALID ISO 8601 date."""
     city: str
     """The city where the person lives."""
 

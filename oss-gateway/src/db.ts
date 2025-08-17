@@ -1,4 +1,4 @@
-import { KeysDb, ApiKeyInfo } from '@pydantic/ai-gateway'
+import { KeysDb, ApiKeyInfo, OtelSettings } from '@pydantic/ai-gateway'
 import { getConfig } from './config'
 import { Config } from './types'
 
@@ -17,6 +17,18 @@ export class ConfigDB extends KeysDb {
     }
     const team = this.config.teams[keyInfo.team]!
     let user = keyInfo.user ? team.users[keyInfo.user] : undefined
+    let otelSettings: OtelSettings | null = null
+    if (user?.otelWriteToken || user?.otelBaseUrl) {
+      otelSettings = {
+        writeToken: user.otelWriteToken,
+        baseUrl: user.otelBaseUrl,
+      }
+    } else if (team.otelWriteToken || team.otelBaseUrl) {
+      otelSettings = {
+        writeToken: team.otelWriteToken,
+        baseUrl: team.otelBaseUrl,
+      }
+    }
     return {
       id: key.substring(0, 5),
       user: keyInfo.user ?? null,
@@ -38,6 +50,7 @@ export class ConfigDB extends KeysDb {
       userSpendingLimitWeekly: user?.spendingLimitWeekly ?? null,
       userSpendingLimitMonthly: user?.spendingLimitMonthly ?? null,
       providers: Object.fromEntries(keyInfo.providers.map((name) => [name, this.config.providers[name]!])),
+      otelSettings,
     }
   }
 

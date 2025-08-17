@@ -59,6 +59,9 @@ class ConfigTs(_Model):
 
 class TeamPy(_Model):
     name: str
+    otel_write_token: str | None = Field(default=None, alias='otelWriteToken')
+    otel_base_url: str | None = Field(default=None, alias='otelBaseUrl')
+    """if unset the base url is derived from the Pydantic Logfire writeToken"""
     users: list[User]
     spending_limit_daily: int | None = Field(default=None, alias='spendingLimitDaily')
     spending_limit_weekly: int | None = Field(default=None, alias='spendingLimitWeekly')
@@ -67,6 +70,8 @@ class TeamPy(_Model):
     def team_ts(self) -> TeamTs:
         return TeamTs(
             name=self.name,
+            otel_write_token=self.otel_write_token,
+            otel_base_url=self.otel_base_url,
             users={user.name: user for user in self.users},
             spending_limit_daily=self.spending_limit_daily,
             spending_limit_weekly=self.spending_limit_weekly,
@@ -76,6 +81,8 @@ class TeamPy(_Model):
 
 class TeamTs(_Model):
     name: str
+    otel_write_token: str | None = Field(default=None, serialization_alias='otelWriteToken')
+    otel_base_url: str | None = Field(default=None, serialization_alias='otelBaseUrl')
     users: dict[str, User]
     spending_limit_daily: int | None = Field(default=None, serialization_alias='spendingLimitDaily')
     spending_limit_weekly: int | None = Field(default=None, serialization_alias='spendingLimitWeekly')
@@ -97,6 +104,9 @@ class ProviderProxy(_Model):
 
 class User(_Model):
     name: str
+    otel_write_token: str | None = Field(default=None, alias='otelWriteToken')
+    otel_base_url: str | None = Field(default=None, alias='otelBaseUrl')
+    """if unset the base url is derived from the Pydantic Logfire writeToken"""
     spending_limit_daily: int | None = Field(default=None, alias='spendingLimitDaily')
     spending_limit_weekly: int | None = Field(default=None, alias='spendingLimitWeekly')
     spending_limit_monthly: int | None = Field(default=None, alias='spendingLimitMonthly')
@@ -134,6 +144,9 @@ org: my-org
 
 teams:
   - name: default
+    # logfire write token to send data to logfire,
+    # can also set otelBaseUrl to send data to any other OTel endpoint
+    otelWriteToken: ...  # optional but recommended
     # limits in $, all spending limits are optional
     spendingLimitDaily: 10
     spendingLimitWeekly: 50

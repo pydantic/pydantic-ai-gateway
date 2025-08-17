@@ -1,9 +1,12 @@
+import * as logfire from '@pydantic/logfire-api'
+
 import { ApiKeyInfo } from '../types'
 import { textResponse } from '../utils'
 import type { GatewayEnv } from '..'
 
 import { apiKeyAuth, disableApiKeyAuth } from './auth'
 import { getProvider } from './providers'
+import { OtelTrace } from './otel'
 
 export async function gateway(request: Request, ctx: ExecutionContext, url: URL, env: GatewayEnv): Promise<Response> {
   const { pathname } = url
@@ -14,6 +17,7 @@ export async function gateway(request: Request, ctx: ExecutionContext, url: URL,
   const [, provider, rest] = providerMatch as [string, string, string]
 
   const apiKey = await apiKeyAuth(request, env)
+  const otel = new OtelTrace(request.headers, apiKey.otelSettings || {})
 
   const providerProxy = apiKey.providers[provider]
   if (!providerProxy) {
@@ -24,20 +28,41 @@ export async function gateway(request: Request, ctx: ExecutionContext, url: URL,
 
   const proxy = new proxyCls(request, env, apiKey, providerProxy, rest)
 
+  const dispatchSpan = otel.startSpan()
   const result = await proxy.dispatch()
+
   if ('successResponse' in result) {
-    ctx.waitUntil(recordSpend(apiKey, result.price, env))
+    dispatchSpan.end('dispatch success', { price: result.price })
+    runAfter(ctx, otel.send())
+    runAfter(ctx, recordSpend(apiKey, result.price, env))
     return result.successResponse
   } else if ('error' in result) {
+    dispatchSpan.end('dispatch error', { error: result.error }, { level: 'error' })
+    runAfter(ctx, otel.send())
     const { error, disableKey } = result
     if (disableKey) {
-      ctx.waitUntil(disableApiKey(apiKey, env, 'Invalid request'))
+      runAfter(ctx, disableApiKey(apiKey, env, 'Invalid request'))
       return textResponse(400, `${error}, API key disabled`)
     } else {
       return textResponse(400, error)
     }
   } else {
+    dispatchSpan.end('dispatch failed', { response_status: result.failResponse.status }, { level: 'warn' })
+    runAfter(ctx, otel.send())
     return result.failResponse
+  }
+}
+
+function runAfter(ctx: ExecutionContext, promise: Promise<unknown>) {
+  ctx.waitUntil(wrapLogfire(promise))
+}
+
+async function wrapLogfire(promise: Promise<unknown>): Promise<void> {
+  try {
+    await promise
+  } catch (error) {
+    logfire.reportError('Error in ctx.waitUntil', error as Error)
+    throw error
   }
 }
 

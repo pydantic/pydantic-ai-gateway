@@ -1,4 +1,4 @@
-import { ProviderProxy } from '@pydantic/ai-gateway'
+import { ProviderProxy, OtelSettings } from '@pydantic/ai-gateway'
 
 export interface Config {
   org: string
@@ -9,6 +9,8 @@ export interface Config {
 
 export interface Team {
   name: string
+  otelWriteToken?: string
+  otelBaseUrl?: string
   users: Record<string, User>
   spendingLimitDaily?: number
   spendingLimitWeekly?: number
@@ -17,6 +19,8 @@ export interface Team {
 
 export interface User {
   name: string
+  otelWriteToken?: string
+  otelBaseUrl?: string
   spendingLimitDaily?: number
   spendingLimitWeekly?: number
   spendingLimitMonthly?: number

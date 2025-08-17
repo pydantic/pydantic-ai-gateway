@@ -1,8 +1,8 @@
 import * as logfire from '@pydantic/logfire-api'
 import { Usage, calcPrice, extractUsage, findProvider } from '@pydantic/genai-prices'
 
-import { ApiKeyInfo, ProviderProxy } from '../../types'
-import { GatewayEnv } from '../..'
+import { ApiKeyInfo, ProviderProxy } from '../types'
+import { GatewayEnv } from '..'
 
 interface ProxySuccess {
   successResponse: Response

@@ -1,6 +1,6 @@
-import { ApiKeyInfo } from '../types'
-import { GatewayEnv } from '..'
-import { ResponseError } from '../utils'
+import { ApiKeyInfo } from './types'
+import { GatewayEnv } from '.'
+import { ResponseError } from './utils'
 
 const CACHE_VERSION = 1
 const CACHE_TTL = 86400

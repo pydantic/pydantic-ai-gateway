@@ -1,12 +1,11 @@
 import * as logfire from '@pydantic/logfire-api'
 
-import { ApiKeyInfo } from '../types'
-import { textResponse } from '../utils'
-import type { GatewayEnv } from '..'
-
+import { ApiKeyInfo } from './types'
+import { textResponse } from './utils'
 import { apiKeyAuth, disableApiKeyAuth } from './auth'
 import { getProvider } from './providers'
 import { OtelTrace } from './otel'
+import type { GatewayEnv } from '.'
 
 export async function gateway(request: Request, ctx: ExecutionContext, url: URL, env: GatewayEnv): Promise<Response> {
   const { pathname } = url

@@ -1,5 +1,5 @@
-import { ApiKeyInfo, ProviderProxy, ProviderID } from '../../types'
-import { GatewayEnv } from '../..'
+import { ApiKeyInfo, ProviderProxy, ProviderID } from '../types'
+import { GatewayEnv } from '..'
 
 import { OpenAIProvider } from './openai'
 import { DefaultProviderProxy } from './default'

@@ -6,7 +6,8 @@ import { GatewayEnv } from '..'
 
 interface ProxySuccess {
   successResponse: Response
-  model: string
+  requestModel?: string
+  responseModel: string
   usage: Usage
   price: number
 }
@@ -19,17 +20,19 @@ interface ProxyInvalidRequest {
 
 interface ProxyFailure {
   failResponse: Response
+  requestModel?: string
 }
 
 interface Prepare {
-  body: BodyInit | null
+  requestBody: BodyInit | null
+  requestModel?: string
 }
 
 type JsonData = Record<string, unknown>
 
 interface ProcessResponse {
   body: JsonData
-  model: string
+  responseModel: string
   usage: Usage
   price: number
 }
@@ -86,7 +89,19 @@ export class DefaultProviderProxy {
   }
 
   async prepRequest(): Promise<Prepare | ProxyInvalidRequest> {
-    return { body: this.request.body }
+    const requestBody = await this.request.text()
+    let requestModel
+    try {
+      const data = JSON.parse(requestBody)
+      requestModel = data.model
+    } catch (error) {
+      return { error: 'invalid request JSON' }
+    }
+    if (!requestModel || typeof requestModel === 'string') {
+      return { requestBody, requestModel }
+    } else {
+      return { error: 'invalid request, "model" should be a string' }
+    }
   }
 
   async extractUsage(response: Response): Promise<ProcessResponse | ProxyInvalidRequest> {
@@ -97,11 +112,11 @@ export class DefaultProviderProxy {
       if (!provider) {
         return { error: 'invalid response JSON, provider not found' }
       }
-      const [model, usage] = extractUsage(provider, body, this.apiFlavour())
+      const [responseModel, usage] = extractUsage(provider, body, this.apiFlavour())
 
-      const price = calcPrice(usage, model, { provider })
+      const price = calcPrice(usage, responseModel, { provider })
       if (price) {
-        return { body, model, usage, price: price.total_price }
+        return { body, responseModel, usage, price: price.total_price }
       } else {
         return { error: 'Unable to calculate spend' }
       }
@@ -122,49 +137,50 @@ export class DefaultProviderProxy {
     const method = this.method()
     const url = this.url()
 
-    const headers = new Headers(this.request.headers)
-    headers.set('user-agent', this.userAgent())
+    const requestHeaders = new Headers(this.request.headers)
+    requestHeaders.set('user-agent', this.userAgent())
     // authorization header was used by the gateway auth, it definitely should not be forwarded to the target api
-    headers.delete('authorization')
-    this.requestHeaders(headers)
+    requestHeaders.delete('authorization')
+    this.requestHeaders(requestHeaders)
 
     const prepResult = await this.prepRequest()
     if ('error' in prepResult) {
       return prepResult
     }
-    const { body } = prepResult
-    const response = await fetch(url, { method, headers, body })
+    const { requestBody, requestModel } = prepResult
+    const response = await fetch(url, { method, headers: requestHeaders, body: requestBody })
 
     if (!response.ok) {
       // CAUTION: can we be charged in any way for failed requests?
-      return { failResponse: response }
-    } else {
-      const processResponse = await this.extractUsage(response)
-      if ('error' in processResponse) {
-        return { ...processResponse, disableKey: true }
-      }
-      const { body, usage, model, price } = processResponse
+      return { failResponse: response, requestModel }
+    }
 
-      // TODO we will want to remove some response headers, e.g. openai org
-      const headers = new Headers(response.headers)
-      headers.set('pydantic-ai-gateway-price-estimate', `${price.toFixed(4)}USD`)
-      this.responseHeaders(headers)
+    const processResponse = await this.extractUsage(response)
+    if ('error' in processResponse) {
+      return { ...processResponse, disableKey: true }
+    }
+    const { body, usage, responseModel, price } = processResponse
 
-      if (this.providerProxy.injectPrice && 'usage' in body && isMapping(body.usage)) {
-        body.usage.pydantic_ai_gateway = { price_estimate: price }
-      }
+    // TODO we will want to remove some response headers, e.g. openai org
+    const headers = new Headers(response.headers)
+    headers.set('pydantic-ai-gateway-price-estimate', `${price.toFixed(4)}USD`)
+    this.responseHeaders(headers)
 
-      const successResponse = new Response(JSON.stringify(body), {
-        status: response.status,
-        headers,
-      })
+    if (this.providerProxy.injectPrice && 'usage' in body && isMapping(body.usage)) {
+      body.usage.pydantic_ai_gateway = { price_estimate: price }
+    }
 
-      return {
-        successResponse,
-        usage,
-        model,
-        price,
-      }
+    const successResponse = new Response(JSON.stringify(body), {
+      status: response.status,
+      headers,
+    })
+
+    return {
+      successResponse,
+      responseModel,
+      requestModel,
+      usage,
+      price,
     }
   }
 }

@@ -46,7 +46,11 @@ export async function gateway(request: Request, ctx: ExecutionContext, url: URL,
       return textResponse(400, error)
     }
   } else {
-    dispatchSpan.end('dispatch failed', { response_status: result.failResponse.status }, { level: 'warn' })
+    dispatchSpan.end(
+      'dispatch failed, {response_status} response',
+      { response_status: result.failResponse.status },
+      { level: 'warn' },
+    )
     runAfter(ctx, otel.send())
     return result.failResponse
   }

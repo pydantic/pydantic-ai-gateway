@@ -16,8 +16,8 @@ import { resourceFromAttributes } from '@opentelemetry/resources'
 
 import type { OtelSettings } from './types'
 
-type Attributes = Record<string, string | number | boolean | undefined>
-type Level = 'debug' | 'info' | 'notice' | 'warn' | 'error'
+export type Attributes = Record<string, string | number | boolean | object | undefined>
+export type Level = 'debug' | 'info' | 'notice' | 'warn' | 'error'
 
 export class OtelTrace {
   private otelSettings: OtelSettings

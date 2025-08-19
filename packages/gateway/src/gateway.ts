@@ -5,6 +5,7 @@ import { textResponse } from './utils'
 import { apiKeyAuth, disableApiKeyAuth } from './auth'
 import { getProvider } from './providers'
 import { OtelTrace } from './otel'
+import { genAiOtelAttributes } from './otelAttributes'
 import type { GatewayEnv } from '.'
 
 export async function gateway(request: Request, ctx: ExecutionContext, url: URL, env: GatewayEnv): Promise<Response> {
@@ -30,19 +31,19 @@ export async function gateway(request: Request, ctx: ExecutionContext, url: URL,
   const dispatchSpan = otel.startSpan()
   const result = await proxy.dispatch()
 
+  const [spanName, attributes, level] = genAiOtelAttributes(result, proxy.providerId())
+  dispatchSpan.end(spanName, attributes, { level })
+
   let response: Response
-  if ('successResponse' in result) {
-    const { successResponse, requestModel, otelAttributes, price } = result
-    dispatchSpan.end(`chat ${requestModel || 'unknown'}`, otelAttributes as any)
+  if ('successStatus' in result) {
+    const { successStatus, responseHeaders, responseBody: body, price } = result
     runAfter(ctx, 'recordSpend', recordSpend(apiKey, price, env))
-    response = successResponse
+    response = new Response(body, {
+      status: successStatus,
+      headers: responseHeaders,
+    })
   } else if ('error' in result) {
-    const { error, disableKey, requestModel } = result
-    dispatchSpan.end(
-      `chat ${requestModel || 'unknown'} - invalid request`,
-      { error, disableKey, requestModel },
-      { level: 'error' },
-    )
+    const { error, disableKey } = result
     if (disableKey) {
       runAfter(ctx, 'disableApiKey', disableApiKey(apiKey, env, 'Invalid request'))
       response = textResponse(400, `${error}, API key disabled`)
@@ -50,13 +51,11 @@ export async function gateway(request: Request, ctx: ExecutionContext, url: URL,
       response = textResponse(400, error)
     }
   } else {
-    const { failResponse, requestModel } = result
-    dispatchSpan.end(
-      `chat ${requestModel || 'unknown'} - unexpected response: {response_status}`,
-      { response_status: failResponse.status },
-      { level: 'warn' },
-    )
-    response = failResponse
+    const { unexpectedStatus, responseHeaders, responseBody: body } = result
+    response = new Response(body, {
+      status: unexpectedStatus,
+      headers: responseHeaders,
+    })
   }
   runAfter(ctx, 'otel.send', otel.send())
   return response

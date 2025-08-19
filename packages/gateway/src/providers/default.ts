@@ -3,36 +3,44 @@ import { Usage, calcPrice, extractUsage, findProvider } from '@pydantic/genai-pr
 
 import { ApiKeyInfo, ProviderProxy } from '../types'
 import { GatewayEnv } from '..'
-import { GenAiOtelAttributes, GenAiOtelEvent } from '../otelAttributes'
+import { GenAiOtelEvent } from '../otelAttributes'
 
-interface ProxySuccess {
-  successResponse: Response
+export interface ProxySuccess {
   requestModel?: string
-  otelAttributes: GenAiOtelAttributes
+  requestBody: string
+  successStatus: number
+  responseHeaders: Headers
+  responseBody: string
+  responseModel: string
+  otelEvents: GenAiOtelEvent[]
+  usage: Usage
   price: number
 }
 
-interface ProxyInvalidRequest {
+export interface ProxyInvalidRequest {
   error: string
   // if true we should disable the key immediately since it appears to be incurring cost we can't measure
   disableKey?: boolean
   requestModel?: string
 }
 
-interface ProxyFailure {
-  failResponse: Response
+export interface ProxyUnexpectedResponse {
   requestModel?: string
+  requestBody: string
+  unexpectedStatus: number
+  responseHeaders: Headers
+  responseBody: string
 }
 
 interface Prepare {
-  requestBody: BodyInit | null
+  requestBody: string
   requestModel?: string
 }
 
 type JsonData = Record<string, unknown>
 
 interface ProcessResponse {
-  body: JsonData
+  responseBody: JsonData
   responseModel: string
   usage: Usage
   price: number
@@ -63,33 +71,33 @@ export class DefaultProviderProxy {
     return this.providerProxy.providerId
   }
 
-  apiFlavour(): string | undefined {
+  protected apiFlavour(): string | undefined {
     return undefined
   }
 
   /* Check that the model being used is supported.
     In particular that we can accurately determine the token usage from the response.
     */
-  check(): ProxyInvalidRequest | void {}
+  protected check(): ProxyInvalidRequest | void {}
 
-  method(): string {
+  protected method(): string {
     return this.request.method
   }
 
-  url() {
+  protected url() {
     return `${this.providerProxy.baseUrl}/${this.restOfPath}`
   }
 
-  userAgent(): string {
+  protected userAgent(): string {
     const userAgent = this.request.headers.get('user-agent')
     return `${userAgent} via Pydantic AI Gateway ${this.env.githubSha.substring(0, 7)}, contact engineering@pydantic.dev`
   }
 
-  requestHeaders(headers: Headers) {
+  protected requestHeaders(headers: Headers) {
     headers.set('Authorization', `Bearer ${this.providerProxy.credentials}`)
   }
 
-  async prepRequest(): Promise<Prepare | ProxyInvalidRequest> {
+  protected async prepRequest(): Promise<Prepare | ProxyInvalidRequest> {
     const requestBody = await this.request.text()
     let requestModel
     try {
@@ -105,19 +113,19 @@ export class DefaultProviderProxy {
     }
   }
 
-  async extractUsage(response: Response): Promise<ProcessResponse | ProxyInvalidRequest> {
+  protected async extractUsage(response: Response): Promise<ProcessResponse | ProxyInvalidRequest> {
     try {
       const bodyText = await response.text()
-      const body = JSON.parse(bodyText)
+      const responseBody = JSON.parse(bodyText)
       const provider = findProvider({ providerId: this.providerId() })
       if (!provider) {
         return { error: 'invalid response JSON, provider not found' }
       }
-      const [responseModel, usage] = extractUsage(provider, body, this.apiFlavour())
+      const [responseModel, usage] = extractUsage(provider, responseBody, this.apiFlavour())
 
       const price = calcPrice(usage, responseModel, { provider })
       if (price) {
-        return { body, responseModel, usage, price: price.total_price }
+        return { responseBody, responseModel, usage, price: price.total_price }
       } else {
         return { error: 'Unable to calculate spend' }
       }
@@ -127,31 +135,13 @@ export class DefaultProviderProxy {
     }
   }
 
-  responseHeaders(_headers: Headers): void {}
+  protected responseHeaders(_headers: Headers): void {}
 
-  otelAttributes(requestModel: string | undefined, responseModel: string, usage: Usage): GenAiOtelAttributes {
-    // TODO add request and response bodies
-    return {
-      'gen_ai.operation.name': 'chat',
-      'gen_ai.system': this.providerId(),
-      'gen_ai.request.model': requestModel,
-      'gen_ai.response.model': responseModel,
-      'gen_ai.usage.input_tokens': usage.input_tokens,
-      'gen_ai.usage.cache_read_tokens': usage.cache_read_tokens,
-      'gen_ai.usage.cache_write_tokens': usage.cache_write_tokens,
-      'gen_ai.usage.output_tokens': usage.output_tokens,
-      'gen_ai.usage.input_audio_tokens': usage.input_audio_tokens,
-      'gen_ai.usage.cache_audio_read_tokens': usage.cache_audio_read_tokens,
-      'gen_ai.usage.output_audio_tokens': usage.output_audio_tokens,
-      events: this.otelEvents(),
-    }
-  }
-
-  otelEvents(): GenAiOtelEvent[] {
+  protected otelEvents(): GenAiOtelEvent[] {
     return []
   }
 
-  async dispatch(): Promise<ProxySuccess | ProxyInvalidRequest | ProxyFailure> {
+  async dispatch(): Promise<ProxySuccess | ProxyInvalidRequest | ProxyUnexpectedResponse> {
     const checkResult = this.check()
     if (checkResult) {
       return checkResult
@@ -175,33 +165,40 @@ export class DefaultProviderProxy {
 
     if (!response.ok) {
       // CAUTION: can we be charged in any way for failed requests?
-      return { failResponse: response, requestModel }
+      let responseBody = await response.text()
+      return {
+        requestModel,
+        requestBody,
+        unexpectedStatus: response.status,
+        responseHeaders: response.headers,
+        responseBody,
+      }
     }
 
     const processResponse = await this.extractUsage(response)
     if ('error' in processResponse) {
       return { ...processResponse, disableKey: true, requestModel }
     }
-    const { body, usage, responseModel, price } = processResponse
+    const { responseBody, usage, responseModel, price } = processResponse
 
     // TODO we will want to remove some response headers, e.g. openai org
-    const headers = new Headers(response.headers)
-    headers.set('pydantic-ai-gateway-price-estimate', `${price.toFixed(4)}USD`)
-    this.responseHeaders(headers)
+    const responseHeaders = new Headers(response.headers)
+    responseHeaders.set('pydantic-ai-gateway-price-estimate', `${price.toFixed(4)}USD`)
+    this.responseHeaders(responseHeaders)
 
-    if (this.providerProxy.injectPrice && 'usage' in body && isMapping(body.usage)) {
-      body.usage.pydantic_ai_gateway = { price_estimate: price }
+    if (this.providerProxy.injectPrice && 'usage' in responseBody && isMapping(responseBody.usage)) {
+      responseBody.usage.pydantic_ai_gateway = { price_estimate: price }
     }
 
-    const successResponse = new Response(JSON.stringify(body), {
-      status: response.status,
-      headers,
-    })
-
     return {
-      successResponse,
+      responseModel,
+      requestBody,
+      successStatus: response.status,
+      responseHeaders,
+      responseBody: JSON.stringify(responseBody),
       requestModel,
-      otelAttributes: this.otelAttributes(requestModel, responseModel, usage),
+      otelEvents: this.otelEvents(),
+      usage,
       price,
     }
   }

@@ -1,16 +1,57 @@
-export interface GenAiOtelAttributes {
-  'gen_ai.operation.name': 'chat'
-  'gen_ai.system': string
-  'gen_ai.request.model'?: string
-  'gen_ai.response.model'?: string
-  'gen_ai.usage.input_tokens'?: number
-  'gen_ai.usage.cache_read_tokens'?: number
-  'gen_ai.usage.cache_write_tokens'?: number
-  'gen_ai.usage.output_tokens'?: number
-  'gen_ai.usage.input_audio_tokens'?: number
-  'gen_ai.usage.cache_audio_read_tokens'?: number
-  'gen_ai.usage.output_audio_tokens'?: number
-  events: GenAiOtelEvent[]
+import type { ProxySuccess, ProxyInvalidRequest, ProxyUnexpectedResponse } from './providers/default'
+import type { Level, Attributes } from './otel'
+
+export function genAiOtelAttributes(
+  result: ProxySuccess | ProxyInvalidRequest | ProxyUnexpectedResponse,
+  providerId: string,
+): [string, Attributes, Level] {
+  const { requestModel } = result
+  let spanName = `chat ${requestModel || 'unknown'}`
+  let attributes: Attributes = {
+    'gen_ai.operation.name': 'chat',
+    'gen_ai.request.model': requestModel,
+    'gen_ai.system': providerId,
+  }
+
+  let level: Level = 'info'
+
+  if ('successStatus' in result) {
+    const { requestBody, successStatus, responseModel, usage, otelEvents, responseBody } = result
+    attributes = {
+      ...attributes,
+      'http.response.status_code': successStatus,
+      'http.request.body': requestBody,
+      'http.response.body': responseBody,
+      'gen_ai.response.model': responseModel,
+      'gen_ai.usage.input_tokens': usage.input_tokens,
+      'gen_ai.usage.cache_read_tokens': usage.cache_read_tokens,
+      'gen_ai.usage.cache_write_tokens': usage.cache_write_tokens,
+      'gen_ai.usage.output_tokens': usage.output_tokens,
+      'gen_ai.usage.input_audio_tokens': usage.input_audio_tokens,
+      'gen_ai.usage.cache_audio_read_tokens': usage.cache_audio_read_tokens,
+      'gen_ai.usage.output_audio_tokens': usage.output_audio_tokens,
+      events: otelEvents,
+    }
+  } else if ('error' in result) {
+    const { error } = result
+    spanName += ': invalid request {error}'
+    attributes = {
+      ...attributes,
+      error,
+    }
+    level = 'error'
+  } else {
+    const { unexpectedStatus, requestBody, responseBody } = result
+    spanName += ': unexpected response: {http.response.status_code}'
+    attributes = {
+      ...attributes,
+      'http.response.status_code': unexpectedStatus,
+      'http.request.body': requestBody,
+      'http.response.body': responseBody,
+    }
+    level = 'warn'
+  }
+  return [spanName, attributes, level]
 }
 
 export type GenAiOtelEvent = GenAiSystemEvent | GenAiUserEvent | GenaiChoiceEvent

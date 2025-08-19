@@ -3,12 +3,12 @@ import { Usage, calcPrice, extractUsage, findProvider } from '@pydantic/genai-pr
 
 import { ApiKeyInfo, ProviderProxy } from '../types'
 import { GatewayEnv } from '..'
+import { GenAiOtelAttributes, GenAiOtelEvent } from '../otelAttributes'
 
 interface ProxySuccess {
   successResponse: Response
   requestModel?: string
-  responseModel: string
-  usage: Usage
+  otelAttributes: GenAiOtelAttributes
   price: number
 }
 
@@ -16,6 +16,7 @@ interface ProxyInvalidRequest {
   error: string
   // if true we should disable the key immediately since it appears to be incurring cost we can't measure
   disableKey?: boolean
+  requestModel?: string
 }
 
 interface ProxyFailure {
@@ -128,6 +129,28 @@ export class DefaultProviderProxy {
 
   responseHeaders(_headers: Headers): void {}
 
+  otelAttributes(requestModel: string | undefined, responseModel: string, usage: Usage): GenAiOtelAttributes {
+    // TODO add request and response bodies
+    return {
+      'gen_ai.operation.name': 'chat',
+      'gen_ai.system': this.providerId(),
+      'gen_ai.request.model': requestModel,
+      'gen_ai.response.model': responseModel,
+      'gen_ai.usage.input_tokens': usage.input_tokens,
+      'gen_ai.usage.cache_read_tokens': usage.cache_read_tokens,
+      'gen_ai.usage.cache_write_tokens': usage.cache_write_tokens,
+      'gen_ai.usage.output_tokens': usage.output_tokens,
+      'gen_ai.usage.input_audio_tokens': usage.input_audio_tokens,
+      'gen_ai.usage.cache_audio_read_tokens': usage.cache_audio_read_tokens,
+      'gen_ai.usage.output_audio_tokens': usage.output_audio_tokens,
+      events: this.otelEvents(),
+    }
+  }
+
+  otelEvents(): GenAiOtelEvent[] {
+    return []
+  }
+
   async dispatch(): Promise<ProxySuccess | ProxyInvalidRequest | ProxyFailure> {
     const checkResult = this.check()
     if (checkResult) {
@@ -157,7 +180,7 @@ export class DefaultProviderProxy {
 
     const processResponse = await this.extractUsage(response)
     if ('error' in processResponse) {
-      return { ...processResponse, disableKey: true }
+      return { ...processResponse, disableKey: true, requestModel }
     }
     const { body, usage, responseModel, price } = processResponse
 
@@ -177,9 +200,8 @@ export class DefaultProviderProxy {
 
     return {
       successResponse,
-      responseModel,
       requestModel,
-      usage,
+      otelAttributes: this.otelAttributes(requestModel, responseModel, usage),
       price,
     }
   }

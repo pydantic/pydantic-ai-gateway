@@ -9,7 +9,7 @@ from pydantic_ai.providers.groq import GroqProvider
 
 logfire.configure(service_name='testing')
 logfire.instrument_pydantic_ai()
-logfire.instrument_httpx(capture_all=True)
+# logfire.instrument_httpx(capture_all=True)
 
 
 class Person(BaseModel, use_attribute_docstrings=True):

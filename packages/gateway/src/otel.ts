@@ -16,18 +16,20 @@ import { resourceFromAttributes } from '@opentelemetry/resources'
 
 import type { OtelSettings } from './types'
 
-type Attributes = { [key: string]: string | number }
+type Attributes = Record<string, string | number | boolean | undefined>
 type Level = 'debug' | 'info' | 'notice' | 'warn' | 'error'
 
 export class OtelTrace {
   private otelSettings: OtelSettings
+  version: string
   private remoteParent?: SpanContext
   traceId: string
   private spans: ReadableSpan[] = []
 
-  constructor(headers: Headers, otelSettings: OtelSettings) {
-    this.otelSettings = otelSettings
-    this.remoteParent = extractSpanContext(headers)
+  constructor(request: Request, otelSettings: OtelSettings | null, version: string) {
+    this.otelSettings = otelSettings || {}
+    this.version = version
+    this.remoteParent = extractSpanContext(request.headers)
     if (this.remoteParent) {
       this.traceId = this.remoteParent.traceId
     } else {
@@ -49,7 +51,16 @@ export class OtelTrace {
     if (this.otelSettings.writeToken) {
       headers.set('Authorization', this.otelSettings.writeToken)
     }
-    const body = this.serialize()
+
+    if (!this.spans.length) {
+      // no spans to send, nothing to do
+      return
+    }
+    const body = ProtobufTraceSerializer.serializeRequest(this.spans)
+    if (body === undefined) {
+      logfire.error('Failed to serialize spans', { span: this.spans })
+      return
+    }
     const response = await fetchRetry(`${baseUrl}/v1/traces`, {
       method: 'POST',
       headers,
@@ -59,15 +70,6 @@ export class OtelTrace {
       const text = await response.text()
       const headers = Object.fromEntries(response.headers.entries())
       logfire.warning(`Unexpected response from OTel: ${response.status}`, { status: response.status, text, headers })
-    }
-  }
-
-  private serialize(): Uint8Array {
-    const serialized = ProtobufTraceSerializer.serializeRequest(this.spans)
-    if (serialized === undefined) {
-      throw new Error('Failed to serialize spans')
-    } else {
-      return serialized
     }
   }
 
@@ -128,6 +130,7 @@ export class OtelSpan {
       ended: true,
       resource: resourceFromAttributes({
         'service.name': 'PAIG',
+        'service.version': this.trace.version,
       }),
       instrumentationScope: {
         name: 'pydantic-ai-gateway',
@@ -144,7 +147,9 @@ export class OtelSpan {
 function renderMessage(messageTemplate: string, attributes: Attributes): string {
   let message = messageTemplate
   for (let [key, value] of Object.entries(attributes)) {
-    message = message.replace(`{${key}}`, value.toString())
+    if (value !== undefined) {
+      message = message.replace(`{${key}}`, value.toString())
+    }
   }
   // console.log('Rendered message:', message)
   return message

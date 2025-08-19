@@ -1,3 +1,4 @@
+import { env } from 'cloudflare:workers'
 import * as logfire from '@pydantic/logfire-api'
 import { instrument } from '@pydantic/logfire-cf-workers'
 import { gatewayFetch, GatewayEnv, LimitDbD1 } from '@pydantic/ai-gateway'
@@ -26,5 +27,6 @@ const handler = {
 export default instrument(handler, {
   service: {
     name: 'gateway',
+    version: env.GITHUB_SHA.substring(0, 7),
   },
 })

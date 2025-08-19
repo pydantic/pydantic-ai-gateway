@@ -16,7 +16,7 @@ export async function gateway(request: Request, ctx: ExecutionContext, url: URL,
   const [, provider, rest] = providerMatch as [string, string, string]
 
   const apiKey = await apiKeyAuth(request, env)
-  const otel = new OtelTrace(request.headers, apiKey.otelSettings || {})
+  const otel = new OtelTrace(request, apiKey.otelSettings, env.githubSha)
 
   const providerProxy = apiKey.providers[provider]
   if (!providerProxy) {
@@ -30,41 +30,47 @@ export async function gateway(request: Request, ctx: ExecutionContext, url: URL,
   const dispatchSpan = otel.startSpan()
   const result = await proxy.dispatch()
 
+  let response: Response
   if ('successResponse' in result) {
-    dispatchSpan.end('dispatch success', { price: result.price })
-    runAfter(ctx, otel.send())
-    runAfter(ctx, recordSpend(apiKey, result.price, env))
-    return result.successResponse
+    const { successResponse, requestModel, otelAttributes, price } = result
+    dispatchSpan.end(`chat ${requestModel || 'unknown'}`, otelAttributes as any)
+    runAfter(ctx, 'recordSpend', recordSpend(apiKey, price, env))
+    response = successResponse
   } else if ('error' in result) {
-    dispatchSpan.end('dispatch error', { error: result.error }, { level: 'error' })
-    runAfter(ctx, otel.send())
-    const { error, disableKey } = result
+    const { error, disableKey, requestModel } = result
+    dispatchSpan.end(
+      `chat ${requestModel || 'unknown'} - invalid request`,
+      { error, disableKey, requestModel },
+      { level: 'error' },
+    )
     if (disableKey) {
-      runAfter(ctx, disableApiKey(apiKey, env, 'Invalid request'))
-      return textResponse(400, `${error}, API key disabled`)
+      runAfter(ctx, 'disableApiKey', disableApiKey(apiKey, env, 'Invalid request'))
+      response = textResponse(400, `${error}, API key disabled`)
     } else {
-      return textResponse(400, error)
+      response = textResponse(400, error)
     }
   } else {
+    const { failResponse, requestModel } = result
     dispatchSpan.end(
-      'dispatch failed, {response_status} response',
-      { response_status: result.failResponse.status },
+      `chat ${requestModel || 'unknown'} - unexpected response: {response_status}`,
+      { response_status: failResponse.status },
       { level: 'warn' },
     )
-    runAfter(ctx, otel.send())
-    return result.failResponse
+    response = failResponse
   }
+  runAfter(ctx, 'otel.send', otel.send())
+  return response
 }
 
-function runAfter(ctx: ExecutionContext, promise: Promise<unknown>) {
-  ctx.waitUntil(wrapLogfire(promise))
+function runAfter(ctx: ExecutionContext, name: string, promise: Promise<unknown>) {
+  ctx.waitUntil(wrapLogfire(name, promise))
 }
 
-async function wrapLogfire(promise: Promise<unknown>): Promise<void> {
+async function wrapLogfire(functionName: string, promise: Promise<unknown>): Promise<void> {
   try {
     await promise
   } catch (error) {
-    logfire.reportError('Error in ctx.waitUntil', error as Error)
+    logfire.reportError(`Error running ${functionName} in ctx.waitUntil`, error as Error)
     throw error
   }
 }

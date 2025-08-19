@@ -139,7 +139,6 @@ export class OtelSpan {
       droppedEventsCount: 0,
       droppedLinksCount: 0,
     }
-
     this.trace._addSpan(span)
   }
 }
@@ -156,9 +155,17 @@ function renderMessage(messageTemplate: string, attributes: Attributes): string 
 }
 
 function attributesJsonSchema(attributes: Attributes): string {
-  const properties: { [key: string]: any } = {}
+  const properties: { [key: string]: unknown } = {}
   for (let key of Object.keys(attributes)) {
-    properties[key] = { type: {} }
+    if (key === 'http.request.body' || key === 'http.response.body') {
+      properties[key] = { type: 'object' }
+    }
+    const valueType = typeof attributes[key]
+    if (valueType === 'string' || valueType === 'number' || valueType === 'boolean') {
+      properties[key] = { type: valueType }
+    } else {
+      properties[key] = {}
+    }
   }
   return JSON.stringify({ type: 'object', properties })
 }

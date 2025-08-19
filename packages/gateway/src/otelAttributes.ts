@@ -20,8 +20,8 @@ export function genAiOtelAttributes(
     attributes = {
       ...attributes,
       'http.response.status_code': successStatus,
-      'http.request.body': requestBody,
-      'http.response.body': responseBody,
+      'http.request.body.text': requestBody,
+      'http.response.body.text': responseBody,
       'gen_ai.response.model': responseModel,
       'gen_ai.usage.input_tokens': usage.input_tokens,
       'gen_ai.usage.cache_read_tokens': usage.cache_read_tokens,
@@ -46,8 +46,8 @@ export function genAiOtelAttributes(
     attributes = {
       ...attributes,
       'http.response.status_code': unexpectedStatus,
-      'http.request.body': requestBody,
-      'http.response.body': responseBody,
+      'http.request.body.text': requestBody,
+      'http.response.body.text': responseBody,
     }
     level = 'warn'
   }

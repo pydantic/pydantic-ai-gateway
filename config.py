@@ -159,8 +159,8 @@ teams:
 
 providers:
   - name: openai
-    baseURL: https://api.openai.com/v1
-    proxySchema: openai
+    baseUrl: https://api.openai.com/v1
+    providerId: openai
     # if credentials starts with 'env::' the value will be read from cloudflare env/secrets
     credentials: env::OPENAI_API_KEY
 
@@ -186,7 +186,6 @@ def main() -> int:
         print('\nInstructions:')
         print(f'* update {config_file} to configure the gateway')
         print('* run `uv run config.py` again to generate the TypeScript config file')
-        return 0
 
     try:
         with config_file.open('r') as f:

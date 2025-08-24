@@ -37,6 +37,14 @@
 
     /* Skip type checking all .d.ts files. */
     "skipLibCheck": true,
-    "noUncheckedIndexedAccess": true
-  }
+    "noUncheckedIndexedAccess": true,
+    "baseUrl": ".",
+    "paths": {
+      /* this is used by oss-gateway, but we can't extend "paths", hence including it here */
+      "@pydantic/ai-gateway": ["packages/gateway/src"],
+      /* paths for API types: */
+      "@groq-chat/completions": ["node_modules/groq-sdk/resources/chat/completions"]
+    }
+  },
+  "types": ["@cloudflare/workers-types"]
 }

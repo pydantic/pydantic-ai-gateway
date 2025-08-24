@@ -33,7 +33,8 @@ export interface ProxyUnexpectedResponse {
 }
 
 interface Prepare {
-  requestBody: string
+  requestBodyText: string
+  requestBodyData: JsonData
   requestModel?: string
 }
 
@@ -98,16 +99,17 @@ export class DefaultProviderProxy {
   }
 
   protected async prepRequest(): Promise<Prepare | ProxyInvalidRequest> {
-    const requestBody = await this.request.text()
-    let requestModel
+    const requestBodyText = await this.request.text()
+    let requestBodyData: JsonData
+    let requestModel: string
     try {
-      const data = JSON.parse(requestBody)
-      requestModel = data.model
+      requestBodyData = JSON.parse(requestBodyText)
+      requestModel = requestBodyData.model as string
     } catch (error) {
       return { error: 'invalid request JSON' }
     }
     if (!requestModel || typeof requestModel === 'string') {
-      return { requestBody, requestModel }
+      return { requestBodyText, requestBodyData, requestModel }
     } else {
       return { error: 'invalid request, "model" should be a string' }
     }
@@ -137,7 +139,7 @@ export class DefaultProviderProxy {
 
   protected responseHeaders(_headers: Headers): void {}
 
-  protected otelEvents(): GenAiOtelEvent[] {
+  protected otelEvents(_requestBody: any, _responseModel: any): GenAiOtelEvent[] {
     return []
   }
 
@@ -160,15 +162,15 @@ export class DefaultProviderProxy {
     if ('error' in prepResult) {
       return prepResult
     }
-    const { requestBody, requestModel } = prepResult
-    const response = await fetch(url, { method, headers: requestHeaders, body: requestBody })
+    const { requestBodyText, requestBodyData, requestModel } = prepResult
+    const response = await fetch(url, { method, headers: requestHeaders, body: requestBodyText })
 
     if (!response.ok) {
       // CAUTION: can we be charged in any way for failed requests?
       let responseBody = await response.text()
       return {
         requestModel,
-        requestBody,
+        requestBody: requestBodyText,
         unexpectedStatus: response.status,
         responseHeaders: response.headers,
         responseBody,
@@ -192,12 +194,12 @@ export class DefaultProviderProxy {
 
     return {
       responseModel,
-      requestBody,
+      requestBody: requestBodyText,
       successStatus: response.status,
       responseHeaders,
       responseBody: JSON.stringify(responseBody),
       requestModel,
-      otelEvents: this.otelEvents(),
+      otelEvents: this.otelEvents(requestBodyData, responseBody),
       usage,
       price,
     }

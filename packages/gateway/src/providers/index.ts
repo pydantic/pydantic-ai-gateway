@@ -2,6 +2,7 @@ import { ApiKeyInfo, ProviderProxy, ProviderID } from '../types'
 import { GatewayEnv } from '..'
 
 import { OpenAIProvider } from './openai'
+import { GroqProvider } from './groq'
 import { DefaultProviderProxy } from './default'
 
 type providerSig = new (
@@ -16,6 +17,8 @@ export function getProvider(providerId: ProviderID): providerSig {
   switch (providerId) {
     case 'openai':
       return OpenAIProvider
+    case 'groq':
+      return GroqProvider
     default:
       return DefaultProviderProxy
   }

@@ -12,5 +12,8 @@
     "@opentelemetry/resources": "^2.0.1",
     "@pydantic/genai-prices": "^0.0.22",
     "@pydantic/logfire-api": "^0.5.0"
+  },
+  "devDependencies": {
+    "groq-sdk": "^0.30.0"
   }
 }

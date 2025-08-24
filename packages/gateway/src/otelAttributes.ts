@@ -54,33 +54,40 @@ export function genAiOtelAttributes(
   return [spanName, attributes, level]
 }
 
-export type GenAiOtelEvent = GenAiSystemEvent | GenAiUserEvent | GenaiChoiceEvent
+// The following should be added by otel.ts
+// * 'gen_ai.message.index': number - apparently used by logfire
+// * 'gen_ai.system': string - otel stand
+export type GenAiOtelEvent =
+  | GenAiSystemEvent
+  | GenAiUserEvent
+  | GenAiToolEvent
+  | GenAiAssistantEvent
+  | GenaiChoiceEvent
 
 export interface GenAiSystemEvent {
   'event.name': 'gen_ai.system.message'
-  'gen_ai.system': string
   role: 'system'
-  content: string
+  content: any
 }
 
 export interface GenAiUserEvent {
   'event.name': 'gen_ai.user.message'
-  'gen_ai.system': string
   role: 'user'
-  content: string
+  content: any
 }
 
-export interface GenaiChoiceEvent {
-  'event.name': 'gen_ai.choice'
-  'gen_ai.system': string
-  finish_reason: 'stop' | 'tool_calls' | 'content_filter'
-  index: number
-  message: ChoiceMessage
+export interface GenAiToolEvent {
+  'event.name': 'gen_ai.tool.message'
+  role: 'tool'
+  content: any
+  id: string
+  name?: string
 }
 
-export interface ChoiceMessage {
-  content?: any // todo
+export interface GenAiAssistantEvent {
+  'event.name': 'gen_ai.assistant.message'
   role: 'assistant'
+  content?: any
   tool_calls?: ToolCall[]
 }
 
@@ -91,4 +98,17 @@ export interface ToolCall {
     name: string
     arguments: string
   }
+}
+
+export interface GenaiChoiceEvent {
+  'event.name': 'gen_ai.choice'
+  finish_reason: string
+  index: number
+  message: ChoiceMessage
+}
+
+export interface ChoiceMessage {
+  role: 'assistant'
+  content?: any // todo
+  tool_calls?: ToolCall[]
 }

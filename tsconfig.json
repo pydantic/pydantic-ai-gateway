@@ -37,6 +37,11 @@
 
     /* Skip type checking all .d.ts files. */
     "skipLibCheck": true,
-    "noUncheckedIndexedAccess": true
-  }
+    "noUncheckedIndexedAccess": true,
+    "baseUrl": ".",
+    "paths": {
+      "@groq-chat/completions": ["node_modules/groq-sdk/resources/chat/completions"]
+    }
+  },
+  "types": ["@cloudflare/workers-types"]
 }

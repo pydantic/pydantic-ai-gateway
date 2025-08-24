@@ -23,6 +23,12 @@ repos:
         language: system
         types_or: [javascript, ts, json]
         pass_filenames: false
+      - id: run-config
+        name: run config
+        entry: uv
+        args: [run, config.py]
+        language: system
+        pass_filenames: false
       - id: typecheck-ts
         name: typecheck typescript
         entry: make

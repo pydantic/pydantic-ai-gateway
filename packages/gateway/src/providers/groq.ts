@@ -12,6 +12,8 @@ import { GenAiOtelEvent, GenaiChoiceEvent } from '../otelAttributes'
 import { DefaultProviderProxy } from './default'
 
 export class GroqProvider extends DefaultProviderProxy {
+  defaultBaseUrl = 'https://api.groq.com'
+
   otelEvents(requestBody: ChatCompletionCreateParamsBase, responseBody: ChatCompletion): GenAiOtelEvent[] {
     const events = requestBody.messages.map(mapRequestMessage)
 

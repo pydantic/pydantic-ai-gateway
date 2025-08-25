@@ -22,7 +22,7 @@ export async function gateway(request: Request, ctx: ExecutionContext, url: URL,
 
   const providerProxy = apiKey.providers[provider]
   if (!providerProxy) {
-    return textResponse(404, `No provider found named '${provider}'`)
+    return textResponse(404, `Provider '${provider}' not supported by this API Key`)
   }
 
   const ProxyCls = getProvider(providerProxy.providerId)

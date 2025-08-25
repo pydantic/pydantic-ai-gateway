@@ -44,7 +44,7 @@ export type ProviderID =
 
 export interface ProviderProxy {
   name: string
-  baseUrl: string
+  baseUrl?: string
   providerId: ProviderID
   injectPrice: boolean
   credentials: string

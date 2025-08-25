@@ -185,7 +185,7 @@ def main() -> int:
         print(f'Config file {config_file} created.')
         print('\nInstructions:')
         print(f'* update {config_file} to configure the gateway')
-        print('* run `uv run config.py` again to generate the TypeScript config file')
+        print('* run `make config` again to generate the TypeScript config file')
 
     try:
         with config_file.open('r') as f:

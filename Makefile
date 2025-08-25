@@ -66,6 +66,14 @@ test: test-ts ## Run all tests
 config: ## Configure the OSS gateway
 	uv run config.py
 
+.PHONY: dev
+dev: config ## Run the OSS gateway locally
+	npm run dev
+
+.PHONY: deploy
+deploy: config ## Run the OSS gateway locally
+	npm run deploy
+
 .PHONY: all
 all: format typecheck test ## run format, typecheck and test
 

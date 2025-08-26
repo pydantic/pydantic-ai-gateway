@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 import { gateway } from './gateway'
 import { ctHeader, response405, ResponseError } from './utils'
 import type { KeysDb, LimitDb } from './db'

@@ -76,10 +76,13 @@ export class DefaultProviderProxy {
     return undefined
   }
 
-  /* Check that the model being used is supported.
-    In particular that we can accurately determine the token usage from the response.
-    */
-  protected check(): ProxyInvalidRequest | void {}
+  /**
+   * Check that the model being used is supported.
+   * In particular that we can accurately determine the token usage from the response.
+   */
+  protected check(): ProxyInvalidRequest | undefined {
+    return undefined
+  }
 
   protected method(): string {
     return this.request.method
@@ -91,7 +94,7 @@ export class DefaultProviderProxy {
 
   protected userAgent(): string {
     const userAgent = this.request.headers.get('user-agent')
-    return `${userAgent} via Pydantic AI Gateway ${this.env.githubSha.substring(0, 7)}, contact engineering@pydantic.dev`
+    return `${String(userAgent)} via Pydantic AI Gateway ${this.env.githubSha.substring(0, 7)}, contact engineering@pydantic.dev`
   }
 
   protected requestHeaders(headers: Headers) {
@@ -103,9 +106,9 @@ export class DefaultProviderProxy {
     let requestBodyData: JsonData
     let requestModel: string
     try {
-      requestBodyData = JSON.parse(requestBodyText)
+      requestBodyData = JSON.parse(requestBodyText) as unknown as JsonData
       requestModel = requestBodyData.model as string
-    } catch (error) {
+    } catch {
       return { error: 'invalid request JSON' }
     }
     if (!requestModel || typeof requestModel === 'string') {
@@ -118,7 +121,7 @@ export class DefaultProviderProxy {
   protected async extractUsage(response: Response): Promise<ProcessResponse | ProxyInvalidRequest> {
     try {
       const bodyText = await response.text()
-      const responseBody = JSON.parse(bodyText)
+      const responseBody = JSON.parse(bodyText) as unknown as JsonData
       const provider = findProvider({ providerId: this.providerId() })
       if (!provider) {
         return { error: 'invalid response JSON, provider not found' }
@@ -137,9 +140,11 @@ export class DefaultProviderProxy {
     }
   }
 
-  protected responseHeaders(_headers: Headers): void {}
+  protected responseHeaders(_headers: Headers): void {
+    return undefined
+  }
 
-  protected otelEvents(_requestBody: any, _responseModel: any): GenAiOtelEvent[] {
+  protected otelEvents(_requestBody: unknown, _responseModel: unknown): GenAiOtelEvent[] {
     return []
   }
 
@@ -167,7 +172,7 @@ export class DefaultProviderProxy {
 
     if (!response.ok) {
       // CAUTION: can we be charged in any way for failed requests?
-      let responseBody = await response.text()
+      const responseBody = await response.text()
       return {
         requestModel,
         requestBody: requestBodyText,

@@ -23,10 +23,11 @@ export async function apiKeyAuth(request: Request, env: GatewayEnv): Promise<Api
     throw new ResponseError(401, 'Unauthorized - Key too long')
   }
 
-  let cacheKey = apiKeyCacheKey(key, env)
+  const cacheKey = apiKeyCacheKey(key, env)
   const cacheResult = await env.kv.getWithMetadata<ApiKeyInfo, number>(cacheKey, { type: 'json' })
 
   let apiKey
+  // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
   if (cacheResult && cacheResult.metadata === CACHE_VERSION && cacheResult.value) {
     apiKey = cacheResult.value
   } else {

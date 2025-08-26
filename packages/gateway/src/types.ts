@@ -20,7 +20,7 @@ export interface ApiKeyInfo {
   userSpendingLimitDaily: number | null
   userSpendingLimitWeekly: number | null
   userSpendingLimitMonthly: number | null
-  providers: { [name: string]: ProviderProxy }
+  providers: Record<string, ProviderProxy>
   otelSettings: OtelSettings | null
 }
 

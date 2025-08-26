@@ -29,6 +29,13 @@ repos:
         args: [config]
         language: system
         pass_filenames: false
+      - id: lint-ts
+        name: lint typescript
+        entry: make
+        args: [lint-ts]
+        language: system
+        types_or: [javascript, ts, json]
+        pass_filenames: false
       - id: typecheck-ts
         name: typecheck typescript
         entry: make

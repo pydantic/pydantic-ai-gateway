@@ -1,3 +1,5 @@
+/* eslint-disable camelcase */
+/** we're working with snake_case keys from the Groq API */
 import * as logfire from '@pydantic/logfire-api'
 
 import type {
@@ -55,6 +57,7 @@ function mapRequestMessage(message: ChatCompletionMessageParam): GenAiOtelEvent 
       content,
       tool_calls,
     }
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
   } else if (role === 'function') {
     // deprecated, shouldn't happen
     const { content } = message
@@ -64,7 +67,8 @@ function mapRequestMessage(message: ChatCompletionMessageParam): GenAiOtelEvent 
       content,
     }
   } else {
-    const neverRole: never = role
+    const neverRole: unknown = role
+    // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
     throw new Error(`Unexpected role: ${neverRole}`)
   }
 }

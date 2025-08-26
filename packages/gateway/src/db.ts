@@ -1,3 +1,5 @@
+/* eslint-disable no-undef */
+/** Above is necessary for the cloudflare d1 types */
 import type { ApiKeyInfo } from './types'
 
 export abstract class KeysDb {
@@ -32,7 +34,7 @@ export class LimitDbD1 extends LimitDb {
         .bind(id, spend, limit)
         .run()
     } catch (error) {
-      let errorString = (error as Error).toString()
+      const errorString = (error as Error).toString()
       if (errorString.includes('SQLITE_CONSTRAINT')) {
         return true
       } else {

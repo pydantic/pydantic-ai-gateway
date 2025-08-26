@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 import * as logfire from '@pydantic/logfire-api'
 
 import { ApiKeyInfo } from './types'
@@ -10,11 +11,11 @@ import type { GatewayEnv } from '.'
 
 export async function gateway(request: Request, ctx: ExecutionContext, url: URL, env: GatewayEnv): Promise<Response> {
   const { pathname } = url
-  const providerMatch = pathname.match(/^\/([^\/]+)\/(.*)$/)
+  const providerMatch = /^\/([^/]+)\/(.*)$/.exec(pathname)
   if (!providerMatch) {
     return textResponse(404, 'Path not found')
   }
-  const [, provider, rest] = providerMatch as [string, string, string]
+  const [, provider, rest] = providerMatch as unknown as [string, string, string]
 
   const apiKey = await apiKeyAuth(request, env)
   const otel = new OtelTrace(request, apiKey.otelSettings, env.githubSha)
@@ -24,9 +25,9 @@ export async function gateway(request: Request, ctx: ExecutionContext, url: URL,
     return textResponse(404, `No provider found named '${provider}'`)
   }
 
-  const proxyCls = getProvider(providerProxy.providerId)
+  const ProxyCls = getProvider(providerProxy.providerId)
 
-  const proxy = new proxyCls(request, env, apiKey, providerProxy, rest)
+  const proxy = new ProxyCls(request, env, apiKey, providerProxy, rest)
 
   const dispatchSpan = otel.startSpan()
   const result = await proxy.dispatch()
@@ -96,7 +97,7 @@ async function recordSpend(apiKey: ApiKeyInfo, spend: number, env: GatewayEnv): 
     await incrementSpend('key-monthly', `${id}-${month}`, spend, apiKey.keySpendingLimitMonthly, ex, env)
   }
   if (typeof apiKey.keySpendingLimitTotal === 'number') {
-    await incrementSpend('key-total', `${id}`, spend, apiKey.keySpendingLimitTotal, ex, env)
+    await incrementSpend('key-total', id, spend, apiKey.keySpendingLimitTotal, ex, env)
   }
 
   if (typeof user === 'string') {
@@ -133,7 +134,7 @@ async function incrementSpend(
   scopesExceeded: string[],
   env: GatewayEnv,
 ): Promise<void> {
-  let limitExceeded = await env.limitDb.incrementSpend(`${scope}-${uniqueID}`, spend, limit)
+  const limitExceeded = await env.limitDb.incrementSpend(`${scope}-${uniqueID}`, spend, limit)
   if (limitExceeded) {
     scopesExceeded.push(scope)
   }

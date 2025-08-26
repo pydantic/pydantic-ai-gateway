@@ -2,6 +2,8 @@ import { DefaultProviderProxy } from '../default'
 import { authToken } from './auth'
 
 export class GoogleVertexProvider extends DefaultProviderProxy {
+  protected usageField = 'usageMetadata'
+
   url() {
     if (this.providerProxy.baseUrl) {
       const extra = this.restOfPath.replace(/^v1beta\/models\//, '')

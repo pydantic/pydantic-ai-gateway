@@ -14,7 +14,7 @@ export interface ProxySuccess {
   responseModel: string
   otelEvents: GenAiOtelEvent[]
   usage: Usage
-  price: number
+  cost: number
 }
 
 export interface ProxyInvalidRequest {
@@ -44,7 +44,7 @@ interface ProcessResponse {
   responseBody: JsonData
   responseModel: string
   usage: Usage
-  price: number
+  cost: number
 }
 
 export class DefaultProviderProxy {
@@ -54,6 +54,7 @@ export class DefaultProviderProxy {
   protected providerProxy: ProviderProxy
   protected restOfPath: string
   protected defaultBaseUrl: string | null = null
+  protected usageField: string | null = 'usage'
 
   constructor(
     request: Request,
@@ -136,7 +137,7 @@ export class DefaultProviderProxy {
 
       const price = calcPrice(usage, responseModel, { provider })
       if (price) {
-        return { responseBody, responseModel, usage, price: price.total_price }
+        return { responseBody, responseModel, usage, cost: price.total_price }
       } else {
         return { error: 'Unable to calculate spend' }
       }
@@ -148,6 +149,15 @@ export class DefaultProviderProxy {
 
   protected responseHeaders(_headers: Headers): void {
     return undefined
+  }
+
+  protected injectCost(responseBody: JsonData, cost: number) {
+    if (this.usageField && this.usageField in responseBody) {
+      const usage = responseBody[this.usageField]
+      if (isMapping(usage)) {
+        usage.pydantic_ai_gateway = { cost_estimate: cost }
+      }
+    }
   }
 
   protected otelEvents(_requestBody: unknown, _responseModel: unknown): GenAiOtelEvent[] {
@@ -195,15 +205,15 @@ export class DefaultProviderProxy {
     if ('error' in processResponse) {
       return { ...processResponse, disableKey: true, requestModel }
     }
-    const { responseBody, usage, responseModel, price } = processResponse
+    const { responseBody, usage, responseModel, cost } = processResponse
 
     // TODO we will want to remove some response headers, e.g. openai org
     const responseHeaders = new Headers(response.headers)
-    responseHeaders.set('pydantic-ai-gateway-price-estimate', `${price.toFixed(4)}USD`)
+    responseHeaders.set('pydantic-ai-gateway-price-estimate', `${cost.toFixed(4)}USD`)
     this.responseHeaders(responseHeaders)
 
-    if (this.providerProxy.injectPrice && 'usage' in responseBody && isMapping(responseBody.usage)) {
-      responseBody.usage.pydantic_ai_gateway = { price_estimate: price }
+    if (this.providerProxy.injectCost) {
+      this.injectCost(responseBody, cost)
     }
 
     return {
@@ -215,7 +225,7 @@ export class DefaultProviderProxy {
       requestModel,
       otelEvents: this.otelEvents(requestBodyData, responseBody),
       usage,
-      price,
+      cost,
     }
   }
 }

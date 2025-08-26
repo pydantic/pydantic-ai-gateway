@@ -102,7 +102,7 @@ class ProviderProxy(_Model):
     name: str
     base_url: str | None = Field(default=None, alias='baseUrl')
     provider_id: ProviderID = Field(alias='providerId')
-    inject_price: bool = Field(default=True, alias='injectPrice')
+    inject_cost: bool = Field(default=True, alias='injectCost')
     credentials: str
 
     @model_validator(mode='after')

@@ -11,6 +11,22 @@ export class GoogleVertexProvider extends DefaultProviderProxy {
     }
   }
 
+  async prepRequest() {
+    const requestBodyText = await this.request.text()
+    let requestBodyData
+    try {
+      requestBodyData = JSON.parse(requestBodyText)
+    } catch (error) {
+      return { error: 'invalid request JSON' }
+    }
+    const m = this.restOfPath.match(/\/models\/(.+?):/)
+    if (m) {
+      return { requestBodyText, requestBodyData, requestModel: m[1] }
+    } else {
+      return { error: 'unable to find model in path' }
+    }
+  }
+
   async requestHeaders(headers: Headers): Promise<void> {
     const token = await authToken(this.providerProxy.credentials, this.env.kv)
     headers.set('Authorization', `Bearer ${token}`)

@@ -802,6 +802,9 @@ wheels = [
 ]
 
 [package.optional-dependencies]
+aiohttp-client = [
+    { name = "opentelemetry-instrumentation-aiohttp-client" },
+]
 httpx = [
     { name = "opentelemetry-instrumentation-httpx" },
 ]
@@ -1059,6 +1062,22 @@ wheels = [
 ]
 
 [[package]]
+name = "opentelemetry-instrumentation-aiohttp-client"
+version = "0.57b0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "opentelemetry-api" },
+    { name = "opentelemetry-instrumentation" },
+    { name = "opentelemetry-semantic-conventions" },
+    { name = "opentelemetry-util-http" },
+    { name = "wrapt" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/35/0b/62ecc589a619d2661557084077854fc8b3908382e08ddd79d811124a930a/opentelemetry_instrumentation_aiohttp_client-0.57b0.tar.gz", hash = "sha256:ce05e8ef7bc7016d4b0d8e47786b5cf5e6efd7ff0bea8e1ab6616ef5fa985f37", size = 15037, upload-time = "2025-07-29T15:42:45.929Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/08/63/45a664f89ea7f3e57658de084477bd3c2b437e123a212e699c19c0690f73/opentelemetry_instrumentation_aiohttp_client-0.57b0-py3-none-any.whl", hash = "sha256:fbec3966da845b9a650a72f8fc7f7ac4dd25365317c850a188611e1c92606ac8", size = 12374, upload-time = "2025-07-29T15:41:43.134Z" },
+]
+
+[[package]]
 name = "opentelemetry-instrumentation-httpx"
 version = "0.57b0"
 source = { registry = "https://pypi.org/simple" }
@@ -1284,6 +1303,7 @@ version = "0.0.0"
 source = { virtual = "." }
 dependencies = [
     { name = "genai-prices" },
+    { name = "logfire", extra = ["aiohttp-client", "httpx"] },
     { name = "pydantic" },
     { name = "ruamel-yaml" },
 ]
@@ -1303,6 +1323,7 @@ examples = [
 [package.metadata]
 requires-dist = [
     { name = "genai-prices", specifier = ">=0.0.22" },
+    { name = "logfire", extras = ["aiohttp-client", "httpx"], specifier = ">=4.3.3" },
     { name = "pydantic", specifier = ">=2.11.7" },
     { name = "ruamel-yaml", specifier = ">=0.18.14" },
 ]

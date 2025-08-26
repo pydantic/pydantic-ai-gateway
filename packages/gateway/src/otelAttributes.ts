@@ -6,7 +6,7 @@ export function genAiOtelAttributes(
   providerId: string,
 ): [string, Attributes, Level] {
   const { requestModel } = result
-  let spanName = `chat ${requestModel ?? 'unknown'}`
+  let spanName: string
   let attributes: Attributes = {
     'gen_ai.operation.name': 'chat',
     'gen_ai.request.model': requestModel,
@@ -17,6 +17,7 @@ export function genAiOtelAttributes(
 
   if ('successStatus' in result) {
     const { requestBody, successStatus, responseModel, usage, otelEvents, responseBody } = result
+    spanName = `chat ${responseModel || requestModel || 'unknown-model'}`
     attributes = {
       ...attributes,
       'http.response.status_code': successStatus,
@@ -34,7 +35,7 @@ export function genAiOtelAttributes(
     }
   } else if ('error' in result) {
     const { error } = result
-    spanName += ': invalid request {error}'
+    spanName = `chat ${requestModel || 'unknown-model'}, invalid request {error}`
     attributes = {
       ...attributes,
       error,
@@ -42,7 +43,7 @@ export function genAiOtelAttributes(
     level = 'error'
   } else {
     const { unexpectedStatus, requestBody, responseBody } = result
-    spanName += ': unexpected response: {http.response.status_code}'
+    spanName = `chat ${requestModel || 'unknown-model'}, unexpected response: {http.response.status_code}`
     attributes = {
       ...attributes,
       'http.response.status_code': unexpectedStatus,

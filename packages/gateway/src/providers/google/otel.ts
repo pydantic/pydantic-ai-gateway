@@ -11,7 +11,9 @@ import type {
 } from '@google/genai'
 import { GenAiOtelEvent, GenaiChoiceEvent, ToolCall } from '../../otelAttributes'
 
-interface GoogleRequest {
+export { GenerateContentResponse } from '@google/genai'
+
+export interface GoogleRequest {
   content: Content[]
   systemInstruction?: ContentUnion
   tools?: Tool[]
@@ -27,7 +29,7 @@ export function otelEvents(requestBody: GoogleRequest, responseBody: GenerateCon
   const events = systemEvents(requestBody.systemInstruction)
   events.push(...requestBody.content.map(mapContent))
 
-  const candidate = responseBody.candidates && responseBody.candidates[0]
+  const candidate = responseBody.candidates?.[0]
   if (candidate) {
     events.push(mapResponseCandidate(candidate))
   } else {
@@ -162,7 +164,7 @@ function convertParts(parts?: Part[]): PartsInfo {
         name,
       }
     }
-    const extraFields = extraPartFields.filter((field) => (part as any)[field])
+    const extraFields = extraPartFields.filter((field) => field in part)
     if (extraFields.length > 0) {
       logfire.warning('Extra fields found on part:', { extraFields, part })
     }
@@ -191,21 +193,21 @@ function convertSystemParts(part: Part, systemInstruction: ContentUnion): string
 }
 
 function mapResponseCandidate({ finishReason, content: candidateContent }: Candidate): GenaiChoiceEvent {
-  let content: any = undefined
-  let tool_calls: ToolCall[] | undefined
+  let content
+  let toolCalls: ToolCall[] | undefined
   if (candidateContent) {
     const partsInfo = convertParts(candidateContent.parts)
     content = partsInfo.content
-    tool_calls = partsInfo.toolCalls
+    toolCalls = partsInfo.toolCalls
   }
   return {
     'event.name': 'gen_ai.choice',
-    finish_reason: finishReason || 'stop',
+    finish_reason: finishReason ?? 'stop',
     index: 0,
     message: {
       role: 'assistant',
       content,
-      tool_calls,
+      tool_calls: toolCalls,
     },
   }
 }

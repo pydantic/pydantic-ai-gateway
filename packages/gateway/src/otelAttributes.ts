@@ -17,7 +17,7 @@ export function genAiOtelAttributes(
 
   if ('successStatus' in result) {
     const { requestBody, successStatus, responseModel, usage, otelEvents, responseBody } = result
-    spanName = `chat ${responseModel || requestModel || 'unknown-model'}`
+    spanName = `chat ${responseModel}`
     attributes = {
       ...attributes,
       'http.response.status_code': successStatus,
@@ -35,7 +35,7 @@ export function genAiOtelAttributes(
     }
   } else if ('error' in result) {
     const { error } = result
-    spanName = `chat ${requestModel || 'unknown-model'}, invalid request {error}`
+    spanName = `chat ${requestModel ?? 'unknown-model'}, invalid request {error}`
     attributes = {
       ...attributes,
       error,
@@ -43,7 +43,7 @@ export function genAiOtelAttributes(
     level = 'error'
   } else {
     const { unexpectedStatus, requestBody, responseBody } = result
-    spanName = `chat ${requestModel || 'unknown-model'}, unexpected response: {http.response.status_code}`
+    spanName = `chat ${requestModel ?? 'unknown-model'}, unexpected response: {http.response.status_code}`
     attributes = {
       ...attributes,
       'http.response.status_code': unexpectedStatus,

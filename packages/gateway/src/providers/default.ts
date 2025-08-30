@@ -38,7 +38,7 @@ interface Prepare {
   requestModel?: string
 }
 
-type JsonData = Record<string, unknown>
+export type JsonData = Record<string, unknown>
 
 interface ProcessResponse {
   responseBody: JsonData
@@ -104,6 +104,7 @@ export class DefaultProviderProxy {
     return `${String(userAgent)} via Pydantic AI Gateway ${this.env.githubSha.substring(0, 7)}, contact engineering@pydantic.dev`
   }
 
+  // eslint-disable-next-line @typescript-eslint/require-await
   protected async requestHeaders(headers: Headers): Promise<void> {
     headers.set('Authorization', `Bearer ${this.providerProxy.credentials}`)
   }

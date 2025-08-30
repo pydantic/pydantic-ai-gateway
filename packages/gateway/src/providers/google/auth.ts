@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 import { ResponseError } from '../../utils'
 
 export async function authToken(credentials: string, kv: KVNamespace): Promise<string> {
@@ -15,19 +16,19 @@ export async function authToken(credentials: string, kv: KVNamespace): Promise<s
 }
 
 function getServiceAccount(credentials: string): ServiceAccount {
-  let client_email, private_key
+  let sa
   try {
-    ;({ client_email, private_key } = JSON.parse(credentials))
+    sa = JSON.parse(credentials) as ServiceAccount
   } catch (error) {
-    throw new ResponseError(400, `provider credentials are not valid JSON: ${error}`)
+    throw new ResponseError(400, `provider credentials are not valid JSON: ${error as Error}`)
   }
-  if (typeof client_email !== 'string') {
-    throw new ResponseError(400, `"client_email" should be a string, not ${typeof client_email}`)
+  if (typeof sa.client_email !== 'string') {
+    throw new ResponseError(400, `"client_email" should be a string, not ${typeof sa.client_email}`)
   }
-  if (typeof private_key !== 'string') {
-    throw new ResponseError(400, `"private_key" should be a string, not ${typeof private_key}`)
+  if (typeof sa.private_key !== 'string') {
+    throw new ResponseError(400, `"private_key" should be a string, not ${typeof sa.private_key}`)
   }
-  return { client_email, private_key }
+  return { client_email: sa.client_email, private_key: sa.private_key }
 }
 
 interface ServiceAccount {
@@ -96,8 +97,8 @@ async function getAccessToken(jwt: string): Promise<string> {
   })
 
   if (response.ok) {
-    const { access_token } = (await response.json()) as TokenResponse
-    return access_token
+    const responseData: TokenResponse = await response.json()
+    return responseData.access_token
   } else {
     const text = await response.text()
     throw new ResponseError(400, `Failed to get GCP access token, response:\n${response.status}: ${text}`)

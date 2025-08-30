@@ -1,6 +1,6 @@
-import { DefaultProviderProxy } from '../default'
+import { DefaultProviderProxy, JsonData } from '../default'
 import { authToken } from './auth'
-import { otelEvents } from './otel'
+import { otelEvents, GoogleRequest, GenerateContentResponse } from './otel'
 
 export class GoogleVertexProvider extends DefaultProviderProxy {
   protected usageField = 'usageMetadata'
@@ -18,11 +18,11 @@ export class GoogleVertexProvider extends DefaultProviderProxy {
     const requestBodyText = await this.request.text()
     let requestBodyData
     try {
-      requestBodyData = JSON.parse(requestBodyText)
-    } catch (error) {
+      requestBodyData = JSON.parse(requestBodyText) as JsonData
+    } catch (_error) {
       return { error: 'invalid request JSON' }
     }
-    const m = this.restOfPath.match(/\/models\/(.+?):/)
+    const m = /\/models\/(.+?):/.exec(this.restOfPath)
     if (m) {
       return { requestBodyText, requestBodyData, requestModel: m[1] }
     } else {
@@ -35,7 +35,7 @@ export class GoogleVertexProvider extends DefaultProviderProxy {
     headers.set('Authorization', `Bearer ${token}`)
   }
 
-  otelEvents(requestBody: any, responseModel: any) {
-    return otelEvents(requestBody, responseModel)
+  otelEvents(requestBody: GoogleRequest, responseBody: GenerateContentResponse) {
+    return otelEvents(requestBody, responseBody)
   }
 }

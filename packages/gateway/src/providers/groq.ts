@@ -69,7 +69,7 @@ function mapRequestMessage(message: ChatCompletionMessageParam): GenAiOtelEvent 
       content,
     }
   } else {
-    const neverRole: unknown = role
+    const neverRole: never = role
     // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
     throw new Error(`Unexpected role: ${neverRole}`)
   }

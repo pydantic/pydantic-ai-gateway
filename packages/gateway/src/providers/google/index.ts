@@ -1,5 +1,6 @@
 import { DefaultProviderProxy } from '../default'
 import { authToken } from './auth'
+import { otelEvents } from './otel'
 
 export class GoogleVertexProvider extends DefaultProviderProxy {
   protected usageField = 'usageMetadata'
@@ -32,5 +33,9 @@ export class GoogleVertexProvider extends DefaultProviderProxy {
   async requestHeaders(headers: Headers): Promise<void> {
     const token = await authToken(this.providerProxy.credentials, this.env.kv)
     headers.set('Authorization', `Bearer ${token}`)
+  }
+
+  otelEvents(requestBody: any, responseModel: any) {
+    return otelEvents(requestBody, responseModel)
   }
 }

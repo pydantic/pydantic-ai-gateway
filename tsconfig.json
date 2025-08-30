@@ -47,7 +47,8 @@
       /* this is used by oss-gateway, but we can't extend "paths", hence including it here */
       "@pydantic/ai-gateway": ["packages/gateway/src"],
       /* paths for API types: */
-      "@groq-chat/completions": ["node_modules/groq-sdk/resources/chat/completions"]
+      "@groq-chat/completions": ["node_modules/groq-sdk/resources/chat/completions"],
+      "@google/genai": ["node_modules/@google/genai/dist/genai.d.ts"]
     }
   },
   "types": ["@cloudflare/workers-types"]

@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 import * as logfire from '@pydantic/logfire-api'
 
 import { ProtobufTraceSerializer } from '@opentelemetry/otlp-transformer'
@@ -27,7 +28,7 @@ export class OtelTrace {
   private spans: ReadableSpan[] = []
 
   constructor(request: Request, otelSettings: OtelSettings | null, version: string) {
-    this.otelSettings = otelSettings || {}
+    this.otelSettings = otelSettings ?? {}
     this.version = version
     this.remoteParent = extractSpanContext(request.headers)
     if (this.remoteParent) {
@@ -93,7 +94,7 @@ export class OtelSpan {
     this.spanContext = {
       traceId: trace.traceId,
       spanId: generateSpanId(),
-      traceFlags: parent?.traceFlags || TraceFlags.NONE,
+      traceFlags: parent?.traceFlags ?? TraceFlags.NONE,
     }
   }
 
@@ -107,21 +108,23 @@ export class OtelSpan {
     }
     this.ended = true
 
-    let now = getTime()
+    const now = getTime()
     const duration: HrTime = [now[0] - this.start[0], now[1] - this.start[1]]
 
-    let span: ReadableSpan = {
+    const span: ReadableSpan = {
       name: messageTemplate,
       kind: 0,
       spanContext: () => this.spanContext,
       parentSpanContext: this.parent,
+      //TODO: should we we make start | undefined?
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
       startTime: this.start || now,
       endTime: now,
       status: { code: 1 },
       attributes: {
         'logfire.msg': renderMessage(messageTemplate, attributes),
         'logfire.json_schema': attributesJsonSchema(attributes),
-        'logfire.level_num': mapLevel(details?.level || 'info'),
+        'logfire.level_num': mapLevel(details?.level ?? 'info'),
         ...attributes,
       },
       links: [],
@@ -145,8 +148,9 @@ export class OtelSpan {
 
 function renderMessage(messageTemplate: string, attributes: Attributes): string {
   let message = messageTemplate
-  for (let [key, value] of Object.entries(attributes)) {
+  for (const [key, value] of Object.entries(attributes)) {
     if (value !== undefined) {
+      // eslint-disable-next-line @typescript-eslint/no-base-to-string
       message = message.replace(`{${key}}`, value.toString())
     }
   }
@@ -155,8 +159,8 @@ function renderMessage(messageTemplate: string, attributes: Attributes): string 
 }
 
 function attributesJsonSchema(attributes: Attributes): string {
-  const properties: { [key: string]: unknown } = {}
-  for (let key of Object.keys(attributes)) {
+  const properties: Record<string, unknown> = {}
+  for (const key of Object.keys(attributes)) {
     if (key === 'http.request.body' || key === 'http.response.body') {
       properties[key] = { type: 'object' }
     }
@@ -171,9 +175,9 @@ function attributesJsonSchema(attributes: Attributes): string {
 }
 
 function getTime(): HrTime {
-  let now = new Date().getTime()
-  let seconds = Math.floor(now / 1000)
-  let nanos = (now - seconds * 1000) * 1000000
+  const now = new Date().getTime()
+  const seconds = Math.floor(now / 1000)
+  const nanos = (now - seconds * 1000) * 1000000
   return [seconds, nanos]
 }
 
@@ -208,6 +212,7 @@ function mapLevel(levelName: Level): number {
     case 'error':
       return 17
     default:
+      // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
       throw new Error(`Unknown log level ${levelName}`)
   }
 }
@@ -224,6 +229,7 @@ function extractSpanContext(headers: Headers): SpanContext | undefined {
       return this
     },
     deleteValue(key: symbol): Context {
+      // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
       delete contextData[key]
       return this
     },
@@ -283,7 +289,7 @@ function getBaseUrl({ baseUrl, writeToken }: OtelSettings): string | undefined {
   if (baseUrl) {
     return baseUrl
   }
-  const regionMatch = writeToken && writeToken.match(/pylf_v\d_(us|eu)/)
+  const regionMatch = writeToken?.match(/pylf_v\d_(us|eu)/)
   if (regionMatch) {
     return `https://logfire-${regionMatch[1]}.pydantic.dev`
   }

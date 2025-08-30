@@ -6,7 +6,7 @@ export function genAiOtelAttributes(
   providerId: string,
 ): [string, Attributes, Level] {
   const { requestModel } = result
-  let spanName = `chat ${requestModel || 'unknown'}`
+  let spanName = `chat ${requestModel ?? 'unknown'}`
   let attributes: Attributes = {
     'gen_ai.operation.name': 'chat',
     'gen_ai.request.model': requestModel,
@@ -67,19 +67,19 @@ export type GenAiOtelEvent =
 export interface GenAiSystemEvent {
   'event.name': 'gen_ai.system.message'
   role: 'system'
-  content: any
+  content: unknown
 }
 
 export interface GenAiUserEvent {
   'event.name': 'gen_ai.user.message'
   role: 'user'
-  content: any
+  content: unknown
 }
 
 export interface GenAiToolEvent {
   'event.name': 'gen_ai.tool.message'
   role: 'tool'
-  content: any
+  content: unknown
   id: string
   name?: string
 }
@@ -87,7 +87,7 @@ export interface GenAiToolEvent {
 export interface GenAiAssistantEvent {
   'event.name': 'gen_ai.assistant.message'
   role: 'assistant'
-  content?: any
+  content?: unknown
   tool_calls?: ToolCall[]
 }
 
@@ -109,6 +109,6 @@ export interface GenaiChoiceEvent {
 
 export interface ChoiceMessage {
   role: 'assistant'
-  content?: any // todo
+  content?: unknown // todo
   tool_calls?: ToolCall[]
 }

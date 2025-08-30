@@ -1,4 +1,4 @@
-import { ProviderProxy, OtelSettings } from '@pydantic/ai-gateway'
+import { ProviderProxy } from '@pydantic/ai-gateway'
 
 export interface Config {
   org: string

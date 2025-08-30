@@ -9,7 +9,7 @@
   ],
   "scripts": {
     "format": "prettier --write -- .",
-    "lint": "prettier --check -- .",
+    "lint": "npm run lint --workspaces",
     "typecheck": "npm run typecheck --workspaces",
     "test": "npm run test --workspace=oss-gateway",
     "deploy": "npm run deploy --workspace=oss-gateway",

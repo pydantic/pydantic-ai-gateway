@@ -38,6 +38,10 @@
     /* Skip type checking all .d.ts files. */
     "skipLibCheck": true,
     "noUncheckedIndexedAccess": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true,
+    "noUncheckedSideEffectImports": true,
     "baseUrl": ".",
     "paths": {
       /* this is used by oss-gateway, but we can't extend "paths", hence including it here */

@@ -1,9 +1,14 @@
-export const ctHeader = (contentType: string) => ({ 'Content-Type': contentType })
+export function ctHeader(contentType: string) {
+  return { 'Content-Type': contentType }
+}
 
-export const textResponse = (status: number, message: string) =>
-  new Response(message, { status, headers: ctHeader('text/plain') })
-export const jsonResponse = (data: any) =>
-  new Response(JSON.stringify(data, null, 2) + '\n', { headers: ctHeader('application/json') })
+export function textResponse(status: number, message: string) {
+  return new Response(message, { status, headers: ctHeader('text/plain') })
+}
+
+export function jsonResponse(data: unknown) {
+  return new Response(JSON.stringify(data, null, 2) + '\n', { headers: ctHeader('application/json') })
+}
 
 export function response405(...allowMethods: string[]): Response {
   const allow = allowMethods.join(', ')
@@ -13,7 +18,8 @@ export function response405(...allowMethods: string[]): Response {
   })
 }
 
-function getIP(request: Request): string {
+// TODO: this is not used at the moment. We can remove it or keep it for the future
+export function getIP(request: Request): string {
   const ip = request.headers.get('cf-connecting-ip')
   if (ip) {
     return ip

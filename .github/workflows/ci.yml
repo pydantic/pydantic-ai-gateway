@@ -23,7 +23,7 @@ jobs:
       - uses: actions/setup-node@v4
 
       - run: npm i
-      - run: "echo 'OPENAI_API_KEY=testing' >> deploy/env.local"
+      - run: "echo 'OPENAI_API_KEY=testing' >> deploy/.env.local"
       - run: npm run typegen
 
       - uses: actions/cache@v4
@@ -49,7 +49,7 @@ jobs:
       - run: uv run config.py
 
       - run: npm i
-      - run: "echo 'OPENAI_API_KEY=testing' >> deploy/env.local"
+      - run: "echo 'OPENAI_API_KEY=testing' >> deploy/.env.local"
       - run: npm run typegen
       - run: npm run test
 
@@ -63,21 +63,3 @@ jobs:
         uses: re-actors/alls-green@release/v1
         with:
           jobs: ${{ toJSON(needs) }}
-
-  # deploy-worker:
-  #   needs: [check]
-  #   if: "success() && github.ref == 'refs/heads/main'"
-  #   runs-on: ubuntu-latest
-  #   environment: cloudflare-workers-deploy
-
-  #   steps:
-  #     - uses: actions/checkout@v4
-
-  #     - uses: actions/setup-node@v4
-
-  #     - run: npm i
-
-  #     - uses: cloudflare/wrangler-action@v3
-  #       with:
-  #         apiToken: ${{ secrets.cloudflare_api_token }}
-  #         command: deploy --var GITHUB_SHA:${{ github.sha }}

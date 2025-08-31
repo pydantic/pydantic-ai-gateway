@@ -44,7 +44,7 @@
     "noUncheckedSideEffectImports": true,
     "baseUrl": ".",
     "paths": {
-      /* this is used by oss-gateway, but we can't extend "paths", hence including it here */
+      /* this is used by deploy, but we can't extend "paths", hence including it here */
       "@pydantic/ai-gateway": ["packages/gateway/src"],
       /* paths for API types: */
       "@groq-chat/completions": ["node_modules/groq-sdk/resources/chat/completions"],

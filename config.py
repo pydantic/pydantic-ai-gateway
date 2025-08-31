@@ -144,7 +144,7 @@ class ApiKey(_Model):
 
 config_schema_file = Path('config.schema.json')
 config_file = Path('config.yaml')
-typescript_content_path = Path('oss-gateway/src/config.ts')
+typescript_content_path = Path('deploy/src/config.ts')
 template_config_file = f"""\
 # yaml-language-server: $schema={config_schema_file.name}
 

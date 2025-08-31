@@ -5,18 +5,18 @@
   "license": "???",
   "workspaces": [
     "packages/gateway",
-    "oss-gateway"
+    "deploy"
   ],
   "scripts": {
     "format": "prettier --write -- .",
     "lint": "npm run lint --workspaces",
     "lint-fix": "npm run lint-fix --workspaces",
     "typecheck": "npm run typecheck --workspaces",
-    "test": "npm run test --workspace=oss-gateway",
-    "deploy": "npm run deploy --workspace=oss-gateway",
-    "dev": "npm run dev --workspace=oss-gateway",
-    "limits-local-db": "npm run limits-local-db --workspace=oss-gateway",
-    "typegen": "npm run typegen --workspace=oss-gateway"
+    "test": "npm run test --workspace=deploy",
+    "deploy": "npm run deploy --workspace=deploy",
+    "dev": "npm run dev --workspace=deploy",
+    "limits-local-db": "npm run limits-local-db --workspace=deploy",
+    "typegen": "npm run typegen --workspace=deploy"
   },
   "prettier": {
     "singleQuote": true,

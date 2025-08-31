@@ -23,6 +23,7 @@ jobs:
       - uses: actions/setup-node@v4
 
       - run: npm i
+      - run: "echo 'OPENAI_API_KEY=testing' >> deploy/env.local"
       - run: npm run typegen
 
       - uses: actions/cache@v4
@@ -48,6 +49,7 @@ jobs:
       - run: uv run config.py
 
       - run: npm i
+      - run: "echo 'OPENAI_API_KEY=testing' >> deploy/env.local"
       - run: npm run typegen
       - run: npm run test
 

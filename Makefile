@@ -19,6 +19,7 @@ install: .npm .uv .pre-commit ## Install the package, dependencies, and pre-comm
 	pre-commit install --install-hooks
 	# this make wrangler significantly faster in some scenarios - https://github.com/cloudflare/workers-sdk/issues/9946
 	npx wrangler telemetry disable
+	npm run typegen
 
 .PHONY: format-ts
 format-ts: ## Format TS and JS code

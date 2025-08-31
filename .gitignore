@@ -1,19 +1,19 @@
 # JS
 node_modules/
 dist
+.env.local
 
 # wrangler
-.dev.vars
 .wrangler/
 
 # claude
-/.claude/
+.claude/
 
 # config
 config.yaml
 config.schema.json
-oss-gateway/src/config.ts
-oss-gateway/worker-configuration.d.ts
+deploy/src/config.ts
+deploy/worker-configuration.d.ts
 
 # misc
 /TODO.md

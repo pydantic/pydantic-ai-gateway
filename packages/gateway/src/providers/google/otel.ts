@@ -80,7 +80,7 @@ const extraPartFields = [
   'thought',
   'inlineData',
   'fileData',
-  'thoughtSignature',
+  // thoughtSignature is not included since we know it can be set and is not useful
   'codeExecutionResult',
   'executableCode',
 ]

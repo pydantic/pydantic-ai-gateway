@@ -30,7 +30,11 @@ class Person(BaseModel, use_attribute_docstrings=True):
 
 
 class GoogleGatewayProvider(Provider[Client]):
-    def __init__(self, *, api_key: str) -> None:
+    def __init__(
+        self, provider_name: str, api_key: str, gateway_url: str = 'https://pydantic-ai-gateway.pydantic.workers.dev'
+    ) -> None:
+        self.provider_name = provider_name
+        self.gateway_url = gateway_url
         http_options: HttpOptionsDict = {
             'headers': {
                 'Authorization': api_key,
@@ -45,7 +49,7 @@ class GoogleGatewayProvider(Provider[Client]):
 
     @property
     def base_url(self) -> str:
-        return 'http://localhost:8787/google'
+        return f'{self.gateway_url}/{self.provider_name}'
 
     @property
     def client(self) -> Client:
@@ -55,7 +59,11 @@ class GoogleGatewayProvider(Provider[Client]):
 person_agent = Agent(
     GoogleModel(
         'gemini-2.5-flash',
-        provider=GoogleGatewayProvider(api_key='VOE4JMpVGr71RgvEEidPCXd4ov42L24ODw9q5RI7uYc'),
+        provider=GoogleGatewayProvider(
+            'google',
+            'VOE4JMpVGr71RgvEEidPCXd4ov42L24ODw9q5RI7uYc',
+            gateway_url='http://localhost:8787',
+        ),
     ),
     output_type=Person,
     instructions='Extract information about the person',

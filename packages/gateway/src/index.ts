@@ -1,4 +1,5 @@
 /* eslint-disable no-undef */
+import * as logfire from '@pydantic/logfire-api'
 import { gateway } from './gateway'
 import { ctHeader, response405, ResponseError } from './utils'
 import type { KeysDb, LimitDb } from './db'
@@ -24,6 +25,7 @@ export async function gatewayFetch(request: Request, ctx: ExecutionContext, env:
     }
   } catch (error) {
     if (error instanceof ResponseError) {
+      logfire.reportError('ResponseError', error)
       return error.response()
     } else {
       throw error

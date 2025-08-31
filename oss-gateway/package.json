@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "typecheck": "tsc --noEmit && cd test && tsc --noEmit",
-    "deploy": "wrangler deploy",
+    "deploy": "wrangler deploy --var GITHUB_SHA:`git rev-parse HEAD`",
     "dev": "wrangler dev",
     "test": "vitest",
     "lint": "",

@@ -12,7 +12,7 @@ export interface ProxySuccess {
   responseHeaders: Headers
   responseBody: string
   responseModel: string
-  otelEvents: GenAiOtelEvent[]
+  otelEvents?: GenAiOtelEvent[]
   usage: Usage
   cost: number
 }
@@ -217,6 +217,14 @@ export class DefaultProviderProxy {
       this.injectCost(responseBody, cost)
     }
 
+    let otelEvents
+    try {
+      otelEvents = this.otelEvents(requestBodyData, responseBody)
+    } catch (error) {
+      console.warn('Error error generating otel events', error)
+      logfire.reportError('Error error generating otel events', error as Error, { requestBodyData, responseBody })
+    }
+
     return {
       responseModel,
       requestBody: requestBodyText,
@@ -224,7 +232,7 @@ export class DefaultProviderProxy {
       responseHeaders,
       responseBody: JSON.stringify(responseBody),
       requestModel,
-      otelEvents: this.otelEvents(requestBodyData, responseBody),
+      otelEvents,
       usage,
       cost,
     }

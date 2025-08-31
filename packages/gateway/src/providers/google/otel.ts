@@ -14,7 +14,7 @@ import { GenAiOtelEvent, GenaiChoiceEvent, ToolCall } from '../../otelAttributes
 export { GenerateContentResponse } from '@google/genai'
 
 export interface GoogleRequest {
-  content: Content[]
+  contents?: Content[]
   systemInstruction?: ContentUnion
   tools?: Tool[]
   toolConfig: ToolConfig
@@ -23,17 +23,22 @@ export interface GoogleRequest {
 
 // NOTE: this is a very incomplete implementation:
 // * not all parts are properly supported
-// * tools aren't supported properly
+// * tools definitions aren't supported properly
 // * I don't entirely trust the types from @google/genai
+// * I'm not sure the way I'm dealing with parts is right
 export function otelEvents(requestBody: GoogleRequest, responseBody: GenerateContentResponse): GenAiOtelEvent[] {
   const events = systemEvents(requestBody.systemInstruction)
-  events.push(...requestBody.content.map(mapContent))
+  if (requestBody.contents) {
+    events.push(...requestBody.contents.map(mapContent))
+  } else {
+    logfire.warning('No contents found in Gemini request', { requestBody })
+  }
 
   const candidate = responseBody.candidates?.[0]
   if (candidate) {
     events.push(mapResponseCandidate(candidate))
   } else {
-    logfire.warning('No candidate found in Gemini response', { responseBody })
+    logfire.warning('No candidates found in Gemini response', { responseBody })
   }
   return events
 }
@@ -68,11 +73,6 @@ function systemEvents(systemInstruction?: ContentUnion): GenAiOtelEvent[] {
     role: 'system',
     content,
   }))
-}
-
-interface ToolResponse {
-  id: string
-  name?: string
 }
 
 const extraPartFields = [
@@ -129,6 +129,11 @@ function mapContent({ role, parts }: Content): GenAiOtelEvent {
   }
 }
 
+interface ToolResponse {
+  id: string
+  name?: string
+}
+
 interface PartsInfo {
   content: string
   toolCalls: ToolCall[]
@@ -158,7 +163,13 @@ function convertParts(parts?: Part[]): PartsInfo {
     }
     if (part.functionResponse) {
       const { id, name, response } = part.functionResponse
-      contentText.push(JSON.stringify(response ?? {}))
+      if (response) {
+        if (Object.keys(response).length === 1 && typeof response.call_error === 'string') {
+          contentText.push(response.call_error)
+        } else {
+          contentText.push(JSON.stringify(response))
+        }
+      }
       toolResponse = {
         id: id ?? 'unknown',
         name,

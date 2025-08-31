@@ -22,7 +22,7 @@ export async function gateway(request: Request, ctx: ExecutionContext, url: URL,
 
   const providerProxy = apiKey.providers[provider]
   if (!providerProxy) {
-    return textResponse(404, `No provider found named '${provider}'`)
+    return textResponse(404, `Provider '${provider}' not supported by this API Key`)
   }
 
   const ProxyCls = getProvider(providerProxy.providerId)
@@ -37,9 +37,9 @@ export async function gateway(request: Request, ctx: ExecutionContext, url: URL,
 
   let response: Response
   if ('successStatus' in result) {
-    const { successStatus, responseHeaders, responseBody: body, price } = result
-    runAfter(ctx, 'recordSpend', recordSpend(apiKey, price, env))
-    response = new Response(body, {
+    const { successStatus, responseHeaders, responseBody, cost } = result
+    runAfter(ctx, 'recordSpend', recordSpend(apiKey, cost, env))
+    response = new Response(responseBody, {
       status: successStatus,
       headers: responseHeaders,
     })
@@ -52,8 +52,8 @@ export async function gateway(request: Request, ctx: ExecutionContext, url: URL,
       response = textResponse(400, error)
     }
   } else {
-    const { unexpectedStatus, responseHeaders, responseBody: body } = result
-    response = new Response(body, {
+    const { unexpectedStatus, responseHeaders, responseBody } = result
+    response = new Response(responseBody, {
       status: unexpectedStatus,
       headers: responseHeaders,
     })

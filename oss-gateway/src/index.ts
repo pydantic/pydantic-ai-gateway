@@ -5,6 +5,8 @@ import { gatewayFetch, GatewayEnv, LimitDbD1 } from '@pydantic/ai-gateway'
 import { CONFIG_HASH } from './config'
 import { ConfigDB } from './db'
 
+const VERSION = `${env.GITHUB_SHA.substring(0, 7)}-${CONFIG_HASH}`
+
 const handler = {
   async fetch(request, env, ctx): Promise<Response> {
     const gatewayEnv: GatewayEnv = {
@@ -12,7 +14,7 @@ const handler = {
       keysDb: new ConfigDB(env),
       limitDb: new LimitDbD1(env.limitsDB),
       kv: env.KV,
-      kvVersion: `${env.GITHUB_SHA.substring(0, 7)}-${CONFIG_HASH}`,
+      kvVersion: VERSION,
     }
     try {
       return await gatewayFetch(request, ctx, gatewayEnv)
@@ -27,6 +29,6 @@ const handler = {
 export default instrument(handler, {
   service: {
     name: 'gateway',
-    version: env.GITHUB_SHA.substring(0, 7),
+    version: VERSION,
   },
 })

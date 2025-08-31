@@ -29,13 +29,6 @@ class Person(BaseModel, use_attribute_docstrings=True):
 
 os.environ['GROQ_BASE_URL'] = 'http://localhost:8787/groq'
 person_agent = Agent(
-    # OpenAIModel(
-    #     'gpt-4.1-mini',
-    #     provider=OpenAIProvider(
-    #         base_url='http://localhost:8787/openai',
-    #         api_key='VOE4JMpVGr71RgvEEidPCXd4ov42L24ODw9q5RI7uYc',
-    #     ),
-    # ),
     GroqModel(
         'openai/gpt-oss-120b',
         provider=GroqProvider(

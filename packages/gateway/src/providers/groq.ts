@@ -12,6 +12,8 @@ import { GenAiOtelEvent, GenaiChoiceEvent } from '../otelAttributes'
 import { DefaultProviderProxy } from './default'
 
 export class GroqProvider extends DefaultProviderProxy {
+  defaultBaseUrl = 'https://api.groq.com'
+
   otelEvents(requestBody: ChatCompletionCreateParamsBase, responseBody: ChatCompletion): GenAiOtelEvent[] {
     const events = requestBody.messages.map(mapRequestMessage)
 
@@ -67,7 +69,7 @@ function mapRequestMessage(message: ChatCompletionMessageParam): GenAiOtelEvent 
       content,
     }
   } else {
-    const neverRole: unknown = role
+    const neverRole: never = role
     // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
     throw new Error(`Unexpected role: ${neverRole}`)
   }

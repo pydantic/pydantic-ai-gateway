@@ -5,8 +5,9 @@ description = "Config of pydantic-ai-gateway"
 requires-python = ">=3.11"
 dependencies = [
     "genai-prices>=0.0.22",
+    "logfire[aiohttp-client,httpx]>=4.3.3",
     "pydantic>=2.11.7",
- "ruamel-yaml>=0.18.14",
+    "ruamel-yaml>=0.18.14",
 ]
 
 [dependency-groups]

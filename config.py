@@ -6,13 +6,14 @@ import re
 import secrets
 import subprocess
 import sys
+from collections.abc import Sequence
 from datetime import datetime
 from enum import StrEnum
 from pathlib import Path
 from typing import cast
 
 from genai_prices.types import ProviderID
-from pydantic import BaseModel, Field, ValidationError, field_serializer, field_validator
+from pydantic import BaseModel, Field, ValidationError, field_serializer, field_validator, model_validator
 from pydantic_core.core_schema import ValidationInfo
 from ruamel.yaml import YAML
 
@@ -94,12 +95,22 @@ class ProxySchema(StrEnum):
     anthropic = 'anthropic'
 
 
+KNOWN_PROVIDERS: Sequence[ProviderID] = ('groq',)
+
+
 class ProviderProxy(_Model):
     name: str
-    base_url: str = Field(alias='baseUrl')
+    base_url: str | None = Field(default=None, alias='baseUrl')
     provider_id: ProviderID = Field(alias='providerId')
-    inject_price: bool = Field(default=True, alias='injectPrice')
+    inject_cost: bool = Field(default=True, alias='injectCost')
     credentials: str
+
+    @model_validator(mode='after')
+    def check_base_url(model) -> ProviderProxy:
+        if model.base_url is None and model.provider_id not in KNOWN_PROVIDERS:
+            providers = ', '.join(KNOWN_PROVIDERS)
+            raise ValueError(f'baseUrl is required unless the providerId is one of {providers}')
+        return model
 
 
 class User(_Model):

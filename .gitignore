@@ -7,7 +7,7 @@ dist
 .wrangler/
 
 # claude
-/.claude/
+.claude/
 
 # config
 config.yaml

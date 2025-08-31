@@ -18,7 +18,7 @@ export default tseslint.config(
       globals: globals.node,
     },
   },
-  { ignores: ['dist', 'src/data.ts'] },
+  { ignores: ['dist'] },
   {
     rules: {
       '@typescript-eslint/no-unused-vars': [
@@ -49,7 +49,6 @@ export default tseslint.config(
     languageOptions: {
       parserOptions: {
         projectService: true,
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
         tsconfigRootDir: import.meta.dirname,
       },
     },

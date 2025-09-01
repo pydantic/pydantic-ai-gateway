@@ -33,6 +33,7 @@ person_agent = Agent(
         'gpt-4.1-mini',
         provider=OpenAIProvider(
             base_url='http://localhost:8787/openai',
+            # base_url='https://pydantic-ai-gateway.pydantic.workers.dev/openai',
             api_key='VOE4JMpVGr71RgvEEidPCXd4ov42L24ODw9q5RI7uYc',
         ),
     ),

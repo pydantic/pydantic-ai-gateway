@@ -23,7 +23,7 @@ jobs:
         with:
           enable-cache: true
 
-      - run: uv sync --all-extras
+      - run: uv sync --all-groups
 
       - uses: actions/setup-node@v4
 

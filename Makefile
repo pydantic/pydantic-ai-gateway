@@ -73,11 +73,8 @@ deploy: ## Run the OSS gateway locally
 
 .PHONY: ci-setup
 ci-setup: ## Setup CI environment
-	echo 'OPENAI_API_KEY=testing' >> deploy/.env.local
-	echo 'GROQ_API_KEY=testing' >> deploy/.env.local
-	echo 'GOOGLE_SERVICE_ACCOUNT_KEY={}' >> deploy/.env.local
-	cp deploy/example.config.ts deploy/src/config.ts
-	cp deploy/example.env.local deploy/.env.local
+	cp -n deploy/example.config.ts deploy/src/config.ts || true
+	cp -n deploy/example.env.local deploy/.env.local || true
 
 .PHONY: all
 all: format typecheck test ## run format, typecheck and test

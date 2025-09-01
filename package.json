@@ -16,6 +16,8 @@
     "deploy": "npm run deploy --workspace=deploy --silent",
     "dev": "npm run dev --workspace=deploy --silent",
     "limits-local-db": "npm run limits-local-db --workspace=deploy",
+    "limits-remote-db": "npm run limits-remote-db --workspace=deploy",
+    "wrangler-secret-put": "npm run wrangler-secret-put --workspace=deploy",
     "generate-api-key": "npm run generate-api-key --workspace=deploy --silent",
     "typegen": "npm run typegen --workspace=deploy --silent"
   },

@@ -45,5 +45,5 @@ reportIgnoreCommentWithoutRule = true
 reportUnusedParameter = true
 reportIncompatibleUnannotatedOverride = true
 reportImplicitAbstractClass = true
-include = ["config.py"]
+include = ["examples"]
 venv = ".venv"

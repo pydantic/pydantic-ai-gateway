@@ -1,3 +1,4 @@
+import { env } from 'cloudflare:workers'
 import type { Config } from './types'
 
 export const CONFIG_VERSION = '1'

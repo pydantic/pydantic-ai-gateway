@@ -15,7 +15,7 @@
 .PHONY: install
 install: .npm .uv .pre-commit ## Install the package, dependencies, and pre-commit for local development
 	npm install
-	uv sync --frozen
+	uv sync --frozen --all-groups
 	pre-commit install --install-hooks
 	# this make wrangler significantly faster in some scenarios - https://github.com/cloudflare/workers-sdk/issues/9946
 	npx wrangler telemetry disable
@@ -63,17 +63,18 @@ test-ts: ## Run TS and JS tests
 .PHONY: test
 test: test-ts ## Run all tests
 
-.PHONY: config
-config: ## Configure the OSS gateway
-	uv run config.py
-
 .PHONY: dev
-dev: config ## Run the OSS gateway locally
+dev: ## Run the OSS gateway locally
 	npm run dev
 
 .PHONY: deploy
-deploy: config ## Run the OSS gateway locally
+deploy: ## Run the OSS gateway locally
 	npm run deploy
+
+.PHONY: ci-setup
+ci-setup: ## Setup CI environment
+	cp -n deploy/example.config.ts deploy/src/config.ts || true
+	cp -n deploy/example.env.local deploy/.env.local || true
 
 .PHONY: all
 all: format typecheck test ## run format, typecheck and test

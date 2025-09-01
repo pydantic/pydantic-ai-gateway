@@ -43,7 +43,6 @@ export type ProviderID =
   | 'openrouter'
 
 export interface ProviderProxy {
-  name: string
   baseUrl?: string
   providerId: ProviderID
   injectCost: boolean

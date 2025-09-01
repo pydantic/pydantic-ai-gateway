@@ -8,6 +8,11 @@ on:
       - '**'
   pull_request: {}
 
+env:
+  COLUMNS: 150
+  UV_PYTHON: 3.12
+  UV_FROZEN: '1'
+
 jobs:
   lint:
     runs-on: ubuntu-latest
@@ -18,12 +23,12 @@ jobs:
         with:
           enable-cache: true
 
-      - run: uv sync
+      - run: uv sync --all-groups
 
       - uses: actions/setup-node@v4
 
       - run: npm i
-      - run: "echo 'OPENAI_API_KEY=testing' >> deploy/.env.local"
+      - run: make ci-setup
       - run: npm run typegen
 
       - uses: actions/cache@v4
@@ -42,14 +47,8 @@ jobs:
 
       - uses: actions/setup-node@v4
 
-      - uses: astral-sh/setup-uv@v6
-        with:
-          enable-cache: true
-
-      - run: uv run config.py
-
       - run: npm i
-      - run: "echo 'OPENAI_API_KEY=testing' >> deploy/.env.local"
+      - run: make ci-setup
       - run: npm run typegen
       - run: npm run test
 

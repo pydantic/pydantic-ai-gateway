@@ -23,12 +23,6 @@ repos:
         language: system
         types_or: [javascript, ts, json]
         pass_filenames: false
-      - id: config
-        name: config
-        entry: make
-        args: [config]
-        language: system
-        pass_filenames: false
       - id: lint-ts
         name: lint typescript
         entry: make

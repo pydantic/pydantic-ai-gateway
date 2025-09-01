@@ -12,11 +12,12 @@
     "lint": "npm run lint --workspaces",
     "lint-fix": "npm run lint-fix --workspaces",
     "typecheck": "npm run typecheck --workspaces",
-    "test": "npm run test --workspace=deploy",
-    "deploy": "npm run deploy --workspace=deploy",
-    "dev": "npm run dev --workspace=deploy",
+    "test": "npm run test --workspace=deploy --silent",
+    "deploy": "npm run deploy --workspace=deploy --silent",
+    "dev": "npm run dev --workspace=deploy --silent",
     "limits-local-db": "npm run limits-local-db --workspace=deploy",
-    "typegen": "npm run typegen --workspace=deploy"
+    "generate-api-key": "npm run generate-api-key --workspace=deploy --silent",
+    "typegen": "npm run typegen --workspace=deploy --silent"
   },
   "prettier": {
     "singleQuote": true,

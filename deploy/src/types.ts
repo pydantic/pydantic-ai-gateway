@@ -29,7 +29,6 @@ export interface User {
 export interface ApiKey {
   team: string
   user?: string
-  apiKey: string
   expires?: number
   spendingLimitDaily?: number
   spendingLimitWeekly?: number

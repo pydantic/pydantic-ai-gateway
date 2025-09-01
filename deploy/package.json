@@ -10,6 +10,7 @@
     "lint": "",
     "lint-fix": "",
     "limits-local-db": "wrangler d1 execute pydantic-ai-gateway-limits --local --file limits-schema.sql",
+    "generate-api-key": "node generate_api_key.js",
     "typegen": "wrangler types --strict-vars false --include-runtime false && prettier worker-configuration.d.ts --write"
   },
   "devDependencies": {

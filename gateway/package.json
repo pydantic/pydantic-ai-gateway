@@ -1,7 +1,7 @@
 {
   "name": "@pydantic/ai-gateway",
   "version": "0.0.0",
-  "private": true,
+  "license": "AGPL-3.0",
   "main": "src/index.ts",
   "scripts": {
     "typecheck": "tsc --noEmit",

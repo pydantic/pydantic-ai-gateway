@@ -6,27 +6,29 @@ An AI Gateway from Pydantic (PAIG)
 
 > Everyone's building AI Gateways, why should I use Pydantic's?
 
-Good question, there's a few reasons:
+Good question, there's a few reasons to try PAIG:
 
 - Excellent integration with [Pydantic AI](https://ai.pydantic.dev)
 - Excellent integration with [Pydantic Logfire](https://pydantic.dev/logfire/), or indeed any Open Telemetry service
 - No "API harmonization" (because Pydantic AI can support all popular models) we don't need to attempt to convert all model responses to one schema, meaning you can use all features of all models as soon as they're released. All PAIG needs to be able to do is authorize requests to that provider
-- Open source with commercial support - you can configure PAIG directly in code and deploy it yourself, or use our hosted service with a convenient UI and API to configure it, we also offer self-hosting of PAIG for enterprise customers
+- Open source (under [AGPL-3.0](https://www.gnu.org/licenses/agpl-3.0.en.html)) with commercial support and hosting - you can configure PAIG directly in code and deploy it yourself, or use our hosted service with a convenient UI and API to configure it, we also offer self-hosting of PAIG for enterprise customers
 - API key delegation and cost limiting - use one provider key across many teams, users and API keys with fine-grained control over usage and costs at each level
 - (TODO) Caching - cache responses to avoid unnecessary API calls and improve performance
 - (TODO) Fallback - if a provider is down or rate limited, PAIG can automatically switch to another provider
-- (TODO) Security
+- (TODO) Security and guardrails
 - (TODO) Code execution, web search and RAG knowledge base all with the same API key
 
-## Deploying PAIG
+## Deploying PAIG yourself
 
-You can deploy PAIG yourself on CloudFlare workers, very easily:
+You can deploy PAIG yourself on CloudFlare workers, very easily.
+
+In this mode there's no UI, instead the gateway is configured by editing `deploy/src/config.ts` and redeploying the worker.
 
 First, clone this repo.
 
 Next configure you the gateway:
 
-You'll also want to set some secrets for CloudFlare's wrangler, you will probably want to start from the example config:
+You'll also want to set some secrets for CloudFlare's wrangler, starting from the example config:
 
 (This command and all subsequent commands should be run from the root of the repo)
 
@@ -41,13 +43,13 @@ the cloudflare env, when you've added variables to `.env.local`, run
 npm run typegen
 ```
 
-Next, configure teams, users, providers and API keys by editing `./deploy/src/config.ts`, you will probably want to start from the example config:
+Next, configure teams, users, providers and API keys by editing `deploy/src/config.ts`, starting from the example config:
 
 ```bash
 cp deploy/example.config.ts deploy/src/config.ts
 ```
 
-Then edit `./deploy/src/config.ts` to set up PAIG.
+Then edit `deploy/src/config.ts` to set up PAIG.
 
 Next, initialize the limits local database (this is used to keep track of costs and block requests that exceed limits)
 

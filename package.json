@@ -2,7 +2,7 @@
   "name": "pydantic-gateway-root",
   "version": "0.0.0",
   "private": true,
-  "license": "???",
+  "license": "AGPL-3.0",
   "workspaces": [
     "gateway",
     "deploy"

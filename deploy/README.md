@@ -1,4 +1,4 @@
-# pydantic-ai-gateway deploy
+# Pydantic AI Gateway deploy
 
 This directory contains code for deploying the Pydantic AI Gateway as a simple "headless" cloudflare worker.
 

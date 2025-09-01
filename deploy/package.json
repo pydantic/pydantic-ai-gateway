@@ -2,6 +2,7 @@
   "name": "pydantic-gateway",
   "version": "0.0.0",
   "private": true,
+  "license": "AGPL-3.0",
   "scripts": {
     "typecheck": "tsc --noEmit && cd test && tsc --noEmit",
     "deploy": "wrangler deploy --var GITHUB_SHA:`git rev-parse HEAD`",

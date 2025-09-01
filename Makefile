@@ -63,17 +63,21 @@ test-ts: ## Run TS and JS tests
 .PHONY: test
 test: test-ts ## Run all tests
 
-.PHONY: config
-config: ## Configure the OSS gateway
-	uv run config.py
-
 .PHONY: dev
-dev: config ## Run the OSS gateway locally
+dev: ## Run the OSS gateway locally
 	npm run dev
 
 .PHONY: deploy
-deploy: config ## Run the OSS gateway locally
+deploy: ## Run the OSS gateway locally
 	npm run deploy
+
+.PHONY: ci-setup
+ci-setup: ## Setup CI environment
+	echo 'OPENAI_API_KEY=testing' >> deploy/.env.local
+	echo 'GROQ_API_KEY=testing' >> deploy/.env.local
+	echo 'GOOGLE_SERVICE_ACCOUNT_KEY={}' >> deploy/.env.local
+	cp deploy/example.config.ts deploy/src/config.ts
+	cp deploy/example.env.local deploy/.env.local
 
 .PHONY: all
 all: format typecheck test ## run format, typecheck and test

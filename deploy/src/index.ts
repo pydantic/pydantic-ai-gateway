@@ -2,10 +2,10 @@ import { env } from 'cloudflare:workers'
 import * as logfire from '@pydantic/logfire-api'
 import { instrument } from '@pydantic/logfire-cf-workers'
 import { gatewayFetch, GatewayEnv, LimitDbD1 } from '@pydantic/ai-gateway'
-import { CONFIG_HASH } from './config'
+import { CONFIG_VERSION } from './config'
 import { ConfigDB } from './db'
 
-const VERSION = `${env.GITHUB_SHA.substring(0, 7)}-${CONFIG_HASH}`
+const VERSION = `${env.GITHUB_SHA.substring(0, 7)}-${CONFIG_VERSION}`
 
 const handler = {
   async fetch(request, env, ctx): Promise<Response> {

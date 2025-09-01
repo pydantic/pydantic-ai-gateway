@@ -10,8 +10,6 @@ dist
 .claude/
 
 # config
-config.yaml
-config.schema.json
 deploy/src/config.ts
 deploy/worker-configuration.d.ts
 

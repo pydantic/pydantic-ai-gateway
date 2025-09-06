@@ -1,0 +1,16 @@
+[project]
+name = "proxy-vcr"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "httptools>=0.6.4",
+    "httpx>=0.28.1",
+    "openai>=1.99.9",
+    "pydantic-settings>=2.10.1",
+    "starlette>=0.47.2",
+    "uvicorn>=0.35.0",
+    "uvloop>=0.21.0",
+    "vcrpy>=7.0.0",
+]

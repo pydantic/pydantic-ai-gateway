@@ -4,7 +4,7 @@
   "name": "pydantic-ai-gateway",
   "main": "src/index.ts",
   "compatibility_date": "2025-07-12",
-  "compatibility_flags": ["nodejs_compat"],
+  "compatibility_flags": ["nodejs_compat_v2"],
   "vars": {
     "GITHUB_SHA": "unknown",
     // if you set `LOGFIRE_TOKEN=pylf...` in .dev.vars, also set `LOGFIRE_ENVIRONMENT=dev`

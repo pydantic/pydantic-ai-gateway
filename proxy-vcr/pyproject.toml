@@ -3,7 +3,7 @@ name = "proxy-vcr"
 version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
-requires-python = ">=3.13"
+requires-python = ">=3.11"
 dependencies = [
     "httptools>=0.6.4",
     "httpx>=0.28.1",

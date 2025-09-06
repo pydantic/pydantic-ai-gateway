@@ -16,3 +16,5 @@ deploy/worker-configuration.d.ts
 # misc
 /TODO.md
 /scratch/
+
+*.egg-info/

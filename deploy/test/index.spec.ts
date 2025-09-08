@@ -1,8 +1,16 @@
 import OpenAI from 'openai'
 import { SELF, env } from 'cloudflare:test'
 import { describe, it, expect, beforeAll } from 'vitest'
-import { proxyVcrRunning } from './utils'
 import SQL from '../limits-schema.sql?raw'
+
+beforeAll(async () => {
+  try {
+    const response = await fetch('http://localhost:8005')
+    expect(response.status, 'The Proxy VCR seems to be facing issues, please check the logs.').toBe(204)
+  } catch {
+    throw new Error('Proxy VCR is not running. Run `make run-proxy-vcr` to enable tests.')
+  }
+})
 
 describe('pydantic ai gateway', () => {
   it('responds with index html', async () => {
@@ -18,7 +26,7 @@ describe('pydantic ai gateway', () => {
   })
 })
 
-describe.skipIf(!proxyVcrRunning)('openai', () => {
+describe('openai', () => {
   beforeAll(async () => {
     await env.limitsDB
       .prepare(

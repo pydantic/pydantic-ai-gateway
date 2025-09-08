@@ -1,7 +1,7 @@
 import { env } from 'cloudflare:workers'
 import type { Config } from './types'
 
-export const CONFIG_VERSION = '2'
+export const CONFIG_VERSION = '3'
 
 export const config: Config = {
   // the name of the organization, doesn't matter in this case
@@ -10,6 +10,7 @@ export const config: Config = {
     default: {
       name: 'default',
       otelWriteToken: 'For sending proxy telemetry to Logfire or other OTel service, generate at logfire.pydantic.dev',
+      otelBaseUrl: 'https://logfire.pydantic.dev',
       // users in this team
       users: {
         testberto: {

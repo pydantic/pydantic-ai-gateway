@@ -1,7 +1,7 @@
 [project]
 name = "proxy-vcr"
 version = "0.1.0"
-description = "Add your description here"
+description = "The Proxy VCR is a tool that records and replays HTTP requests."
 readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [

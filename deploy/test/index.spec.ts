@@ -38,7 +38,6 @@ ${SQL}
       apiKey: 'o-QBrunFudqD99879C5jkFZgZrueCLlCJGSMAbzFGFY',
       baseURL: 'https://example.com/openai',
       fetch: SELF.fetch.bind(SELF),
-      defaultHeaders: { 'X-VCR-FILENAME': 'openai-chat-completion.yaml' },
     })
 
     const completion = await client.chat.completions.create({
@@ -63,8 +62,8 @@ ${SQL}
             },
           },
         ],
-        "created": 1757186985,
-        "id": "chatcmpl-CCstVpoEahHH9q0YclOQCy0a0ciKS",
+        "created": 1757316780,
+        "id": "chatcmpl-CDQeyDf30d6s2eFqr1PmAs2sdQcAd",
         "model": "gpt-5-2025-08-07",
         "object": "chat.completion",
         "service_tier": "default",

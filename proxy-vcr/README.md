@@ -1,1 +1,1 @@
-Run this with `make start-proxy-vcr` to start the proxy.
+Run this with `make run-proxy-vcr` to start the proxy.

@@ -1,10 +1,12 @@
+from __future__ import annotations as _annotations
+
+import hashlib
 import pathlib
 from contextlib import asynccontextmanager
 from typing import cast
 
 import httpx
 import uvicorn
-from rich.pretty import pprint
 from starlette.applications import Starlette
 from starlette.exceptions import HTTPException
 from starlette.requests import Request
@@ -29,24 +31,25 @@ vcr = VCR(
 
 @asynccontextmanager
 async def lifespan(_: Starlette):
-    client = httpx.AsyncClient(timeout=600)
-    yield {'httpx_client': client}
+    async with httpx.AsyncClient(timeout=600) as client:
+        yield {'httpx_client': client}
 
 
 async def proxy(request: Request) -> JSONResponse:
     user_agent = request.headers.get('user-agent', '')
-    body = await request.body()
     auth_header = request.headers.get('authorization', '')
+    body = await request.body()
+
+    # We should cache based on request body content, so we should make a hash of the request body.
+    body_hash = hashlib.sha256(body).hexdigest()
 
     if user_agent.startswith('OpenAI'):
         client = cast(httpx.AsyncClient, request.scope['state']['httpx_client'])
 
         url = OPENAI_BASE_URL + request.url.path
-        with vcr.use_cassette(request.headers.get('x-vcr-filename', '')):  # type: ignore[reportUnknownReturnType]
-            response = await client.post(
-                url, content=body, headers={'Authorization': auth_header, 'content-type': 'application/json'}
-            )
-        pprint(response.json())
+        with vcr.use_cassette(f'{body_hash}.yaml'):  # type: ignore[reportUnknownReturnType]
+            headers = {'Authorization': auth_header, 'content-type': 'application/json'}
+            response = await client.post(url, content=body, headers=headers)
         return JSONResponse(response.json())
     raise HTTPException(status_code=400, detail='Invalid user agent')
 

@@ -1,6 +1,7 @@
 import OpenAI from 'openai'
 import { SELF, env } from 'cloudflare:test'
 import { describe, it, expect, beforeAll } from 'vitest'
+import { proxyVcrRunning } from './utils'
 
 // @ts-ignore
 import SQL from '../limits-schema.sql?raw'
@@ -19,7 +20,7 @@ describe('pydantic ai gateway', () => {
   })
 })
 
-describe('openai', () => {
+describe.skipIf(!proxyVcrRunning)('openai', () => {
   beforeAll(async () => {
     await env.limitsDB
       .prepare(

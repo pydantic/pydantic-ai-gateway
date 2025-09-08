@@ -10,7 +10,7 @@ import uvicorn
 from starlette.applications import Starlette
 from starlette.exceptions import HTTPException
 from starlette.requests import Request
-from starlette.responses import JSONResponse
+from starlette.responses import JSONResponse, Response
 from starlette.routing import Route
 from vcr import VCR  # type: ignore[reportMissingTypeStubs]
 from vcr.record_mode import RecordMode  # type: ignore[reportMissingTypeStubs]
@@ -54,7 +54,17 @@ async def proxy(request: Request) -> JSONResponse:
     raise HTTPException(status_code=400, detail='Invalid user agent')
 
 
-app = Starlette(lifespan=lifespan, routes=[Route('/{path:path}', proxy, methods=['POST'])])
+async def health_check(_: Request) -> Response:
+    return Response(status_code=204)
+
+
+app = Starlette(
+    lifespan=lifespan,
+    routes=[
+        Route('/{path:path}', proxy, methods=['POST']),
+        Route('/', health_check, methods=['GET']),
+    ],
+)
 
 if __name__ == '__main__':
     uvicorn.run(app, host='0.0.0.0', port=8005)

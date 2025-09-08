@@ -14,11 +14,13 @@ export class ConfigDB extends KeysDb {
       otelSettings = {
         writeToken: user.otelWriteToken,
         baseUrl: user.otelBaseUrl,
+        exporterOtlpProtocol: user.otelExporterOtlpProtocol,
       }
     } else if (team.otelWriteToken || team.otelBaseUrl) {
       otelSettings = {
         writeToken: team.otelWriteToken,
         baseUrl: team.otelBaseUrl,
+        exporterOtlpProtocol: team.otelExporterOtlpProtocol,
       }
     }
     return {

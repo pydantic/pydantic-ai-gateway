@@ -7,10 +7,13 @@ export interface Config {
   apiKeys: Record<string, ApiKey>
 }
 
+export type OtelExporterOtlpProtocol = 'http/json' | 'http/protobuf'
+
 export interface Team {
   name: string
   otelWriteToken?: string
   otelBaseUrl?: string
+  otelExporterOtlpProtocol?: OtelExporterOtlpProtocol
   users: Record<string, User>
   spendingLimitDaily?: number
   spendingLimitWeekly?: number
@@ -21,6 +24,7 @@ export interface User {
   name: string
   otelWriteToken?: string
   otelBaseUrl?: string
+  otelExporterOtlpProtocol?: OtelExporterOtlpProtocol
   spendingLimitDaily?: number
   spendingLimitWeekly?: number
   spendingLimitMonthly?: number

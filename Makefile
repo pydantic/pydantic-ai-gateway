@@ -30,6 +30,10 @@ format-py: ## Format Python code
 	uv run ruff format
 	uv run ruff check --fix --fix-only
 
+.PHONY: run-proxy-vcr
+run-proxy-vcr: ## Start the proxy-vcr
+	uv run -m proxy_vcr.main
+
 .PHONY: format
 format: format-ts format-py ## Format all code
 
@@ -51,7 +55,7 @@ typecheck-ts: ## Typecheck TS and JS code
 
 .PHONY: typecheck-py
 typecheck-py: ## Typecheck the code
-	uv run basedpyright
+	uv run pyright
 
 .PHONY: typecheck
 typecheck: typecheck-ts typecheck-py ## Typecheck all code

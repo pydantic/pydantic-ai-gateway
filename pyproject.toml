@@ -57,3 +57,6 @@ reportIncompatibleUnannotatedOverride = true
 reportImplicitAbstractClass = true
 include = ["examples"]
 venv = ".venv"
+
+[tool.codespell]
+ignore-words-list = ["afterAll"]

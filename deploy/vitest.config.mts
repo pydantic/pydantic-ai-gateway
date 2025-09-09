@@ -4,6 +4,7 @@ export default defineWorkersConfig({
   test: {
     // from https://github.com/cloudflare/workers-sdk/issues/6581#issuecomment-2653472683
     testTimeout: 30000,
+    resolveSnapshotPath: (testPath, snapshotExtension) => testPath + snapshotExtension,
     deps: {
       optimizer: {
         ssr: {

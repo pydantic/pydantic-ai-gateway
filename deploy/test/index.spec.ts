@@ -1,6 +1,6 @@
 import OpenAI from 'openai'
 import { SELF, env, fetchMock } from 'cloudflare:test'
-import { describe, it, expect, beforeAll, afterAll, beforeEach } from 'vitest' // codespell:ignore afterAll
+import { describe, it, expect, beforeAll, afterAll, beforeEach } from 'vitest'
 import SQL from '../limits-schema.sql?raw'
 
 beforeAll(async () => {

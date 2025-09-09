@@ -1,6 +1,6 @@
 import OpenAI from 'openai'
-import { SELF, env } from 'cloudflare:test'
-import { describe, it, expect, beforeAll } from 'vitest'
+import { SELF, env, fetchMock } from 'cloudflare:test'
+import { describe, it, expect, beforeAll, afterAll, beforeEach } from 'vitest'
 import SQL from '../limits-schema.sql?raw'
 
 beforeAll(async () => {
@@ -11,6 +11,23 @@ beforeAll(async () => {
     throw new Error('Proxy VCR is not running. Run `make run-proxy-vcr` to enable tests.')
   }
 })
+
+beforeEach(() => {
+  fetchMock.activate()
+})
+afterAll(() => {
+  fetchMock.assertNoPendingInterceptors()
+})
+
+function recordOtelBatch(otelBatch: Array<any>) {
+  fetchMock
+    .get('https://logfire.pydantic.dev')
+    .intercept({ method: 'POST', path: '/v1/traces', headers: { Authorization: 'write-token' } })
+    .reply(({ body }) => {
+      otelBatch.push(body)
+      return { statusCode: 200, body }
+    })
+}
 
 describe('pydantic ai gateway', () => {
   it('responds with index html', async () => {
@@ -41,6 +58,9 @@ ${SQL}
   })
 
   it('should call openai via gateway', async () => {
+    let otelBatch: Array<any> = []
+    recordOtelBatch(otelBatch)
+
     const client = new OpenAI({
       apiKey: 'o-QBrunFudqD99879C5jkFZgZrueCLlCJGSMAbzFGFY',
       baseURL: 'https://example.com/openai',
@@ -55,45 +75,10 @@ ${SQL}
       ],
     })
 
-    expect(completion).toMatchInlineSnapshot(`
-      {
-        "choices": [
-          {
-            "finish_reason": "stop",
-            "index": 0,
-            "message": {
-              "annotations": [],
-              "content": "Paris.",
-              "refusal": null,
-              "role": "assistant",
-            },
-          },
-        ],
-        "created": 1757316780,
-        "id": "chatcmpl-CDQeyDf30d6s2eFqr1PmAs2sdQcAd",
-        "model": "gpt-5-2025-08-07",
-        "object": "chat.completion",
-        "service_tier": "default",
-        "system_fingerprint": null,
-        "usage": {
-          "completion_tokens": 11,
-          "completion_tokens_details": {
-            "accepted_prediction_tokens": 0,
-            "audio_tokens": 0,
-            "reasoning_tokens": 0,
-            "rejected_prediction_tokens": 0,
-          },
-          "prompt_tokens": 23,
-          "prompt_tokens_details": {
-            "audio_tokens": 0,
-            "cached_tokens": 0,
-          },
-          "pydantic_ai_gateway": {
-            "cost_estimate": 0.00013875,
-          },
-          "total_tokens": 34,
-        },
-      }
-    `)
+    expect(completion).toMatchSnapshot('llm')
+    expect(otelBatch.length).toBe(1)
+    expect(JSON.parse(otelBatch[0])['resourceSpans'][0]['scopeSpans'][0]['spans'][0]['attributes']).toMatchSnapshot(
+      'span',
+    )
   })
 })

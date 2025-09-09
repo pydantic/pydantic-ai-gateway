@@ -1,7 +1,12 @@
 /* eslint-disable no-undef */
 import * as logfire from '@pydantic/logfire-api'
 
-import { ProtobufTraceSerializer } from '@opentelemetry/otlp-transformer'
+import {
+  ProtobufTraceSerializer,
+  JsonTraceSerializer,
+  type ISerializer,
+  IExportTraceServiceResponse,
+} from '@opentelemetry/otlp-transformer'
 
 import {
   type Context,
@@ -48,7 +53,6 @@ export class OtelTrace {
       return
     }
     const headers = new Headers()
-    headers.set('Content-Type', 'application/x-protobuf')
     if (this.otelSettings.writeToken) {
       headers.set('Authorization', this.otelSettings.writeToken)
     }
@@ -57,7 +61,18 @@ export class OtelTrace {
       // no spans to send, nothing to do
       return
     }
-    const body = ProtobufTraceSerializer.serializeRequest(this.spans)
+
+    const exportOtlpProtocol = this.otelSettings.exporterOtlpProtocol ?? 'http/protobuf'
+    let serializer: ISerializer<ReadableSpan[], IExportTraceServiceResponse>
+    if (exportOtlpProtocol === 'http/json') {
+      headers.set('Content-Type', 'application/json')
+      serializer = JsonTraceSerializer
+    } else {
+      headers.set('Content-Type', 'application/x-protobuf')
+      serializer = ProtobufTraceSerializer
+    }
+
+    const body = serializer.serializeRequest(this.spans)
     if (body === undefined) {
       logfire.error('Failed to serialize spans', { span: this.spans })
       return

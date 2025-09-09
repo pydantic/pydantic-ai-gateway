@@ -49,9 +49,13 @@ export interface ProviderProxy {
   credentials: string
 }
 
+export type OtelExporterOtlpProtocol = 'http/json' | 'http/protobuf'
+
 export interface OtelSettings {
   // if writeToken is unset, no authorization header is set
   writeToken?: string
   // if unset the baseUrl is derived from the Pydantic Logfire writeToken
   baseUrl?: string
+  // if unset the default is http/protobuf
+  exporterOtlpProtocol?: OtelExporterOtlpProtocol
 }

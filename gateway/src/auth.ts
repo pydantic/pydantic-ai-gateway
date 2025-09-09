@@ -40,6 +40,7 @@ export async function apiKeyAuth(request: Request, env: GatewayEnv): Promise<Api
       expirationTtl: CACHE_TTL,
     })
   }
+  // check all key validity in gateway.ts
   return apiKey
 }
 

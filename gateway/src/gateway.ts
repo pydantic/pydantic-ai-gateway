@@ -29,13 +29,13 @@ export async function gateway(request: Request, ctx: ExecutionContext, url: URL,
 
   let providerProxies = apiKey.providers.filter((p) => p.providerID === provider)
 
-  const profile = url.searchParams.get('pydantic-ai-gateway-profile')
-  if (profile) {
+  const profile = request.headers.get('pydantic-ai-gateway-profile')
+  if (profile !== null) {
     providerProxies = providerProxies.filter((p) => p.profile === profile)
   }
 
-  // sort providers on priority
-  providerProxies.sort((a, b) => (a.priority ?? 1) - (b.priority ?? 1))
+  // sort providers on priority, highest first
+  providerProxies.sort((a, b) => (b.priority ?? 1) - (a.priority ?? 1))
 
   const providerProxy = providerProxies[0]
   if (!providerProxy) {

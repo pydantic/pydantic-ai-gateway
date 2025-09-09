@@ -44,7 +44,6 @@ export default defineConfig(
           allowRegExp: true,
         },
       ],
-      '@typescript-eslint/no-non-null-assertion': 'off',
     },
   },
   {

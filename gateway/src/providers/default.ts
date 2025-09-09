@@ -71,7 +71,7 @@ export class DefaultProviderProxy {
   }
 
   providerId(): string {
-    return this.providerProxy.providerId
+    return this.providerProxy.providerID
   }
 
   protected apiFlavour(): string | undefined {

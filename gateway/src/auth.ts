@@ -40,12 +40,7 @@ export async function apiKeyAuth(request: Request, env: GatewayEnv): Promise<Api
       expirationTtl: CACHE_TTL,
     })
   }
-
-  if (apiKey.active) {
-    return apiKey
-  } else {
-    throw new ResponseError(403, 'Unauthorized - Key not active')
-  }
+  return apiKey
 }
 
 export async function disableApiKeyAuth(apiKey: ApiKeyInfo, env: GatewayEnv) {

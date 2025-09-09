@@ -1,7 +1,7 @@
 /* eslint-disable no-undef */
 import * as logfire from '@pydantic/logfire-api'
 
-import { ApiKeyInfo } from './types'
+import { ApiKeyInfo, guardProviderID } from './types'
 import { textResponse } from './utils'
 import { apiKeyAuth, disableApiKeyAuth } from './auth'
 import { getProvider } from './providers'
@@ -17,15 +17,34 @@ export async function gateway(request: Request, ctx: ExecutionContext, url: URL,
   }
   const [, provider, rest] = providerMatch as unknown as [string, string, string]
 
-  const apiKey = await apiKeyAuth(request, env)
-  const otel = new OtelTrace(request, apiKey.otelSettings, env.githubSha)
-
-  const providerProxy = apiKey.providers[provider]
-  if (!providerProxy) {
-    return textResponse(404, `Provider '${provider}' not supported by this API Key`)
+  if (!guardProviderID(provider)) {
+    return textResponse(400, `Invalid provider '${provider}'`)
   }
 
-  const ProxyCls = getProvider(providerProxy.providerId)
+  const apiKey = await apiKeyAuth(request, env)
+
+  if (!apiKey.active) {
+    return textResponse(403, 'Unauthorized - Key not active')
+  }
+
+  let providerProxies = apiKey.providers.filter((p) => p.providerID === provider)
+
+  const profile = url.searchParams.get('pydantic-ai-gateway-profile')
+  if (profile) {
+    providerProxies = providerProxies.filter((p) => p.profile === profile)
+  }
+
+  // sort providers on priority
+  providerProxies.sort((a, b) => (a.priority ?? 1) - (b.priority ?? 1))
+
+  const providerProxy = providerProxies[0]
+  if (!providerProxy) {
+    return textResponse(403, 'Forbidden - Provider not supported by this API Key')
+  }
+
+  const otel = new OtelTrace(request, apiKey.otelSettings, env.githubSha)
+
+  const ProxyCls = getProvider(providerProxy.providerID)
 
   const proxy = new ProxyCls(request, env, apiKey, providerProxy, rest)
 

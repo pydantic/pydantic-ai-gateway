@@ -34,7 +34,7 @@ export interface User {
   spendingLimitMonthly?: number
 }
 
-export interface ApiKey<ProviderKey extends string = string> {
+export interface ApiKey<ProviderKey extends string> {
   team: string
   user?: string
   expires?: number

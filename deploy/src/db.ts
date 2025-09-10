@@ -1,6 +1,5 @@
 import { KeysDb, ApiKeyInfo, OtelSettings, ProviderProxy } from '@pydantic/ai-gateway'
 import { config } from './config'
-import type { ApiKey, Config } from './types'
 
 export class ConfigDB extends KeysDb {
   async apiKeyAuth(key: string): Promise<ApiKeyInfo | null> {
@@ -10,6 +9,14 @@ export class ConfigDB extends KeysDb {
     }
     const team = config.teams[keyInfo.team]!
     let user = keyInfo.user ? team.users[keyInfo.user] : undefined
+
+    let providers: ProviderProxy[]
+    if (keyInfo.providers == '__all__') {
+      providers = Object.values(config.providers)
+    } else {
+      providers = keyInfo.providers.map((name) => config.providers[name])
+    }
+
     let otelSettings: OtelSettings | null = null
     if (user?.otelWriteToken || user?.otelBaseUrl) {
       otelSettings = {
@@ -24,6 +31,7 @@ export class ConfigDB extends KeysDb {
         exporterOtlpProtocol: team.otelExporterOtlpProtocol,
       }
     }
+
     return {
       id: key.substring(0, 5),
       user: keyInfo.user ?? null,
@@ -44,7 +52,7 @@ export class ConfigDB extends KeysDb {
       userSpendingLimitDaily: user?.spendingLimitDaily ?? null,
       userSpendingLimitWeekly: user?.spendingLimitWeekly ?? null,
       userSpendingLimitMonthly: user?.spendingLimitMonthly ?? null,
-      providers: getProviders(keyInfo, config),
+      providers,
       otelSettings,
     }
   }
@@ -52,14 +60,4 @@ export class ConfigDB extends KeysDb {
   async disableKey(_id: string, _reason: string): Promise<void> {
     // do nothing
   }
-}
-
-function getProviders<T extends string>(keyInfo: ApiKey<T>, config: Config<T>): ProviderProxy[] {
-  let providers: ProviderProxy[]
-  if (keyInfo.providers == '__all__') {
-    providers = Object.values(config.providers)
-  } else {
-    providers = keyInfo.providers.map((name) => config.providers[name]).filter((provider) => !!provider)
-  }
-  return providers
 }

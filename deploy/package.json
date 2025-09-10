@@ -18,7 +18,7 @@
   },
   "_": "@cloudflare/vitest-pool-workers is pinned because of https://github.com/cloudflare/workers-sdk/issues/10506",
   "devDependencies": {
-    "@cloudflare/vitest-pool-workers": "0.8.49",
+    "@cloudflare/vitest-pool-workers": "0.8.44",
     "@cloudflare/workers-types": "^4.20250712.0",
     "openai": "^4.70.3",
     "typescript": "^5.5.2",

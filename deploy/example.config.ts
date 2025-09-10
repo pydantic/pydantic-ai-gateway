@@ -34,7 +34,7 @@ export const config: Config<ProviderKeys> = {
     // you would use this provider by using the model id `gateway:openai-chat/gpt-5` in Pydantic AI
     a: {
       // providerId decides on the logic used to process the request and response
-      providerID: 'openai-chat',
+      providerID: 'openai',
       // baseUrl decides what URL the request will be forwarded to
       baseUrl: 'https://api.openai.com/v1',
       // if injectCost is True, the cost of request from genai-prices is injected in the usage object in the response

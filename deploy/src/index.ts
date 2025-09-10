@@ -19,10 +19,8 @@ import { env } from 'cloudflare:workers'
 import * as logfire from '@pydantic/logfire-api'
 import { instrument } from '@pydantic/logfire-cf-workers'
 import { gatewayFetch, GatewayEnv, LimitDbD1 } from '@pydantic/ai-gateway'
-import { CONFIG_VERSION } from './config'
+import { config } from './config'
 import { ConfigDB } from './db'
-
-const VERSION = `${env.GITHUB_SHA.substring(0, 7)}-${CONFIG_VERSION}`
 
 const handler = {
   async fetch(request, env, ctx): Promise<Response> {
@@ -31,7 +29,7 @@ const handler = {
       keysDb: new ConfigDB(),
       limitDb: new LimitDbD1(env.limitsDB),
       kv: env.KV,
-      kvVersion: VERSION,
+      kvVersion: await hash(JSON.stringify(config)),
     }
     try {
       return await gatewayFetch(request, ctx, gatewayEnv)
@@ -46,6 +44,12 @@ const handler = {
 export default instrument(handler, {
   service: {
     name: 'gateway',
-    version: VERSION,
+    version: env.GITHUB_SHA.substring(0, 7),
   },
 })
+
+async function hash(input: string): Promise<string> {
+  const hashBuffer = await crypto.subtle.digest('SHA-1', new TextEncoder().encode(input))
+  const hashArray = Array.from(new Uint8Array(hashBuffer))
+  return hashArray.map((byte) => byte.toString(16).padStart(2, '0')).join('')
+}

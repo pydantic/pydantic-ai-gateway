@@ -2,7 +2,7 @@
 name = "pydantic-ai-gateway"
 version = "0.0.0"
 description = "Config of pydantic-ai-gateway"
-requires-python = ">=3.11"
+requires-python = ">=3.12"
 dependencies = [
     "genai-prices>=0.0.22",
     "logfire[aiohttp-client,httpx]>=4.3.3",
@@ -15,13 +15,13 @@ dependencies = [
 dev = ["pyright>=1.1.341", "ruff>=0.12.8"]
 examples = [
     "devtools>=0.12.2",
-    "logfire[httpx]>=4.3.3",
-    "openai>=1.99.9",
-    "pydantic-ai>=0.7.2",
+    "logfire[aiohttp-client,httpx]>=4.3.3",
+    "pydantic-ai",
 ]
 
 [tool.uv.sources]
 proxy-vcr = { workspace = true }
+pydantic-ai = { git = "https://github.com/pydantic/pydantic-ai.git", branch = "add-coverage" }
 
 [tool.uv.workspace]
 members = ["proxy-vcr"]

@@ -1,7 +1,6 @@
 import { env } from 'cloudflare:workers'
 import type { Config } from '@deploy/types'
 
-export const CONFIG_VERSION = '4'
 type ProviderKeys = 'openai'
 
 export const config: Config<ProviderKeys> = {

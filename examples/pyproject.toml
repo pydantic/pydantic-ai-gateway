@@ -1,0 +1,8 @@
+[project]
+name = "examples"
+version = "0.1.0"
+dependencies = [
+    "devtools>=0.12.2",
+    "logfire[httpx]>=4.3.3",
+    "pydantic-ai",
+]

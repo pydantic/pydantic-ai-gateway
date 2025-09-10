@@ -1,33 +1,18 @@
 [project]
 name = "pydantic-ai-gateway"
 version = "0.0.0"
-description = "Config of pydantic-ai-gateway"
 requires-python = ">=3.12"
-dependencies = [
-    "genai-prices>=0.0.22",
-    "logfire[aiohttp-client,httpx]>=4.3.3",
-    "pydantic>=2.11.7",
-    "ruamel-yaml>=0.18.14",
-    "proxy-vcr>=0.1.0",
-]
 
 [dependency-groups]
 dev = ["pyright>=1.1.341", "ruff>=0.12.8"]
-examples = [
-    "devtools>=0.12.2",
-    "logfire[aiohttp-client,httpx]>=4.3.3",
-    "pydantic-ai",
-]
 
 [tool.uv.sources]
 proxy-vcr = { workspace = true }
+examples = { workspace = true }
 pydantic-ai = { git = "https://github.com/pydantic/pydantic-ai.git", branch = "add-coverage" }
 
 [tool.uv.workspace]
-members = ["proxy-vcr"]
-
-[tool.uv]
-default-groups = ["dev", "examples"]
+members = ["proxy-vcr", "examples"]
 
 [tool.ruff]
 line-length = 120

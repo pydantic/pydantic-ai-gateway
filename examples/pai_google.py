@@ -6,8 +6,6 @@ from pydantic_ai import Agent
 
 logfire.configure(service_name='testing')
 logfire.instrument_pydantic_ai()
-logfire.instrument_httpx(capture_all=True)
-logfire.instrument_aiohttp_client()
 
 
 class Person(BaseModel, use_attribute_docstrings=True):

@@ -15,7 +15,7 @@
 .PHONY: install
 install: .npm .uv .pre-commit ## Install the package, dependencies, and pre-commit for local development
 	npm install
-	uv sync --frozen --all-groups
+	uv sync --frozen --all-packages
 	pre-commit install --install-hooks
 	# this make wrangler significantly faster in some scenarios - https://github.com/cloudflare/workers-sdk/issues/9946
 	npx wrangler telemetry disable
@@ -32,7 +32,7 @@ format-py: ## Format Python code
 
 .PHONY: run-proxy-vcr
 run-proxy-vcr: ## Start the proxy-vcr
-	uv run -m proxy_vcr.main
+	uv run --package proxy-vcr -m proxy_vcr.main
 
 .PHONY: format
 format: format-ts format-py ## Format all code

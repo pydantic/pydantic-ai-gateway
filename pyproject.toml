@@ -1,7 +1,6 @@
 [project]
 name = "pydantic-ai-gateway"
 version = "0.0.0"
-description = "Config of pydantic-ai-gateway"
 requires-python = ">=3.12"
 
 [dependency-groups]

@@ -1,8 +1,6 @@
 import { env } from 'cloudflare:workers'
 import type { Config } from '@deploy/types'
 
-export const CONFIG_VERSION = '1'
-
 // can be whatever you want, just used to make linking apiKeys to providers typesafe.
 type ProviderKeys = 'a' | 'b' | 'c'
 

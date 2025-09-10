@@ -7,7 +7,11 @@ export class GoogleVertexProvider extends DefaultProviderProxy {
 
   url() {
     if (this.providerProxy.baseUrl) {
-      const extra = this.restOfPath.replace(/^v1beta\/models\//, '')
+      const extra = this.restOfPath
+        // I think this regex is for GLA aka the google developer API
+        .replace(/^v1beta\/models\//, '')
+        // this is for requests expecting google vertex
+        .replace(/^v1beta1\/publishers\/google\/models\//, '')
       return `${this.providerProxy.baseUrl}/${extra}`
     } else {
       return { error: 'baseUrl is required for the Google Provider' }

@@ -1,11 +1,8 @@
-import os
 from datetime import date
 
 import logfire
 from pydantic import BaseModel, field_validator
 from pydantic_ai import Agent
-from pydantic_ai.models.openai import OpenAIModel
-from pydantic_ai.providers.openai import OpenAIProvider
 
 logfire.configure(service_name='testing')
 logfire.instrument_pydantic_ai()
@@ -27,16 +24,8 @@ class Person(BaseModel, use_attribute_docstrings=True):
         return v
 
 
-os.environ['GROQ_BASE_URL'] = 'http://localhost:8787/groq'
 person_agent = Agent(
-    OpenAIModel(
-        'gpt-4.1-mini',
-        provider=OpenAIProvider(
-            base_url='http://localhost:8787/openai',
-            # base_url='https://pydantic-ai-gateway.pydantic.workers.dev/openai',
-            api_key='VOE4JMpVGr71RgvEEidPCXd4ov42L24ODw9q5RI7uYc',
-        ),
-    ),
+    'gateway:openai/gpt-4.1-mini',
     output_type=Person,
     instructions='Extract information about the person',
 )

@@ -4,7 +4,7 @@ import * as logfire from '@pydantic/logfire-api'
 import { ApiKeyInfo, guardProviderID, providerIdArray } from './types'
 import { textResponse } from './utils'
 import { apiKeyAuth, disableApiKeyAuth } from './auth'
-import type { SpendLimit } from './db'
+import type { IntervalSpend } from './db'
 import { getProvider } from './providers'
 import { OtelTrace } from './otel'
 import { genAiOtelAttributes } from './otelAttributes'
@@ -106,42 +106,42 @@ async function recordSpend(apiKey: ApiKeyInfo, spend: number, env: GatewayEnv): 
   const today = isoDate(now)
   const week = startOfWeek(now)
   const month = startOfMonth(now)
-  const spendLimits: SpendLimit[] = []
+  const intervalSpends: IntervalSpend[] = []
   if (apiKey.keySpendingLimitDaily != null) {
-    spendLimits.push({ id: `key-daily-${id}-${today}`, limit: apiKey.keySpendingLimitDaily })
+    intervalSpends.push({ intervalId: `key-daily-${id}-${today}`, limit: apiKey.keySpendingLimitDaily })
   }
   if (apiKey.keySpendingLimitWeekly != null) {
-    spendLimits.push({ id: `key-weekly-${id}-${week}`, limit: apiKey.keySpendingLimitWeekly })
+    intervalSpends.push({ intervalId: `key-weekly-${id}-${week}`, limit: apiKey.keySpendingLimitWeekly })
   }
   if (apiKey.keySpendingLimitMonthly != null) {
-    spendLimits.push({ id: `key-monthly-${id}-${month}`, limit: apiKey.keySpendingLimitMonthly })
+    intervalSpends.push({ intervalId: `key-monthly-${id}-${month}`, limit: apiKey.keySpendingLimitMonthly })
   }
   if (apiKey.keySpendingLimitTotal != null) {
-    spendLimits.push({ id: `key-total-${id}`, limit: apiKey.keySpendingLimitTotal })
+    intervalSpends.push({ intervalId: `key-total-${id}`, limit: apiKey.keySpendingLimitTotal })
   }
 
   if (user != null) {
     if (apiKey.userSpendingLimitDaily != null) {
-      spendLimits.push({ id: `user-daily-${user}-${today}`, limit: apiKey.userSpendingLimitDaily })
+      intervalSpends.push({ intervalId: `user-daily-${user}-${today}`, limit: apiKey.userSpendingLimitDaily })
     }
     if (apiKey.userSpendingLimitWeekly != null) {
-      spendLimits.push({ id: `user-weekly-${user}-${week}`, limit: apiKey.userSpendingLimitWeekly })
+      intervalSpends.push({ intervalId: `user-weekly-${user}-${week}`, limit: apiKey.userSpendingLimitWeekly })
     }
     if (apiKey.userSpendingLimitMonthly != null) {
-      spendLimits.push({ id: `user-monthly-${user}-${month}`, limit: apiKey.userSpendingLimitMonthly })
+      intervalSpends.push({ intervalId: `user-monthly-${user}-${month}`, limit: apiKey.userSpendingLimitMonthly })
     }
   }
 
   if (apiKey.teamSpendingLimitDaily != null) {
-    spendLimits.push({ id: `team-daily-${team}-${today}`, limit: apiKey.teamSpendingLimitDaily })
+    intervalSpends.push({ intervalId: `team-daily-${team}-${today}`, limit: apiKey.teamSpendingLimitDaily })
   }
   if (apiKey.teamSpendingLimitWeekly != null) {
-    spendLimits.push({ id: `team-weekly-${team}-${week}`, limit: apiKey.teamSpendingLimitWeekly })
+    intervalSpends.push({ intervalId: `team-weekly-${team}-${week}`, limit: apiKey.teamSpendingLimitWeekly })
   }
   if (apiKey.teamSpendingLimitMonthly != null) {
-    spendLimits.push({ id: `team-monthly-${team}-${month}`, limit: apiKey.teamSpendingLimitMonthly })
+    intervalSpends.push({ intervalId: `team-monthly-${team}-${month}`, limit: apiKey.teamSpendingLimitMonthly })
   }
-  const limitExceeded = await env.limitDb.incrementSpend(spendLimits, spend)
+  const limitExceeded = await env.limitDb.incrementSpend(intervalSpends, spend)
 
   if (limitExceeded) {
     await disableApiKey(apiKey, env, 'spending limit exceeded')

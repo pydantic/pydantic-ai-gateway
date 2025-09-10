@@ -8,14 +8,14 @@ export abstract class KeysDb {
   abstract disableKey(id: string, reason: string): Promise<void>
 }
 
-export interface SpendLimit {
-  id: string
+export interface IntervalSpend {
+  intervalId: string
   limit: number
 }
 
 export abstract class LimitDb {
   // increment spends and return true if the limit is exceeded
-  abstract incrementSpend(spendLimits: SpendLimit[], spend: number): Promise<boolean>
+  abstract incrementSpend(spendLimits: IntervalSpend[], spend: number): Promise<boolean>
 }
 
 export class LimitDbD1 extends LimitDb {
@@ -26,12 +26,12 @@ export class LimitDbD1 extends LimitDb {
     this.db = db
   }
 
-  async incrementSpend(spendLimits: SpendLimit[], spend: number): Promise<boolean> {
+  async incrementSpend(intervalSpends: IntervalSpend[], spend: number): Promise<boolean> {
     const sqlValues: '(?, ?, ?)'[] = []
     const values: (string | number)[] = []
-    for (const { id, limit } of spendLimits) {
+    for (const { intervalId, limit } of intervalSpends) {
       sqlValues.push('(?, ?, ?)')
-      values.push(id, limit, spend)
+      values.push(intervalId, limit, spend)
     }
     try {
       await this.db

@@ -32,7 +32,7 @@ format-py: ## Format Python code
 
 .PHONY: run-proxy-vcr
 run-proxy-vcr: ## Start the proxy-vcr
-	uv run -m proxy_vcr.main
+	uv run --package proxy-vcr -m proxy_vcr.main
 
 .PHONY: format
 format: format-ts format-py ## Format all code

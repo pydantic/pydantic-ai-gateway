@@ -48,8 +48,7 @@ describe('openai', () => {
     await env.limitsDB
       .prepare(
         `
-DROP TABLE IF EXISTS namespaces;
-DROP TABLE IF EXISTS kv;
+DROP TABLE IF EXISTS spend;
 
 ${SQL}
 `,
@@ -63,7 +62,7 @@ ${SQL}
 
     const client = new OpenAI({
       apiKey: 'o-QBrunFudqD99879C5jkFZgZrueCLlCJGSMAbzFGFY',
-      baseURL: 'https://example.com/openai',
+      baseURL: 'https://example.com/openai-chat',
       fetch: SELF.fetch.bind(SELF),
     })
 

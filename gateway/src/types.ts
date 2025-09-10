@@ -35,6 +35,8 @@ const providerIDs: Record<ProviderID, boolean> = {
   anthropic: true,
 }
 
+export const providerIdArray = Object.keys(providerIDs) as ProviderID[]
+
 export function guardProviderID(id: string): id is ProviderID {
   return id in providerIDs
 }

@@ -1,7 +1,7 @@
 /* eslint-disable no-undef */
 import * as logfire from '@pydantic/logfire-api'
 
-import { ApiKeyInfo, guardProviderID } from './types'
+import { ApiKeyInfo, guardProviderID, providerIdArray } from './types'
 import { textResponse } from './utils'
 import { apiKeyAuth, disableApiKeyAuth } from './auth'
 import { getProvider } from './providers'
@@ -18,7 +18,7 @@ export async function gateway(request: Request, ctx: ExecutionContext, url: URL,
   const [, provider, rest] = providerMatch as unknown as [string, string, string]
 
   if (!guardProviderID(provider)) {
-    return textResponse(400, `Invalid provider '${provider}'`)
+    return textResponse(400, `Invalid provider '${provider}', should be one of ${JSON.stringify(providerIdArray)}`)
   }
 
   const apiKey = await apiKeyAuth(request, env)

@@ -46,24 +46,27 @@ const RESET_SQL = `DROP TABLE IF EXISTS spend;\n${SQL}`
 
 describe('invalid request', () => {
   it('401 on no auth header', async () => {
-    const response = await SELF.fetch('https://example.com/openai-chat/gpt-5')
-    expect(response.status).toBe(401)
-    expect(await response.text()).toMatchInlineSnapshot(`"Unauthorized - Missing Authorization Header"`)
+    const response = await SELF.fetch('https://example.com/openai/gpt-5')
+    const text = await response.text()
+    expect(response.status, `got response: ${text}`).toBe(401)
+    expect(text).toMatchInlineSnapshot(`"Unauthorized - Missing Authorization Header"`)
   })
   it('401 on unknown auth header', async () => {
-    const response = await SELF.fetch('https://example.com/openai-chat/gpt-5', {
+    const response = await SELF.fetch('https://example.com/openai/gpt-5', {
       headers: { Authorization: 'unknown-token' },
     })
-    expect(response.status).toBe(401)
-    expect(await response.text()).toMatchInlineSnapshot(`"Unauthorized - Key not found"`)
+    const text = await response.text()
+    expect(response.status, `got response: ${text}`).toBe(401)
+    expect(text).toMatchInlineSnapshot(`"Unauthorized - Key not found"`)
   })
-  it('404 on unknown provider', async () => {
+  it('400 on unknown provider', async () => {
     const response = await SELF.fetch('https://example.com/wrong/gpt-5', {
       headers: { Authorization: 'unknown-token' },
     })
-    expect(response.status).toBe(400)
-    expect(await response.text()).toMatchInlineSnapshot(
-      `"Invalid provider 'wrong', should be one of groq, openai-chat, openai-responses, google-vertex, anthropic"`,
+    const text = await response.text()
+    expect(response.status, `got response: ${text}`).toBe(400)
+    expect(text).toMatchInlineSnapshot(
+      `"Invalid provider 'wrong', should be one of groq, openai, google-vertex, anthropic"`,
     )
   })
 })
@@ -75,7 +78,7 @@ describe('openai', () => {
 
     const client = new OpenAI({
       apiKey: 'o-QBrunFudqD99879C5jkFZgZrueCLlCJGSMAbzFGFY',
-      baseURL: 'https://example.com/openai-chat',
+      baseURL: 'https://example.com/openai',
       fetch: SELF.fetch.bind(SELF),
     })
 

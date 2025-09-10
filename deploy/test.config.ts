@@ -33,7 +33,7 @@ export const config: Config<ProviderKeys> = {
       // baseUrl decides what URL the request will be forwarded to
       baseUrl: 'http://localhost:8005',
       // providerId decides on the logic used to process the request and response
-      providerID: 'openai-chat',
+      providerID: 'openai',
       // if injectCost is True, the cost of request from genai-prices is injected in the usage object in the response
       injectCost: true,
       // credentials are used by the ProviderProxy to authenticate the forwarded request

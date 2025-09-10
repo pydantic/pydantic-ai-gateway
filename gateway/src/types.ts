@@ -24,13 +24,12 @@ export interface ApiKeyInfo {
   otelSettings: OtelSettings | null
 }
 
-export type ProviderID = 'groq' | 'openai-chat' | 'openai-responses' | 'google-vertex' | 'anthropic'
+export type ProviderID = 'groq' | 'openai' | 'google-vertex' | 'anthropic'
 // TODO | 'aws' | 'azure' | 'fireworks' | 'mistral' | 'cohere'
 
 const providerIDs: Record<ProviderID, boolean> = {
   groq: true,
-  'openai-chat': true,
-  'openai-responses': true,
+  openai: true,
   'google-vertex': true,
   anthropic: true,
 }

@@ -18,7 +18,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 import { ApiKeyInfo, ProviderProxy, ProviderID } from '../types'
 import { GatewayEnv } from '..'
 
-import { OpenAIChatProvider, OpenAIResponsesProvider } from './openai'
+import { OpenAIProvider } from './openai'
 import { GoogleVertexProvider } from './google'
 import { GroqProvider } from './groq'
 import { DefaultProviderProxy } from './default'
@@ -33,10 +33,8 @@ type providerSig = new (
 
 export function getProvider(providerId: ProviderID): providerSig {
   switch (providerId) {
-    case 'openai-chat':
-      return OpenAIChatProvider
-    case 'openai-responses':
-      return OpenAIResponsesProvider
+    case 'openai':
+      return OpenAIProvider
     case 'groq':
       return GroqProvider
     case 'google-vertex':

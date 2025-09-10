@@ -98,8 +98,6 @@ describe('openai', () => {
 
     expect(completion).toMatchSnapshot('llm')
     expect(otelBatch.length).toBe(1)
-    expect(JSON.parse(otelBatch[0])['resourceSpans'][0]['scopeSpans'][0]['spans'][0]['attributes']).toMatchSnapshot(
-      'span',
-    )
+    expect(JSON.parse(otelBatch[0]).resourceSpans?.[0].scopeSpans?.[0].spans?.[0]?.attributes).toMatchSnapshot('span')
   })
 })

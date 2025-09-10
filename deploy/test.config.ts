@@ -10,7 +10,7 @@ export const config: Config<ProviderKeys> = {
   teams: {
     default: {
       name: 'default',
-      otel: { writeToken: 'write-token', exporterProtocol: 'http/json' },
+      otel: { writeToken: 'write-token', baseUrl: 'https://logfire.pydantic.dev', exporterProtocol: 'http/json' },
       // users in this team
       users: {
         testberto: {

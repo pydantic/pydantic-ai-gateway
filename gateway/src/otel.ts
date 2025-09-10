@@ -44,11 +44,16 @@ export class OtelTrace {
   }
 
   startSpan(): OtelSpan {
-    return new OtelSpan(this, this.remoteParent)
+    if (this.otelSettings) {
+      return new ActiveOtelSpan(this, this.remoteParent)
+    } else {
+      return new NoopOtelSpan()
+    }
   }
 
   async send(): Promise<void> {
-    if (!this.otelSettings) {
+    if (!this.otelSettings || !this.spans.length) {
+      // otel not active or no spans to send, nothing to do
       return
     }
 
@@ -59,11 +64,6 @@ export class OtelTrace {
     const headers = new Headers()
     if (this.otelSettings.writeToken) {
       headers.set('Authorization', this.otelSettings.writeToken)
-    }
-
-    if (!this.spans.length) {
-      // no spans to send, nothing to do
-      return
     }
 
     const exportOtlpProtocol = this.otelSettings.exporterProtocol ?? 'http/protobuf'
@@ -98,7 +98,12 @@ export class OtelTrace {
   }
 }
 
-class OtelSpan {
+abstract class OtelSpan {
+  abstract startSpan(): OtelSpan
+  abstract end(messageTemplate: string, attributes: Attributes, details?: { level?: Level }): void
+}
+
+class ActiveOtelSpan extends OtelSpan {
   private trace: OtelTrace
   private spanContext: SpanContext
   private parent?: SpanContext
@@ -107,6 +112,7 @@ class OtelSpan {
   private ended = false
 
   constructor(trace: OtelTrace, parent?: SpanContext) {
+    super()
     this.trace = trace
     this.parent = parent
     this.start = getTime()
@@ -117,8 +123,8 @@ class OtelSpan {
     }
   }
 
-  startSpan(): OtelSpan {
-    return new OtelSpan(this.trace, this.spanContext)
+  startSpan() {
+    return new ActiveOtelSpan(this.trace, this.spanContext)
   }
 
   end(messageTemplate: string, attributes: Attributes, details?: { level?: Level }) {
@@ -162,6 +168,20 @@ class OtelSpan {
       droppedLinksCount: 0,
     }
     this.trace._addSpan(span)
+  }
+}
+
+class NoopOtelSpan extends OtelSpan {
+  private ended = false
+
+  startSpan() {
+    return new NoopOtelSpan()
+  }
+  end(_messageTemplate: string, _attributes: Attributes, _details?: { level?: Level }) {
+    if (this.ended) {
+      throw new Error('Span already ended')
+    }
+    this.ended = true
   }
 }
 

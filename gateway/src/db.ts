@@ -5,7 +5,7 @@ import type { ApiKeyInfo } from './types'
 export abstract class KeysDb {
   abstract apiKeyAuth(key: string): Promise<ApiKeyInfo | null>
 
-  abstract disableKey(id: string, reason: string): Promise<void>
+  abstract disableKey(id: string, reason: string, newStatus: string): Promise<void>
 }
 
 export abstract class LimitDb {

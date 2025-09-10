@@ -5,8 +5,12 @@ export interface ApiKeyInfo {
   team: string
   org: string
   key: string
-  // TODO this should be status: 'active' | 'expired' | 'limit-exceeded' | 'disabled'
-  active: boolean
+  status:
+    | 'active' // when the key is active
+    | 'expired' // when the key expires
+    | 'limit-exceeded' // when the key exceeds the limits
+    | 'disabled' // when the user sets in the UI
+    | 'blocked' // when we got a valid response that we couldn't calculate the cost for
   // limits per apiKey - note the extra field since keys can have a total limit
   keySpendingLimitDaily: number | null
   keySpendingLimitWeekly: number | null

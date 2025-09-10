@@ -55,7 +55,7 @@ export const config: Config<ProviderKeys> = {
   },
   // individual apiKeys
   apiKeys: {
-    'o-QBrunFudqD99879C5jkFZgZrueCLlCJGSMAbzFGFY': {
+    'healthy-key': {
       // team is required
       team: 'default',
       // user is optional
@@ -68,6 +68,11 @@ export const config: Config<ProviderKeys> = {
       spendingLimitMonthly: 10,
       // these limits include an extra limit `spendingLimitTotal` which is useful for temporary API keys
       spendingLimitTotal: 11,
+    },
+    'low-limit-key': {
+      team: 'default',
+      providers: '__all__',
+      spendingLimitDaily: 0.01,
     },
   },
 }

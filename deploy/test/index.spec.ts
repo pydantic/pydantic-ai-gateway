@@ -42,7 +42,12 @@ describe('index', () => {
   })
 })
 
-const RESET_SQL = `DROP TABLE IF EXISTS spend;\n${SQL}`
+const RESET_SQL = `
+DROP TABLE IF EXISTS spend;
+DROP TABLE IF EXISTS keyStatus;
+
+${SQL}
+`
 
 describe('invalid request', () => {
   it('401 on no auth header', async () => {
@@ -77,7 +82,7 @@ describe('openai', () => {
     recordOtelBatch(otelBatch)
 
     const client = new OpenAI({
-      apiKey: 'o-QBrunFudqD99879C5jkFZgZrueCLlCJGSMAbzFGFY',
+      apiKey: 'healthy-key',
       baseURL: 'https://example.com/openai',
       fetch: SELF.fetch.bind(SELF),
     })
@@ -93,5 +98,27 @@ describe('openai', () => {
     expect(completion).toMatchSnapshot('llm')
     expect(otelBatch.length).toBe(1)
     expect(JSON.parse(otelBatch[0]).resourceSpans?.[0].scopeSpans?.[0].spans?.[0]?.attributes).toMatchSnapshot('span')
+  })
+})
+
+describe('blocked key', () => {
+  it('should block key if limit is exceeded', async () => {
+    const client = new OpenAI({
+      apiKey: 'healthy-key',
+      baseURL: 'https://example.com/openai',
+      fetch: SELF.fetch.bind(SELF),
+    })
+
+    await client.chat.completions.create({
+      model: 'gpt-5',
+      messages: [
+        { role: 'developer', content: 'You are a helpful assistant.' },
+        { role: 'user', content: 'Give me an essay on the history of the universe.' },
+      ],
+    })
+    const allSpends = await env.limitsDB.prepare('SELECT * FROM spend').all()
+    console.log(allSpends)
+    const allKeyStatus = await env.limitsDB.prepare('SELECT * FROM keyStatus').all()
+    console.log(allKeyStatus)
   })
 })

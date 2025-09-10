@@ -9,6 +9,18 @@ import { OtelTrace } from './otel'
 import { genAiOtelAttributes } from './otelAttributes'
 import type { GatewayEnv } from '.'
 
+type ScopeExceeded =
+  | 'key-daily'
+  | 'key-weekly'
+  | 'key-monthly'
+  | 'key-total'
+  | 'user-daily'
+  | 'user-weekly'
+  | 'user-monthly'
+  | 'team-daily'
+  | 'team-weekly'
+  | 'team-monthly'
+
 export async function gateway(request: Request, ctx: ExecutionContext, url: URL, env: GatewayEnv): Promise<Response> {
   const { pathname } = url
   const providerMatch = /^\/([^/]+)\/(.*)$/.exec(pathname)
@@ -23,7 +35,7 @@ export async function gateway(request: Request, ctx: ExecutionContext, url: URL,
 
   const apiKey = await apiKeyAuth(request, env)
 
-  if (!apiKey.active) {
+  if (apiKey.status !== 'active') {
     return textResponse(403, 'Unauthorized - Key not active')
   }
 
@@ -65,7 +77,7 @@ export async function gateway(request: Request, ctx: ExecutionContext, url: URL,
   } else if ('error' in result) {
     const { error, disableKey } = result
     if (disableKey) {
-      runAfter(ctx, 'disableApiKey', disableApiKey(apiKey, env, 'Invalid request'))
+      runAfter(ctx, 'disableApiKey', blockApiKey(apiKey, env, 'Invalid request'))
       response = textResponse(400, `${error}, API key disabled`)
     } else {
       response = textResponse(400, error)
@@ -94,9 +106,20 @@ async function wrapLogfire(functionName: string, promise: Promise<unknown>): Pro
   }
 }
 
-export async function disableApiKey(apiKey: ApiKeyInfo, env: GatewayEnv, reason: string): Promise<void> {
-  await disableApiKeyAuth(apiKey, env)
-  await env.keysDb.disableKey(apiKey.id, reason)
+async function blockApiKey(apiKey: ApiKeyInfo, env: GatewayEnv, reason: string): Promise<void> {
+  await disableApiKey(apiKey, env, reason, 'blocked', Infinity)
+}
+
+export async function disableApiKey(
+  apiKey: ApiKeyInfo,
+  env: GatewayEnv,
+  reason: string,
+  newStatus: 'blocked' | 'limit-exceeded',
+  expirationTtl: number,
+): Promise<void> {
+  apiKey.status = newStatus
+  await disableApiKeyAuth(apiKey, env, expirationTtl)
+  await env.keysDb.disableKey(apiKey.id, reason, newStatus)
 }
 
 async function recordSpend(apiKey: ApiKeyInfo, spend: number, env: GatewayEnv): Promise<void> {
@@ -105,7 +128,7 @@ async function recordSpend(apiKey: ApiKeyInfo, spend: number, env: GatewayEnv): 
   const today = isoDate(now)
   const week = startOfWeek(now)
   const month = startOfMonth(now)
-  const ex: string[] = []
+  const ex: Set<ScopeExceeded> = new Set<ScopeExceeded>()
   if (typeof apiKey.keySpendingLimitDaily === 'number') {
     await incrementSpend('key-daily', `${id}-${today}`, spend, apiKey.keySpendingLimitDaily, ex, env)
   }
@@ -140,22 +163,28 @@ async function recordSpend(apiKey: ApiKeyInfo, spend: number, env: GatewayEnv): 
   // always set monthly team spend and include org in the key so we can sum to get monthly org spend
   await incrementSpend('team-monthly', `${org}-${team}-${month}`, spend, apiKey.teamSpendingLimitMonthly, ex, env)
 
-  if (ex.length) {
-    await disableApiKey(apiKey, env, `limits exceeded: ${ex.join(', ')}`)
+  if (ex.size) {
+    await disableApiKey(
+      apiKey,
+      env,
+      `limits exceeded: ${Array.from(ex).join(', ')}`,
+      'limit-exceeded',
+      calculateExpirationTtl(ex),
+    )
   }
 }
 
 async function incrementSpend(
-  scope: string,
+  scope: ScopeExceeded,
   uniqueID: string,
   spend: number,
   limit: number | null,
-  scopesExceeded: string[],
+  scopesExceeded: Set<ScopeExceeded>,
   env: GatewayEnv,
 ): Promise<void> {
   const limitExceeded = await env.limitDb.incrementSpend(`${scope}-${uniqueID}`, spend, limit)
   if (limitExceeded) {
-    scopesExceeded.push(scope)
+    scopesExceeded.add(scope)
   }
 }
 
@@ -180,4 +209,39 @@ function startOfMonth(date: Date): string {
   const sOfMonth = new Date(date)
   sOfMonth.setDate(1)
   return isoDate(sOfMonth)
+}
+
+/**
+ * Calculates the time-to-live (TTL) in seconds for API key expiration based on exceeded scopes.
+ *
+ * The function prioritizes the highest-level (longest duration) scope that was exceeded:
+ * - If monthly limits are exceeded, expires at the next month boundary regardless of other scopes
+ * - If weekly limits are exceeded (and no monthly), expires at the next week boundary
+ * - If only daily limits are exceeded, expires at the next day boundary
+ *
+ * @param ex - Set of scope exceeded types that determine the expiration period
+ * @returns TTL in seconds until the next reset period, Infinity for permanent disabling or 0 if no match is found
+ *
+ * - `key-total`: Infinity
+ * - Monthly scopes: Returns seconds until next month boundary
+ * - Weekly scopes: Returns seconds until next week boundary
+ * - Daily scopes: Returns seconds until next day boundary
+ */
+function calculateExpirationTtl(ex: Set<ScopeExceeded>): number {
+  console.log('calculateExpirationTtl', ex)
+  const now = new Date()
+  if (ex.has('key-total')) {
+    return Infinity
+  } else if (ex.has('key-monthly') || ex.has('user-monthly') || ex.has('team-monthly')) {
+    const nextMonth = new Date(now.getFullYear(), now.getMonth() + 1, 1)
+    return Math.floor((nextMonth.getTime() - Date.now()) / 1000)
+  } else if (ex.has('key-weekly') || ex.has('user-weekly') || ex.has('team-weekly')) {
+    const nextWeek = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 7)
+    return Math.floor((new Date(startOfWeek(nextWeek)).getTime() - Date.now()) / 1000)
+  } else if (ex.has('key-daily') || ex.has('user-daily') || ex.has('team-daily')) {
+    console.log('key-daily')
+    const nextDay = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1)
+    return Math.floor((nextDay.getTime() - Date.now()) / 1000)
+  }
+  return 0
 }

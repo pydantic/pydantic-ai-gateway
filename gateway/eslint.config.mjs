@@ -22,6 +22,7 @@ export default defineConfig(
   { ignores: ['dist'] },
   {
     rules: {
+      'no-redeclare': 'off',
       '@typescript-eslint/no-unused-vars': [
         'error',
         {

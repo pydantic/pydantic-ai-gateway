@@ -1,9 +1,10 @@
 import { env } from 'cloudflare:workers'
-import type { Config } from './types'
+import type { Config } from '@deploy/types'
 
 export const CONFIG_VERSION = '4'
+type ProviderKeys = 'openai'
 
-export const config: Config = {
+export const config: Config<ProviderKeys> = {
   // the name of the organization, doesn't matter in this case
   org: 'my-org',
   teams: {
@@ -35,7 +36,7 @@ export const config: Config = {
       // baseUrl decides what URL the request will be forwarded to
       baseUrl: 'http://localhost:8005',
       // providerId decides on the logic used to process the request and response
-      providerId: 'openai',
+      providerID: 'openai-chat',
       // if injectCost is True, the cost of request from genai-prices is injected in the usage object in the response
       injectCost: true,
       // credentials are used by the ProviderProxy to authenticate the forwarded request

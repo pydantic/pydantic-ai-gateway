@@ -29,7 +29,7 @@ function recordOtelBatch(otelBatch: Array<any>) {
     })
 }
 
-describe('pydantic ai gateway', () => {
+describe('index', () => {
   it('responds with index html', async () => {
     const response = await SELF.fetch('https://example.com')
     expect(response.status).toBe(200)
@@ -43,18 +43,39 @@ describe('pydantic ai gateway', () => {
   })
 })
 
+const RESET_SQL = `DROP TABLE IF EXISTS spend;\n${SQL}`
+
+describe('invalid request', () => {
+  beforeAll(async () => {
+    await env.limitsDB.prepare(RESET_SQL).run()
+  })
+
+  it('401 on no auth header', async () => {
+    const response = await SELF.fetch('https://example.com/openai-chat/gpt-5')
+    expect(response.status).toBe(401)
+    expect(await response.text()).toMatchInlineSnapshot(`"Unauthorized - Missing Authorization Header"`)
+  })
+  it('401 on unknown auth header', async () => {
+    const response = await SELF.fetch('https://example.com/openai-chat/gpt-5', {
+      headers: { Authorization: 'unknown-token' },
+    })
+    expect(response.status).toBe(401)
+    expect(await response.text()).toMatchInlineSnapshot(`"Unauthorized - Key not found"`)
+  })
+  it('404 on unknown provider', async () => {
+    const response = await SELF.fetch('https://example.com/wrong/gpt-5', {
+      headers: { Authorization: 'unknown-token' },
+    })
+    expect(response.status).toBe(400)
+    expect(await response.text()).toMatchInlineSnapshot(
+      `"Invalid provider 'wrong', should be one of groq, openai-chat, openai-responses, google-vertex, anthropic"`,
+    )
+  })
+})
+
 describe('openai', () => {
   beforeAll(async () => {
-    await env.limitsDB
-      .prepare(
-        `
-DROP TABLE IF EXISTS namespaces;
-DROP TABLE IF EXISTS kv;
-
-${SQL}
-`,
-      )
-      .run()
+    await env.limitsDB.prepare(RESET_SQL).run()
   })
 
   it('should call openai via gateway', async () => {
@@ -63,7 +84,7 @@ ${SQL}
 
     const client = new OpenAI({
       apiKey: 'o-QBrunFudqD99879C5jkFZgZrueCLlCJGSMAbzFGFY',
-      baseURL: 'https://example.com/openai',
+      baseURL: 'https://example.com/openai-chat',
       fetch: SELF.fetch.bind(SELF),
     })
 

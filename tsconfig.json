@@ -44,7 +44,8 @@
     "noUncheckedSideEffectImports": true,
     "baseUrl": ".",
     "paths": {
-      /* this is used by deploy, but we can't extend "paths", hence including it here */
+      /* these are used by deploy, but we can't extend "paths", hence including them here */
+      "@deploy/*": ["deploy/src/*"],
       "@pydantic/ai-gateway": ["gateway/src"],
       /* paths for API types: */
       "@groq-chat/completions": ["node_modules/groq-sdk/resources/chat/completions"],

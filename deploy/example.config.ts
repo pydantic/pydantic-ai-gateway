@@ -12,7 +12,9 @@ export const config: Config<ProviderKeys> = {
   teams: {
     default: {
       name: 'default',
-      otelWriteToken: 'For sending proxy telemetry to Logfire or other OTel service, generate at logfire.pydantic.dev',
+      otel: {
+        writeToken: 'For sending proxy telemetry to Logfire or other OTel service, generate at logfire.pydantic.dev',
+      },
       // users in this team
       users: {
         samuel: {

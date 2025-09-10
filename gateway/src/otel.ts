@@ -26,14 +26,14 @@ export type Attributes = Record<string, string | number | boolean | object | und
 export type Level = 'debug' | 'info' | 'notice' | 'warn' | 'error'
 
 export class OtelTrace {
-  private otelSettings: OtelSettings
+  private otelSettings: OtelSettings | null
   version: string
   private remoteParent?: SpanContext
   traceId: string
   private spans: ReadableSpan[] = []
 
   constructor(request: Request, otelSettings: OtelSettings | null, version: string) {
-    this.otelSettings = otelSettings ?? {}
+    this.otelSettings = otelSettings
     this.version = version
     this.remoteParent = extractSpanContext(request.headers)
     if (this.remoteParent) {
@@ -48,6 +48,10 @@ export class OtelTrace {
   }
 
   async send(): Promise<void> {
+    if (!this.otelSettings) {
+      return
+    }
+
     const baseUrl = getBaseUrl(this.otelSettings)
     if (!baseUrl) {
       return
@@ -62,7 +66,7 @@ export class OtelTrace {
       return
     }
 
-    const exportOtlpProtocol = this.otelSettings.exporterOtlpProtocol ?? 'http/protobuf'
+    const exportOtlpProtocol = this.otelSettings.exporterProtocol ?? 'http/protobuf'
     let serializer: ISerializer<ReadableSpan[], IExportTraceServiceResponse>
     if (exportOtlpProtocol === 'http/json') {
       headers.set('Content-Type', 'application/json')
@@ -94,7 +98,7 @@ export class OtelTrace {
   }
 }
 
-export class OtelSpan {
+class OtelSpan {
   private trace: OtelTrace
   private spanContext: SpanContext
   private parent?: SpanContext
@@ -304,9 +308,9 @@ function getBaseUrl({ baseUrl, writeToken }: OtelSettings): string | undefined {
   if (baseUrl) {
     return baseUrl
   }
-  const regionMatch = writeToken?.match(/pylf_v\d_(us|eu)/)
+  const regionMatch = /pylf_v\d_(us|eu)/.exec(writeToken)
   if (regionMatch) {
     return `https://logfire-${regionMatch[1]}.pydantic.dev`
   }
-  logfire.warning('unable to OTel base url', { baseUrl, writeToken: writeToken?.substring(0, 7) })
+  logfire.warning('unable to infer OTel base URL', { writeToken: writeToken.substring(0, 7) })
 }

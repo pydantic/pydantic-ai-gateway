@@ -1,4 +1,4 @@
-import { ProviderProxy } from '@pydantic/ai-gateway'
+import { ProviderProxy, OtelSettings } from '@pydantic/ai-gateway'
 
 export interface Config<ProviderKey extends string = string> {
   org: string
@@ -12,12 +12,8 @@ export type OtelExporterOtlpProtocol = 'http/json' | 'http/protobuf'
 export interface Team {
   /** @name: human readable name for the team */
   name: string
-  /** @otelWriteToken: write token for sending proxy telemetry to Logfire or other OTel service, generate at logfire.pydantic.dev */
-  otelWriteToken?: string
-  /** @otelBaseUrl: base URL to send opentelemetry data to */
-  otelBaseUrl?: string
-  /** @otelExporterOtlpProtocol: whether to send otel over protobuf or JSON */
-  otelExporterOtlpProtocol?: OtelExporterOtlpProtocol
+  /** @otel: otel settings for sending proxy telemetry to Logfire or other OTel service, for all users in the team */
+  otel?: OtelSettings
   users: Record<string, User>
   spendingLimitDaily?: number
   spendingLimitWeekly?: number
@@ -26,9 +22,8 @@ export interface Team {
 
 export interface User {
   name: string
-  otelWriteToken?: string
-  otelBaseUrl?: string
-  otelExporterOtlpProtocol?: OtelExporterOtlpProtocol
+  /** @otel: otel settings for sending proxy telemetry to Logfire or other OTel service, for this user */
+  otel?: OtelSettings
   spendingLimitDaily?: number
   spendingLimitWeekly?: number
   spendingLimitMonthly?: number

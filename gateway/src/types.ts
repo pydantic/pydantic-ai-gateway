@@ -58,13 +58,15 @@ export interface ProviderProxy {
   priority?: number
 }
 
-export type OtelExporterOtlpProtocol = 'http/json' | 'http/protobuf'
-
 export interface OtelSettings {
-  // if writeToken is unset, no authorization header is set
-  writeToken?: string
-  // if unset the baseUrl is derived from the Pydantic Logfire writeToken
+  /** @otelWriteToken: write token for sending proxy telemetry to Logfire or other OTel service,
+   * generate at logfire.pydantic.dev
+   */
+  writeToken: string
+  /** @otelBaseUrl: base URL to send opentelemetry data to,
+   * if unset the baseUrl is derived from the Pydantic Logfire writeToken
+   */
   baseUrl?: string
-  // if unset the default is http/protobuf
-  exporterOtlpProtocol?: OtelExporterOtlpProtocol
+  /** @otelExporterProtocol: whether to send OTel data over protobuf or JSON, defaults to protobuf */
+  exporterProtocol?: 'http/protobuf' | 'http/json'
 }

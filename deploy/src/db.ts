@@ -1,4 +1,4 @@
-import { KeysDb, ApiKeyInfo, OtelSettings, ProviderProxy } from '@pydantic/ai-gateway'
+import { KeysDb, ApiKeyInfo, ProviderProxy } from '@pydantic/ai-gateway'
 import { config } from './config'
 
 export class ConfigDB extends KeysDb {
@@ -15,21 +15,6 @@ export class ConfigDB extends KeysDb {
       providers = Object.values(config.providers)
     } else {
       providers = keyInfo.providers.map((name) => config.providers[name])
-    }
-
-    let otelSettings: OtelSettings | null = null
-    if (user?.otelWriteToken || user?.otelBaseUrl) {
-      otelSettings = {
-        writeToken: user.otelWriteToken,
-        baseUrl: user.otelBaseUrl,
-        exporterOtlpProtocol: user.otelExporterOtlpProtocol,
-      }
-    } else if (team.otelWriteToken || team.otelBaseUrl) {
-      otelSettings = {
-        writeToken: team.otelWriteToken,
-        baseUrl: team.otelBaseUrl,
-        exporterOtlpProtocol: team.otelExporterOtlpProtocol,
-      }
     }
 
     return {
@@ -53,7 +38,7 @@ export class ConfigDB extends KeysDb {
       userSpendingLimitWeekly: user?.spendingLimitWeekly ?? null,
       userSpendingLimitMonthly: user?.spendingLimitMonthly ?? null,
       providers,
-      otelSettings,
+      otelSettings: user?.otel ?? team.otel ?? null,
     }
   }
 

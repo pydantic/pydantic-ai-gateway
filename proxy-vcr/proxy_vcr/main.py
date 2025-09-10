@@ -50,7 +50,7 @@ async def proxy(request: Request) -> JSONResponse:
         with vcr.use_cassette(f'{body_hash}.yaml'):  # type: ignore[reportUnknownReturnType]
             headers = {'Authorization': auth_header, 'content-type': 'application/json'}
             response = await client.post(url, content=body, headers=headers)
-        return JSONResponse(response.json())
+        return JSONResponse(response.json(), status_code=response.status_code)
     raise HTTPException(status_code=400, detail='Invalid user agent')
 
 

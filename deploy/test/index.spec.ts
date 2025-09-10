@@ -1,6 +1,6 @@
 import OpenAI from 'openai'
 import { SELF, env, fetchMock } from 'cloudflare:test'
-import { describe, it, expect, beforeAll, afterAll, beforeEach } from 'vitest'
+import { describe, it, expect, beforeAll, afterEach, beforeEach } from 'vitest'
 import SQL from '../limits-schema.sql?raw'
 
 beforeAll(async () => {
@@ -12,12 +12,11 @@ beforeAll(async () => {
   }
 })
 
-beforeEach(() => {
+beforeEach(async () => {
+  await env.limitsDB.prepare(RESET_SQL).run()
   fetchMock.activate()
 })
-afterAll(() => {
-  fetchMock.assertNoPendingInterceptors()
-})
+afterEach(() => fetchMock.assertNoPendingInterceptors())
 
 function recordOtelBatch(otelBatch: Array<any>) {
   fetchMock
@@ -46,10 +45,6 @@ describe('index', () => {
 const RESET_SQL = `DROP TABLE IF EXISTS spend;\n${SQL}`
 
 describe('invalid request', () => {
-  beforeAll(async () => {
-    await env.limitsDB.prepare(RESET_SQL).run()
-  })
-
   it('401 on no auth header', async () => {
     const response = await SELF.fetch('https://example.com/openai-chat/gpt-5')
     expect(response.status).toBe(401)
@@ -74,10 +69,6 @@ describe('invalid request', () => {
 })
 
 describe('openai', () => {
-  beforeAll(async () => {
-    await env.limitsDB.prepare(RESET_SQL).run()
-  })
-
   it('should call openai via gateway', async () => {
     let otelBatch: Array<any> = []
     recordOtelBatch(otelBatch)

@@ -66,7 +66,6 @@ export class OtelTrace {
       headers.set('Authorization', this.otelSettings.writeToken)
     }
 
-    console.log(this.otelSettings)
     const exportOtlpProtocol = this.otelSettings.exporterProtocol ?? 'http/protobuf'
     let serializer: ISerializer<ReadableSpan[], IExportTraceServiceResponse>
     if (exportOtlpProtocol === 'http/json') {

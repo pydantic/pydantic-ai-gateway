@@ -12,7 +12,7 @@ Good question, there's a few reasons to try PAIG:
 - Excellent integration with [Pydantic Logfire](https://pydantic.dev/logfire/), or indeed any Open Telemetry service
 - No "API harmonization" (because Pydantic AI can support all popular models) we don't need to attempt to convert all model responses to one schema, meaning you can use all features of all models as soon as they're released. All PAIG needs to be able to do is authorize requests to that provider
 - Open source (under [AGPL-3.0](https://www.gnu.org/licenses/agpl-3.0.en.html)) with commercial support and hosting - you can configure PAIG directly in code and deploy it yourself, or use our hosted service with a convenient UI and API to configure it, we also offer self-hosting of PAIG for enterprise customers
-- API key delegation and cost limiting - use one provider key across many teams, users and API keys with fine-grained control over usage and costs at each level
+- API key delegation and cost limiting - use one provider API key across many teams, users and API keys with fine-grained control over usage and costs at each level (Note: cost limits are somewhat "soft" since we can't calculate the cost of LLM calls until they complete, and we use CloudFlare's KV store to cache state)
 - (TODO) Caching - cache responses to avoid unnecessary API calls and improve performance
 - (TODO) Fallback - if a provider is down or rate limited, PAIG can automatically switch to another provider
 - (TODO) Security and guardrails

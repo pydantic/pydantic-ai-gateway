@@ -8,9 +8,14 @@ export abstract class KeysDb {
   abstract disableKey(id: string, reason: string): Promise<void>
 }
 
+export interface IntervalSpend {
+  intervalId: string
+  limit: number
+}
+
 export abstract class LimitDb {
-  // increment spend and return true if the limit is exceeded
-  abstract incrementSpend(id: string, spend: number, limit: number | null): Promise<boolean>
+  // increment spends and return true if the limit is exceeded
+  abstract incrementSpend(spendLimits: IntervalSpend[], spend: number): Promise<boolean>
 }
 
 export class LimitDbD1 extends LimitDb {
@@ -21,21 +26,25 @@ export class LimitDbD1 extends LimitDb {
     this.db = db
   }
 
-  async incrementSpend(id: string, spend: number, limit: number | null): Promise<boolean> {
+  async incrementSpend(intervalSpends: IntervalSpend[], spend: number): Promise<boolean> {
+    const sqlValues: '(?, ?, ?)'[] = []
+    const values: (string | number)[] = []
+    for (const { intervalId, limit } of intervalSpends) {
+      sqlValues.push('(?, ?, ?)')
+      values.push(intervalId, limit, spend)
+    }
     try {
       await this.db
         .prepare(
-          `
-        INSERT INTO spend (id, spend, spendingLimit)
-        VALUES (?, ?, ?)
-        ON CONFLICT(id) DO UPDATE SET spend = spend.spend + EXCLUDED.spend;
-        `,
+          `\
+INSERT INTO spend (id, spendingLimit, spend)
+VALUES ${sqlValues.join(', ')}
+ON CONFLICT(id) DO UPDATE SET spend = spend.spend + EXCLUDED.spend;`,
         )
-        .bind(id, spend, limit)
+        .bind(...values)
         .run()
     } catch (error) {
-      const errorString = (error as Error).toString()
-      if (errorString.includes('SQLITE_CONSTRAINT')) {
+      if (error instanceof Error && error.message.includes('spendingLimit: SQLITE_CONSTRAINT')) {
         return true
       } else {
         throw error

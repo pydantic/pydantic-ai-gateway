@@ -4,6 +4,7 @@ import * as logfire from '@pydantic/logfire-api'
 import { ApiKeyInfo, guardProviderID, providerIdArray } from './types'
 import { textResponse } from './utils'
 import { apiKeyAuth, disableApiKeyAuth } from './auth'
+import type { SpendLimit } from './db'
 import { getProvider } from './providers'
 import { OtelTrace } from './otel'
 import { genAiOtelAttributes } from './otelAttributes'
@@ -100,62 +101,50 @@ export async function disableApiKey(apiKey: ApiKeyInfo, env: GatewayEnv, reason:
 }
 
 async function recordSpend(apiKey: ApiKeyInfo, spend: number, env: GatewayEnv): Promise<void> {
-  const { id, org, team, user } = apiKey
+  const { id, team, user } = apiKey
   const now = new Date()
   const today = isoDate(now)
   const week = startOfWeek(now)
   const month = startOfMonth(now)
-  const ex: string[] = []
-  if (typeof apiKey.keySpendingLimitDaily === 'number') {
-    await incrementSpend('key-daily', `${id}-${today}`, spend, apiKey.keySpendingLimitDaily, ex, env)
+  const spendLimits: SpendLimit[] = []
+  if (apiKey.keySpendingLimitDaily != null) {
+    spendLimits.push({ id: `key-daily-${id}-${today}`, limit: apiKey.keySpendingLimitDaily })
   }
-  if (typeof apiKey.keySpendingLimitWeekly === 'number') {
-    await incrementSpend('key-weekly', `${id}-${week}`, spend, apiKey.keySpendingLimitWeekly, ex, env)
+  if (apiKey.keySpendingLimitWeekly != null) {
+    spendLimits.push({ id: `key-weekly-${id}-${week}`, limit: apiKey.keySpendingLimitWeekly })
   }
-  if (typeof apiKey.keySpendingLimitMonthly === 'number') {
-    await incrementSpend('key-monthly', `${id}-${month}`, spend, apiKey.keySpendingLimitMonthly, ex, env)
+  if (apiKey.keySpendingLimitMonthly != null) {
+    spendLimits.push({ id: `key-monthly-${id}-${month}`, limit: apiKey.keySpendingLimitMonthly })
   }
-  if (typeof apiKey.keySpendingLimitTotal === 'number') {
-    await incrementSpend('key-total', id, spend, apiKey.keySpendingLimitTotal, ex, env)
+  if (apiKey.keySpendingLimitTotal != null) {
+    spendLimits.push({ id: `key-total-${id}`, limit: apiKey.keySpendingLimitTotal })
   }
 
-  if (typeof user === 'string') {
-    if (typeof apiKey.userSpendingLimitDaily === 'number') {
-      await incrementSpend('user-daily', `${user}-${today}`, spend, apiKey.userSpendingLimitDaily, ex, env)
+  if (user != null) {
+    if (apiKey.userSpendingLimitDaily != null) {
+      spendLimits.push({ id: `user-daily-${user}-${today}`, limit: apiKey.userSpendingLimitDaily })
     }
-    if (typeof apiKey.userSpendingLimitWeekly === 'number') {
-      await incrementSpend('user-weekly', `${user}-${week}`, spend, apiKey.userSpendingLimitWeekly, ex, env)
+    if (apiKey.userSpendingLimitWeekly != null) {
+      spendLimits.push({ id: `user-weekly-${user}-${week}`, limit: apiKey.userSpendingLimitWeekly })
     }
-    if (typeof apiKey.userSpendingLimitMonthly === 'number') {
-      await incrementSpend('user-monthly', `${user}-${month}`, spend, apiKey.userSpendingLimitMonthly, ex, env)
+    if (apiKey.userSpendingLimitMonthly != null) {
+      spendLimits.push({ id: `user-monthly-${user}-${month}`, limit: apiKey.userSpendingLimitMonthly })
     }
   }
 
-  if (typeof apiKey.teamSpendingLimitDaily === 'number') {
-    await incrementSpend('team-daily', `${team}-${today}`, spend, apiKey.teamSpendingLimitDaily, ex, env)
+  if (apiKey.teamSpendingLimitDaily != null) {
+    spendLimits.push({ id: `team-daily-${team}-${today}`, limit: apiKey.teamSpendingLimitDaily })
   }
-  if (typeof apiKey.teamSpendingLimitWeekly === 'number') {
-    await incrementSpend('team-weekly', `${team}-${week}`, spend, apiKey.teamSpendingLimitWeekly, ex, env)
+  if (apiKey.teamSpendingLimitWeekly != null) {
+    spendLimits.push({ id: `team-weekly-${team}-${week}`, limit: apiKey.teamSpendingLimitWeekly })
   }
-  // always set monthly team spend and include org in the key so we can sum to get monthly org spend
-  await incrementSpend('team-monthly', `${org}-${team}-${month}`, spend, apiKey.teamSpendingLimitMonthly, ex, env)
+  if (apiKey.teamSpendingLimitMonthly != null) {
+    spendLimits.push({ id: `team-monthly-${team}-${month}`, limit: apiKey.teamSpendingLimitMonthly })
+  }
+  const limitExceeded = await env.limitDb.incrementSpend(spendLimits, spend)
 
-  if (ex.length) {
-    await disableApiKey(apiKey, env, `limits exceeded: ${ex.join(', ')}`)
-  }
-}
-
-async function incrementSpend(
-  scope: string,
-  uniqueID: string,
-  spend: number,
-  limit: number | null,
-  scopesExceeded: string[],
-  env: GatewayEnv,
-): Promise<void> {
-  const limitExceeded = await env.limitDb.incrementSpend(`${scope}-${uniqueID}`, spend, limit)
   if (limitExceeded) {
-    scopesExceeded.push(scope)
+    await disableApiKey(apiKey, env, 'spending limit exceeded')
   }
 }
 

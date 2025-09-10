@@ -11,7 +11,8 @@ export const config: Config<ProviderKeys> = {
     default: {
       name: 'default',
       otel: {
-        writeToken: 'For sending proxy telemetry to Logfire or other OTel service, generate at logfire.pydantic.dev',
+        // For sending proxy telemetry to Logfire or other OTel service, generate at logfire.pydantic.dev
+        writeToken: 'pylf_...',
       },
       // users in this team
       users: {
@@ -50,6 +51,7 @@ export const config: Config<ProviderKeys> = {
     },
     c: {
       providerID: 'google-vertex',
+      // NOTE: you'll need to replace `{gcp-project-name}` to set your GCP project here
       baseUrl:
         'https://us-central1-aiplatform.googleapis.com/v1beta1/projects/{gcp-project-name}/locations/us-central1/publishers/google/models',
       injectCost: true,

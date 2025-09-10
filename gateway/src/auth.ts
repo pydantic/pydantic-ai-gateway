@@ -24,11 +24,13 @@ export async function apiKeyAuth(request: Request, env: GatewayEnv): Promise<Api
   }
 
   const cacheKey = apiKeyCacheKey(key, env)
-  const cacheResult = await env.kv.getWithMetadata<ApiKeyInfo, number>(cacheKey, { type: 'json' })
+  const cacheResult = await env.kv.getWithMetadata<ApiKeyInfo, { version: number; retryAfter?: number }>(cacheKey, {
+    type: 'json',
+  })
 
   let apiKey
   // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-  if (cacheResult && cacheResult.metadata === CACHE_VERSION && cacheResult.value) {
+  if (cacheResult && cacheResult.metadata?.version === CACHE_VERSION && cacheResult.value) {
     apiKey = cacheResult.value
   } else {
     apiKey = await env.keysDb.apiKeyAuth(key)
@@ -36,7 +38,7 @@ export async function apiKeyAuth(request: Request, env: GatewayEnv): Promise<Api
       throw new ResponseError(401, 'Unauthorized - Key not found')
     }
     await env.kv.put(cacheKey, JSON.stringify(apiKey), {
-      metadata: CACHE_VERSION,
+      metadata: { version: CACHE_VERSION },
       expirationTtl: CACHE_TTL,
     })
   }
@@ -44,6 +46,11 @@ export async function apiKeyAuth(request: Request, env: GatewayEnv): Promise<Api
   if (apiKey.active) {
     return apiKey
   } else {
+    if (cacheResult.metadata?.retryAfter) {
+      throw new ResponseError(429, 'Too Many Requests', {
+        'Retry-After': cacheResult.metadata.retryAfter.toString(),
+      })
+    }
     throw new ResponseError(403, 'Unauthorized - Key not active')
   }
 }
@@ -52,7 +59,7 @@ export async function disableApiKeyAuth(apiKey: ApiKeyInfo, env: GatewayEnv) {
   apiKey.active = false
   const cacheKey = apiKeyCacheKey(apiKey.key, env)
   await env.kv.put(cacheKey, JSON.stringify(apiKey), {
-    metadata: CACHE_VERSION,
+    metadata: { CACHE_VERSION, retryAfter: Date.now() + CACHE_TTL * 1000 },
     expirationTtl: CACHE_TTL, // TODO this need to be customed to the disabled time
   })
 }

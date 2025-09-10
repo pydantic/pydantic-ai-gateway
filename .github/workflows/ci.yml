@@ -25,7 +25,7 @@ jobs:
 
       - run: uv sync --all-groups
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v5
 
       - run: npm i
       - run: make ci-setup
@@ -49,7 +49,7 @@ jobs:
         with:
           enable-cache: true
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v5
 
       - run: npm i
       - run: make ci-setup

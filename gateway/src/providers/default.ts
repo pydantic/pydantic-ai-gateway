@@ -12,7 +12,7 @@ export interface ProxySuccess {
   responseHeaders: Headers
   responseBody: string
   responseModel: string
-  responseId: string
+  responseId?: string
   otelEvents?: GenAiOtelEvent[]
   usage: Usage
   cost: number

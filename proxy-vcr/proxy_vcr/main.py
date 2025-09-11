@@ -7,7 +7,6 @@ from typing import cast
 
 import httpx
 import uvicorn
-from rich.pretty import pprint
 from starlette.applications import Starlette
 from starlette.exceptions import HTTPException
 from starlette.requests import Request
@@ -42,8 +41,6 @@ async def lifespan(_: Starlette):
 async def proxy(request: Request) -> JSONResponse:
     auth_header = request.headers.get('authorization', '')
     body = await request.body()
-
-    pprint(request.headers)
 
     # We should cache based on request body content, so we should make a hash of the request body.
     body_hash = hashlib.sha256(body).hexdigest()

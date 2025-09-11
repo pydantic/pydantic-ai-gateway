@@ -16,9 +16,11 @@ from vcr import VCR  # type: ignore[reportMissingTypeStubs]
 from vcr.record_mode import RecordMode  # type: ignore[reportMissingTypeStubs]
 
 OPENAI_BASE_URL = 'https://api.openai.com/v1/'
-
+GROQ_BASE_URL = 'https://api.groq.com'
 
 current_file_dir = pathlib.Path(__file__).parent
+
+# TODO(Marcelo): We should create different cassette directories: PydanticAI and Gateway test suites.
 
 vcr = VCR(
     serializer='yaml',
@@ -45,6 +47,13 @@ async def proxy(request: Request) -> JSONResponse:
     if request.url.path.startswith('/openai'):
         client = cast(httpx.AsyncClient, request.scope['state']['httpx_client'])
         url = OPENAI_BASE_URL + request.url.path.strip('/openai')
+        with vcr.use_cassette(f'{body_hash}.yaml'):  # type: ignore[reportUnknownReturnType]
+            headers = {'Authorization': auth_header, 'content-type': 'application/json'}
+            response = await client.post(url, content=body, headers=headers)
+        return JSONResponse(response.json(), status_code=response.status_code)
+    elif request.url.path.startswith('/groq'):
+        client = cast(httpx.AsyncClient, request.scope['state']['httpx_client'])
+        url = GROQ_BASE_URL + request.url.path[len('/groq') :]
         with vcr.use_cassette(f'{body_hash}.yaml'):  # type: ignore[reportUnknownReturnType]
             headers = {'Authorization': auth_header, 'content-type': 'application/json'}
             response = await client.post(url, content=body, headers=headers)

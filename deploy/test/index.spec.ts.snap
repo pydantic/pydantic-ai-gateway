@@ -1,5 +1,43 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
+exports[`groq > should call groq via gateway > llm 1`] = `
+{
+  "choices": [
+    {
+      "finish_reason": "stop",
+      "index": 0,
+      "logprobs": null,
+      "message": {
+        "content": "The capital of France is Paris.",
+        "role": "assistant",
+      },
+    },
+  ],
+  "created": 1757583859,
+  "id": "chatcmpl-dc545ddf-4d56-41c5-b839-aa29388b76f5",
+  "model": "llama-3.3-70b-versatile",
+  "object": "chat.completion",
+  "service_tier": "on_demand",
+  "system_fingerprint": "fp_2ddfbb0da0",
+  "usage": {
+    "completion_time": 0.002192431,
+    "completion_tokens": 8,
+    "prompt_time": 0.010942305,
+    "prompt_tokens": 42,
+    "pydantic_ai_gateway": {
+      "cost_estimate": 0.0000311,
+    },
+    "queue_time": 0.084393519,
+    "total_time": 0.013134736,
+    "total_tokens": 50,
+  },
+  "usage_breakdown": null,
+  "x_groq": {
+    "id": "req_01k4w2jqx2f31tmse2nw28za8v",
+  },
+}
+`;
+
 exports[`openai > should call openai via gateway > llm 1`] = `
 {
   "choices": [
@@ -14,8 +52,8 @@ exports[`openai > should call openai via gateway > llm 1`] = `
       },
     },
   ],
-  "created": 1757316780,
-  "id": "chatcmpl-CDQeyDf30d6s2eFqr1PmAs2sdQcAd",
+  "created": 1757583776,
+  "id": "chatcmpl-CEY7M6BwbBtavblK5zBwrXgbDdIaF",
   "model": "gpt-5-2025-08-07",
   "object": "chat.completion",
   "service_tier": "default",
@@ -106,7 +144,7 @@ exports[`openai > should call openai via gateway > span 1`] = `
   {
     "key": "http.response.body.text",
     "value": {
-      "stringValue": "{"id":"chatcmpl-CDQeyDf30d6s2eFqr1PmAs2sdQcAd","object":"chat.completion","created":1757316780,"model":"gpt-5-2025-08-07","choices":[{"index":0,"message":{"role":"assistant","content":"Paris.","refusal":null,"annotations":[]},"finish_reason":"stop"}],"usage":{"prompt_tokens":23,"completion_tokens":11,"total_tokens":34,"prompt_tokens_details":{"cached_tokens":0,"audio_tokens":0},"completion_tokens_details":{"reasoning_tokens":0,"audio_tokens":0,"accepted_prediction_tokens":0,"rejected_prediction_tokens":0},"pydantic_ai_gateway":{"cost_estimate":0.00013875}},"service_tier":"default","system_fingerprint":null}",
+      "stringValue": "{"id":"chatcmpl-CEY7M6BwbBtavblK5zBwrXgbDdIaF","object":"chat.completion","created":1757583776,"model":"gpt-5-2025-08-07","choices":[{"index":0,"message":{"role":"assistant","content":"Paris.","refusal":null,"annotations":[]},"finish_reason":"stop"}],"usage":{"prompt_tokens":23,"completion_tokens":11,"total_tokens":34,"prompt_tokens_details":{"cached_tokens":0,"audio_tokens":0},"completion_tokens_details":{"reasoning_tokens":0,"audio_tokens":0,"accepted_prediction_tokens":0,"rejected_prediction_tokens":0},"pydantic_ai_gateway":{"cost_estimate":0.00013875}},"service_tier":"default","system_fingerprint":null}",
     },
   },
   {

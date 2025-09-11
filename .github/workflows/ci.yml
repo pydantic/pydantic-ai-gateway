@@ -58,12 +58,8 @@ jobs:
       - name: Start proxy-vcr service
         run: |
           make run-proxy-vcr &
-          sleep 1
+          sleep 2
           curl -s http://localhost:8005 | grep -q 'Proxy VCR is running'
-          if [ $? -ne 0 ]; then
-            echo 'Proxy VCR is not running'
-            exit 1
-          fi
 
       - run: npm run test
 

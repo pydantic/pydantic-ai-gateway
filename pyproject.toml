@@ -9,7 +9,7 @@ dev = ["pyright>=1.1.341", "ruff>=0.12.8"]
 [tool.uv.sources]
 proxy-vcr = { workspace = true }
 examples = { workspace = true }
-pydantic-ai = { git = "https://github.com/pydantic/pydantic-ai.git", branch = "add-coverage" }
+pydantic-ai = { git = "https://github.com/pydantic/pydantic-ai.git", branch = "support-anthropic-gateway" }
 
 [tool.uv.workspace]
 members = ["proxy-vcr", "examples"]

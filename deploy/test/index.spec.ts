@@ -1,4 +1,6 @@
 import OpenAI from 'openai'
+import Groq from 'groq-sdk'
+import Anthropic from '@anthropic-ai/sdk'
 import { SELF, env, fetchMock } from 'cloudflare:test'
 import { describe, it, expect, beforeAll, afterEach, beforeEach } from 'vitest'
 import SQL from '../limits-schema.sql?raw'
@@ -120,5 +122,47 @@ describe('blocked key', () => {
     console.log(allSpends)
     const allKeyStatus = await env.limitsDB.prepare('SELECT * FROM keyStatus').all()
     console.log(allKeyStatus)
+  })
+})
+
+describe('groq', () => {
+  it('should call groq via gateway', async () => {
+    const client = new Groq({
+      apiKey: 'o-QBrunFudqD99879C5jkFZgZrueCLlCJGSMAbzFGFY',
+      baseURL: 'https://example.com/groq',
+      fetch: SELF.fetch.bind(SELF),
+    })
+
+    const completion = await client.chat.completions.create({
+      model: 'llama-3.3-70b-versatile',
+      messages: [
+        { role: 'developer', content: 'You are a helpful assistant.' },
+        { role: 'user', content: 'What is the capital of France?' },
+      ],
+    })
+    expect(completion).toMatchSnapshot('llm')
+  })
+})
+
+describe('anthropic', () => {
+  it('should call anthropic via gateway', async () => {
+    let otelBatch: Array<any> = []
+    recordOtelBatch(otelBatch)
+
+    const client = new Anthropic({
+      // The `authToken` is passed as `Authorization` header.
+      authToken: 'o-QBrunFudqD99879C5jkFZgZrueCLlCJGSMAbzFGFY',
+      baseURL: 'https://example.com/anthropic',
+      fetch: SELF.fetch.bind(SELF),
+    })
+
+    const completion = await client.messages.create({
+      model: 'claude-sonnet-4-20250514',
+      max_tokens: 1024,
+      messages: [{ role: 'user', content: 'What is the capital of France?' }],
+    })
+    expect(completion).toMatchSnapshot('llm')
+    expect(otelBatch.length).toBe(1)
+    expect(JSON.parse(otelBatch[0]).resourceSpans?.[0].scopeSpans?.[0].spans?.[0]?.attributes).toMatchSnapshot('span')
   })
 })

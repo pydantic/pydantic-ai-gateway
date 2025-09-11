@@ -1,8 +1,6 @@
 interactions:
   - request:
-      body: "{\n  \"model\": \"gpt-5\",\n  \"messages\": [\n    {\n      \"role\": \"developer\",\n
-        \     \"content\": \"You are a helpful assistant.\"\n    },\n    {\n      \"role\":
-        \"user\",\n      \"content\": \"What is the capital of France?\"\n    }\n  ]\n}"
+      body: '{"messages":[{"role":"user","content":"What is the capital of France?"}],"model":"gpt-5","stream":false}'
       headers:
         accept:
           - '*/*'
@@ -11,11 +9,9 @@ interactions:
         connection:
           - keep-alive
         content-length:
-          - '215'
+          - '104'
         content-type:
           - application/json
-        cookie:
-          - __cf_bm=wtSTOCOx_5Nj0.ADwaVYLySEV7K80b5qRA_VSLQhZUo-1757582221-1.0.1.1-d1EWyTSEe.s4_Xc4o3jZ7YMjB3UuWFTVzzhECY3IfXuxZRh0p5wJwz.Wq1o3ubJ44w38duB4n5IVq1FsOtUnKrkpT8a9N.lYONtqSb_2iMw
         host:
           - api.openai.com
         user-agent:
@@ -25,16 +21,16 @@ interactions:
     response:
       body:
         string: !!binary |
-          H4sIAAAAAAAAA4ySSWvDMBCF7/4VQue4ZKnjkmO6QCmFHltKMBNp4qiVJSGNu4X89yJlsUNb6EWH
-          +WYe741mkzHGleQzxsUaSDRO55fXT+X9dP6+nBO8LfVd8TV/94/18krewg0fxAm7fEFBh6kzYRun
-          kZQ1Oyw8AmFUHZVFWVxMynKaQGMl6jhWO8qLfDwcF/nwIh+W+7m1VQIDn7HnjDHGNumNDo3EDz5j
-          w8Gh0mAIUCOfHZsY497qWOEQggoEhvigg8IaQpNMP4BX4awPPa7aANGaabXuATDGEsRoydZiT7ZH
-          IytlVFhXHiFYE8UDWccT3WaMLVKw9sQrd942jiqyr5hkx5OdHO8W2cHRaA/JEuiuPjkf/KJWSSRQ
-          OvQWwwWINcpustsitFLZHsh62X6a+U17l1uZ+j/yHRACHaGsnEepxGngrs1jPLO/2o47ToZ5QP+m
-          BFak0Md/kLiCVu9OgIfPQNhUK2Vq9M6rdAfxq7Nt9g0AAP//AwBra+HUBAMAAA==
+          H4sIAAAAAAAAA4yST2sCMRDF7/spQs6uqO2y4lVqoYVioVBokSUm4240m4Rktq0Vv3tJ/LMrtdBL
+          DvObebw3mV1CCJWCTgjlFUNeW5VO717fnvD5e7Yp82op1rPH+QNOX/Lp5/2W016YMMs1cDxN9bmp
+          rQKURh8wd8AQguowz/Isz8ejLILaCFBhrLSYZuloMMrSwTgd5Me5ykgOnk7Ie0IIIbv4BodawBed
+          kEHvVKnBe1YCnZybCKHOqFChzHvpkWmkvRZyoxF0ND1nTvp+FzpYNZ4Fa7pRqgOY1gZZiBZtLY5k
+          fzayklr6qnDAvNFB3KOxNNJ9QsgiBmsuvFLrTG2xQLOBKDu8OcjRdpEdODxCNMhUWx/d9q6oFQKQ
+          SeU7i6Gc8QpEO9lukTVCmg5IOtl+m7mmfcgtdfkf+RZwDhZBFNaBkPwycNvmIJzZX23nHUfD1IP7
+          kBwKlODCPwhYsUYdToD6rUeoi5XUJTjrZLyD8NXJPvkBAAD//wMAoi9PhAQDAAA=
       headers:
         CF-RAY:
-          - 97d637c7aa3955af-AMS
+          - 97d5a680ab360e3b-AMS
         Connection:
           - keep-alive
         Content-Encoding:
@@ -42,14 +38,14 @@ interactions:
         Content-Type:
           - application/json
         Date:
-          - Thu, 11 Sep 2025 09:42:58 GMT
+          - Thu, 11 Sep 2025 08:03:48 GMT
         Server:
           - cloudflare
         Set-Cookie:
-          - __cf_bm=t0q63x7lV4hd.mEhglY_yL4IJDDeY8cfcapwQXA5mD4-1757583778-1.0.1.1-C3KIvU6Flrn4BUzQe88U.G.cXvFlf5x9TCvhWpdR8ztf2TSS3.nZkLfjuuPb5OCavoxyYCRhKIWaUsY7eSYZf7pLzxm76qaTx7A9fot6Acc;
-            path=/; expires=Thu, 11-Sep-25 10:12:58 GMT; domain=.api.openai.com; HttpOnly;
+          - __cf_bm=mKmlyBqqq08Ytf.fwoZ5tBqtVwsfjD_6rH.fYo04sn0-1757577828-1.0.1.1-nAdtac6xdgpkLPja6xsvE.9ktna6T31tUNniJyVkMYWEbxS0_ss2TFvZwkhinvezgmm_t7ZkMdiZMbjVfGVjIw0jQUFk7eEDRqvuykzn_fg;
+            path=/; expires=Thu, 11-Sep-25 08:33:48 GMT; domain=.api.openai.com; HttpOnly;
             Secure; SameSite=None
-          - _cfuvid=zaeS.PboLIo7BwQaYsGhdge3oP9b.70.No7v.o4TNg4-1757583778371-0.0.1.1-604800000;
+          - _cfuvid=K7s1ARgw9BKupVflOFDG0LgyMUvgedBSHpBbpieLXAA-1757577828573-0.0.1.1-604800000;
             path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
         Strict-Transport-Security:
           - max-age=31536000; includeSubDomains; preload
@@ -66,13 +62,13 @@ interactions:
         openai-organization:
           - pydantic-28gund
         openai-processing-ms:
-          - '1733'
+          - '2654'
         openai-project:
           - proj_dKobscVY9YJxeEaDJen54e3d
         openai-version:
           - '2020-10-01'
         x-envoy-upstream-service-time:
-          - '1965'
+          - '2774'
         x-openai-proxy-wasm:
           - v0.1
         x-ratelimit-limit-requests:
@@ -82,13 +78,13 @@ interactions:
         x-ratelimit-remaining-requests:
           - '9999'
         x-ratelimit-remaining-tokens:
-          - '3999981'
+          - '3999990'
         x-ratelimit-reset-requests:
           - 6ms
         x-ratelimit-reset-tokens:
           - 0s
         x-request-id:
-          - req_9bec9f62fa56404195293ee1130ea753
+          - req_5fac5d12c7224715b58ad19a94110930
       status:
         code: 200
         message: OK

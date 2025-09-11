@@ -10,6 +10,9 @@
     // if you set `LOGFIRE_TOKEN=pylf...` in .dev.vars, also set `LOGFIRE_ENVIRONMENT=dev`
     "LOGFIRE_ENVIRONMENT": "prod",
   },
+  "placement": {
+    "mode": "smart",
+  },
   "d1_databases": [
     {
       "binding": "limitsDB",

@@ -18,3 +18,5 @@ deploy/worker-configuration.d.ts
 /scratch/
 
 *.egg-info/
+
+.DS_Store

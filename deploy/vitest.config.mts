@@ -9,7 +9,7 @@ export default defineWorkersConfig({
       optimizer: {
         ssr: {
           enabled: true,
-          include: ['@pydantic/logfire-cf-workers', '@opentelemetry/resources', '@pydantic/ai-gateway'],
+          include: ['@pydantic/logfire-cf-workers', '@opentelemetry/resources'],
         },
       },
     },
@@ -24,9 +24,9 @@ export default defineWorkersConfig({
         miniflare: {
           bindings: {
             // put variables here
-            OPENAI_API_KEY: `${process.env.OPENAI_API_KEY}`,
-            GROQ_API_KEY: `${process.env.GROQ_API_KEY}`,
-            ANTHROPIC_API_KEY: `${process.env.ANTHROPIC_API_KEY}`,
+            OPENAI_API_KEY: process.env.OPENAI_API_KEY ?? 'OPENAI_API_KEY-unset',
+            GROQ_API_KEY: process.env.GROQ_API_KEY ?? 'GROQ_API_KEY-unset',
+            ANTHROPIC_API_KEY: process.env.ANTHROPIC_API_KEY ?? 'ANTHROPIC_API_KEY-unset',
           },
         },
       },

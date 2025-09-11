@@ -1,4 +1,3 @@
-/* eslint-disable no-undef */
 import * as logfire from '@pydantic/logfire-api'
 
 import { ApiKeyInfo, guardProviderID, providerIdArray } from './types'

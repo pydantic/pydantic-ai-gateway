@@ -47,6 +47,12 @@ export default defineConfig(
     },
   },
   {
+    files: ['src/**/*.ts'],
+    rules: {
+      'no-undef': 'off',
+    },
+  },
+  {
     languageOptions: {
       parserOptions: {
         projectService: true,

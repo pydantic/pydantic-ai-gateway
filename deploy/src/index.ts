@@ -20,7 +20,7 @@ import * as logfire from '@pydantic/logfire-api'
 import { instrument } from '@pydantic/logfire-cf-workers'
 import { gatewayFetch, GatewayEnv, LimitDbD1 } from '@pydantic/ai-gateway'
 import { config } from './config'
-import { ConfigDB } from './db'
+import { ConfigDB, hash } from './db'
 
 const handler = {
   async fetch(request, env, ctx): Promise<Response> {
@@ -47,9 +47,3 @@ export default instrument(handler, {
     version: env.GITHUB_SHA.substring(0, 7),
   },
 })
-
-async function hash(input: string): Promise<string> {
-  const hashBuffer = await crypto.subtle.digest('SHA-1', new TextEncoder().encode(input))
-  const hashArray = Array.from(new Uint8Array(hashBuffer))
-  return hashArray.map((byte) => byte.toString(16).padStart(2, '0')).join('')
-}

@@ -1,4 +1,3 @@
-/* eslint-disable no-undef */
 import * as logfire from '@pydantic/logfire-api'
 import { gateway } from './gateway'
 import { ctHeader, response405, ResponseError } from './utils'

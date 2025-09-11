@@ -346,7 +346,7 @@ dependencies = [
 requires-dist = [
     { name = "devtools", specifier = ">=0.12.2" },
     { name = "logfire", extras = ["httpx"], specifier = ">=4.3.3" },
-    { name = "pydantic-ai", git = "https://github.com/pydantic/pydantic-ai.git?branch=add-coverage" },
+    { name = "pydantic-ai", git = "https://github.com/pydantic/pydantic-ai.git?branch=main" },
 ]
 
 [[package]]
@@ -463,15 +463,15 @@ wheels = [
 
 [[package]]
 name = "genai-prices"
-version = "0.0.22"
+version = "0.0.27"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "httpx" },
     { name = "pydantic" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/81/c5/0aa155ac23a17eb6de36f0611d8595fc49861bdb0a5f302133b7b4f68f5b/genai_prices-0.0.22.tar.gz", hash = "sha256:5e743424d40176ea04de7b74d1ad3a41801390439f4404d4593b82218f2c0c04", size = 44125, upload-time = "2025-08-12T12:04:52.265Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/e9/f1/e9da3299662343f4757e7113bda469f9a3fcdec03a57e6f926ecae790620/genai_prices-0.0.27.tar.gz", hash = "sha256:e0ac07c9af75c6cd28c3feab5ed4dd7299e459975927145f1aa25317db3fb24d", size = 45451, upload-time = "2025-09-10T19:02:20.714Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/8d/1c/313541ea19144a7e5b0ac32dec3dd026de719c5b15147b043d52006dbef7/genai_prices-0.0.22-py3-none-any.whl", hash = "sha256:1ae496bdf517047bc489421c1eff653872e5d456d5eb86d113dfb49d2977a041", size = 46445, upload-time = "2025-08-12T12:04:50.884Z" },
+    { url = "https://files.pythonhosted.org/packages/43/75/f2e11c7a357289934a26e45d60eb9892523e5e9b07ad886be7a8a35078b1/genai_prices-0.0.27-py3-none-any.whl", hash = "sha256:3f95bf72378ddfc88992755e33f1b208f15242697807d71ade5c1627caa56ce1", size = 48053, upload-time = "2025-09-10T19:02:19.416Z" },
 ]
 
 [[package]]
@@ -1244,8 +1244,8 @@ wheels = [
 
 [[package]]
 name = "pydantic-ai"
-version = "1.0.2.dev22+35b44c7"
-source = { git = "https://github.com/pydantic/pydantic-ai.git?branch=add-coverage#35b44c7214ad1dfdd00d663f0308bbf625921d68" }
+version = "1.0.4.dev1+99581d7"
+source = { git = "https://github.com/pydantic/pydantic-ai.git?branch=main#99581d7052df6038e0106d959d686c6fe2788a0c" }
 dependencies = [
     { name = "pydantic-ai-slim", extra = ["ag-ui", "anthropic", "bedrock", "cli", "cohere", "evals", "google", "groq", "huggingface", "logfire", "mcp", "mistral", "openai", "retries", "temporal", "vertexai"] },
 ]
@@ -1271,8 +1271,8 @@ dev = [
 
 [[package]]
 name = "pydantic-ai-slim"
-version = "1.0.2.dev22+35b44c7"
-source = { git = "https://github.com/pydantic/pydantic-ai.git?subdirectory=pydantic_ai_slim&branch=add-coverage#35b44c7214ad1dfdd00d663f0308bbf625921d68" }
+version = "1.0.4.dev1+99581d7"
+source = { git = "https://github.com/pydantic/pydantic-ai.git?subdirectory=pydantic_ai_slim&branch=main#99581d7052df6038e0106d959d686c6fe2788a0c" }
 dependencies = [
     { name = "genai-prices" },
     { name = "griffe" },
@@ -1382,8 +1382,8 @@ wheels = [
 
 [[package]]
 name = "pydantic-evals"
-version = "1.0.2.dev22+35b44c7"
-source = { git = "https://github.com/pydantic/pydantic-ai.git?subdirectory=pydantic_evals&branch=add-coverage#35b44c7214ad1dfdd00d663f0308bbf625921d68" }
+version = "1.0.4.dev1+99581d7"
+source = { git = "https://github.com/pydantic/pydantic-ai.git?subdirectory=pydantic_evals&branch=main#99581d7052df6038e0106d959d686c6fe2788a0c" }
 dependencies = [
     { name = "anyio" },
     { name = "logfire-api" },
@@ -1395,8 +1395,8 @@ dependencies = [
 
 [[package]]
 name = "pydantic-graph"
-version = "1.0.2.dev22+35b44c7"
-source = { git = "https://github.com/pydantic/pydantic-ai.git?subdirectory=pydantic_graph&branch=add-coverage#35b44c7214ad1dfdd00d663f0308bbf625921d68" }
+version = "1.0.4.dev1+99581d7"
+source = { git = "https://github.com/pydantic/pydantic-ai.git?subdirectory=pydantic_graph&branch=main#99581d7052df6038e0106d959d686c6fe2788a0c" }
 dependencies = [
     { name = "httpx" },
     { name = "logfire-api" },

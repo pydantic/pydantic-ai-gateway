@@ -123,6 +123,7 @@ describe('anthropic', () => {
     recordOtelBatch(otelBatch)
 
     const client = new Anthropic({
+      // The `authToken` is passed as `Authorization` header.
       authToken: 'o-QBrunFudqD99879C5jkFZgZrueCLlCJGSMAbzFGFY',
       baseURL: 'https://example.com/anthropic',
       fetch: SELF.fetch.bind(SELF),

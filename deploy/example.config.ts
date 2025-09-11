@@ -2,7 +2,7 @@ import { env } from 'cloudflare:workers'
 import type { Config } from '@deploy/types'
 
 // can be whatever you want, just used to make linking apiKeys to providers typesafe.
-type ProviderKeys = 'a' | 'b' | 'c'
+type ProviderKeys = 'a' | 'b' | 'c' | 'd'
 
 export const config: Config<ProviderKeys> = {
   // the name of the organization, doesn't matter in this case
@@ -56,6 +56,12 @@ export const config: Config<ProviderKeys> = {
         'https://us-central1-aiplatform.googleapis.com/v1beta1/projects/{gcp-project-name}/locations/us-central1/publishers/google/models',
       injectCost: true,
       credentials: env.GOOGLE_SERVICE_ACCOUNT_KEY,
+    },
+    d: {
+      providerID: 'anthropic',
+      baseUrl: 'https://api.anthropic.com',
+      injectCost: true,
+      credentials: env.ANTHROPIC_API_KEY,
     },
   },
   // individual apiKeys

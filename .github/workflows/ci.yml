@@ -56,10 +56,7 @@ jobs:
       - run: npm run typegen
 
       - name: Start proxy-vcr service
-        run: |
-          make run-proxy-vcr &
-          sleep 2
-          curl -s http://localhost:8005 | grep -q 'Proxy VCR is running'
+        run: make run-proxy-vcr &
 
       - run: npm run test
 

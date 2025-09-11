@@ -1,4 +1,7 @@
 import OpenAI from 'openai'
+import { AnthropicVertex } from '@anthropic-ai/vertex-sdk'
+import { GoogleAuth } from 'google-auth-library'
+
 import Groq from 'groq-sdk'
 import { SELF, env, fetchMock } from 'cloudflare:test'
 import { describe, it, expect, beforeAll, afterEach, beforeEach } from 'vitest'
@@ -111,6 +114,25 @@ describe('groq', () => {
         { role: 'developer', content: 'You are a helpful assistant.' },
         { role: 'user', content: 'What is the capital of France?' },
       ],
+    })
+    expect(completion).toMatchSnapshot('llm')
+  })
+})
+
+describe('anthropic', () => {
+  it('should call anthropic via gateway', async () => {
+    const client = new AnthropicVertex({
+      baseURL: 'https://example.com/anthropic',
+      fetch: SELF.fetch.bind(SELF),
+      googleAuth: new GoogleAuth({
+        apiKey: 'o-QBrunFudqD99879C5jkFZgZrueCLlCJGSMAbzFGFY',
+      }),
+    })
+
+    const completion = await client.messages.create({
+      model: 'claude-sonnet-4-20250514',
+      max_tokens: 1024,
+      messages: [{ role: 'user', content: 'What is the capital of France?' }],
     })
     expect(completion).toMatchSnapshot('llm')
   })

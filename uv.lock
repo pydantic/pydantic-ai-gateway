@@ -149,15 +149,6 @@ wheels = [
 ]
 
 [[package]]
-name = "asgiref"
-version = "3.9.1"
-source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/90/61/0aa957eec22ff70b830b22ff91f825e70e1ef732c06666a805730f28b36b/asgiref-3.9.1.tar.gz", hash = "sha256:a5ab6582236218e5ef1648f242fd9f10626cfd4de8dc377db215d5d5098e3142", size = 36870, upload-time = "2025-07-08T09:07:43.344Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/7c/3c/0464dcada90d5da0e71018c04a140ad6349558afb30b3051b4264cc5b965/asgiref-3.9.1-py3-none-any.whl", hash = "sha256:f3bba7092a48005b5f5bacd747d36ee4a5a61f4a269a6df590b43144355ebd2c", size = 23790, upload-time = "2025-07-08T09:07:41.548Z" },
-]
-
-[[package]]
 name = "asttokens"
 version = "2.4.1"
 source = { registry = "https://pypi.org/simple" }
@@ -800,9 +791,6 @@ wheels = [
 httpx = [
     { name = "opentelemetry-instrumentation-httpx" },
 ]
-starlette = [
-    { name = "opentelemetry-instrumentation-starlette" },
-]
 
 [[package]]
 name = "logfire-api"
@@ -1036,22 +1024,6 @@ wheels = [
 ]
 
 [[package]]
-name = "opentelemetry-instrumentation-asgi"
-version = "0.57b0"
-source = { registry = "https://pypi.org/simple" }
-dependencies = [
-    { name = "asgiref" },
-    { name = "opentelemetry-api" },
-    { name = "opentelemetry-instrumentation" },
-    { name = "opentelemetry-semantic-conventions" },
-    { name = "opentelemetry-util-http" },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/97/10/7ba59b586eb099fa0155521b387d857de476687c670096597f618d889323/opentelemetry_instrumentation_asgi-0.57b0.tar.gz", hash = "sha256:a6f880b5d1838f65688fc992c65fbb1d3571f319d370990c32e759d3160e510b", size = 24654, upload-time = "2025-07-29T15:42:48.199Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/9e/07/ab97dd7e8bc680b479203f7d3b2771b7a097468135a669a38da3208f96cb/opentelemetry_instrumentation_asgi-0.57b0-py3-none-any.whl", hash = "sha256:47debbde6af066a7e8e911f7193730d5e40d62effc1ac2e1119908347790a3ea", size = 16599, upload-time = "2025-07-29T15:41:48.332Z" },
-]
-
-[[package]]
 name = "opentelemetry-instrumentation-httpx"
 version = "0.57b0"
 source = { registry = "https://pypi.org/simple" }
@@ -1065,22 +1037,6 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/01/28/65fea8b8e7f19502a8af1229c62384f9211c1480f5dee1776841810d6551/opentelemetry_instrumentation_httpx-0.57b0.tar.gz", hash = "sha256:ea5669cdb17185f8d247c2dbf756ae5b95b53110ca4d58424f2be5cc7223dbdd", size = 19511, upload-time = "2025-07-29T15:43:00.575Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/bd/24/e59b319a5c6a41c6b4230f5e25651edbeb3a8d248afa1b411fd07cc3f9bf/opentelemetry_instrumentation_httpx-0.57b0-py3-none-any.whl", hash = "sha256:729fef97624016d3e5b03b71f51c9a1a2f7480b023373186d643fbed7496712a", size = 15111, upload-time = "2025-07-29T15:42:06.501Z" },
-]
-
-[[package]]
-name = "opentelemetry-instrumentation-starlette"
-version = "0.57b0"
-source = { registry = "https://pypi.org/simple" }
-dependencies = [
-    { name = "opentelemetry-api" },
-    { name = "opentelemetry-instrumentation" },
-    { name = "opentelemetry-instrumentation-asgi" },
-    { name = "opentelemetry-semantic-conventions" },
-    { name = "opentelemetry-util-http" },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/84/2c/bc7533a4b91dcf0e2d76c1f61cf42e90d17bbcb31de9000015284fea3bad/opentelemetry_instrumentation_starlette-0.57b0.tar.gz", hash = "sha256:d01c411f0189fe530c574f4392f83941a7845839af7ae6456ad00ac2aeb6441c", size = 14499, upload-time = "2025-07-29T15:43:13.515Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/16/5b/239cab1dccb2e2964c22157860da8178e8870e10b2250c208daac4678505/opentelemetry_instrumentation_starlette-0.57b0-py3-none-any.whl", hash = "sha256:be835509cc4192b5c4aa4fdafbcbb18a028bc329746d9c12e4693ad81f9c2cac", size = 11717, upload-time = "2025-07-29T15:42:28.896Z" },
 ]
 
 [[package]]
@@ -1230,7 +1186,6 @@ source = { editable = "proxy-vcr" }
 dependencies = [
     { name = "httptools" },
     { name = "httpx" },
-    { name = "logfire", extra = ["httpx", "starlette"] },
     { name = "openai" },
     { name = "pydantic-settings" },
     { name = "starlette" },
@@ -1243,7 +1198,6 @@ dependencies = [
 requires-dist = [
     { name = "httptools", specifier = ">=0.6.4" },
     { name = "httpx", specifier = ">=0.28.1" },
-    { name = "logfire", extras = ["httpx", "starlette"], specifier = ">=4.3.3" },
     { name = "openai", specifier = ">=1.99.9" },
     { name = "pydantic-settings", specifier = ">=2.10.1" },
     { name = "starlette", specifier = ">=0.47.2" },

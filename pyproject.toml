@@ -40,7 +40,7 @@ reportIgnoreCommentWithoutRule = true
 reportUnusedParameter = true
 reportIncompatibleUnannotatedOverride = true
 reportImplicitAbstractClass = true
-include = ["examples"]
+include = ["examples", "proxy-vcr"]
 venv = ".venv"
 
 [tool.codespell]

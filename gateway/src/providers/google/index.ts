@@ -43,7 +43,7 @@ export class GoogleVertexProvider extends DefaultProviderProxy {
     return otelEvents(requestBody, responseBody)
   }
 
-  responseId(responseBody: JsonData): string {
-    return responseBody.responseId as string
+  responseId(responseBody: JsonData): string | undefined {
+    return responseBody.responseId === 'string' ? responseBody.responseId : undefined
   }
 }

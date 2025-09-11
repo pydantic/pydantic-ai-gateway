@@ -16,6 +16,7 @@ dependencies = [
     "uvicorn>=0.35.0",
     "uvloop>=0.21.0",
     "vcrpy>=7.0.0",
+    "logfire[httpx,starlette]>=4.3.3",
 ]
 
 [tool.uv.build-backend]

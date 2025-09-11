@@ -11,7 +11,7 @@
     "LOGFIRE_ENVIRONMENT": "prod",
   },
   "placement": {
-    "mode": "smart"
+    "mode": "smart",
   },
   "d1_databases": [
     {

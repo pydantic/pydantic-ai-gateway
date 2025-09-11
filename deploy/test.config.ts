@@ -31,7 +31,7 @@ export const config: Config<ProviderKeys> = {
     // the key is the slug used to identify the provider in the incoming request
     openai: {
       // baseUrl decides what URL the request will be forwarded to
-      baseUrl: 'http://localhost:8005',
+      baseUrl: 'http://localhost:8005/openai',
       // providerId decides on the logic used to process the request and response
       providerID: 'openai',
       // if injectCost is True, the cost of request from genai-prices is injected in the usage object in the response

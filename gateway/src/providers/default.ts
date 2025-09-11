@@ -167,10 +167,7 @@ export class DefaultProviderProxy {
   }
 
   protected responseId(responseBody: JsonData): string | undefined {
-    const responseId = responseBody.id
-    if (typeof responseId == 'string') {
-      return responseId
-    }
+    return typeof responseBody.id === 'string' ? responseBody.id : undefined
   }
 
   async dispatch(): Promise<ProxySuccess | ProxyInvalidRequest | ProxyUnexpectedResponse> {

@@ -88,4 +88,5 @@ app = Starlette(
 )
 
 if __name__ == '__main__':
-    uvicorn.run('proxy_vcr.main:app', host='0.0.0.0', port=8005, reload=True)
+    this_dir = pathlib.Path(__file__).parent
+    uvicorn.run('proxy_vcr.main:app', host='0.0.0.0', port=8005, reload=True, reload_dirs=[str(this_dir)])

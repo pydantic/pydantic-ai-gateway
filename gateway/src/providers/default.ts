@@ -12,6 +12,7 @@ export interface ProxySuccess {
   responseHeaders: Headers
   responseBody: string
   responseModel: string
+  responseId?: string
   otelEvents?: GenAiOtelEvent[]
   usage: Usage
   cost: number
@@ -165,6 +166,10 @@ export class DefaultProviderProxy {
     return []
   }
 
+  protected responseId(responseBody: JsonData): string | undefined {
+    return typeof responseBody.id === 'string' ? responseBody.id : undefined
+  }
+
   async dispatch(): Promise<ProxySuccess | ProxyInvalidRequest | ProxyUnexpectedResponse> {
     const checkResult = this.check()
     if (checkResult) {
@@ -208,6 +213,8 @@ export class DefaultProviderProxy {
     }
     const { responseBody, usage, responseModel, cost } = processResponse
 
+    const responseId = this.responseId(responseBody)
+
     // TODO we will want to remove some response headers, e.g. openai org
     const responseHeaders = new Headers(response.headers)
     responseHeaders.set('pydantic-ai-gateway-price-estimate', `${cost.toFixed(4)}USD`)
@@ -231,6 +238,7 @@ export class DefaultProviderProxy {
       successStatus: response.status,
       responseHeaders,
       responseBody: JSON.stringify(responseBody),
+      responseId,
       requestModel,
       otelEvents,
       usage,

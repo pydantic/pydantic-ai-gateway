@@ -42,4 +42,8 @@ export class GoogleVertexProvider extends DefaultProviderProxy {
   otelEvents(requestBody: GoogleRequest, responseBody: GenerateContentResponse) {
     return otelEvents(requestBody, responseBody)
   }
+
+  responseId(responseBody: JsonData): string | undefined {
+    return responseBody.responseId === 'string' ? responseBody.responseId : undefined
+  }
 }

@@ -16,6 +16,13 @@ repos:
 
   - repo: local
     hooks:
+      - id: npm-install
+        name: format install
+        entry: npm
+        args: [install]
+        language: system
+        types_or: [json]
+        pass_filenames: false
       - id: format-ts
         name: format typescript
         entry: make

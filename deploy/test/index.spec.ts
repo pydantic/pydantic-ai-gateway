@@ -1,4 +1,5 @@
 import OpenAI from 'openai'
+import Groq from 'groq-sdk'
 import { SELF, env, fetchMock } from 'cloudflare:test'
 import { describe, it, expect, beforeAll, afterEach, beforeEach } from 'vitest'
 import SQL from '../limits-schema.sql?raw'
@@ -93,5 +94,24 @@ describe('openai', () => {
     expect(completion).toMatchSnapshot('llm')
     expect(otelBatch.length).toBe(1)
     expect(JSON.parse(otelBatch[0]).resourceSpans?.[0].scopeSpans?.[0].spans?.[0]?.attributes).toMatchSnapshot('span')
+  })
+})
+
+describe('groq', () => {
+  it('should call groq via gateway', async () => {
+    const client = new Groq({
+      apiKey: 'o-QBrunFudqD99879C5jkFZgZrueCLlCJGSMAbzFGFY',
+      baseURL: 'https://example.com/groq',
+      fetch: SELF.fetch.bind(SELF),
+    })
+
+    const completion = await client.chat.completions.create({
+      model: 'llama-3.3-70b-versatile',
+      messages: [
+        { role: 'developer', content: 'You are a helpful assistant.' },
+        { role: 'user', content: 'What is the capital of France?' },
+      ],
+    })
+    expect(completion).toMatchSnapshot('llm')
   })
 })

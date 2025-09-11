@@ -16,7 +16,7 @@ export function genAiOtelAttributes(
   let level: Level = 'info'
 
   if ('successStatus' in result) {
-    const { requestBody, successStatus, responseModel, usage, otelEvents, responseBody } = result
+    const { requestBody, successStatus, responseModel, usage, otelEvents, responseBody, responseId } = result
     spanName = `chat ${responseModel}`
     attributes = {
       ...attributes,
@@ -24,6 +24,7 @@ export function genAiOtelAttributes(
       'http.request.body.text': requestBody,
       'http.response.body.text': responseBody,
       'gen_ai.response.model': responseModel,
+      'gen_ai.response.id': responseId,
       'gen_ai.usage.input_tokens': usage.input_tokens,
       'gen_ai.usage.cache_read_tokens': usage.cache_read_tokens,
       'gen_ai.usage.cache_write_tokens': usage.cache_write_tokens,

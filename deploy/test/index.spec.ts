@@ -14,7 +14,18 @@ beforeAll(async () => {
   }
 })
 
+const RESET_SQL = `
+DROP TABLE IF EXISTS spend;
+DROP TABLE IF EXISTS keyStatus;
+
+${SQL}
+`
+
 beforeEach(async () => {
+  const keys = await env.KV.list()
+  if (keys.keys.length !== 0) {
+    throw new Error('KV store is not empty before test.')
+  }
   await env.limitsDB.prepare(RESET_SQL).run()
   fetchMock.activate()
 })
@@ -43,13 +54,6 @@ describe('index', () => {
     )
   })
 })
-
-const RESET_SQL = `
-DROP TABLE IF EXISTS spend;
-DROP TABLE IF EXISTS keyStatus;
-
-${SQL}
-`
 
 describe('invalid request', () => {
   it('401 on no auth header', async () => {
@@ -106,7 +110,7 @@ describe('openai', () => {
 describe('blocked key', () => {
   it('should block key if limit is exceeded', async () => {
     const client = new OpenAI({
-      apiKey: 'healthy-key',
+      apiKey: 'low-limit-key',
       baseURL: 'https://example.com/openai',
       fetch: SELF.fetch.bind(SELF),
     })
@@ -128,7 +132,7 @@ describe('blocked key', () => {
 describe('groq', () => {
   it('should call groq via gateway', async () => {
     const client = new Groq({
-      apiKey: 'o-QBrunFudqD99879C5jkFZgZrueCLlCJGSMAbzFGFY',
+      apiKey: 'healthy-key',
       baseURL: 'https://example.com/groq',
       fetch: SELF.fetch.bind(SELF),
     })
@@ -151,7 +155,7 @@ describe('anthropic', () => {
 
     const client = new Anthropic({
       // The `authToken` is passed as `Authorization` header.
-      authToken: 'o-QBrunFudqD99879C5jkFZgZrueCLlCJGSMAbzFGFY',
+      authToken: 'healthy-key',
       baseURL: 'https://example.com/anthropic',
       fetch: SELF.fetch.bind(SELF),
     })

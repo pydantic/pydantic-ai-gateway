@@ -4,23 +4,11 @@ import * as logfire from '@pydantic/logfire-api'
 import { ApiKeyInfo, guardProviderID, providerIdArray } from './types'
 import { textResponse } from './utils'
 import { apiKeyAuth, disableApiKeyAuth } from './auth'
-import type { IntervalSpend } from './db'
+import type { IntervalSpend, SpendLimitScope } from './db'
 import { getProvider } from './providers'
 import { OtelTrace } from './otel'
 import { genAiOtelAttributes } from './otelAttributes'
 import type { GatewayEnv } from '.'
-
-type ScopeExceeded =
-  | 'key-daily'
-  | 'key-weekly'
-  | 'key-monthly'
-  | 'key-total'
-  | 'user-daily'
-  | 'user-weekly'
-  | 'user-monthly'
-  | 'team-daily'
-  | 'team-weekly'
-  | 'team-monthly'
 
 export async function gateway(request: Request, ctx: ExecutionContext, url: URL, env: GatewayEnv): Promise<Response> {
   const { pathname } = url
@@ -132,43 +120,43 @@ async function recordSpend(apiKey: ApiKeyInfo, spend: number, env: GatewayEnv): 
 
   const intervalSpends: IntervalSpend[] = []
   if (apiKey.keySpendingLimitDaily != null) {
-    intervalSpends.push({ intervalId: `key-daily-${id}-${today}`, limit: apiKey.keySpendingLimitDaily })
+    intervalSpends.push({ scope: 'key-daily', id: `${id}-${today}`, limit: apiKey.keySpendingLimitDaily })
   }
   if (apiKey.keySpendingLimitWeekly != null) {
-    intervalSpends.push({ intervalId: `key-weekly-${id}-${week}`, limit: apiKey.keySpendingLimitWeekly })
+    intervalSpends.push({ scope: 'key-weekly', id: `${id}-${week}`, limit: apiKey.keySpendingLimitWeekly })
   }
   if (apiKey.keySpendingLimitMonthly != null) {
-    intervalSpends.push({ intervalId: `key-monthly-${id}-${month}`, limit: apiKey.keySpendingLimitMonthly })
+    intervalSpends.push({ scope: 'key-monthly', id: `${id}-${month}`, limit: apiKey.keySpendingLimitMonthly })
   }
   if (apiKey.keySpendingLimitTotal != null) {
-    intervalSpends.push({ intervalId: `key-total-${id}`, limit: apiKey.keySpendingLimitTotal })
+    intervalSpends.push({ scope: 'key-total', id, limit: apiKey.keySpendingLimitTotal })
   }
 
   if (user != null) {
     if (apiKey.userSpendingLimitDaily != null) {
-      intervalSpends.push({ intervalId: `user-daily-${user}-${today}`, limit: apiKey.userSpendingLimitDaily })
+      intervalSpends.push({ scope: 'user-daily', id: `${user}-${today}`, limit: apiKey.userSpendingLimitDaily })
     }
     if (apiKey.userSpendingLimitWeekly != null) {
-      intervalSpends.push({ intervalId: `user-weekly-${user}-${week}`, limit: apiKey.userSpendingLimitWeekly })
+      intervalSpends.push({ scope: 'user-weekly', id: `${user}-${week}`, limit: apiKey.userSpendingLimitWeekly })
     }
     if (apiKey.userSpendingLimitMonthly != null) {
-      intervalSpends.push({ intervalId: `user-monthly-${user}-${month}`, limit: apiKey.userSpendingLimitMonthly })
+      intervalSpends.push({ scope: 'user-monthly', id: `${user}-${month}`, limit: apiKey.userSpendingLimitMonthly })
     }
   }
 
   if (apiKey.teamSpendingLimitDaily != null) {
-    intervalSpends.push({ intervalId: `team-daily-${team}-${today}`, limit: apiKey.teamSpendingLimitDaily })
+    intervalSpends.push({ scope: 'team-daily', id: `${team}-${today}`, limit: apiKey.teamSpendingLimitDaily })
   }
   if (apiKey.teamSpendingLimitWeekly != null) {
-    intervalSpends.push({ intervalId: `team-weekly-${team}-${week}`, limit: apiKey.teamSpendingLimitWeekly })
+    intervalSpends.push({ scope: 'team-weekly', id: `${team}-${week}`, limit: apiKey.teamSpendingLimitWeekly })
   }
   if (apiKey.teamSpendingLimitMonthly != null) {
-    intervalSpends.push({ intervalId: `team-monthly-${team}-${month}`, limit: apiKey.teamSpendingLimitMonthly })
+    intervalSpends.push({ scope: 'team-monthly', id: `${team}-${month}`, limit: apiKey.teamSpendingLimitMonthly })
   }
-  const limitExceeded = await env.limitDb.incrementSpend(intervalSpends, spend)
+  const scopesExceeded = await env.limitDb.incrementSpend(intervalSpends, spend)
 
-  if (limitExceeded) {
-    await disableApiKey(apiKey, env, `limits exceeded: TODO`, 'limit-exceeded', calculateExpirationTtl(new Set()))
+  if (scopesExceeded.length) {
+    await disableApiKey(apiKey, env, `limits exceeded: TODO`, 'limit-exceeded', calculateExpirationTtl(scopesExceeded))
   }
 }
 
@@ -203,7 +191,7 @@ function startOfMonth(date: Date): string {
  * - If weekly limits are exceeded (and no monthly), expires at the next week boundary
  * - If only daily limits are exceeded, expires at the next day boundary
  *
- * @param ex - Set of scope exceeded types that determine the expiration period
+ * @param xSet - Set of scope exceeded types that determine the expiration period
  * @returns TTL in seconds until the next reset period, Infinity for permanent disabling or 0 if no match is found
  *
  * - `key-total`: Infinity
@@ -211,19 +199,19 @@ function startOfMonth(date: Date): string {
  * - Weekly scopes: Returns seconds until next week boundary
  * - Daily scopes: Returns seconds until next day boundary
  */
-function calculateExpirationTtl(ex: Set<ScopeExceeded>): number {
+function calculateExpirationTtl(ex: SpendLimitScope[]): number {
   console.log('calculateExpirationTtl', ex)
+  const xSet = new Set(ex)
   const now = new Date()
-  if (ex.has('key-total')) {
+  if (xSet.has('key-total')) {
     return Infinity
-  } else if (ex.has('key-monthly') || ex.has('user-monthly') || ex.has('team-monthly')) {
+  } else if (xSet.has('key-monthly') || xSet.has('user-monthly') || xSet.has('team-monthly')) {
     const nextMonth = new Date(now.getFullYear(), now.getMonth() + 1, 1)
     return Math.floor((nextMonth.getTime() - Date.now()) / 1000)
-  } else if (ex.has('key-weekly') || ex.has('user-weekly') || ex.has('team-weekly')) {
+  } else if (xSet.has('key-weekly') || xSet.has('user-weekly') || xSet.has('team-weekly')) {
     const nextWeek = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 7)
     return Math.floor((new Date(startOfWeek(nextWeek)).getTime() - Date.now()) / 1000)
-  } else if (ex.has('key-daily') || ex.has('user-daily') || ex.has('team-daily')) {
-    console.log('key-daily')
+  } else if (xSet.has('key-daily') || xSet.has('user-daily') || xSet.has('team-daily')) {
     const nextDay = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1)
     return Math.floor((nextDay.getTime() - Date.now()) / 1000)
   }

@@ -1,7 +1,7 @@
 import { env } from 'cloudflare:workers'
 import type { Config } from '@deploy/types'
 
-type ProviderKeys = 'openai' | 'groq'
+type ProviderKeys = 'openai' | 'groq' | 'anthropic'
 
 export const config: Config<ProviderKeys> = {
   // the name of the organization, doesn't matter in this case
@@ -52,6 +52,12 @@ export const config: Config<ProviderKeys> = {
     //     injectCost: true,
     //     credentials: env.GOOGLE_SERVICE_ACCOUNT_KEY,
     // },
+    anthropic: {
+      baseUrl: 'http://localhost:8005/anthropic',
+      providerID: 'anthropic',
+      injectCost: true,
+      credentials: env.ANTHROPIC_API_KEY,
+    },
   },
   // individual apiKeys
   apiKeys: {
@@ -61,7 +67,7 @@ export const config: Config<ProviderKeys> = {
       // user is optional
       user: 'testberto',
       // providers is required and identifies which providers this apiKey is allowed to use
-      providers: ['openai', 'groq'],
+      providers: ['openai', 'groq', 'anthropic'],
       // you can also optionally add limits to a single key here
       spendingLimitDaily: 1,
       spendingLimitWeekly: 5,

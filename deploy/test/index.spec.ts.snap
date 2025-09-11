@@ -1,5 +1,145 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
+exports[`anthropic > should call anthropic via gateway > llm 1`] = `
+{
+  "content": [
+    {
+      "text": "The capital of France is Paris.",
+      "type": "text",
+    },
+  ],
+  "id": "msg_01585PaGjM59gXCuvKbohmSX",
+  "model": "claude-sonnet-4-20250514",
+  "role": "assistant",
+  "stop_reason": "end_turn",
+  "stop_sequence": null,
+  "type": "message",
+  "usage": {
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 0,
+      "ephemeral_5m_input_tokens": 0,
+    },
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 0,
+    "input_tokens": 14,
+    "output_tokens": 10,
+    "pydantic_ai_gateway": {
+      "cost_estimate": 0.00019199999999999998,
+    },
+    "service_tier": "standard",
+  },
+}
+`;
+
+exports[`anthropic > should call anthropic via gateway > span 1`] = `
+[
+  {
+    "key": "logfire.msg",
+    "value": {
+      "stringValue": "chat claude-sonnet-4-20250514",
+    },
+  },
+  {
+    "key": "logfire.json_schema",
+    "value": {
+      "stringValue": "{"type":"object","properties":{"gen_ai.operation.name":{"type":"string"},"gen_ai.request.model":{"type":"string"},"gen_ai.system":{"type":"string"},"http.response.status_code":{"type":"number"},"http.request.body.text":{"type":"string"},"http.response.body.text":{"type":"string"},"gen_ai.response.model":{"type":"string"},"gen_ai.usage.input_tokens":{"type":"number"},"gen_ai.usage.cache_read_tokens":{"type":"number"},"gen_ai.usage.cache_write_tokens":{"type":"number"},"gen_ai.usage.output_tokens":{"type":"number"},"gen_ai.usage.input_audio_tokens":{},"gen_ai.usage.cache_audio_read_tokens":{},"gen_ai.usage.output_audio_tokens":{},"events":{}}}",
+    },
+  },
+  {
+    "key": "logfire.level_num",
+    "value": {
+      "intValue": 9,
+    },
+  },
+  {
+    "key": "gen_ai.operation.name",
+    "value": {
+      "stringValue": "chat",
+    },
+  },
+  {
+    "key": "gen_ai.request.model",
+    "value": {
+      "stringValue": "claude-sonnet-4-20250514",
+    },
+  },
+  {
+    "key": "gen_ai.system",
+    "value": {
+      "stringValue": "anthropic",
+    },
+  },
+  {
+    "key": "http.response.status_code",
+    "value": {
+      "intValue": 200,
+    },
+  },
+  {
+    "key": "http.request.body.text",
+    "value": {
+      "stringValue": "{"model":"claude-sonnet-4-20250514","max_tokens":1024,"messages":[{"role":"user","content":"What is the capital of France?"}]}",
+    },
+  },
+  {
+    "key": "http.response.body.text",
+    "value": {
+      "stringValue": "{"id":"msg_01585PaGjM59gXCuvKbohmSX","type":"message","role":"assistant","model":"claude-sonnet-4-20250514","content":[{"type":"text","text":"The capital of France is Paris."}],"stop_reason":"end_turn","stop_sequence":null,"usage":{"input_tokens":14,"cache_creation_input_tokens":0,"cache_read_input_tokens":0,"cache_creation":{"ephemeral_5m_input_tokens":0,"ephemeral_1h_input_tokens":0},"output_tokens":10,"service_tier":"standard","pydantic_ai_gateway":{"cost_estimate":0.00019199999999999998}}}",
+    },
+  },
+  {
+    "key": "gen_ai.response.model",
+    "value": {
+      "stringValue": "claude-sonnet-4-20250514",
+    },
+  },
+  {
+    "key": "gen_ai.usage.input_tokens",
+    "value": {
+      "intValue": 14,
+    },
+  },
+  {
+    "key": "gen_ai.usage.cache_read_tokens",
+    "value": {
+      "intValue": 0,
+    },
+  },
+  {
+    "key": "gen_ai.usage.cache_write_tokens",
+    "value": {
+      "intValue": 0,
+    },
+  },
+  {
+    "key": "gen_ai.usage.output_tokens",
+    "value": {
+      "intValue": 10,
+    },
+  },
+  {
+    "key": "gen_ai.usage.input_audio_tokens",
+    "value": {},
+  },
+  {
+    "key": "gen_ai.usage.cache_audio_read_tokens",
+    "value": {},
+  },
+  {
+    "key": "gen_ai.usage.output_audio_tokens",
+    "value": {},
+  },
+  {
+    "key": "events",
+    "value": {
+      "arrayValue": {
+        "values": [],
+      },
+    },
+  },
+]
+`;
+
 exports[`groq > should call groq via gateway > llm 1`] = `
 {
   "choices": [

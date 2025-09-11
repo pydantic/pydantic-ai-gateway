@@ -17,6 +17,7 @@ from vcr.record_mode import RecordMode  # type: ignore[reportMissingTypeStubs]
 
 OPENAI_BASE_URL = 'https://api.openai.com/v1/'
 GROQ_BASE_URL = 'https://api.groq.com'
+ANTHROPIC_BASE_URL = 'https://api.anthropic.com'
 
 current_file_dir = pathlib.Path(__file__).parent
 
@@ -27,7 +28,7 @@ vcr = VCR(
     cassette_library_dir=(current_file_dir / 'cassettes').as_posix(),
     record_mode=RecordMode.ONCE,
     match_on=['uri', 'method'],
-    filter_headers=['Authorization'],
+    filter_headers=['Authorization', 'x-api-key'],
 )
 
 
@@ -56,6 +57,18 @@ async def proxy(request: Request) -> JSONResponse:
         url = GROQ_BASE_URL + request.url.path[len('/groq') :]
         with vcr.use_cassette(f'{body_hash}.yaml'):  # type: ignore[reportUnknownReturnType]
             headers = {'Authorization': auth_header, 'content-type': 'application/json'}
+            response = await client.post(url, content=body, headers=headers)
+        return JSONResponse(response.json(), status_code=response.status_code)
+    elif request.url.path.startswith('/anthropic'):
+        client = cast(httpx.AsyncClient, request.scope['state']['httpx_client'])
+        url = ANTHROPIC_BASE_URL + request.url.path[len('/anthropic') :]
+        api_key = auth_header.replace('Bearer ', '')
+        with vcr.use_cassette(f'{body_hash}.yaml'):  # type: ignore[reportUnknownReturnType]
+            headers = {
+                'x-api-key': api_key,
+                'content-type': 'application/json',
+                'anthropic-version': request.headers.get('anthropic-version', '2023-06-01'),
+            }
             response = await client.post(url, content=body, headers=headers)
         return JSONResponse(response.json(), status_code=response.status_code)
     raise HTTPException(status_code=404, detail=f'Path {request.url.path} not supported')

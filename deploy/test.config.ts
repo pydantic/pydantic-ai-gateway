@@ -1,7 +1,7 @@
 import { env } from 'cloudflare:workers'
 import type { Config } from '@deploy/types'
 
-type ProviderKeys = 'openai' | 'groq'
+type ProviderKeys = 'openai' | 'groq' | 'google'
 
 export const config: Config<ProviderKeys> = {
   // the name of the organization, doesn't matter in this case
@@ -45,13 +45,12 @@ export const config: Config<ProviderKeys> = {
       injectCost: true,
       credentials: env.GROQ_API_KEY,
     },
-    // google: {
-    //     baseUrl:
-    //         'https://us-central1-aiplatform.googleapis.com/v1beta1/projects/{gcp-project-name}/locations/us-central1/publishers/google/models',
-    //     providerId: 'google',
-    //     injectCost: true,
-    //     credentials: env.GOOGLE_SERVICE_ACCOUNT_KEY,
-    // },
+    google: {
+      baseUrl: 'http://localhost:8005/google',
+      providerID: 'google-vertex',
+      injectCost: true,
+      credentials: env.GOOGLE_SERVICE_ACCOUNT_KEY,
+    },
   },
   // individual apiKeys
   apiKeys: {
@@ -61,7 +60,7 @@ export const config: Config<ProviderKeys> = {
       // user is optional
       user: 'testberto',
       // providers is required and identifies which providers this apiKey is allowed to use
-      providers: ['openai', 'groq'],
+      providers: ['openai', 'groq', 'google'],
       // you can also optionally add limits to a single key here
       spendingLimitDaily: 1,
       spendingLimitWeekly: 5,

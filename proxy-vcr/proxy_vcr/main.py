@@ -17,6 +17,7 @@ from vcr.record_mode import RecordMode  # type: ignore[reportMissingTypeStubs]
 
 OPENAI_BASE_URL = 'https://api.openai.com/v1/'
 GROQ_BASE_URL = 'https://api.groq.com'
+GOOGLE_VERTEX_BASE_URL = 'https://us-central1-aiplatform.googleapis.com/v1beta1/projects/pydantic-ai/locations/us-central1/publishers/google/models'
 
 current_file_dir = pathlib.Path(__file__).parent
 

@@ -19,13 +19,14 @@ export default defineWorkersConfig({
     poolOptions: {
       workers: {
         wrangler: {
+          isolatedStorage: true,
           configPath: './wrangler.jsonc',
         },
         miniflare: {
           bindings: {
-            // put variables here
             OPENAI_API_KEY: `${process.env.OPENAI_API_KEY}`,
             GROQ_API_KEY: `${process.env.GROQ_API_KEY}`,
+            GOOGLE_SERVICE_ACCOUNT_KEY: `${process.env.GOOGLE_SERVICE_ACCOUNT_KEY}`,
           },
         },
       },

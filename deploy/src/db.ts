@@ -2,6 +2,14 @@ import { KeysDb, ApiKeyInfo, ProviderProxy } from '@pydantic/ai-gateway'
 import { config } from './config'
 
 export class ConfigDB extends KeysDb {
+  // TODO(Marcelo): Should we call this DB instead?
+  private limitsDB: D1Database
+
+  constructor(limitsDB: D1Database) {
+    super()
+    this.limitsDB = limitsDB
+  }
+
   async apiKeyAuth(key: string): Promise<ApiKeyInfo | null> {
     const keyInfo = config.apiKeys[key]
     if (!keyInfo) {
@@ -24,7 +32,7 @@ export class ConfigDB extends KeysDb {
       team: keyInfo.team,
       org: config.org,
       key,
-      active: keyInfo.expires ? Date.now() < keyInfo.expires : true,
+      status: Date.now() < (keyInfo.expires ?? Infinity) ? 'active' : 'expired',
       // key limits
       keySpendingLimitDaily: keyInfo.spendingLimitDaily ?? null,
       keySpendingLimitWeekly: keyInfo.spendingLimitWeekly ?? null,
@@ -43,8 +51,9 @@ export class ConfigDB extends KeysDb {
     }
   }
 
-  async disableKey(_id: string, _reason: string): Promise<void> {
-    // do nothing
+  async disableKey(id: string, _reason: string, newStatus: string): Promise<void> {
+    await this.limitsDB.prepare('UPDATE keyStatus SET status = ? WHERE id = ?').bind(newStatus, id).run()
+    await this.limitsDB.prepare('DELETE FROM keyStatus WHERE expiresAt < CURRENT_TIMESTAMP').run()
   }
 }
 

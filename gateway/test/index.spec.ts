@@ -1,7 +1,7 @@
 import OpenAI from 'openai'
 import Groq from 'groq-sdk'
 import Anthropic from '@anthropic-ai/sdk'
-import { env, createExecutionContext } from 'cloudflare:test'
+import { env, createExecutionContext, waitOnExecutionContext } from 'cloudflare:test'
 import { describe, it, expect, beforeAll, beforeEach } from 'vitest'
 import SQL from '../limits-schema.sql?raw'
 
@@ -17,7 +17,11 @@ beforeAll(async () => {
   }
 })
 
-const RESET_SQL = `DROP TABLE IF EXISTS spend;\n${SQL}`
+const RESET_SQL = `\
+DROP TABLE IF EXISTS spend;
+DROP TABLE IF EXISTS keyStatus;
+
+${SQL}`
 
 beforeEach(async () => {
   await env.limitsDB.prepare(RESET_SQL).run()
@@ -54,7 +58,9 @@ function testGateway(): TestGateway {
       url,
       init as RequestInit<IncomingRequestCfProperties>,
     )
-    return await gatewayFetch(request, ctx, buildGatewayEnv(env, subFetch))
+    const response = await gatewayFetch(request, ctx, buildGatewayEnv(env, subFetch))
+    await waitOnExecutionContext(ctx)
+    return response
   }
   return { fetch: mockFetch, ctx, otelBatch }
 }
@@ -77,7 +83,7 @@ describe('invalid request', () => {
   it('401 on no auth header', async () => {
     const response = await testGateway().fetch('https://example.com/openai/gpt-5')
     const text = await response.text()
-    expect(response.status, `got response: ${text}`).toBe(401)
+    expect(response.status, `got ${response.status} response: ${text}`).toBe(401)
     expect(text).toMatchInlineSnapshot(`"Unauthorized - Missing Authorization Header"`)
   })
   it('401 on unknown auth header', async () => {
@@ -85,7 +91,7 @@ describe('invalid request', () => {
       headers: { Authorization: 'unknown-token' },
     })
     const text = await response.text()
-    expect(response.status, `got response: ${text}`).toBe(401)
+    expect(response.status, `got ${response.status} response: ${text}`).toBe(401)
     expect(text).toMatchInlineSnapshot(`"Unauthorized - Key not found"`)
   })
   it('400 on unknown provider', async () => {
@@ -93,7 +99,7 @@ describe('invalid request', () => {
       headers: { Authorization: 'unknown-token' },
     })
     const text = await response.text()
-    expect(response.status, `got response: ${text}`).toBe(400)
+    expect(response.status, `got ${response.status} response: ${text}`).toBe(400)
     expect(text).toMatchInlineSnapshot(
       `"Invalid provider 'wrong', should be one of groq, openai, google-vertex, anthropic"`,
     )
@@ -149,7 +155,7 @@ describe('anthropic', () => {
     const { fetch, otelBatch } = testGateway()
 
     const client = new Anthropic({
-      // The `authToken` is passed as `Authorization` header.
+      // The `authToken` is passed as `Authorization` header with the anthropic client.
       authToken: 'healthy',
       baseURL: 'https://example.com/anthropic',
       fetch,
@@ -163,5 +169,100 @@ describe('anthropic', () => {
     expect(completion).toMatchSnapshot('llm')
     expect(otelBatch.length).toBe(1)
     expect(JSON.parse(otelBatch[0]!).resourceSpans?.[0].scopeSpans?.[0].spans?.[0]?.attributes).toMatchSnapshot('span')
+  })
+})
+
+describe('blocked key', () => {
+  it('should not block key if limit is not exceeded', async () => {
+    const { fetch } = testGateway()
+    const client = new OpenAI({
+      apiKey: 'healthy',
+      baseURL: 'https://example.com/test',
+      fetch,
+    })
+    await client.chat.completions.create({
+      model: 'gpt-5',
+      messages: [
+        { role: 'developer', content: 'You are a helpful assistant.' },
+        { role: 'user', content: 'Give me an essay on the history of the universe.' },
+      ],
+    })
+    const allSpends = await env.limitsDB
+      .prepare(`SELECT id, printf('%.3f', spend, 3) spend, spendingLimit FROM spend order by spendingLimit`)
+      .run<{ id: string; spend: string; spendingLimit: number }>()
+    expect(allSpends.results).toEqual([
+      {
+        id: expect.stringMatching(/key-daily:healthy-id-\d{4}-\d{2}-\d{2}/),
+        spend: '0.018',
+        spendingLimit: 1,
+      },
+      {
+        id: 'key-total:healthy-id',
+        spend: '0.018',
+        spendingLimit: 2,
+      },
+      {
+        id: expect.stringMatching(/user-weekly:user1-\d{4}-\d{2}-\d{2}/),
+        spend: '0.018',
+        spendingLimit: 3,
+      },
+      {
+        id: expect.stringMatching(/team-monthly:team1-\d{4}-\d{2}-\d{2}/),
+        spend: '0.018',
+        spendingLimit: 4,
+      },
+    ])
+    const allKeyStatus = await env.limitsDB
+      .prepare('SELECT count(*) as count FROM keyStatus')
+      .first<{ count: number }>()
+    expect(allKeyStatus?.count).toBe(0)
+  })
+
+  it('should block if key is disabled', async () => {
+    const { fetch } = testGateway()
+
+    const response = await fetch('https://example.com/openai/xxx', {
+      headers: { Authorization: 'disabled' },
+    })
+    const text = await response.text()
+    expect(response.status, `got response: ${response.status} ${text}`).toBe(403)
+    expect(text).toMatchInlineSnapshot(`"Unauthorized - Key disabled"`)
+    const spendCount = await env.limitsDB.prepare('SELECT count(*) count FROM spend').first<{ count: number }>()
+    expect(spendCount?.count).toBe(0)
+    const keyStatusCount = await env.limitsDB
+      .prepare('SELECT count(*) count FROM keyStatus')
+      .first<{ count: number }>()
+    expect(keyStatusCount?.count).toBe(0)
+  })
+
+  it('should block if limit is exceeded', async () => {
+    const { fetch } = testGateway()
+
+    const client = new OpenAI({
+      apiKey: 'tiny-limit',
+      baseURL: 'https://example.com/test',
+      fetch,
+    })
+    await client.chat.completions.create({
+      model: 'gpt-5',
+      messages: [
+        { role: 'developer', content: 'You are a helpful assistant.' },
+        { role: 'user', content: 'Give me an essay on the history of the universe.' },
+      ],
+    })
+
+    const apiValue = await env.KV.get('apiKeyAuth:test:tiny-limit')
+    expect(apiValue).toBeTypeOf('string')
+    expect(JSON.parse(apiValue!)).toMatchSnapshot('kv-value')
+
+    const spendCount1 = await env.limitsDB.prepare('SELECT count(*) count FROM spend').first<{ count: number }>()
+    expect(spendCount1?.count).toBe(0)
+
+    const response = await fetch('https://example.com/openai/xxx', {
+      headers: { Authorization: 'tiny-limit' },
+    })
+    const text = await response.text()
+    expect(response.status, `got ${response.status} response: ${text}`).toBe(403)
+    expect(text).toMatchInlineSnapshot(`"Unauthorized - Key limit-exceeded"`)
   })
 })

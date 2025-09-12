@@ -3,17 +3,30 @@ import type { ApiKeyInfo } from './types'
 export abstract class KeysDb {
   abstract apiKeyAuth(key: string): Promise<ApiKeyInfo | null>
 
-  abstract disableKey(id: string, reason: string): Promise<void>
+  abstract disableKey(id: string, reason: string, newStatus: string): Promise<void>
 }
 
+export type SpendLimitScope =
+  | 'key-daily'
+  | 'key-weekly'
+  | 'key-monthly'
+  | 'key-total'
+  | 'user-daily'
+  | 'user-weekly'
+  | 'user-monthly'
+  | 'team-daily'
+  | 'team-weekly'
+  | 'team-monthly'
+
 export interface IntervalSpend {
-  intervalId: string
+  scope: SpendLimitScope
+  id: string
   limit: number
 }
 
 export abstract class LimitDb {
-  // increment spends and return true if the limit is exceeded
-  abstract incrementSpend(spendLimits: IntervalSpend[], spend: number): Promise<boolean>
+  // increment spends and return IDs of any scopes that are exceeded
+  abstract incrementSpend(spendLimits: IntervalSpend[], spend: number): Promise<SpendLimitScope[]>
 }
 
 export class LimitDbD1 extends LimitDb {
@@ -24,12 +37,16 @@ export class LimitDbD1 extends LimitDb {
     this.db = db
   }
 
-  async incrementSpend(intervalSpends: IntervalSpend[], spend: number): Promise<boolean> {
+  async incrementSpend(intervalSpends: IntervalSpend[], spend: number): Promise<SpendLimitScope[]> {
+    if (!intervalSpends.length) {
+      return []
+    }
+
     const sqlValues: '(?, ?, ?)'[] = []
     const values: (string | number)[] = []
-    for (const { intervalId, limit } of intervalSpends) {
+    for (const { scope, id, limit } of intervalSpends) {
       sqlValues.push('(?, ?, ?)')
-      values.push(intervalId, limit, spend)
+      values.push(`${scope}:${id}`, limit, spend)
     }
     try {
       await this.db
@@ -43,11 +60,41 @@ ON CONFLICT(id) DO UPDATE SET spend = spend.spend + EXCLUDED.spend;`,
         .run()
     } catch (error) {
       if (error instanceof Error && error.message.includes('spendingLimit: SQLITE_CONSTRAINT')) {
-        return true
+        return await this.findExceededScopes(intervalSpends, spend)
       } else {
         throw error
       }
     }
-    return false
+    return []
+  }
+
+  protected async findExceededScopes(intervalSpends: IntervalSpend[], spend: number): Promise<SpendLimitScope[]> {
+    const sqlValues: '?'[] = []
+    const values: (string | number)[] = []
+    for (const { scope, id } of intervalSpends) {
+      sqlValues.push('?')
+      values.push(`${scope}:${id}`)
+    }
+    const { results } = await this.db
+      .prepare(
+        `\
+SELECT id, spend
+FROM spend
+WHERE id IN (${sqlValues.join(', ')})`,
+      )
+      .bind(...values)
+      .run<{ id: string; spend: number }>()
+
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    const entries = results.map(({ id, spend }): [string, number] => [id.split(':', 1)[0]!, spend])
+    const spendLookup = Object.fromEntries(entries)
+    const exceeded: SpendLimitScope[] = []
+    for (const { scope, limit } of intervalSpends) {
+      const previousSpend = spendLookup[scope] ?? 0
+      if (previousSpend + spend >= limit) {
+        exceeded.push(scope)
+      }
+    }
+    return exceeded
   }
 }

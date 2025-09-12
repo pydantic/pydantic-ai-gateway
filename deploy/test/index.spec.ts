@@ -12,9 +12,17 @@ beforeAll(async () => {
   }
 })
 
-const RESET_SQL = `DROP TABLE IF EXISTS spend;\n${SQL}`
+const RESET_SQL = `\
+DROP TABLE IF EXISTS spend;
+DROP TABLE IF EXISTS keyStatus;
+
+${SQL}`
 
 beforeEach(async () => {
+  const keys = await env.KV.list()
+  if (keys.keys.length !== 0) {
+    throw new Error('KV store is not empty before test.')
+  }
   await env.limitsDB.prepare(RESET_SQL).run()
   fetchMock.activate()
 })
@@ -36,7 +44,7 @@ describe('openai', () => {
     recordOtelBatch(otelBatch)
 
     const client = new OpenAI({
-      apiKey: 'o-QBrunFudqD99879C5jkFZgZrueCLlCJGSMAbzFGFY',
+      apiKey: 'healthy-key',
       baseURL: 'https://example.com/openai',
       fetch: SELF.fetch.bind(SELF),
     })

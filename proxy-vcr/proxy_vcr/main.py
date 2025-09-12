@@ -71,7 +71,8 @@ async def proxy(request: Request) -> JSONResponse:
             }
             response = await client.post(url, content=body, headers=headers)
         return JSONResponse(response.json(), status_code=response.status_code)
-    raise HTTPException(status_code=404, detail=f'Path {request.url.path} not supported')
+    raise HTTPException(status_code=400, detail='Invalid user agent')
+    # raise HTTPException(status_code=404, detail=f'Path {request.url.path} not supported')
 
 
 async def health_check(_: Request) -> Response:

@@ -63,13 +63,18 @@ export const config: Config<ProviderKeys> = {
   },
   // individual apiKeys
   apiKeys: {
-    'o-QBrunFudqD99879C5jkFZgZrueCLlCJGSMAbzFGFY': {
+    'healthy-key': {
       // team is required
       team: 'default',
       user: 'testberto',
       providers: ['openai', 'groq', 'anthropic', 'test'],
       spendingLimitMonthly: 3,
       spendingLimitTotal: 4,
+    },
+    'low-limit-key': {
+      team: 'default',
+      providers: '__all__',
+      spendingLimitDaily: 0.01,
     },
   },
 }

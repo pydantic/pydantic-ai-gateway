@@ -14,14 +14,13 @@ export default defineConfig(
   eslintPluginPrettierRecommended,
   eslintConfigPrettier,
   {
-    ignores: ['vitest.config.mts'],
+    ignores: ['dist'],
   },
   {
     languageOptions: {
       globals: globals.node,
     },
   },
-  { ignores: ['dist'] },
   {
     rules: {
       'no-redeclare': 'off',
@@ -53,12 +52,12 @@ export default defineConfig(
     files: ['**/*.ts'],
     rules: {
       'no-undef': 'off',
+      '@typescript-eslint/no-non-null-assertion': 'off',
     },
   },
   {
-    files: ['test/**/*.ts'],
+    files: ['gateway/test/**/*.ts', 'deploy/test/**/*.ts'],
     rules: {
-      '@typescript-eslint/no-non-null-assertion': 'off',
       '@typescript-eslint/no-unsafe-member-access': 'off',
       '@typescript-eslint/no-explicit-any': 'off',
       '@typescript-eslint/no-unsafe-argument': 'off',

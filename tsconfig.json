@@ -52,5 +52,6 @@
       "@google/genai": ["node_modules/@google/genai/dist/genai.d.ts"]
     }
   },
-  "types": ["@cloudflare/workers-types"]
+  "types": ["@cloudflare/workers-types"],
+  "include": ["eslint.config.mjs"]
 }

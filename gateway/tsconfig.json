@@ -5,5 +5,5 @@
     "types": ["@cloudflare/workers-types"],
     "erasableSyntaxOnly": true
   },
-  "include": ["src/**/*.ts", "eslint.config.mjs", "prettier.config.mjs"]
+  "include": ["src/**/*.ts", "vitest.config.mts"]
 }

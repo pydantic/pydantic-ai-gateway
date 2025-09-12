@@ -2,8 +2,13 @@
   "$schema": "https://json.schemastore.org/tsconfig",
   "extends": "../tsconfig.json",
   "compilerOptions": {
-    "types": ["@cloudflare/vitest-pool-workers", "vite/client"]
+    "types": [
+      "@cloudflare/workers-types",
+      "@cloudflare/vitest-pool-workers",
+      "vite/client",
+      "../worker-configuration.d.ts"
+    ]
   },
-  "include": ["./**/*.ts", "../worker-configuration.d.ts"],
+  "include": ["./**/*.ts"],
   "exclude": []
 }

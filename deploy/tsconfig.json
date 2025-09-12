@@ -5,5 +5,5 @@
     "types": ["@cloudflare/workers-types", "./worker-configuration.d.ts"]
   },
   "exclude": ["test"],
-  "include": ["./**/*.ts"]
+  "include": ["./**/*.ts", "generate_api_key.js", "vitest.config.mts"]
 }

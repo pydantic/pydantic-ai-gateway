@@ -26,21 +26,27 @@ beforeEach(async () => {
   await env.limitsDB.prepare(RESET_SQL).run()
   fetchMock.activate()
 })
-afterEach(() => fetchMock.assertNoPendingInterceptors())
+afterEach(() => {
+  fetchMock.assertNoPendingInterceptors()
+})
 
-function recordOtelBatch(otelBatch: Array<any>) {
+function recordOtelBatch(otelBatch: string[]) {
   fetchMock
     .get('https://logfire.pydantic.dev')
     .intercept({ method: 'POST', path: '/v1/traces', headers: { Authorization: 'write-token' } })
     .reply(({ body }) => {
-      otelBatch.push(body)
+      if (typeof body === 'string') {
+        otelBatch.push(body)
+      } else {
+        throw new Error('Unexpected response body type')
+      }
       return { statusCode: 200, body }
     })
 }
 
 describe('openai', () => {
   it('should call openai via gateway', async () => {
-    let otelBatch: Array<any> = []
+    const otelBatch: string[] = []
     recordOtelBatch(otelBatch)
 
     const client = new OpenAI({
@@ -59,6 +65,6 @@ describe('openai', () => {
 
     expect(completion).toMatchSnapshot('llm')
     expect(otelBatch.length).toBe(1)
-    expect(JSON.parse(otelBatch[0]).resourceSpans?.[0].scopeSpans?.[0].spans?.[0]?.attributes).toMatchSnapshot('span')
+    expect(JSON.parse(otelBatch[0]!).resourceSpans?.[0].scopeSpans?.[0].spans?.[0]?.attributes).toMatchSnapshot('span')
   })
 })

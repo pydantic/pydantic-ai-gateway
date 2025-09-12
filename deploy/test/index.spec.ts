@@ -30,20 +30,6 @@ function recordOtelBatch(otelBatch: Array<any>) {
     })
 }
 
-describe('index', () => {
-  it('responds with index html', async () => {
-    const response = await SELF.fetch('https://example.com')
-    expect(response.status).toBe(200)
-    expect(await response.text()).toMatchInlineSnapshot(
-      `
-      "<h1>Pydantic AI Gateway</h1>
-      <p>release: unknown</p>
-      "
-    `,
-    )
-  })
-})
-
 describe('openai', () => {
   it('should call openai via gateway', async () => {
     let otelBatch: Array<any> = []

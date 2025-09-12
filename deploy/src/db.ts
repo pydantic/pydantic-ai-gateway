@@ -8,10 +8,10 @@ export class ConfigDB extends KeysDbD1 {
       return null
     }
     const team = config.teams[keyInfo.team]!
-    let user = keyInfo.user ? team.users[keyInfo.user] : undefined
+    const user = keyInfo.user ? team.users[keyInfo.user] : undefined
 
     let providers: ProviderProxy[]
-    if (keyInfo.providers == '__all__') {
+    if (keyInfo.providers === '__all__') {
       providers = Object.values(config.providers)
     } else {
       providers = keyInfo.providers.map((name) => config.providers[name])

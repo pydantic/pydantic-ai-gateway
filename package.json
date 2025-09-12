@@ -9,8 +9,7 @@
   ],
   "scripts": {
     "format": "prettier --write -- .",
-    "lint": "npm run lint --workspaces",
-    "lint-fix": "npm run lint-fix --workspaces",
+    "lint": "eslint gateway deploy",
     "typecheck": "npm run typecheck --workspaces",
     "test-deploy": "npm run test --workspace=deploy --silent",
     "test-gateway": "npm run test --workspace=gateway --silent",
@@ -35,8 +34,16 @@
   "devDependencies": {
     "@cloudflare/vitest-pool-workers": "0.8.44",
     "@cloudflare/workers-types": "^4.20250712.0",
+    "@eslint/js": "^9.34.0",
+    "@typescript-eslint/utils": "^8.41.0",
+    "eslint": "^9.34.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-prettier": "^5.5.4",
+    "globals": "^16.3.0",
+    "neostandard": "^0.12.2",
     "prettier": "^3.6.2",
     "typescript": "^5.5.2",
+    "typescript-eslint": "^8.41.0",
     "vitest": "~3.2.0"
   },
   "engines": {

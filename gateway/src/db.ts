@@ -62,9 +62,23 @@ export interface IntervalSpend {
   limit: number
 }
 
+export interface LimitUpdate {
+  daily?: number
+  weekly?: number
+  monthly?: number
+}
+
+export type KeyLimitUpdate = LimitUpdate & { total?: number }
+
 export abstract class LimitDb {
-  // increment spends and return IDs of any scopes that are exceeded
+  // increment spends and return IDs of any scopes that have exceeded the spending limit
   abstract incrementSpend(spendLimits: IntervalSpend[], spend: number): Promise<SpendLimitScope[]>
+
+  abstract updateTeamLimits(teamId: string, update: LimitUpdate): Promise<void>
+
+  abstract updateUserLimits(userId: string, update: LimitUpdate): Promise<void>
+
+  abstract updateKeyLimits(keyId: string, update: KeyLimitUpdate): Promise<void>
 }
 
 export class LimitDbD1 extends LimitDb {
@@ -98,5 +112,71 @@ RETURNING id, spend > spendingLimit as ex;`,
       .run<{ id: string; ex: 0 | 1 }>()
 
     return results.filter(({ ex }) => ex).map(({ id }) => id.split(':')[0] as SpendLimitScope)
+  }
+
+  async updateTeamLimits(teamId: string, { daily, weekly, monthly }: LimitUpdate) {
+    if (daily) {
+      await this.db
+        .prepare(`UPDATE spend SET spendingLimit = ? WHERE id LIKE ?`)
+        .bind(daily, `team-daily:${teamId}:%`)
+        .run()
+    }
+    if (weekly) {
+      await this.db
+        .prepare(`UPDATE spend SET spendingLimit = ? WHERE id LIKE ?`)
+        .bind(weekly, `team-weekly:${teamId}:%`)
+        .run()
+    }
+    if (monthly) {
+      await this.db
+        .prepare(`UPDATE spend SET spendingLimit = ? WHERE id LIKE ?`)
+        .bind(monthly, `team-monthly:${teamId}:%`)
+        .run()
+    }
+  }
+
+  async updateUserLimits(userId: string, { daily, weekly, monthly }: LimitUpdate) {
+    if (daily) {
+      await this.db
+        .prepare(`UPDATE spend SET spendingLimit = ? WHERE id LIKE ?`)
+        .bind(daily, `user-daily:${userId}:%`)
+        .run()
+    }
+    if (weekly) {
+      await this.db
+        .prepare(`UPDATE spend SET spendingLimit = ? WHERE id LIKE ?`)
+        .bind(weekly, `user-weekly:${userId}:%`)
+        .run()
+    }
+    if (monthly) {
+      await this.db
+        .prepare(`UPDATE spend SET spendingLimit = ? WHERE id LIKE ?`)
+        .bind(monthly, `user-monthly:${userId}:%`)
+        .run()
+    }
+  }
+
+  async updateKeyLimits(keyId: string, { daily, weekly, monthly, total }: KeyLimitUpdate) {
+    if (daily) {
+      await this.db
+        .prepare(`UPDATE spend SET spendingLimit = ? WHERE id LIKE ?`)
+        .bind(daily, `key-daily:${keyId}:%`)
+        .run()
+    }
+    if (weekly) {
+      await this.db
+        .prepare(`UPDATE spend SET spendingLimit = ? WHERE id LIKE ?`)
+        .bind(weekly, `key-weekly:${keyId}:%`)
+        .run()
+    }
+    if (monthly) {
+      await this.db
+        .prepare(`UPDATE spend SET spendingLimit = ? WHERE id LIKE ?`)
+        .bind(monthly, `key-monthly:${keyId}:%`)
+        .run()
+    }
+    if (total) {
+      await this.db.prepare(`UPDATE spend SET spendingLimit = ? WHERE id = ?`).bind(total, `key-total:${keyId}`).run()
+    }
   }
 }

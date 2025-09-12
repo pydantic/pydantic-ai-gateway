@@ -119,13 +119,13 @@ async function recordSpend(apiKey: ApiKeyInfo, spend: number, env: GatewayEnv): 
 
   const intervalSpends: IntervalSpend[] = []
   if (isSet(apiKey.keySpendingLimitDaily)) {
-    intervalSpends.push({ scope: 'key-daily', id: `${id}-${today}`, limit: apiKey.keySpendingLimitDaily })
+    intervalSpends.push({ scope: 'key-daily', id: `${id}:${today}`, limit: apiKey.keySpendingLimitDaily })
   }
   if (isSet(apiKey.keySpendingLimitWeekly)) {
-    intervalSpends.push({ scope: 'key-weekly', id: `${id}-${week}`, limit: apiKey.keySpendingLimitWeekly })
+    intervalSpends.push({ scope: 'key-weekly', id: `${id}:${week}`, limit: apiKey.keySpendingLimitWeekly })
   }
   if (isSet(apiKey.keySpendingLimitMonthly)) {
-    intervalSpends.push({ scope: 'key-monthly', id: `${id}-${month}`, limit: apiKey.keySpendingLimitMonthly })
+    intervalSpends.push({ scope: 'key-monthly', id: `${id}:${month}`, limit: apiKey.keySpendingLimitMonthly })
   }
   if (isSet(apiKey.keySpendingLimitTotal)) {
     intervalSpends.push({ scope: 'key-total', id, limit: apiKey.keySpendingLimitTotal })
@@ -133,24 +133,24 @@ async function recordSpend(apiKey: ApiKeyInfo, spend: number, env: GatewayEnv): 
 
   if (user != null) {
     if (isSet(apiKey.userSpendingLimitDaily)) {
-      intervalSpends.push({ scope: 'user-daily', id: `${user}-${today}`, limit: apiKey.userSpendingLimitDaily })
+      intervalSpends.push({ scope: 'user-daily', id: `${user}:${today}`, limit: apiKey.userSpendingLimitDaily })
     }
     if (isSet(apiKey.userSpendingLimitWeekly)) {
-      intervalSpends.push({ scope: 'user-weekly', id: `${user}-${week}`, limit: apiKey.userSpendingLimitWeekly })
+      intervalSpends.push({ scope: 'user-weekly', id: `${user}:${week}`, limit: apiKey.userSpendingLimitWeekly })
     }
     if (isSet(apiKey.userSpendingLimitMonthly)) {
-      intervalSpends.push({ scope: 'user-monthly', id: `${user}-${month}`, limit: apiKey.userSpendingLimitMonthly })
+      intervalSpends.push({ scope: 'user-monthly', id: `${user}:${month}`, limit: apiKey.userSpendingLimitMonthly })
     }
   }
 
   if (isSet(apiKey.teamSpendingLimitDaily)) {
-    intervalSpends.push({ scope: 'team-daily', id: `${team}-${today}`, limit: apiKey.teamSpendingLimitDaily })
+    intervalSpends.push({ scope: 'team-daily', id: `${team}:${today}`, limit: apiKey.teamSpendingLimitDaily })
   }
   if (isSet(apiKey.teamSpendingLimitWeekly)) {
-    intervalSpends.push({ scope: 'team-weekly', id: `${team}-${week}`, limit: apiKey.teamSpendingLimitWeekly })
+    intervalSpends.push({ scope: 'team-weekly', id: `${team}:${week}`, limit: apiKey.teamSpendingLimitWeekly })
   }
   if (isSet(apiKey.teamSpendingLimitMonthly)) {
-    intervalSpends.push({ scope: 'team-monthly', id: `${team}-${month}`, limit: apiKey.teamSpendingLimitMonthly })
+    intervalSpends.push({ scope: 'team-monthly', id: `${team}:${month}`, limit: apiKey.teamSpendingLimitMonthly })
   }
   const scopesExceeded = await env.limitDb.incrementSpend(intervalSpends, spend)
 

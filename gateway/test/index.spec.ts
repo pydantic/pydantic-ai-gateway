@@ -5,7 +5,7 @@ import { env, createExecutionContext, waitOnExecutionContext } from 'cloudflare:
 import { describe, it, expect, beforeAll, beforeEach } from 'vitest'
 import SQL from '../limits-schema.sql?raw'
 
-import { gatewayFetch } from '@pydantic/ai-gateway'
+import { gatewayFetch, LimitDbD1 } from '@pydantic/ai-gateway'
 import { buildGatewayEnv, DisableEvent } from './worker'
 
 beforeAll(async () => {
@@ -203,7 +203,7 @@ describe('key status', () => {
       .run<{ id: string; spend: string; spendingLimit: number }>()
     expect(allSpends.results).toEqual([
       {
-        id: expect.stringMatching(/key-daily:healthy-id-\d{4}-\d{2}-\d{2}/),
+        id: expect.stringMatching(/key-daily:healthy-id:\d{4}-\d{2}-\d{2}/),
         spend: 0.018,
         spendingLimit: 1,
       },
@@ -213,12 +213,12 @@ describe('key status', () => {
         spendingLimit: 2,
       },
       {
-        id: expect.stringMatching(/user-weekly:user1-\d{4}-\d{2}-\d{2}/),
+        id: expect.stringMatching(/user-weekly:user1:\d{4}-\d{2}-\d{2}/),
         spend: 0.018,
         spendingLimit: 3,
       },
       {
-        id: expect.stringMatching(/team-monthly:team1-\d{4}-\d{2}-\d{2}/),
+        id: expect.stringMatching(/team-monthly:team1:\d{4}-\d{2}-\d{2}/),
         spend: 0.018,
         spendingLimit: 4,
       },
@@ -274,12 +274,12 @@ describe('key status', () => {
       .run<{ id: string; spend: string; spendingLimit: number }>()
     expect(allSpends1.results).toEqual([
       {
-        id: expect.stringMatching(/key-daily:tiny-limit-id-\d{4}-\d{2}-\d{2}/),
+        id: expect.stringMatching(/key-daily:tiny-limit-id:\d{4}-\d{2}-\d{2}/),
         spend: 0.018,
         spendingLimit: 0.01,
       },
       {
-        id: expect.stringMatching(/team-monthly:team1-\d{4}-\d{2}-\d{2}/),
+        id: expect.stringMatching(/team-monthly:team1:\d{4}-\d{2}-\d{2}/),
         spend: 0.018,
         spendingLimit: 4,
       },
@@ -325,5 +325,28 @@ describe('key status', () => {
         expirationTtl: expect.any(Number),
       },
     ])
+  })
+})
+
+describe('LimitDbD1', () => {
+  it('updates limit', async () => {
+    const db = new LimitDbD1(env.limitsDB)
+    await db.incrementSpend([{ scope: 'user-daily', id: 'user1:2025-12-25', limit: 2 }], 1)
+
+    {
+      const state = await env.limitsDB
+        .prepare('SELECT id, spend, spendingLimit FROM spend')
+        .first<{ id: string; spend: number; spendingLimit: number }>()
+      expect(state).toEqual({ id: 'user-daily:user1:2025-12-25', spend: 1, spendingLimit: 2 })
+    }
+
+    await db.updateUserLimits('user1', { daily: 3, weekly: 5 })
+
+    {
+      const state = await env.limitsDB
+        .prepare('SELECT id, spend, spendingLimit FROM spend')
+        .first<{ id: string; spend: number; spendingLimit: number }>()
+      expect(state).toEqual({ id: 'user-daily:user1:2025-12-25', spend: 1, spendingLimit: 3 })
+    }
   })
 })

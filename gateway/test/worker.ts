@@ -1,15 +1,30 @@
-import { gatewayFetch, GatewayEnv, LimitDbD1, KeysDb, ApiKeyInfo, ProviderProxy, SubFetch } from '@pydantic/ai-gateway'
+import {
+  gatewayFetch,
+  GatewayEnv,
+  LimitDbD1,
+  KeysDbD1,
+  ApiKeyInfo,
+  ProviderProxy,
+  SubFetch,
+} from '@pydantic/ai-gateway'
 
 export default {
   async fetch(request, env, ctx): Promise<Response> {
-    return await gatewayFetch(request, ctx, buildGatewayEnv(env, fetch))
+    return await gatewayFetch(request, ctx, buildGatewayEnv(env, [], fetch))
   },
 } satisfies ExportedHandler<Env>
 
-export function buildGatewayEnv(env: Env, subFetch: SubFetch): GatewayEnv {
+export interface DisableEvent {
+  id: string
+  reason: string
+  newStatus: string
+  expirationTtl?: number
+}
+
+export function buildGatewayEnv(env: Env, disableEvents: DisableEvent[], subFetch: SubFetch): GatewayEnv {
   return {
     githubSha: 'test',
-    keysDb: new TestKeysDB(env),
+    keysDb: new TestKeysDB(env, disableEvents),
     limitDb: new LimitDbD1(env.limitsDB),
     kv: env.KV,
     kvVersion: 'test',
@@ -17,11 +32,13 @@ export function buildGatewayEnv(env: Env, subFetch: SubFetch): GatewayEnv {
   }
 }
 
-class TestKeysDB extends KeysDb {
+class TestKeysDB extends KeysDbD1 {
   allProviders: ProviderProxy[]
+  disableEvents: DisableEvent[]
 
-  constructor(env: Env) {
-    super()
+  constructor(env: Env, disableEvents: DisableEvent[]) {
+    super(env.limitsDB)
+    this.disableEvents = disableEvents
     this.allProviders = [
       {
         baseUrl: 'http://test.example.com/test',
@@ -63,7 +80,7 @@ class TestKeysDB extends KeysDb {
           team: 'team1',
           org: 'org1',
           key,
-          status: 'active',
+          status: (await this.getDbKeyStatus('healthy-id')) ?? 'active',
           // key limits
           keySpendingLimitDaily: 1,
           keySpendingLimitTotal: 2,
@@ -96,8 +113,9 @@ class TestKeysDB extends KeysDb {
           team: 'team1',
           org: 'org1',
           key,
-          status: 'active',
-          keySpendingLimitWeekly: 0.01,
+          status: (await this.getDbKeyStatus('tiny-limit-id')) ?? 'active',
+          keySpendingLimitDaily: 0.01,
+          teamSpendingLimitMonthly: 4,
           providers: [this.allProviders[0]!],
           otelSettings: null,
         }
@@ -106,7 +124,8 @@ class TestKeysDB extends KeysDb {
     }
   }
 
-  async disableKey(_id: string, _reason: string): Promise<void> {
-    // do nothing
+  async disableKey(id: string, reason: string, newStatus: string, expirationTtl?: number): Promise<void> {
+    await super.disableKey(id, reason, newStatus, expirationTtl)
+    this.disableEvents.push({ id, reason, newStatus, expirationTtl })
   }
 }

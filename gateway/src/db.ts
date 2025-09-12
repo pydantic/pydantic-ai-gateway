@@ -1,9 +1,47 @@
-import type { ApiKeyInfo } from './types'
+import type { ApiKeyInfo, KeyStatus } from './types'
 
 export abstract class KeysDb {
   abstract apiKeyAuth(key: string): Promise<ApiKeyInfo | null>
 
-  abstract disableKey(id: string, reason: string, newStatus: string): Promise<void>
+  disableKey(_id: string, _reason: string, _newStatus: string, _expirationTtl?: number): Promise<void> {
+    return Promise.resolve()
+  }
+}
+
+export abstract class KeysDbD1 extends KeysDb {
+  private Db: D1Database
+
+  constructor(DB: D1Database) {
+    super()
+    this.Db = DB
+  }
+
+  async getDbKeyStatus(keyId: string): Promise<KeyStatus | undefined> {
+    const result = await this.Db.prepare(`SELECT status FROM keyStatus WHERE id = ? and expiresAt > datetime('now')`)
+      .bind(keyId)
+      .first<{ status: KeyStatus }>()
+    return result?.status
+  }
+
+  async disableKey(id: string, _reason: string, newStatus: string, expirationTtl?: number): Promise<void> {
+    if (typeof expirationTtl === 'number') {
+      await this.Db.prepare(
+        `
+INSERT INTO keyStatus (id, status, expiresAt) VALUES (?, ?, datetime('now', ?))
+ON CONFLICT (id) DO UPDATE SET status = excluded.status, expiresAt = excluded.expiresAt`,
+      )
+        .bind(id, newStatus, `${expirationTtl} seconds`)
+        .run()
+    } else {
+      await this.Db.prepare(
+        `
+INSERT INTO keyStatus (id, status) VALUES (?, ?)
+ON CONFLICT (id) DO UPDATE SET status = excluded.status, expiresAt = null`,
+      )
+        .bind(id, newStatus)
+        .run()
+    }
+  }
 }
 
 export type SpendLimitScope =
@@ -48,53 +86,17 @@ export class LimitDbD1 extends LimitDb {
       sqlValues.push('(?, ?, ?)')
       values.push(`${scope}:${id}`, limit, spend)
     }
-    try {
-      await this.db
-        .prepare(
-          `\
-INSERT INTO spend (id, spendingLimit, spend)
-VALUES ${sqlValues.join(', ')}
-ON CONFLICT(id) DO UPDATE SET spend = spend.spend + EXCLUDED.spend;`,
-        )
-        .bind(...values)
-        .run()
-    } catch (error) {
-      if (error instanceof Error && error.message.includes('spendingLimit: SQLITE_CONSTRAINT')) {
-        return await this.findExceededScopes(intervalSpends, spend)
-      } else {
-        throw error
-      }
-    }
-    return []
-  }
-
-  protected async findExceededScopes(intervalSpends: IntervalSpend[], spend: number): Promise<SpendLimitScope[]> {
-    const sqlValues: '?'[] = []
-    const values: (string | number)[] = []
-    for (const { scope, id } of intervalSpends) {
-      sqlValues.push('?')
-      values.push(`${scope}:${id}`)
-    }
     const { results } = await this.db
       .prepare(
         `\
-SELECT id, spend
-FROM spend
-WHERE id IN (${sqlValues.join(', ')})`,
+INSERT INTO spend (id, spendingLimit, spend)
+VALUES ${sqlValues.join(', ')}
+ON CONFLICT(id) DO UPDATE SET spend = spend + EXCLUDED.spend
+RETURNING id, spend > spendingLimit as ex;`,
       )
       .bind(...values)
-      .run<{ id: string; spend: number }>()
+      .run<{ id: string; ex: 0 | 1 }>()
 
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    const entries = results.map(({ id, spend }): [string, number] => [id.split(':', 1)[0]!, spend])
-    const spendLookup = Object.fromEntries(entries)
-    const exceeded: SpendLimitScope[] = []
-    for (const { scope, limit } of intervalSpends) {
-      const previousSpend = spendLookup[scope] ?? 0
-      if (previousSpend + spend >= limit) {
-        exceeded.push(scope)
-      }
-    }
-    return exceeded
+    return results.filter(({ ex }) => ex).map(({ id }) => id.split(':')[0] as SpendLimitScope)
   }
 }

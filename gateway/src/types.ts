@@ -1,5 +1,12 @@
 export type SubFetch = (url: RequestInfo | URL, init?: RequestInit) => Promise<Response>
 
+export type KeyStatus =
+  | 'active' // when the key is active
+  | 'expired' // when the key expires
+  | 'limit-exceeded' // when the key exceeds the limits
+  | 'disabled' // when the user sets in the UI
+  | 'blocked' // when we got a valid response that we couldn't calculate the cost for
+
 // Info about an API key for a particular provider returned by the DB during a request
 export interface ApiKeyInfo {
   id: string
@@ -7,12 +14,7 @@ export interface ApiKeyInfo {
   team: string
   org: string
   key: string
-  status:
-    | 'active' // when the key is active
-    | 'expired' // when the key expires
-    | 'limit-exceeded' // when the key exceeds the limits
-    | 'disabled' // when the user sets in the UI
-    | 'blocked' // when we got a valid response that we couldn't calculate the cost for
+  status: KeyStatus
   // limits are both optional and nullable to allow for databases that return null
   // limits per apiKey - note the extra field since keys can have a total limit
   keySpendingLimitDaily?: number | null

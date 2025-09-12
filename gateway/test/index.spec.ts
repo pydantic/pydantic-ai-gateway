@@ -6,7 +6,7 @@ import { describe, it, expect, beforeAll, beforeEach } from 'vitest'
 import SQL from '../limits-schema.sql?raw'
 
 import { gatewayFetch } from '@pydantic/ai-gateway'
-import { buildGatewayEnv } from './worker'
+import { buildGatewayEnv, DisableEvent } from './worker'
 
 beforeAll(async () => {
   try {
@@ -31,11 +31,13 @@ interface TestGateway {
   fetch: (url: RequestInfo | URL, init?: RequestInit) => Promise<Response>
   ctx: ExecutionContext
   otelBatch: string[]
+  disableEvents: DisableEvent[]
 }
 
 function testGateway(): TestGateway {
   const ctx = createExecutionContext()
   const otelBatch: string[] = []
+  const disableEvents: DisableEvent[] = []
 
   async function subFetch(url: RequestInfo | URL, init?: RequestInit): Promise<Response> {
     let hostname: string
@@ -58,11 +60,11 @@ function testGateway(): TestGateway {
       url,
       init as RequestInit<IncomingRequestCfProperties>,
     )
-    const response = await gatewayFetch(request, ctx, buildGatewayEnv(env, subFetch))
+    const response = await gatewayFetch(request, ctx, buildGatewayEnv(env, disableEvents, subFetch))
     await waitOnExecutionContext(ctx)
     return response
   }
-  return { fetch: mockFetch, ctx, otelBatch }
+  return { fetch: mockFetch, ctx, otelBatch, disableEvents }
 }
 
 describe('index', () => {
@@ -172,8 +174,8 @@ describe('anthropic', () => {
   })
 })
 
-describe('blocked key', () => {
-  it('should not block key if limit is not exceeded', async () => {
+describe('key status', () => {
+  it('should not change key status if limit is not exceeded', async () => {
     const { fetch } = testGateway()
     const client = new OpenAI({
       apiKey: 'healthy',
@@ -218,7 +220,7 @@ describe('blocked key', () => {
     expect(allKeyStatus?.count).toBe(0)
   })
 
-  it('should block if key is disabled', async () => {
+  it('should block request if key is disabled', async () => {
     const { fetch } = testGateway()
 
     const response = await fetch('https://example.com/openai/xxx', {
@@ -236,8 +238,10 @@ describe('blocked key', () => {
     expect(keyStatusCount?.count).toBe(0)
   })
 
-  it('should block if limit is exceeded', async () => {
-    const { fetch } = testGateway()
+  it('should change key status if limit is exceeded', async () => {
+    const { fetch, disableEvents } = testGateway()
+
+    expect(disableEvents).toEqual([])
 
     const client = new OpenAI({
       apiKey: 'tiny-limit',
@@ -256,22 +260,61 @@ describe('blocked key', () => {
     expect(apiValue).toBeTypeOf('string')
     expect(JSON.parse(apiValue!)).toMatchSnapshot('kv-value')
 
-    const allSpends = await env.limitsDB
-      .prepare(`SELECT id, round(spend, 3) spend, spendingLimit FROM spend`)
+    const allSpends1 = await env.limitsDB
+      .prepare(`SELECT id, round(spend, 3) spend, spendingLimit FROM spend order by spendingLimit`)
       .run<{ id: string; spend: string; spendingLimit: number }>()
-    expect(allSpends.results).toEqual([
+    expect(allSpends1.results).toEqual([
       {
-        id: expect.stringMatching(/key-weekly:tiny-limit-id-\d{4}-\d{2}-\d{2}/),
+        id: expect.stringMatching(/key-daily:tiny-limit-id-\d{4}-\d{2}-\d{2}/),
         spend: 0.018,
         spendingLimit: 0.01,
       },
+      {
+        id: expect.stringMatching(/team-monthly:team1-\d{4}-\d{2}-\d{2}/),
+        spend: 0.018,
+        spendingLimit: 4,
+      },
     ])
 
-    const response = await fetch('https://example.com/openai/xxx', {
-      headers: { Authorization: 'tiny-limit' },
-    })
-    const text = await response.text()
-    expect(response.status, `got ${response.status} response: ${text}`).toBe(403)
-    expect(text).toMatchInlineSnapshot(`"Unauthorized - Key limit-exceeded"`)
+    expect(disableEvents).toEqual([
+      {
+        id: 'tiny-limit-id',
+        reason: 'limits exceeded: key-daily',
+        newStatus: 'limit-exceeded',
+        expirationTtl: expect.any(Number),
+      },
+    ])
+    expect(disableEvents[0]!.expirationTtl).toBeGreaterThanOrEqual(0)
+    expect(disableEvents[0]!.expirationTtl).toBeLessThanOrEqual(86400)
+
+    const keyStatusQuery = await env.limitsDB
+      .prepare("SELECT id, status, strftime('%s', expiresAt) - strftime('%s','now') as expiresAtDiff FROM keyStatus")
+      .run<{ id: string; status: string; expiresAtDiff: number }>()
+    expect(keyStatusQuery.results).toEqual([
+      {
+        id: 'tiny-limit-id',
+        status: 'limit-exceeded',
+        expiresAtDiff: expect.any(Number),
+      },
+    ])
+    expect(Math.abs(keyStatusQuery.results[0]!.expiresAtDiff - disableEvents[0]!.expirationTtl!)).toBeLessThan(2)
+
+    {
+      const response = await fetch('https://example.com/openai/xxx', {
+        headers: { Authorization: 'tiny-limit' },
+      })
+      const text = await response.text()
+      expect(response.status, `got ${response.status} response: ${text}`).toBe(403)
+      expect(text).toMatchInlineSnapshot(`"Unauthorized - Key limit-exceeded"`)
+    }
+
+    expect(disableEvents).toEqual([
+      {
+        id: 'tiny-limit-id',
+        reason: 'limits exceeded: key-daily',
+        newStatus: 'limit-exceeded',
+        expirationTtl: expect.any(Number),
+      },
+    ])
   })
 })

@@ -107,7 +107,7 @@ export async function disableApiKey(
 ): Promise<void> {
   apiKey.status = newStatus
   await disableApiKeyAuth(apiKey, env, expirationTtl)
-  await env.keysDb.disableKey(apiKey.id, reason, newStatus)
+  await env.keysDb.disableKey(apiKey.id, reason, newStatus, expirationTtl)
 }
 
 async function recordSpend(apiKey: ApiKeyInfo, spend: number, env: GatewayEnv): Promise<void> {

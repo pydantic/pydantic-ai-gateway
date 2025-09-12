@@ -3,7 +3,7 @@
   "$schema": "../../node_modules/wrangler/config-schema.json",
   "name": "pydantic-ai-gateway-test",
   "main": "worker.ts",
-  "compatibility_date": "2025-07-12",
+  "compatibility_date": "2025-06-17",
   "compatibility_flags": ["nodejs_compat_v2"],
   "d1_databases": [
     {

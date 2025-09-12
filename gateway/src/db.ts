@@ -48,53 +48,23 @@ export class LimitDbD1 extends LimitDb {
       sqlValues.push('(?, ?, ?)')
       values.push(`${scope}:${id}`, limit, spend)
     }
-    try {
-      await this.db
-        .prepare(
-          `\
-INSERT INTO spend (id, spendingLimit, spend)
-VALUES ${sqlValues.join(', ')}
-ON CONFLICT(id) DO UPDATE SET spend = spend.spend + EXCLUDED.spend;`,
-        )
-        .bind(...values)
-        .run()
-    } catch (error) {
-      if (error instanceof Error && error.message.includes('spendingLimit: SQLITE_CONSTRAINT')) {
-        return await this.findExceededScopes(intervalSpends, spend)
-      } else {
-        throw error
-      }
-    }
-    return []
-  }
-
-  protected async findExceededScopes(intervalSpends: IntervalSpend[], spend: number): Promise<SpendLimitScope[]> {
-    const sqlValues: '?'[] = []
-    const values: (string | number)[] = []
-    for (const { scope, id } of intervalSpends) {
-      sqlValues.push('?')
-      values.push(`${scope}:${id}`)
-    }
     const { results } = await this.db
       .prepare(
         `\
-SELECT id, spend
-FROM spend
-WHERE id IN (${sqlValues.join(', ')})`,
+INSERT INTO spend (id, spendingLimit, spend)
+VALUES ${sqlValues.join(', ')}
+ON CONFLICT(id) DO UPDATE SET spend = spend + EXCLUDED.spend
+RETURNING id, spend > spendingLimit as limitExceeded;`,
       )
       .bind(...values)
-      .run<{ id: string; spend: number }>()
+      .run<{ id: string; limitExceeded: boolean }>()
 
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    const entries = results.map(({ id, spend }): [string, number] => [id.split(':', 1)[0]!, spend])
-    const spendLookup = Object.fromEntries(entries)
-    const exceeded: SpendLimitScope[] = []
-    for (const { scope, limit } of intervalSpends) {
-      const previousSpend = spendLookup[scope] ?? 0
-      if (previousSpend + spend >= limit) {
-        exceeded.push(scope)
+    const exceededScopes: SpendLimitScope[] = []
+    for (const { id, limitExceeded } of results) {
+      if (limitExceeded) {
+        exceededScopes.push(id.split(':')[0] as SpendLimitScope)
       }
     }
-    return exceeded
+    return exceededScopes
   }
 }

@@ -188,27 +188,27 @@ describe('blocked key', () => {
       ],
     })
     const allSpends = await env.limitsDB
-      .prepare(`SELECT id, printf('%.3f', spend, 3) spend, spendingLimit FROM spend order by spendingLimit`)
+      .prepare(`SELECT id, round(spend, 3) spend, spendingLimit FROM spend order by spendingLimit`)
       .run<{ id: string; spend: string; spendingLimit: number }>()
     expect(allSpends.results).toEqual([
       {
         id: expect.stringMatching(/key-daily:healthy-id-\d{4}-\d{2}-\d{2}/),
-        spend: '0.018',
+        spend: 0.018,
         spendingLimit: 1,
       },
       {
         id: 'key-total:healthy-id',
-        spend: '0.018',
+        spend: 0.018,
         spendingLimit: 2,
       },
       {
         id: expect.stringMatching(/user-weekly:user1-\d{4}-\d{2}-\d{2}/),
-        spend: '0.018',
+        spend: 0.018,
         spendingLimit: 3,
       },
       {
         id: expect.stringMatching(/team-monthly:team1-\d{4}-\d{2}-\d{2}/),
-        spend: '0.018',
+        spend: 0.018,
         spendingLimit: 4,
       },
     ])
@@ -227,6 +227,7 @@ describe('blocked key', () => {
     const text = await response.text()
     expect(response.status, `got response: ${response.status} ${text}`).toBe(403)
     expect(text).toMatchInlineSnapshot(`"Unauthorized - Key disabled"`)
+
     const spendCount = await env.limitsDB.prepare('SELECT count(*) count FROM spend').first<{ count: number }>()
     expect(spendCount?.count).toBe(0)
     const keyStatusCount = await env.limitsDB
@@ -255,8 +256,16 @@ describe('blocked key', () => {
     expect(apiValue).toBeTypeOf('string')
     expect(JSON.parse(apiValue!)).toMatchSnapshot('kv-value')
 
-    const spendCount1 = await env.limitsDB.prepare('SELECT count(*) count FROM spend').first<{ count: number }>()
-    expect(spendCount1?.count).toBe(0)
+    const allSpends = await env.limitsDB
+      .prepare(`SELECT id, round(spend, 3) spend, spendingLimit FROM spend`)
+      .run<{ id: string; spend: string; spendingLimit: number }>()
+    expect(allSpends.results).toEqual([
+      {
+        id: expect.stringMatching(/key-weekly:tiny-limit-id-\d{4}-\d{2}-\d{2}/),
+        spend: 0.018,
+        spendingLimit: 0.01,
+      },
+    ])
 
     const response = await fetch('https://example.com/openai/xxx', {
       headers: { Authorization: 'tiny-limit' },

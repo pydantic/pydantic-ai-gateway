@@ -14,7 +14,7 @@
     "typecheck": "npm run typecheck --workspaces",
     "test-deploy": "npm run test --workspace=deploy --silent",
     "test-gateway": "npm run test --workspace=gateway --silent",
-    "test": "CI=1 npm run test --workspaces --silent",
+    "test": "CI=1 npm run test --workspaces",
     "deploy": "npm run deploy --workspace=deploy --silent",
     "dev": "npm run dev --workspace=deploy --silent",
     "limits-local-db": "npm run limits-local-db --workspace=deploy",

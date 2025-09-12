@@ -30,6 +30,13 @@ afterEach(() => {
   fetchMock.assertNoPendingInterceptors()
 })
 
+describe('index', () => {
+  it('responds with index html', async () => {
+    const response = await SELF.fetch('https://example.com')
+    expect(response.status).toBe(200)
+  })
+})
+
 function recordOtelBatch(otelBatch: string[]) {
   fetchMock
     .get('https://logfire.pydantic.dev')

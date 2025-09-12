@@ -54,11 +54,19 @@ function index(request: Request, env: GatewayEnv): Response {
   if (request.method === 'GET') {
     return new Response(
       `\
-<h1>Pydantic AI Gateway</h1>
-<p>release: ${env.githubSha.substring(0, 7)}</p>
+▗▄▄▖  ▗▄▖ ▗▄▄▄▖ ▗▄▄▖
+▐▌ ▐▌▐▌ ▐▌  █  ▐▌
+▐▛▀▘ ▐▛▀▜▌  █  ▐▌▝▜▌
+▐▌   ▐▌ ▐▌▗▄█▄▖▝▚▄▞▘
+
+Pydantic AI Gateway
+
+git sha: ${env.githubSha}
+GitHub: https://github.com/pydantic/pydantic-ai-gateway
+To connect, point your application at ${request.url}<provider-id>
 `,
       {
-        headers: ctHeader('text/html'),
+        headers: ctHeader('text/plain; charset=utf-8'),
       },
     )
   } else if (request.method === 'HEAD') {

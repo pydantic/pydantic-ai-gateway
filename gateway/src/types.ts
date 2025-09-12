@@ -1,3 +1,5 @@
+export type SubFetch = (url: RequestInfo | URL, init?: RequestInit) => Promise<Response>
+
 // Info about an API key for a particular provider returned by the DB during a request
 export interface ApiKeyInfo {
   id: string

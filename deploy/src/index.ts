@@ -30,6 +30,7 @@ const handler = {
       limitDb: new LimitDbD1(env.limitsDB),
       kv: env.KV,
       kvVersion: await hash(JSON.stringify(config)),
+      subFetch: fetch,
     }
     try {
       return await gatewayFetch(request, ctx, gatewayEnv)

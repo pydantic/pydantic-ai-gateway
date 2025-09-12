@@ -128,7 +128,7 @@ export class DefaultProviderProxy {
   }
 
   protected fetch(url: string, init: RequestInit): Promise<Response> {
-    return fetch(url, init)
+    return this.env.subFetch(url, init)
   }
 
   protected async extractUsage(response: Response): Promise<ProcessResponse | ProxyInvalidRequest> {

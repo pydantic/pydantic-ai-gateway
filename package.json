@@ -12,7 +12,9 @@
     "lint": "npm run lint --workspaces",
     "lint-fix": "npm run lint-fix --workspaces",
     "typecheck": "npm run typecheck --workspaces",
-    "test": "npm run test --workspace=deploy --silent",
+    "test-deploy": "npm run test --workspace=deploy --silent",
+    "test-gateway": "npm run test --workspace=gateway --silent",
+    "test": "CI=1 npm run test --workspaces --silent",
     "deploy": "npm run deploy --workspace=deploy --silent",
     "dev": "npm run dev --workspace=deploy --silent",
     "limits-local-db": "npm run limits-local-db --workspace=deploy",
@@ -30,10 +32,8 @@
     "bracketSpacing": true
   },
   "devDependencies": {
-    "@cloudflare/workers-types": "^4.20250712.0",
     "prettier": "^3.6.2",
-    "typescript": "^5.5.2",
-    "vitest": "~3.2.0"
+    "typescript": "^5.5.2"
   },
   "engines": {
     "node": ">= 20.19.0"

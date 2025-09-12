@@ -2,6 +2,7 @@ import * as logfire from '@pydantic/logfire-api'
 import { gateway } from './gateway'
 import { ctHeader, response405, ResponseError } from './utils'
 import type { KeysDb, LimitDb } from './db'
+import type { SubFetch } from './types'
 
 export * from './db'
 export * from './types'
@@ -12,6 +13,7 @@ export interface GatewayEnv {
   limitDb: LimitDb
   kv: KVNamespace
   kvVersion: string
+  subFetch: SubFetch
 }
 
 export async function gatewayFetch(request: Request, ctx: ExecutionContext, env: GatewayEnv): Promise<Response> {
@@ -20,7 +22,7 @@ export async function gatewayFetch(request: Request, ctx: ExecutionContext, env:
     if (url.pathname === '/') {
       return index(request, env)
     } else {
-      return await gateway(request, ctx, url, env)
+      return await gateway(request, ctx, env)
     }
   } catch (error) {
     if (error instanceof ResponseError) {

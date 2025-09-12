@@ -1,7 +1,7 @@
 import OpenAI from 'openai'
 import Groq from 'groq-sdk'
 import Anthropic from '@anthropic-ai/sdk'
-import { env, createExecutionContext } from 'cloudflare:test'
+import { env, createExecutionContext, waitOnExecutionContext } from 'cloudflare:test'
 import { describe, it, expect, beforeAll, beforeEach } from 'vitest'
 import SQL from '../limits-schema.sql?raw'
 
@@ -153,7 +153,7 @@ describe('anthropic', () => {
     const { fetch, otelBatch } = testGateway()
 
     const client = new Anthropic({
-      // The `authToken` is passed as `Authorization` header.
+      // The `authToken` is passed as `Authorization` header with the anthropic client.
       authToken: 'healthy',
       baseURL: 'https://example.com/anthropic',
       fetch,
@@ -171,15 +171,13 @@ describe('anthropic', () => {
 })
 
 describe('blocked key', () => {
-  it('should block key if limit is exceeded', async () => {
-    const { fetch } = testGateway()
-
+  it('should not block key if limit is not exceeded', async () => {
+    const { fetch, ctx } = testGateway()
     const client = new OpenAI({
       apiKey: 'healthy',
-      baseURL: 'https://example.com/openai',
+      baseURL: 'https://example.com/test',
       fetch,
     })
-
     await client.chat.completions.create({
       model: 'gpt-5',
       messages: [
@@ -187,9 +185,35 @@ describe('blocked key', () => {
         { role: 'user', content: 'Give me an essay on the history of the universe.' },
       ],
     })
-    const allSpends = await env.limitsDB.prepare('SELECT * FROM spend').all()
-    console.log(allSpends)
-    const allKeyStatus = await env.limitsDB.prepare('SELECT * FROM keyStatus').all()
-    console.log(allKeyStatus)
+    await waitOnExecutionContext(ctx)
+    const allSpends = await env.limitsDB
+      .prepare(`SELECT id, printf('%.3f', spend, 3) spend, spendingLimit FROM spend order by spendingLimit`)
+      .run<{ id: string; spend: string; spendingLimit: number }>()
+    expect(allSpends.results).toEqual([
+      {
+        id: expect.stringMatching(/key-daily:healthy-id-\d{4}-\d{2}-\d{2}/),
+        spend: '0.018',
+        spendingLimit: 1,
+      },
+      {
+        id: 'key-total:healthy-id',
+        spend: '0.018',
+        spendingLimit: 2,
+      },
+      {
+        id: expect.stringMatching(/user-weekly:user1-\d{4}-\d{2}-\d{2}/),
+        spend: '0.018',
+        spendingLimit: 3,
+      },
+      {
+        id: expect.stringMatching(/team-monthly:team1-\d{4}-\d{2}-\d{2}/),
+        spend: '0.018',
+        spendingLimit: 4,
+      },
+    ])
+    const allKeyStatus = await env.limitsDB
+      .prepare('SELECT count(*) as count FROM keyStatus')
+      .first<{ count: number }>()
+    expect(allKeyStatus?.count).toBe(0)
   })
 })

@@ -44,7 +44,7 @@ export async function apiKeyAuth(request: Request, env: GatewayEnv): Promise<Api
   return apiKey
 }
 
-export async function disableApiKeyAuth(apiKey: ApiKeyInfo, env: GatewayEnv, expirationTtl: number) {
+export async function disableApiKeyAuth(apiKey: ApiKeyInfo, env: GatewayEnv, expirationTtl?: number) {
   const cacheKey = apiKeyCacheKey(apiKey.key, env)
   await env.kv.put(cacheKey, JSON.stringify(apiKey), {
     metadata: CACHE_VERSION,

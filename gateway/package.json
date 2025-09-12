@@ -4,7 +4,7 @@
   "license": "AGPL-3.0",
   "main": "src/index.ts",
   "scripts": {
-    "typecheck": "tsc --noEmit",
+    "typecheck": "tsc --noEmit && cd test && tsc --noEmit",
     "lint": "eslint",
     "lint-fix": "eslint --fix --quiet",
     "test": "vitest"

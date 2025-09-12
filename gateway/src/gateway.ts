@@ -95,7 +95,7 @@ async function wrapLogfire(functionName: string, promise: Promise<unknown>): Pro
 }
 
 async function blockApiKey(apiKey: ApiKeyInfo, env: GatewayEnv, reason: string): Promise<void> {
-  await disableApiKey(apiKey, env, reason, 'blocked', Infinity)
+  await disableApiKey(apiKey, env, reason, 'blocked')
 }
 
 export async function disableApiKey(
@@ -103,7 +103,7 @@ export async function disableApiKey(
   env: GatewayEnv,
   reason: string,
   newStatus: 'blocked' | 'limit-exceeded',
-  expirationTtl: number,
+  expirationTtl?: number,
 ): Promise<void> {
   apiKey.status = newStatus
   await disableApiKeyAuth(apiKey, env, expirationTtl)
@@ -190,20 +190,20 @@ function startOfMonth(date: Date): string {
  * - If weekly limits are exceeded (and no monthly), expires at the next week boundary
  * - If only daily limits are exceeded, expires at the next day boundary
  *
- * @param xSet - Set of scope exceeded types that determine the expiration period
- * @returns TTL in seconds until the next reset period, Infinity for permanent disabling or 0 if no match is found
+ * @param ex: Set of scope exceeded types that determine the expiration period
+ * @returns TTL in seconds until the next reset period, undefined for permanent disabling
  *
- * - `key-total`: Infinity
+ * - `key-total`: undefined
  * - Monthly scopes: Returns seconds until next month boundary
  * - Weekly scopes: Returns seconds until next week boundary
  * - Daily scopes: Returns seconds until next day boundary
  */
-function calculateExpirationTtl(ex: SpendLimitScope[]): number {
+function calculateExpirationTtl(ex: SpendLimitScope[]): number | undefined {
   console.log('calculateExpirationTtl', ex)
   const xSet = new Set(ex)
   const now = new Date()
   if (xSet.has('key-total')) {
-    return Infinity
+    return
   } else if (xSet.has('key-monthly') || xSet.has('user-monthly') || xSet.has('team-monthly')) {
     const nextMonth = new Date(now.getFullYear(), now.getMonth() + 1, 1)
     return Math.floor((nextMonth.getTime() - Date.now()) / 1000)
@@ -214,5 +214,5 @@ function calculateExpirationTtl(ex: SpendLimitScope[]): number {
     const nextDay = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1)
     return Math.floor((nextDay.getTime() - Date.now()) / 1000)
   }
-  return 0
+  throw new Error('Invalid spending limit scopes, unable to calculate expiration TTL')
 }

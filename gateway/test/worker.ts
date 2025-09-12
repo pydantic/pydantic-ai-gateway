@@ -23,24 +23,24 @@ class TestKeysDB extends KeysDb {
       case 'healthy':
         return {
           id: 'healthy-id',
-          user: null,
-          team: 'test1',
+          user: 'user1',
+          team: 'team1',
           org: 'org1',
           key,
-          active: true,
+          status: 'active',
           // key limits
           keySpendingLimitDaily: 1,
           keySpendingLimitWeekly: null,
           keySpendingLimitMonthly: null,
           keySpendingLimitTotal: 2,
-          // team limits
-          teamSpendingLimitDaily: null,
-          teamSpendingLimitWeekly: 3,
-          teamSpendingLimitMonthly: null,
           // user limits
           userSpendingLimitDaily: null,
-          userSpendingLimitWeekly: null,
-          userSpendingLimitMonthly: 4,
+          userSpendingLimitWeekly: 3,
+          userSpendingLimitMonthly: null,
+          // team limits
+          teamSpendingLimitDaily: null,
+          teamSpendingLimitWeekly: null,
+          teamSpendingLimitMonthly: 4,
           providers: allProviders,
           otelSettings: {
             writeToken: 'write-token',

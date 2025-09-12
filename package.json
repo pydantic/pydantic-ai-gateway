@@ -31,9 +31,13 @@
     "printWidth": 119,
     "bracketSpacing": true
   },
+  "_": "@cloudflare/vitest-pool-workers is pinned because of https://github.com/cloudflare/workers-sdk/issues/10506",
   "devDependencies": {
+    "@cloudflare/vitest-pool-workers": "0.8.44",
+    "@cloudflare/workers-types": "^4.20250712.0",
     "prettier": "^3.6.2",
-    "typescript": "^5.5.2"
+    "typescript": "^5.5.2",
+    "vitest": "~3.2.0"
   },
   "engines": {
     "node": ">= 20.19.0"

@@ -1,4 +1,3 @@
-/* eslint-disable no-undef */
 import * as logfire from '@pydantic/logfire-api'
 
 import {
@@ -20,7 +19,8 @@ import {
 import type { ReadableSpan } from '@opentelemetry/sdk-trace-base/build/src/export/ReadableSpan'
 import { resourceFromAttributes } from '@opentelemetry/resources'
 
-import type { OtelSettings } from './types'
+import type { OtelSettings, SubFetch } from './types'
+import type { GatewayEnv } from '.'
 
 export type Attributes = Record<string, string | number | boolean | object | undefined>
 export type Level = 'debug' | 'info' | 'notice' | 'warn' | 'error'
@@ -31,10 +31,12 @@ export class OtelTrace {
   private remoteParent?: SpanContext
   traceId: string
   private spans: ReadableSpan[] = []
+  private subFetch: SubFetch
 
-  constructor(request: Request, otelSettings: OtelSettings | null, version: string) {
+  constructor(request: Request, otelSettings: OtelSettings | null, env: GatewayEnv) {
     this.otelSettings = otelSettings
-    this.version = version
+    this.version = env.githubSha
+    this.subFetch = env.subFetch
     this.remoteParent = extractSpanContext(request.headers)
     if (this.remoteParent) {
       this.traceId = this.remoteParent.traceId
@@ -81,7 +83,7 @@ export class OtelTrace {
       logfire.error('Failed to serialize spans', { span: this.spans })
       return
     }
-    const response = await fetchRetry(`${baseUrl}/v1/traces`, {
+    const response = await fetchRetry(this.subFetch, `${baseUrl}/v1/traces`, {
       method: 'POST',
       headers,
       body,
@@ -292,7 +294,7 @@ const headerTextMapGetter: TextMapGetter<Headers> = {
 const SLEEPS = [0, 1000, 2000, 4000, 8000]
 // Wrapper for fetch that retries on failure up to 5 times.
 // Each request times out after 8 seconds
-export async function fetchRetry(url: string, input: RequestInit): Promise<Response> {
+export async function fetchRetry(subFetch: SubFetch, url: string, input: RequestInit): Promise<Response> {
   let lastResponse: Response | null = null
   for (const sleepTime of SLEEPS) {
     if (sleepTime > 0) {
@@ -301,7 +303,7 @@ export async function fetchRetry(url: string, input: RequestInit): Promise<Respo
     }
     input.signal = AbortSignal.timeout(8000)
     try {
-      const response = await fetch(url, input)
+      const response = await subFetch(url, input)
       if (response.status >= 500) {
         logfire.warning(`Fetch failed with status ${response.status}`, { response })
         lastResponse = response

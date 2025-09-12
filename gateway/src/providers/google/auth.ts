@@ -1,4 +1,3 @@
-/* eslint-disable no-undef */
 import { ResponseError } from '../../utils'
 
 export async function authToken(credentials: string, kv: KVNamespace): Promise<string> {

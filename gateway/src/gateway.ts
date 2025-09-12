@@ -1,4 +1,3 @@
-/* eslint-disable no-undef */
 import * as logfire from '@pydantic/logfire-api'
 
 import { ApiKeyInfo, guardProviderID, providerIdArray } from './types'
@@ -10,8 +9,8 @@ import { OtelTrace } from './otel'
 import { genAiOtelAttributes } from './otelAttributes'
 import type { GatewayEnv } from '.'
 
-export async function gateway(request: Request, ctx: ExecutionContext, url: URL, env: GatewayEnv): Promise<Response> {
-  const { pathname } = url
+export async function gateway(request: Request, ctx: ExecutionContext, env: GatewayEnv): Promise<Response> {
+  const { pathname } = new URL(request.url)
   const providerMatch = /^\/([^/]+)\/(.*)$/.exec(pathname)
   if (!providerMatch) {
     return textResponse(404, 'Path not found')
@@ -43,7 +42,7 @@ export async function gateway(request: Request, ctx: ExecutionContext, url: URL,
     return textResponse(403, 'Forbidden - Provider not supported by this API Key')
   }
 
-  const otel = new OtelTrace(request, apiKey.otelSettings, env.githubSha)
+  const otel = new OtelTrace(request, apiKey.otelSettings, env)
 
   const ProxyCls = getProvider(providerProxy.providerID)
 

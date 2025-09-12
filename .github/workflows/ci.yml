@@ -58,7 +58,8 @@ jobs:
       - name: Start proxy-vcr service
         run: make run-proxy-vcr &
 
-      - run: npm run test
+      - run: npm run test-gateway
+      - run: npm run test-deploy
 
   # https://github.com/marketplace/actions/alls-green#why used for branch protection checks
   check:

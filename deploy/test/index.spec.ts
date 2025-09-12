@@ -1,9 +1,7 @@
 import OpenAI from 'openai'
-import Groq from 'groq-sdk'
-import Anthropic from '@anthropic-ai/sdk'
 import { SELF, env, fetchMock } from 'cloudflare:test'
 import { describe, it, expect, beforeAll, afterEach, beforeEach } from 'vitest'
-import SQL from '../limits-schema.sql?raw'
+import SQL from '../../gateway/limits-schema.sql?raw'
 
 beforeAll(async () => {
   try {
@@ -13,6 +11,8 @@ beforeAll(async () => {
     throw new Error('Proxy VCR is not running. Run `make run-proxy-vcr` to enable tests.')
   }
 })
+
+const RESET_SQL = `DROP TABLE IF EXISTS spend;\n${SQL}`
 
 beforeEach(async () => {
   await env.limitsDB.prepare(RESET_SQL).run()
@@ -29,49 +29,6 @@ function recordOtelBatch(otelBatch: Array<any>) {
       return { statusCode: 200, body }
     })
 }
-
-describe('index', () => {
-  it('responds with index html', async () => {
-    const response = await SELF.fetch('https://example.com')
-    expect(response.status).toBe(200)
-    expect(await response.text()).toMatchInlineSnapshot(
-      `
-      "<h1>Pydantic AI Gateway</h1>
-      <p>release: unknown</p>
-      "
-    `,
-    )
-  })
-})
-
-const RESET_SQL = `DROP TABLE IF EXISTS spend;\n${SQL}`
-
-describe('invalid request', () => {
-  it('401 on no auth header', async () => {
-    const response = await SELF.fetch('https://example.com/openai/gpt-5')
-    const text = await response.text()
-    expect(response.status, `got response: ${text}`).toBe(401)
-    expect(text).toMatchInlineSnapshot(`"Unauthorized - Missing Authorization Header"`)
-  })
-  it('401 on unknown auth header', async () => {
-    const response = await SELF.fetch('https://example.com/openai/gpt-5', {
-      headers: { Authorization: 'unknown-token' },
-    })
-    const text = await response.text()
-    expect(response.status, `got response: ${text}`).toBe(401)
-    expect(text).toMatchInlineSnapshot(`"Unauthorized - Key not found"`)
-  })
-  it('400 on unknown provider', async () => {
-    const response = await SELF.fetch('https://example.com/wrong/gpt-5', {
-      headers: { Authorization: 'unknown-token' },
-    })
-    const text = await response.text()
-    expect(response.status, `got response: ${text}`).toBe(400)
-    expect(text).toMatchInlineSnapshot(
-      `"Invalid provider 'wrong', should be one of groq, openai, google-vertex, anthropic"`,
-    )
-  })
-})
 
 describe('openai', () => {
   it('should call openai via gateway', async () => {
@@ -92,48 +49,6 @@ describe('openai', () => {
       ],
     })
 
-    expect(completion).toMatchSnapshot('llm')
-    expect(otelBatch.length).toBe(1)
-    expect(JSON.parse(otelBatch[0]).resourceSpans?.[0].scopeSpans?.[0].spans?.[0]?.attributes).toMatchSnapshot('span')
-  })
-})
-
-describe('groq', () => {
-  it('should call groq via gateway', async () => {
-    const client = new Groq({
-      apiKey: 'o-QBrunFudqD99879C5jkFZgZrueCLlCJGSMAbzFGFY',
-      baseURL: 'https://example.com/groq',
-      fetch: SELF.fetch.bind(SELF),
-    })
-
-    const completion = await client.chat.completions.create({
-      model: 'llama-3.3-70b-versatile',
-      messages: [
-        { role: 'developer', content: 'You are a helpful assistant.' },
-        { role: 'user', content: 'What is the capital of France?' },
-      ],
-    })
-    expect(completion).toMatchSnapshot('llm')
-  })
-})
-
-describe('anthropic', () => {
-  it('should call anthropic via gateway', async () => {
-    let otelBatch: Array<any> = []
-    recordOtelBatch(otelBatch)
-
-    const client = new Anthropic({
-      // The `authToken` is passed as `Authorization` header.
-      authToken: 'o-QBrunFudqD99879C5jkFZgZrueCLlCJGSMAbzFGFY',
-      baseURL: 'https://example.com/anthropic',
-      fetch: SELF.fetch.bind(SELF),
-    })
-
-    const completion = await client.messages.create({
-      model: 'claude-sonnet-4-20250514',
-      max_tokens: 1024,
-      messages: [{ role: 'user', content: 'What is the capital of France?' }],
-    })
     expect(completion).toMatchSnapshot('llm')
     expect(otelBatch.length).toBe(1)
     expect(JSON.parse(otelBatch[0]).resourceSpans?.[0].scopeSpans?.[0].spans?.[0]?.attributes).toMatchSnapshot('span')

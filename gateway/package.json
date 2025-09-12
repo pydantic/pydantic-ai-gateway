@@ -6,11 +6,10 @@
   "scripts": {
     "typecheck": "tsc --noEmit",
     "lint": "eslint",
-    "lint-fix": "eslint --fix --quiet"
+    "lint-fix": "eslint --fix --quiet",
+    "test": "vitest"
   },
   "dependencies": {
-    "@anthropic-ai/sdk": "^0.62.0",
-    "@google/genai": "^1.15.0",
     "@opentelemetry/api": "^1.9.0",
     "@opentelemetry/exporter-trace-otlp-http": "^0.203.0",
     "@opentelemetry/resources": "^2.0.1",
@@ -18,7 +17,9 @@
     "@pydantic/logfire-api": "^0.5.0"
   },
   "devDependencies": {
+    "@anthropic-ai/sdk": "^0.62.0",
     "@eslint/js": "^9.34.0",
+    "@google/genai": "^1.15.0",
     "@typescript-eslint/utils": "^8.41.0",
     "eslint": "^9.34.0",
     "eslint-config-prettier": "^10.1.8",
@@ -26,7 +27,6 @@
     "globals": "^16.3.0",
     "groq-sdk": "^0.30.0",
     "neostandard": "^0.12.2",
-    "typescript": "^5.9.2",
     "typescript-eslint": "^8.41.0"
   }
 }

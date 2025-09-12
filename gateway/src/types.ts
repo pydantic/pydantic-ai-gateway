@@ -1,3 +1,5 @@
+export type SubFetch = (url: RequestInfo | URL, init?: RequestInit) => Promise<Response>
+
 // Info about an API key for a particular provider returned by the DB during a request
 export interface ApiKeyInfo {
   id: string
@@ -24,7 +26,7 @@ export interface ApiKeyInfo {
   otelSettings: OtelSettings | null
 }
 
-export type ProviderID = 'groq' | 'openai' | 'google-vertex' | 'anthropic'
+export type ProviderID = 'groq' | 'openai' | 'google-vertex' | 'anthropic' | 'test'
 // TODO | 'aws' | 'azure' | 'fireworks' | 'mistral' | 'cohere'
 
 const providerIDs: Record<ProviderID, boolean> = {
@@ -32,9 +34,10 @@ const providerIDs: Record<ProviderID, boolean> = {
   openai: true,
   'google-vertex': true,
   anthropic: true,
+  test: true,
 }
 
-export const providerIdArray = Object.keys(providerIDs) as ProviderID[]
+export const providerIdArray = Object.keys(providerIDs).filter((id) => id !== 'test') as ProviderID[]
 
 export function guardProviderID(id: string): id is ProviderID {
   return id in providerIDs

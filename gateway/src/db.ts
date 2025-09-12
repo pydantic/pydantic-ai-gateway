@@ -38,6 +38,10 @@ export class LimitDbD1 extends LimitDb {
   }
 
   async incrementSpend(intervalSpends: IntervalSpend[], spend: number): Promise<SpendLimitScope[]> {
+    if (!intervalSpends.length) {
+      return []
+    }
+
     const sqlValues: '(?, ?, ?)'[] = []
     const values: (string | number)[] = []
     for (const { scope, id, limit } of intervalSpends) {
@@ -56,7 +60,7 @@ ON CONFLICT(id) DO UPDATE SET spend = spend.spend + EXCLUDED.spend;`,
         .run()
     } catch (error) {
       if (error instanceof Error && error.message.includes('spendingLimit: SQLITE_CONSTRAINT')) {
-        return await this.findExceededScopes(intervalSpends)
+        return await this.findExceededScopes(intervalSpends, spend)
       } else {
         throw error
       }
@@ -64,7 +68,7 @@ ON CONFLICT(id) DO UPDATE SET spend = spend.spend + EXCLUDED.spend;`,
     return []
   }
 
-  protected async findExceededScopes(intervalSpends: IntervalSpend[]): Promise<SpendLimitScope[]> {
+  protected async findExceededScopes(intervalSpends: IntervalSpend[], spend: number): Promise<SpendLimitScope[]> {
     const sqlValues: '?'[] = []
     const values: (string | number)[] = []
     for (const { scope, id } of intervalSpends) {
@@ -74,12 +78,23 @@ ON CONFLICT(id) DO UPDATE SET spend = spend.spend + EXCLUDED.spend;`,
     const { results } = await this.db
       .prepare(
         `\
-SELECT id
+SELECT id, spend
 FROM spend
-WHERE spend > spendingLimit and id IN (${sqlValues.join(', ')})`,
+WHERE id IN (${sqlValues.join(', ')})`,
       )
       .bind(...values)
-      .run<{ id: string }>()
-    return results.map((row) => row.id.split(':', 1)[0] as SpendLimitScope)
+      .run<{ id: string; spend: number }>()
+
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    const entries = results.map(({ id, spend }): [string, number] => [id.split(':', 1)[0]!, spend])
+    const spendLookup = Object.fromEntries(entries)
+    const exceeded: SpendLimitScope[] = []
+    for (const { scope, limit } of intervalSpends) {
+      const previousSpend = spendLookup[scope] ?? 0
+      if (previousSpend + spend >= limit) {
+        exceeded.push(scope)
+      }
+    }
+    return exceeded
   }
 }

@@ -24,7 +24,7 @@ export async function gateway(request: Request, ctx: ExecutionContext, env: Gate
   const apiKey = await apiKeyAuth(request, env)
 
   if (apiKey.status !== 'active') {
-    return textResponse(403, 'Unauthorized - Key not active')
+    return textResponse(403, `Unauthorized - Key ${apiKey.status}`)
   }
 
   let providerProxies = apiKey.providers.filter((p) => p.providerID === provider)
@@ -118,44 +118,50 @@ async function recordSpend(apiKey: ApiKeyInfo, spend: number, env: GatewayEnv): 
   const month = startOfMonth(now)
 
   const intervalSpends: IntervalSpend[] = []
-  if (apiKey.keySpendingLimitDaily != null) {
+  if (isSet(apiKey.keySpendingLimitDaily)) {
     intervalSpends.push({ scope: 'key-daily', id: `${id}-${today}`, limit: apiKey.keySpendingLimitDaily })
   }
-  if (apiKey.keySpendingLimitWeekly != null) {
+  if (isSet(apiKey.keySpendingLimitWeekly)) {
     intervalSpends.push({ scope: 'key-weekly', id: `${id}-${week}`, limit: apiKey.keySpendingLimitWeekly })
   }
-  if (apiKey.keySpendingLimitMonthly != null) {
+  if (isSet(apiKey.keySpendingLimitMonthly)) {
     intervalSpends.push({ scope: 'key-monthly', id: `${id}-${month}`, limit: apiKey.keySpendingLimitMonthly })
   }
-  if (apiKey.keySpendingLimitTotal != null) {
+  if (isSet(apiKey.keySpendingLimitTotal)) {
     intervalSpends.push({ scope: 'key-total', id, limit: apiKey.keySpendingLimitTotal })
   }
 
   if (user != null) {
-    if (apiKey.userSpendingLimitDaily != null) {
+    if (isSet(apiKey.userSpendingLimitDaily)) {
       intervalSpends.push({ scope: 'user-daily', id: `${user}-${today}`, limit: apiKey.userSpendingLimitDaily })
     }
-    if (apiKey.userSpendingLimitWeekly != null) {
+    if (isSet(apiKey.userSpendingLimitWeekly)) {
       intervalSpends.push({ scope: 'user-weekly', id: `${user}-${week}`, limit: apiKey.userSpendingLimitWeekly })
     }
-    if (apiKey.userSpendingLimitMonthly != null) {
+    if (isSet(apiKey.userSpendingLimitMonthly)) {
       intervalSpends.push({ scope: 'user-monthly', id: `${user}-${month}`, limit: apiKey.userSpendingLimitMonthly })
     }
   }
 
-  if (apiKey.teamSpendingLimitDaily != null) {
+  if (isSet(apiKey.teamSpendingLimitDaily)) {
     intervalSpends.push({ scope: 'team-daily', id: `${team}-${today}`, limit: apiKey.teamSpendingLimitDaily })
   }
-  if (apiKey.teamSpendingLimitWeekly != null) {
+  if (isSet(apiKey.teamSpendingLimitWeekly)) {
     intervalSpends.push({ scope: 'team-weekly', id: `${team}-${week}`, limit: apiKey.teamSpendingLimitWeekly })
   }
-  if (apiKey.teamSpendingLimitMonthly != null) {
+  if (isSet(apiKey.teamSpendingLimitMonthly)) {
     intervalSpends.push({ scope: 'team-monthly', id: `${team}-${month}`, limit: apiKey.teamSpendingLimitMonthly })
   }
   const scopesExceeded = await env.limitDb.incrementSpend(intervalSpends, spend)
 
   if (scopesExceeded.length) {
-    await disableApiKey(apiKey, env, `limits exceeded: TODO`, 'limit-exceeded', calculateExpirationTtl(scopesExceeded))
+    await disableApiKey(
+      apiKey,
+      env,
+      `limits exceeded: ${scopesExceeded.join(', ')}`,
+      'limit-exceeded',
+      calculateExpirationTtl(scopesExceeded),
+    )
   }
 }
 
@@ -199,7 +205,6 @@ function startOfMonth(date: Date): string {
  * - Daily scopes: Returns seconds until next day boundary
  */
 function calculateExpirationTtl(ex: SpendLimitScope[]): number | undefined {
-  console.log('calculateExpirationTtl', ex)
   const xSet = new Set(ex)
   const now = new Date()
   if (xSet.has('key-total')) {
@@ -215,4 +220,8 @@ function calculateExpirationTtl(ex: SpendLimitScope[]): number | undefined {
     return Math.floor((nextDay.getTime() - Date.now()) / 1000)
   }
   throw new Error('Invalid spending limit scopes, unable to calculate expiration TTL')
+}
+
+function isSet(value: number | null | undefined): value is number {
+  return value !== null && value !== undefined
 }

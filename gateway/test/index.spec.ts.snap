@@ -146,6 +146,27 @@ exports[`anthropic > should call anthropic via gateway > span 1`] = `
 ]
 `;
 
+exports[`blocked key > should block if limit is exceeded > kv-value 1`] = `
+{
+  "id": "tiny-limit-id",
+  "key": "tiny-limit",
+  "keySpendingLimitWeekly": 0.01,
+  "org": "org1",
+  "otelSettings": null,
+  "providers": [
+    {
+      "baseUrl": "http://test.example.com/test",
+      "credentials": "test",
+      "injectCost": true,
+      "providerID": "test",
+    },
+  ],
+  "status": "active",
+  "team": "team1",
+  "user": null,
+}
+`;
+
 exports[`groq > should call groq via gateway > llm 1`] = `
 {
   "choices": [

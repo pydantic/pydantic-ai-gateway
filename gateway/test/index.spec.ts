@@ -81,7 +81,7 @@ describe('invalid request', () => {
   it('401 on no auth header', async () => {
     const response = await testGateway().fetch('https://example.com/openai/gpt-5')
     const text = await response.text()
-    expect(response.status, `got response: ${text}`).toBe(401)
+    expect(response.status, `got ${response.status} response: ${text}`).toBe(401)
     expect(text).toMatchInlineSnapshot(`"Unauthorized - Missing Authorization Header"`)
   })
   it('401 on unknown auth header', async () => {
@@ -89,7 +89,7 @@ describe('invalid request', () => {
       headers: { Authorization: 'unknown-token' },
     })
     const text = await response.text()
-    expect(response.status, `got response: ${text}`).toBe(401)
+    expect(response.status, `got ${response.status} response: ${text}`).toBe(401)
     expect(text).toMatchInlineSnapshot(`"Unauthorized - Key not found"`)
   })
   it('400 on unknown provider', async () => {
@@ -97,7 +97,7 @@ describe('invalid request', () => {
       headers: { Authorization: 'unknown-token' },
     })
     const text = await response.text()
-    expect(response.status, `got response: ${text}`).toBe(400)
+    expect(response.status, `got ${response.status} response: ${text}`).toBe(400)
     expect(text).toMatchInlineSnapshot(
       `"Invalid provider 'wrong', should be one of groq, openai, google-vertex, anthropic"`,
     )
@@ -215,5 +215,56 @@ describe('blocked key', () => {
       .prepare('SELECT count(*) as count FROM keyStatus')
       .first<{ count: number }>()
     expect(allKeyStatus?.count).toBe(0)
+  })
+
+  it('should block if key is disabled', async () => {
+    const { fetch, ctx } = testGateway()
+
+    const response = await fetch('https://example.com/openai/xxx', {
+      headers: { Authorization: 'disabled' },
+    })
+    await waitOnExecutionContext(ctx)
+    const text = await response.text()
+    expect(response.status, `got response: ${response.status} ${text}`).toBe(403)
+    expect(text).toMatchInlineSnapshot(`"Unauthorized - Key disabled"`)
+    const spendCount = await env.limitsDB.prepare('SELECT count(*) count FROM spend').first<{ count: number }>()
+    expect(spendCount?.count).toBe(0)
+    const keyStatusCount = await env.limitsDB
+      .prepare('SELECT count(*) count FROM keyStatus')
+      .first<{ count: number }>()
+    expect(keyStatusCount?.count).toBe(0)
+  })
+
+  it('should block if limit is exceeded', async () => {
+    const { fetch, ctx } = testGateway()
+
+    const client = new OpenAI({
+      apiKey: 'tiny-limit',
+      baseURL: 'https://example.com/test',
+      fetch,
+    })
+    await client.chat.completions.create({
+      model: 'gpt-5',
+      messages: [
+        { role: 'developer', content: 'You are a helpful assistant.' },
+        { role: 'user', content: 'Give me an essay on the history of the universe.' },
+      ],
+    })
+
+    const apiValue = await env.KV.get('apiKeyAuth:test:tiny-limit')
+    expect(apiValue).toBeTypeOf('string')
+    expect(JSON.parse(apiValue!)).toMatchSnapshot('kv-value')
+
+    await waitOnExecutionContext(ctx)
+    const spendCount1 = await env.limitsDB.prepare('SELECT count(*) count FROM spend').first<{ count: number }>()
+    expect(spendCount1?.count).toBe(0)
+
+    const response = await fetch('https://example.com/openai/xxx', {
+      headers: { Authorization: 'tiny-limit' },
+    })
+    await waitOnExecutionContext(ctx)
+    const text = await response.text()
+    expect(response.status, `got ${response.status} response: ${text}`).toBe(403)
+    expect(text).toMatchInlineSnapshot(`"Unauthorized - Key limit-exceeded"`)
   })
 })

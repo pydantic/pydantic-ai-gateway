@@ -13,19 +13,20 @@ export interface ApiKeyInfo {
     | 'limit-exceeded' // when the key exceeds the limits
     | 'disabled' // when the user sets in the UI
     | 'blocked' // when we got a valid response that we couldn't calculate the cost for
+  // limits are both optional and nullable to allow for databases that return null
   // limits per apiKey - note the extra field since keys can have a total limit
-  keySpendingLimitDaily: number | null
-  keySpendingLimitWeekly: number | null
-  keySpendingLimitMonthly: number | null
-  keySpendingLimitTotal: number | null
+  keySpendingLimitDaily?: number | null
+  keySpendingLimitWeekly?: number | null
+  keySpendingLimitMonthly?: number | null
+  keySpendingLimitTotal?: number | null
   // limits per team
-  teamSpendingLimitDaily: number | null
-  teamSpendingLimitWeekly: number | null
-  teamSpendingLimitMonthly: number | null
+  teamSpendingLimitDaily?: number | null
+  teamSpendingLimitWeekly?: number | null
+  teamSpendingLimitMonthly?: number | null
   // limits per user
-  userSpendingLimitDaily: number | null
-  userSpendingLimitWeekly: number | null
-  userSpendingLimitMonthly: number | null
+  userSpendingLimitDaily?: number | null
+  userSpendingLimitWeekly?: number | null
+  userSpendingLimitMonthly?: number | null
   providers: ProviderProxy[]
   otelSettings: OtelSettings | null
 }

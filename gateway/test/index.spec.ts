@@ -86,6 +86,7 @@ describe('index', () => {
       "
     `,
     )
+    expect(response.headers.get('content-type')).toBe('text/plain; charset=utf-8')
   })
 })
 

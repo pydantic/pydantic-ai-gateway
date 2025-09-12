@@ -66,7 +66,7 @@ GitHub: https://github.com/pydantic/pydantic-ai-gateway
 To connect, point your application at ${request.url}<provider-id>
 `,
       {
-        headers: ctHeader('text/html'),
+        headers: ctHeader('text/plain; charset=utf-8'),
       },
     )
   } else if (request.method === 'HEAD') {

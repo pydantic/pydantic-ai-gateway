@@ -73,8 +73,16 @@ describe('index', () => {
     expect(response.status).toBe(200)
     expect(await response.text()).toMatchInlineSnapshot(
       `
-      "<h1>Pydantic AI Gateway</h1>
-      <p>release: test</p>
+      "▗▄▄▖  ▗▄▖ ▗▄▄▄▖ ▗▄▄▖
+      ▐▌ ▐▌▐▌ ▐▌  █  ▐▌
+      ▐▛▀▘ ▐▛▀▜▌  █  ▐▌▝▜▌
+      ▐▌   ▐▌ ▐▌▗▄█▄▖▝▚▄▞▘
+
+      Pydantic AI Gateway
+
+      git sha: test
+      GitHub: https://github.com/pydantic/pydantic-ai-gateway
+      To connect, point your application at https://example.com/<provider-id>
       "
     `,
     )

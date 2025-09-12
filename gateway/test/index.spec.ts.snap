@@ -161,7 +161,7 @@ exports[`blocked key > should block if limit is exceeded > kv-value 1`] = `
       "providerID": "test",
     },
   ],
-  "status": "active",
+  "status": "limit-exceeded",
   "team": "team1",
   "user": null,
 }

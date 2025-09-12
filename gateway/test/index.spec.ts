@@ -58,7 +58,9 @@ function testGateway(): TestGateway {
       url,
       init as RequestInit<IncomingRequestCfProperties>,
     )
-    return await gatewayFetch(request, ctx, buildGatewayEnv(env, subFetch))
+    const response = await gatewayFetch(request, ctx, buildGatewayEnv(env, subFetch))
+    await waitOnExecutionContext(ctx)
+    return response
   }
   return { fetch: mockFetch, ctx, otelBatch }
 }
@@ -172,7 +174,7 @@ describe('anthropic', () => {
 
 describe('blocked key', () => {
   it('should not block key if limit is not exceeded', async () => {
-    const { fetch, ctx } = testGateway()
+    const { fetch } = testGateway()
     const client = new OpenAI({
       apiKey: 'healthy',
       baseURL: 'https://example.com/test',
@@ -185,7 +187,6 @@ describe('blocked key', () => {
         { role: 'user', content: 'Give me an essay on the history of the universe.' },
       ],
     })
-    await waitOnExecutionContext(ctx)
     const allSpends = await env.limitsDB
       .prepare(`SELECT id, printf('%.3f', spend, 3) spend, spendingLimit FROM spend order by spendingLimit`)
       .run<{ id: string; spend: string; spendingLimit: number }>()
@@ -218,12 +219,11 @@ describe('blocked key', () => {
   })
 
   it('should block if key is disabled', async () => {
-    const { fetch, ctx } = testGateway()
+    const { fetch } = testGateway()
 
     const response = await fetch('https://example.com/openai/xxx', {
       headers: { Authorization: 'disabled' },
     })
-    await waitOnExecutionContext(ctx)
     const text = await response.text()
     expect(response.status, `got response: ${response.status} ${text}`).toBe(403)
     expect(text).toMatchInlineSnapshot(`"Unauthorized - Key disabled"`)
@@ -236,7 +236,7 @@ describe('blocked key', () => {
   })
 
   it('should block if limit is exceeded', async () => {
-    const { fetch, ctx } = testGateway()
+    const { fetch } = testGateway()
 
     const client = new OpenAI({
       apiKey: 'tiny-limit',
@@ -255,14 +255,12 @@ describe('blocked key', () => {
     expect(apiValue).toBeTypeOf('string')
     expect(JSON.parse(apiValue!)).toMatchSnapshot('kv-value')
 
-    await waitOnExecutionContext(ctx)
     const spendCount1 = await env.limitsDB.prepare('SELECT count(*) count FROM spend').first<{ count: number }>()
     expect(spendCount1?.count).toBe(0)
 
     const response = await fetch('https://example.com/openai/xxx', {
       headers: { Authorization: 'tiny-limit' },
     })
-    await waitOnExecutionContext(ctx)
     const text = await response.text()
     expect(response.status, `got ${response.status} response: ${text}`).toBe(403)
     expect(text).toMatchInlineSnapshot(`"Unauthorized - Key limit-exceeded"`)

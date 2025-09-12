@@ -1,5 +1,3 @@
-/* eslint-disable no-undef */
-/** Above is necessary for the cloudflare d1 types */
 import type { ApiKeyInfo } from './types'
 
 export abstract class KeysDb {

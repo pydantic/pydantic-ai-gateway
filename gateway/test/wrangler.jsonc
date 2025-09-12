@@ -1,0 +1,20 @@
+// https://developers.cloudflare.com/workers/wrangler/configuration/
+{
+  "$schema": "../../node_modules/wrangler/config-schema.json",
+  "name": "pydantic-ai-gateway-test",
+  "main": "worker.ts",
+  "compatibility_date": "2025-06-17",
+  "compatibility_flags": ["nodejs_compat_v2"],
+  "d1_databases": [
+    {
+      "binding": "limitsDB",
+      "database_id": "test",
+    },
+  ],
+  "kv_namespaces": [
+    {
+      "binding": "KV",
+      "id": "test",
+    },
+  ],
+}

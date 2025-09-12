@@ -30,6 +30,8 @@ export interface User {
 }
 
 export interface ApiKey<ProviderKey extends string> {
+  /** @param key: if unset, a hash of the API key itself is used */
+  id?: string
   team: string
   user?: string
   expires?: number

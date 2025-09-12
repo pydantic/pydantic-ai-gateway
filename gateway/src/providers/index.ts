@@ -23,6 +23,7 @@ import { GoogleVertexProvider } from './google'
 import { GroqProvider } from './groq'
 import { DefaultProviderProxy } from './default'
 import { AnthropicProvider } from './anthropic'
+import { TestProvider } from './test'
 
 type providerSig = new (
   request: Request,
@@ -42,6 +43,8 @@ export function getProvider(providerId: ProviderID): providerSig {
       return GoogleVertexProvider
     case 'anthropic':
       return AnthropicProvider
+    case 'test':
+      return TestProvider
     default:
       return DefaultProviderProxy
   }

@@ -26,7 +26,8 @@ export class ConfigDB extends KeysDb {
     }
 
     return {
-      id: key.substring(0, 5),
+      // if keyInfo.id is unset, hash the API key to give something unique without explicitly using the key directly
+      id: keyInfo.id ?? (await hash(key)),
       user: keyInfo.user ?? null,
       team: keyInfo.team,
       org: config.org,
@@ -54,4 +55,10 @@ export class ConfigDB extends KeysDb {
     await this.limitsDB.prepare('UPDATE keyStatus SET status = ? WHERE id = ?').bind(newStatus, id).run()
     await this.limitsDB.prepare('DELETE FROM keyStatus WHERE expiresAt < CURRENT_TIMESTAMP').run()
   }
+}
+
+export async function hash(input: string): Promise<string> {
+  const hashBuffer = await crypto.subtle.digest('SHA-1', new TextEncoder().encode(input))
+  const hashArray = Array.from(new Uint8Array(hashBuffer))
+  return hashArray.map((byte) => byte.toString(16).padStart(2, '0')).join('')
 }

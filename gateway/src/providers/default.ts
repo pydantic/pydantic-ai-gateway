@@ -127,6 +127,10 @@ export class DefaultProviderProxy {
     }
   }
 
+  protected fetch(url: string, init: RequestInit): Promise<Response> {
+    return this.env.subFetch(url, init)
+  }
+
   protected async extractUsage(response: Response): Promise<ProcessResponse | ProxyInvalidRequest> {
     const bodyText = await response.text()
     try {
@@ -193,7 +197,7 @@ export class DefaultProviderProxy {
       return prepResult
     }
     const { requestBodyText, requestBodyData, requestModel } = prepResult
-    const response = await fetch(url, { method, headers: requestHeaders, body: requestBodyText })
+    const response = await this.fetch(url, { method, headers: requestHeaders, body: requestBodyText })
 
     if (!response.ok) {
       // CAUTION: can we be charged in any way for failed requests?

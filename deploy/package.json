@@ -1,5 +1,5 @@
 {
-  "name": "pydantic-gateway",
+  "name": "pydantic-gateway-deploy",
   "version": "0.0.0",
   "private": true,
   "license": "AGPL-3.0",
@@ -10,8 +10,8 @@
     "test": "vitest",
     "lint": "",
     "lint-fix": "",
-    "limits-local-db": "wrangler d1 execute pydantic-ai-gateway-limits --local --file limits-schema.sql",
-    "limits-remote-db": "wrangler d1 execute pydantic-ai-gateway-limits --remote --file limits-schema.sql",
+    "limits-local-db": "wrangler d1 execute pydantic-ai-gateway-limits --local --file ../gateway/limits-schema.sql",
+    "limits-remote-db": "wrangler d1 execute pydantic-ai-gateway-limits --remote --file ../gateway/limits-schema.sql",
     "wrangler-secret-put": "wrangler secret put",
     "generate-api-key": "node generate_api_key.js",
     "typegen": "wrangler types --strict-vars false --include-runtime false && prettier worker-configuration.d.ts --write"
@@ -20,14 +20,8 @@
     "@pydantic/logfire-api": "^0.8.1",
     "@pydantic/logfire-cf-workers": "^0.6.0"
   },
-  "_": "@cloudflare/vitest-pool-workers is pinned because of https://github.com/cloudflare/workers-sdk/issues/10506",
   "devDependencies": {
-    "@cloudflare/vitest-pool-workers": "0.8.44",
-    "@cloudflare/workers-types": "^4.20250712.0",
-    "groq-sdk": "^0.30.0",
     "openai": "^4.70.3",
-    "typescript": "^5.5.2",
-    "vitest": "~3.2.0",
     "wrangler": "^4.27.0"
   }
 }

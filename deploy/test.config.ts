@@ -1,7 +1,7 @@
 import { env } from 'cloudflare:workers'
 import type { Config } from '@deploy/types'
 
-type ProviderKeys = 'openai' | 'groq' | 'anthropic'
+type ProviderKeys = 'openai' | 'groq' | 'anthropic' | 'test'
 
 export const config: Config<ProviderKeys> = {
   // the name of the organization, doesn't matter in this case
@@ -15,15 +15,11 @@ export const config: Config<ProviderKeys> = {
         testberto: {
           name: 'testberto',
           // each user can have their own spending limits, or these can be omitted
-          spendingLimitDaily: 1,
-          spendingLimitWeekly: 5,
-          spendingLimitMonthly: 10,
+          spendingLimitWeekly: 2,
         },
       },
       /// similarly team limits are optional
-      spendingLimitDaily: 10,
-      spendingLimitWeekly: 50,
-      spendingLimitMonthly: 100,
+      spendingLimitDaily: 1,
     },
   },
   // providers
@@ -58,22 +54,22 @@ export const config: Config<ProviderKeys> = {
       injectCost: true,
       credentials: env.ANTHROPIC_API_KEY,
     },
+    test: {
+      baseUrl: 'http://test.example.com/test',
+      providerID: 'test',
+      injectCost: true,
+      credentials: 'test',
+    },
   },
   // individual apiKeys
   apiKeys: {
     'healthy-key': {
       // team is required
       team: 'default',
-      // user is optional
       user: 'testberto',
-      // providers is required and identifies which providers this apiKey is allowed to use
-      providers: ['openai', 'groq', 'anthropic'],
-      // you can also optionally add limits to a single key here
-      spendingLimitDaily: 1,
-      spendingLimitWeekly: 5,
-      spendingLimitMonthly: 10,
-      // these limits include an extra limit `spendingLimitTotal` which is useful for temporary API keys
-      spendingLimitTotal: 11,
+      providers: ['openai', 'groq', 'anthropic', 'test'],
+      spendingLimitMonthly: 3,
+      spendingLimitTotal: 4,
     },
     'low-limit-key': {
       team: 'default',

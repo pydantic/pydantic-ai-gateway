@@ -13,7 +13,9 @@ export default defineConfig(
   neostandard({ noJsx: true, noStyle: true }),
   eslintPluginPrettierRecommended,
   eslintConfigPrettier,
-  { files: ['src/*.{js,mjs,cjs,ts}', 'eslint.config.mjs', 'vite.config.ts'] },
+  {
+    ignores: ['vitest.config.mts'],
+  },
   {
     languageOptions: {
       globals: globals.node,
@@ -45,6 +47,22 @@ export default defineConfig(
           allowRegExp: true,
         },
       ],
+    },
+  },
+  {
+    files: ['**/*.ts'],
+    rules: {
+      'no-undef': 'off',
+    },
+  },
+  {
+    files: ['test/**/*.ts'],
+    rules: {
+      '@typescript-eslint/no-non-null-assertion': 'off',
+      '@typescript-eslint/no-unsafe-member-access': 'off',
+      '@typescript-eslint/no-explicit-any': 'off',
+      '@typescript-eslint/no-unsafe-argument': 'off',
+      '@typescript-eslint/require-await': 'off',
     },
   },
   {

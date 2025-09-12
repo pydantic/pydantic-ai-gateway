@@ -12,7 +12,9 @@
     "lint": "npm run lint --workspaces",
     "lint-fix": "npm run lint-fix --workspaces",
     "typecheck": "npm run typecheck --workspaces",
-    "test": "npm run test --workspace=deploy --silent",
+    "test-deploy": "npm run test --workspace=deploy --silent",
+    "test-gateway": "npm run test --workspace=gateway --silent",
+    "test": "CI=1 npm run test --workspaces",
     "deploy": "npm run deploy --workspace=deploy --silent",
     "dev": "npm run dev --workspace=deploy --silent",
     "limits-local-db": "npm run limits-local-db --workspace=deploy",
@@ -29,7 +31,9 @@
     "printWidth": 119,
     "bracketSpacing": true
   },
+  "_": "@cloudflare/vitest-pool-workers is pinned because of https://github.com/cloudflare/workers-sdk/issues/10506",
   "devDependencies": {
+    "@cloudflare/vitest-pool-workers": "0.8.44",
     "@cloudflare/workers-types": "^4.20250712.0",
     "prettier": "^3.6.2",
     "typescript": "^5.5.2",

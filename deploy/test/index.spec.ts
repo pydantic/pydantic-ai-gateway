@@ -51,7 +51,21 @@ function recordOtelBatch(otelBatch: string[]) {
     })
 }
 
-describe('openai', () => {
+describe('deploy', () => {
+  it('status auth works', async () => {
+    const noAuth = await SELF.fetch('https://example.com/status/')
+    expect(noAuth.status).toBe(401)
+    expect(await noAuth.text()).toMatchInlineSnapshot(`"Unauthorized - Missing "Authorization" Header"`)
+
+    const wrongAuth = await SELF.fetch('https://example.com/status/', { headers: { authorization: 'wrong' } })
+    expect(wrongAuth.status).toBe(401)
+    expect(await wrongAuth.text()).toMatchInlineSnapshot(`"Unauthorized - Invalid API Key"`)
+
+    const ok = await SELF.fetch('https://example.com/status/', { headers: { authorization: 'testing' } })
+    expect(ok.status).toBe(200)
+    expect(await ok.text()).toMatchSnapshot('status-empty')
+  })
+
   it('should call openai via gateway', async () => {
     const otelBatch: string[] = []
     recordOtelBatch(otelBatch)
@@ -73,5 +87,11 @@ describe('openai', () => {
     expect(completion).toMatchSnapshot('llm')
     expect(otelBatch.length).toBe(1)
     expect(JSON.parse(otelBatch[0]!).resourceSpans?.[0].scopeSpans?.[0].spans?.[0]?.attributes).toMatchSnapshot('span')
+
+    const response = await SELF.fetch('https://example.com/status/', { headers: { authorization: 'testing' } })
+    expect(response.status).toBe(200)
+    let data = await response.text()
+    data = data.replace(/\d{4}-\d{2}-\d{2}/g, 'YYYY-MM-DD').trim()
+    expect(data).toMatchSnapshot('status-after-requests')
   })
 })

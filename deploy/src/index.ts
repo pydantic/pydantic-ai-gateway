@@ -28,8 +28,8 @@ const handler = {
     const { pathname } = new URL(request.url)
     const limitDb = new LimitDbD1(env.limitsDB)
 
-    if (pathname === '/status' || pathname === '/status') {
-      return await status(limitDb)
+    if (pathname === '/status' || pathname === '/status/') {
+      return await status(request, env, limitDb)
     }
 
     const gatewayEnv: GatewayEnv = {

@@ -24,7 +24,12 @@ interface Status {
   keys: KeyStatus[]
 }
 
-export async function status(limitdb: LimitDb): Promise<Response> {
+export async function status(request: Request, env: Env, limitdb: LimitDb): Promise<Response> {
+  const authResponse = auth(request, env)
+  if (authResponse !== 'ok') {
+    return authResponse
+  }
+
   const teamStatus = await limitdb.spendStatus('team')
   const userStatus = await limitdb.spendStatus('user')
   const keyStatus = await limitdb.spendStatus('key')
@@ -68,4 +73,31 @@ export async function status(limitdb: LimitDb): Promise<Response> {
       'Content-Type': 'application/json',
     },
   })
+}
+
+function auth(request: Request, env: Env): Response | 'ok' {
+  // if the expected password is the default value, return an error to warn the user
+  const expected = env.STATUS_AUTH_API_KEY
+  if (expected.toLowerCase() === 'change-me!') {
+    return new Response('Default Password Detected, please change STATUS_AUTH_API_KEY!', { status: 500 })
+  }
+
+  const authHeader = request.headers.get('authorization')
+
+  let key
+  if (authHeader) {
+    if (authHeader.toLowerCase().startsWith('bearer ')) {
+      key = authHeader.substring(7)
+    } else {
+      key = authHeader
+    }
+  } else {
+    return new Response('Unauthorized - Missing "Authorization" Header', { status: 401 })
+  }
+
+  if (key === expected) {
+    return 'ok'
+  } else {
+    return new Response('Unauthorized - Invalid API Key', { status: 401 })
+  }
 }

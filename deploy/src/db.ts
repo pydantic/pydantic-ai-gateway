@@ -18,7 +18,7 @@ export class ConfigDB extends KeysDbD1 {
     }
 
     // if keyInfo.id is unset, hash the API key to give something unique without explicitly using the key directly
-    const keyId = keyInfo.id ?? (await hash(key))
+    const keyId = keyInfo.id
 
     let status: KeyStatus = Date.now() < (keyInfo.expires ?? Infinity) ? 'active' : 'expired'
     if (status === 'active') {
@@ -32,7 +32,6 @@ export class ConfigDB extends KeysDbD1 {
       id: keyId,
       user: keyInfo.user ?? null,
       team: keyInfo.team,
-      org: config.org,
       key,
       status,
       // key limits

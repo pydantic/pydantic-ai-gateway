@@ -13,6 +13,7 @@ repos:
     rev: v2.3.0
     hooks:
       - id: codespell
+        args: ['--skip=*.snap']
 
   - repo: local
     hooks:

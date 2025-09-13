@@ -1,6 +1,6 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`openai > should call openai via gateway > llm 1`] = `
+exports[`deploy > should call openai via gateway > llm 1`] = `
 {
   "choices": [
     {
@@ -41,7 +41,7 @@ exports[`openai > should call openai via gateway > llm 1`] = `
 }
 `;
 
-exports[`openai > should call openai via gateway > span 1`] = `
+exports[`deploy > should call openai via gateway > span 1`] = `
 [
   {
     "key": "logfire.msg",
@@ -166,4 +166,143 @@ exports[`openai > should call openai via gateway > span 1`] = `
     },
   },
 ]
+`;
+
+exports[`deploy > should call openai via gateway > status-after-requests 1`] = `
+"{
+  "teams": [
+    {
+      "id": 1,
+      "name": "default",
+      "spendingLimitDaily": 1,
+      "spend": [
+        {
+          "entityId": 1,
+          "scope": "daily",
+          "scopeInterval": "YYYY-MM-DDT00:00:00.000Z",
+          "limit": 1,
+          "spend": 0.00013875
+        }
+      ],
+      "users": [
+        {
+          "id": 2,
+          "name": "testberto",
+          "spend": [
+            {
+              "entityId": 2,
+              "scope": "weekly",
+              "scopeInterval": "YYYY-MM-DDT00:00:00.000Z",
+              "limit": 2,
+              "spend": 0.00013875
+            }
+          ],
+          "spendingLimitWeekly": 2
+        }
+      ]
+    }
+  ],
+  "keys": [
+    {
+      "id": 3,
+      "name": "healt...",
+      "spend": [
+        {
+          "entityId": 3,
+          "scope": "monthly",
+          "scopeInterval": "YYYY-MM-DDT00:00:00.000Z",
+          "limit": 3,
+          "spend": 0.00013875
+        },
+        {
+          "entityId": 3,
+          "scope": "total",
+          "scopeInterval": null,
+          "limit": 4,
+          "spend": 0.00013875
+        }
+      ],
+      "spendingLimitMonthly": 3,
+      "spendingLimitTotal": 4
+    },
+    {
+      "id": 4,
+      "name": "low-l...",
+      "spend": [],
+      "spendingLimitDaily": 0.01
+    }
+  ]
+}"
+`;
+
+exports[`deploy > status > status-empty 1`] = `
+"{
+  "teams": [
+    {
+      "id": 1,
+      "name": "default",
+      "spendingLimitDaily": 1,
+      "spend": [],
+      "users": [
+        {
+          "id": 2,
+          "name": "testberto",
+          "spend": [],
+          "spendingLimitWeekly": 2
+        }
+      ]
+    }
+  ],
+  "keys": [
+    {
+      "id": 3,
+      "name": "healt...",
+      "spend": [],
+      "spendingLimitMonthly": 3,
+      "spendingLimitTotal": 4
+    },
+    {
+      "id": 4,
+      "name": "low-l...",
+      "spend": [],
+      "spendingLimitDaily": 0.01
+    }
+  ]
+}"
+`;
+
+exports[`deploy > status auth works > status-empty 1`] = `
+"{
+  "teams": [
+    {
+      "id": 1,
+      "name": "default",
+      "spendingLimitDaily": 1,
+      "spend": [],
+      "users": [
+        {
+          "id": 2,
+          "name": "testberto",
+          "spend": [],
+          "spendingLimitWeekly": 2
+        }
+      ]
+    }
+  ],
+  "keys": [
+    {
+      "id": 3,
+      "name": "healt...",
+      "spend": [],
+      "spendingLimitMonthly": 3,
+      "spendingLimitTotal": 4
+    },
+    {
+      "id": 4,
+      "name": "low-l...",
+      "spend": [],
+      "spendingLimitDaily": 0.01
+    }
+  ]
+}"
 `;

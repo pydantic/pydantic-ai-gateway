@@ -73,8 +73,8 @@ const reverseScopeLookup: Record<1 | 2 | 3 | 4, Scope> = {
 }
 
 export interface SpendScope {
-  entityId: number
   entityType: EntityType
+  entityId: number
   scope: Scope
   // scopeInterval is null for total scope
   scopeInterval?: number
@@ -94,6 +94,16 @@ export interface LimitUpdate {
 
 export type KeyLimitUpdate = LimitUpdate & { total?: number }
 
+const DISTANCE_FUTURE = 65536
+
+export interface SpendStatus {
+  entityId: number
+  scope: Scope
+  scopeInterval: Date | null
+  limit: number
+  spend: number
+}
+
 export abstract class LimitDb {
   // increment spends and return IDs of any scopes that have exceeded the spending limit
   abstract incrementSpend(spenScopes: SpendScope[], spend: number): Promise<ExceededScope[]>
@@ -103,6 +113,8 @@ export abstract class LimitDb {
   abstract updateUserLimits(userId: number, update: LimitUpdate): Promise<void>
 
   abstract updateKeyLimits(keyId: number, update: KeyLimitUpdate): Promise<void>
+
+  abstract spendStatus(entityType: EntityType, entityId?: number): Promise<SpendStatus[]>
 }
 
 export class LimitDbD1 extends LimitDb {
@@ -119,15 +131,22 @@ export class LimitDbD1 extends LimitDb {
     }
 
     const sqlValues: '(?, ?, ?, ?, ?, ?)'[] = []
-    const values: (string | number | null)[] = []
-    for (const { entityId, entityType, scope, scopeInterval, limit } of intervalSpends) {
+    const values: (string | number)[] = []
+    for (const { entityType, entityId, scope, scopeInterval, limit } of intervalSpends) {
       sqlValues.push('(?, ?, ?, ?, ?, ?)')
-      values.push(entityId, entityTypeLookup[entityType], scopeLookup[scope], scopeInterval ?? null, limit, spend)
+      values.push(
+        entityTypeLookup[entityType],
+        entityId,
+        scopeLookup[scope],
+        scopeInterval ?? DISTANCE_FUTURE,
+        limit,
+        spend,
+      )
     }
     const { results } = await this.db
       .prepare(
         `\
-INSERT INTO spend (entityId, entityType, scope, scopeInterval, spendingLimit, spend)
+INSERT INTO spend (entityType, entityId, scope, scopeInterval, spendingLimit, spend)
 VALUES ${sqlValues.join(', ')}
 ON CONFLICT DO UPDATE SET spend = spend + EXCLUDED.spend
 RETURNING entityType, scope, spend > spendingLimit as ex;`,
@@ -182,10 +201,86 @@ RETURNING entityType, scope, spend > spendingLimit as ex;`,
     }
   }
 
+  async spendStatus(entityType: EntityType, entityId?: number): Promise<SpendStatus[]> {
+    const entityIdClause = entityId ? ` AND entityId = ?` : ''
+    const params = [entityTypeLookup[entityType]]
+    if (entityId) {
+      params.push(entityId)
+    }
+
+    const { results } = await this.db
+      .prepare(
+        `
+SELECT entityId, scope, scopeInterval, spendingLimit, spend
+FROM spend
+WHERE entityType = ? ${entityIdClause}
+`,
+      )
+      .bind(...params)
+      .run<{ entityId: number; scope: 1 | 2 | 3 | 4; scopeInterval: number; spendingLimit: number; spend: number }>()
+
+    return results.map(({ entityId, scope, scopeInterval, spendingLimit, spend }) => ({
+      entityId,
+      scope: reverseScopeLookup[scope],
+      scopeInterval: scopeInterval === DISTANCE_FUTURE ? null : intAsDate(scopeInterval),
+      limit: spendingLimit,
+      spend,
+    }))
+  }
+
   protected async updateSpend(limit: number, entityType: EntityType, entityId: number, scope: Scope) {
     await this.db
       .prepare(`UPDATE spend SET spendingLimit = ? WHERE entityType = ? AND entityId = ? and scope = ?`)
       .bind(limit, entityTypeLookup[entityType], entityId, scopeLookup[scope])
       .run()
   }
+}
+
+interface ScopeIntervas {
+  day: number
+  endOfWeek: number
+  endOfMonth: number
+}
+
+export function scopeIntervals(): ScopeIntervas {
+  const now = new Date()
+  const day = new Date(now)
+  day.setHours(0, 0, 0, 0)
+  return {
+    day: dateAsInt(day),
+    endOfWeek: dateAsInt(endOfWeek(now)),
+    endOfMonth: dateAsInt(endOfMonth(now)),
+  }
+}
+
+const MS_PER_DAY = 24 * 60 * 60 * 1000
+function dateAsInt(date: Date): number {
+  return Math.floor(date.getTime() / MS_PER_DAY)
+}
+
+function intAsDate(days: number): Date {
+  return new Date(days * MS_PER_DAY)
+}
+
+/** get the last day of the week, e.g. "this Sunday" */
+export function endOfWeek(date: Date): Date {
+  const dayOfWeek = date.getDay()
+  const d = new Date(date)
+  d.setHours(0, 0, 0, 0)
+  if (dayOfWeek === 0) {
+    // sunday -  return this date as it's the end of the week
+    return d
+  } else {
+    // else if not sunday, add enough days to get to the next sunday
+    d.setDate(d.getDate() + (7 - dayOfWeek))
+    return d
+  }
+}
+
+/** get the last day of the month */
+export function endOfMonth(date: Date): Date {
+  const d = new Date(date)
+  d.setHours(0, 0, 0, 0)
+  d.setMonth(d.getMonth() + 1, 0)
+  return d
 }

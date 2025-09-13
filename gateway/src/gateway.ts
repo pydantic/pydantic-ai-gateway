@@ -3,7 +3,7 @@ import * as logfire from '@pydantic/logfire-api'
 import { ApiKeyInfo, guardProviderID, providerIdArray } from './types'
 import { textResponse } from './utils'
 import { apiKeyAuth, disableApiKeyAuth } from './auth'
-import type { SpendScope, ExceededScope } from './db'
+import { type SpendScope, type ExceededScope, scopeIntervals, endOfMonth, endOfWeek } from './db'
 import { getProvider } from './providers'
 import { OtelTrace } from './otel'
 import { genAiOtelAttributes } from './otelAttributes'
@@ -112,10 +112,8 @@ export async function disableApiKey(
 
 async function recordSpend(apiKey: ApiKeyInfo, spend: number, env: GatewayEnv): Promise<void> {
   const { id, team, user } = apiKey
-  const now = new Date()
-  const today = dateAsInt(now)
-  const week = dateAsInt(endOfWeek(now))
-  const month = dateAsInt(endOfMonth(now))
+
+  const { day, endOfWeek, endOfMonth } = scopeIntervals()
 
   const intervalSpends: SpendScope[] = []
   if (isSet(apiKey.keySpendingLimitDaily)) {
@@ -123,7 +121,7 @@ async function recordSpend(apiKey: ApiKeyInfo, spend: number, env: GatewayEnv): 
       entityId: id,
       entityType: 'key',
       scope: 'daily',
-      scopeInterval: today,
+      scopeInterval: day,
       limit: apiKey.keySpendingLimitDaily,
     })
   }
@@ -132,7 +130,7 @@ async function recordSpend(apiKey: ApiKeyInfo, spend: number, env: GatewayEnv): 
       entityId: id,
       entityType: 'key',
       scope: 'weekly',
-      scopeInterval: today,
+      scopeInterval: endOfWeek,
       limit: apiKey.keySpendingLimitWeekly,
     })
   }
@@ -141,7 +139,7 @@ async function recordSpend(apiKey: ApiKeyInfo, spend: number, env: GatewayEnv): 
       entityId: id,
       entityType: 'key',
       scope: 'monthly',
-      scopeInterval: today,
+      scopeInterval: endOfMonth,
       limit: apiKey.keySpendingLimitMonthly,
     })
   }
@@ -160,7 +158,7 @@ async function recordSpend(apiKey: ApiKeyInfo, spend: number, env: GatewayEnv): 
         entityId: user,
         entityType: 'user',
         scope: 'daily',
-        scopeInterval: today,
+        scopeInterval: day,
         limit: apiKey.userSpendingLimitDaily,
       })
     }
@@ -169,7 +167,7 @@ async function recordSpend(apiKey: ApiKeyInfo, spend: number, env: GatewayEnv): 
         entityId: user,
         entityType: 'user',
         scope: 'weekly',
-        scopeInterval: week,
+        scopeInterval: endOfWeek,
         limit: apiKey.userSpendingLimitWeekly,
       })
     }
@@ -178,7 +176,7 @@ async function recordSpend(apiKey: ApiKeyInfo, spend: number, env: GatewayEnv): 
         entityId: user,
         entityType: 'user',
         scope: 'monthly',
-        scopeInterval: month,
+        scopeInterval: endOfMonth,
         limit: apiKey.userSpendingLimitMonthly,
       })
     }
@@ -189,7 +187,7 @@ async function recordSpend(apiKey: ApiKeyInfo, spend: number, env: GatewayEnv): 
       entityId: team,
       entityType: 'team',
       scope: 'daily',
-      scopeInterval: today,
+      scopeInterval: day,
       limit: apiKey.teamSpendingLimitDaily,
     })
   }
@@ -198,7 +196,7 @@ async function recordSpend(apiKey: ApiKeyInfo, spend: number, env: GatewayEnv): 
       entityId: team,
       entityType: 'team',
       scope: 'weekly',
-      scopeInterval: week,
+      scopeInterval: endOfWeek,
       limit: apiKey.teamSpendingLimitWeekly,
     })
   }
@@ -207,7 +205,7 @@ async function recordSpend(apiKey: ApiKeyInfo, spend: number, env: GatewayEnv): 
       entityId: team,
       entityType: 'team',
       scope: 'monthly',
-      scopeInterval: month,
+      scopeInterval: endOfMonth,
       limit: apiKey.teamSpendingLimitMonthly,
     })
   }
@@ -222,32 +220,6 @@ async function recordSpend(apiKey: ApiKeyInfo, spend: number, env: GatewayEnv): 
       calculateExpirationTtl(scopesExceeded),
     )
   }
-}
-
-const MS_PER_DAY = 24 * 60 * 60 * 1000
-
-function dateAsInt(date: Date): number {
-  return Math.floor(date.getTime() / MS_PER_DAY)
-}
-
-function endOfWeek(date: Date): Date {
-  const dayOfWeek = date.getDay()
-  const d = new Date(date)
-  d.setHours(0, 0, 0, 0)
-  if (dayOfWeek === 0) {
-    // sunday -  return this date as it's the end of the week
-    return d
-  } else {
-    // else if not sunday, add enough days to get to the next sunday
-    d.setDate(d.getDate() + (7 - dayOfWeek))
-    return d
-  }
-}
-
-function endOfMonth(date: Date): Date {
-  const d = new Date(date)
-  d.setMonth(d.getMonth() + 1, 0)
-  return d
 }
 
 /**

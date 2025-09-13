@@ -138,6 +138,45 @@ describe('openai', () => {
     expect(completion).toMatchSnapshot('llm')
     expect(otelBatch.length, 'otelBatch length not 1').toBe(1)
     expect(JSON.parse(otelBatch[0]!).resourceSpans?.[0].scopeSpans?.[0].spans?.[0]?.attributes).toMatchSnapshot('span')
+
+    const limitDb = new LimitDbD1(env.limitsDB)
+    const teamStatus = await limitDb.spendStatus('team')
+    expect(teamStatus).toEqual([
+      {
+        entityId: IDS.teamDefault,
+        limit: 4,
+        scope: 'monthly',
+        scopeInterval: expect.any(Date),
+        spend: 0.00013875,
+      },
+    ])
+    const userStatus = await limitDb.spendStatus('user')
+    expect(userStatus).toEqual([
+      {
+        entityId: IDS.userDefault,
+        limit: 3,
+        scope: 'weekly',
+        scopeInterval: expect.any(Date),
+        spend: 0.00013875,
+      },
+    ])
+    const keyStatus = await limitDb.spendStatus('key')
+    expect(keyStatus.sort((a, b) => a.limit - b.limit)).toEqual([
+      {
+        entityId: IDS.keyHealthy,
+        limit: 1,
+        scope: 'daily',
+        scopeInterval: expect.any(Date),
+        spend: 0.00013875,
+      },
+      {
+        entityId: IDS.keyHealthy,
+        limit: 2,
+        scope: 'total',
+        scopeInterval: null,
+        spend: 0.00013875,
+      },
+    ])
   })
 })
 

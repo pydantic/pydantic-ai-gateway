@@ -34,13 +34,14 @@ export class AnthropicProvider extends DefaultProviderProxy {
 
 function mapInputParts(content: BetaMessageParam['content']): InputParts {
   const parts: InputParts = []
-  for (const part of content) {
-    if (typeof part === 'string') {
-      parts.push({
-        type: 'text',
-        content: part,
-      })
-    } else {
+
+  if (typeof content === 'string') {
+    parts.push({
+      type: 'text',
+      content,
+    })
+  } else {
+    for (const part of content) {
       if ('type' in part && part.type === 'text') {
         parts.push({
           type: 'text',

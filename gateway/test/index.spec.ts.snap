@@ -102,9 +102,552 @@ exports[`anthropic > should call anthropic via gateway > span 1`] = `
                   },
                 },
                 {
-                  "key": "content",
+                  "key": "parts",
                   "value": {
-                    "stringValue": "What is the capital of France?",
+                    "arrayValue": {
+                      "values": [
+                        {
+                          "kvlistValue": {
+                            "values": [
+                              {
+                                "key": "type",
+                                "value": {
+                                  "stringValue": "text",
+                                },
+                              },
+                              {
+                                "key": "content",
+                                "value": {
+                                  "stringValue": "W",
+                                },
+                              },
+                            ],
+                          },
+                        },
+                        {
+                          "kvlistValue": {
+                            "values": [
+                              {
+                                "key": "type",
+                                "value": {
+                                  "stringValue": "text",
+                                },
+                              },
+                              {
+                                "key": "content",
+                                "value": {
+                                  "stringValue": "h",
+                                },
+                              },
+                            ],
+                          },
+                        },
+                        {
+                          "kvlistValue": {
+                            "values": [
+                              {
+                                "key": "type",
+                                "value": {
+                                  "stringValue": "text",
+                                },
+                              },
+                              {
+                                "key": "content",
+                                "value": {
+                                  "stringValue": "a",
+                                },
+                              },
+                            ],
+                          },
+                        },
+                        {
+                          "kvlistValue": {
+                            "values": [
+                              {
+                                "key": "type",
+                                "value": {
+                                  "stringValue": "text",
+                                },
+                              },
+                              {
+                                "key": "content",
+                                "value": {
+                                  "stringValue": "t",
+                                },
+                              },
+                            ],
+                          },
+                        },
+                        {
+                          "kvlistValue": {
+                            "values": [
+                              {
+                                "key": "type",
+                                "value": {
+                                  "stringValue": "text",
+                                },
+                              },
+                              {
+                                "key": "content",
+                                "value": {
+                                  "stringValue": " ",
+                                },
+                              },
+                            ],
+                          },
+                        },
+                        {
+                          "kvlistValue": {
+                            "values": [
+                              {
+                                "key": "type",
+                                "value": {
+                                  "stringValue": "text",
+                                },
+                              },
+                              {
+                                "key": "content",
+                                "value": {
+                                  "stringValue": "i",
+                                },
+                              },
+                            ],
+                          },
+                        },
+                        {
+                          "kvlistValue": {
+                            "values": [
+                              {
+                                "key": "type",
+                                "value": {
+                                  "stringValue": "text",
+                                },
+                              },
+                              {
+                                "key": "content",
+                                "value": {
+                                  "stringValue": "s",
+                                },
+                              },
+                            ],
+                          },
+                        },
+                        {
+                          "kvlistValue": {
+                            "values": [
+                              {
+                                "key": "type",
+                                "value": {
+                                  "stringValue": "text",
+                                },
+                              },
+                              {
+                                "key": "content",
+                                "value": {
+                                  "stringValue": " ",
+                                },
+                              },
+                            ],
+                          },
+                        },
+                        {
+                          "kvlistValue": {
+                            "values": [
+                              {
+                                "key": "type",
+                                "value": {
+                                  "stringValue": "text",
+                                },
+                              },
+                              {
+                                "key": "content",
+                                "value": {
+                                  "stringValue": "t",
+                                },
+                              },
+                            ],
+                          },
+                        },
+                        {
+                          "kvlistValue": {
+                            "values": [
+                              {
+                                "key": "type",
+                                "value": {
+                                  "stringValue": "text",
+                                },
+                              },
+                              {
+                                "key": "content",
+                                "value": {
+                                  "stringValue": "h",
+                                },
+                              },
+                            ],
+                          },
+                        },
+                        {
+                          "kvlistValue": {
+                            "values": [
+                              {
+                                "key": "type",
+                                "value": {
+                                  "stringValue": "text",
+                                },
+                              },
+                              {
+                                "key": "content",
+                                "value": {
+                                  "stringValue": "e",
+                                },
+                              },
+                            ],
+                          },
+                        },
+                        {
+                          "kvlistValue": {
+                            "values": [
+                              {
+                                "key": "type",
+                                "value": {
+                                  "stringValue": "text",
+                                },
+                              },
+                              {
+                                "key": "content",
+                                "value": {
+                                  "stringValue": " ",
+                                },
+                              },
+                            ],
+                          },
+                        },
+                        {
+                          "kvlistValue": {
+                            "values": [
+                              {
+                                "key": "type",
+                                "value": {
+                                  "stringValue": "text",
+                                },
+                              },
+                              {
+                                "key": "content",
+                                "value": {
+                                  "stringValue": "c",
+                                },
+                              },
+                            ],
+                          },
+                        },
+                        {
+                          "kvlistValue": {
+                            "values": [
+                              {
+                                "key": "type",
+                                "value": {
+                                  "stringValue": "text",
+                                },
+                              },
+                              {
+                                "key": "content",
+                                "value": {
+                                  "stringValue": "a",
+                                },
+                              },
+                            ],
+                          },
+                        },
+                        {
+                          "kvlistValue": {
+                            "values": [
+                              {
+                                "key": "type",
+                                "value": {
+                                  "stringValue": "text",
+                                },
+                              },
+                              {
+                                "key": "content",
+                                "value": {
+                                  "stringValue": "p",
+                                },
+                              },
+                            ],
+                          },
+                        },
+                        {
+                          "kvlistValue": {
+                            "values": [
+                              {
+                                "key": "type",
+                                "value": {
+                                  "stringValue": "text",
+                                },
+                              },
+                              {
+                                "key": "content",
+                                "value": {
+                                  "stringValue": "i",
+                                },
+                              },
+                            ],
+                          },
+                        },
+                        {
+                          "kvlistValue": {
+                            "values": [
+                              {
+                                "key": "type",
+                                "value": {
+                                  "stringValue": "text",
+                                },
+                              },
+                              {
+                                "key": "content",
+                                "value": {
+                                  "stringValue": "t",
+                                },
+                              },
+                            ],
+                          },
+                        },
+                        {
+                          "kvlistValue": {
+                            "values": [
+                              {
+                                "key": "type",
+                                "value": {
+                                  "stringValue": "text",
+                                },
+                              },
+                              {
+                                "key": "content",
+                                "value": {
+                                  "stringValue": "a",
+                                },
+                              },
+                            ],
+                          },
+                        },
+                        {
+                          "kvlistValue": {
+                            "values": [
+                              {
+                                "key": "type",
+                                "value": {
+                                  "stringValue": "text",
+                                },
+                              },
+                              {
+                                "key": "content",
+                                "value": {
+                                  "stringValue": "l",
+                                },
+                              },
+                            ],
+                          },
+                        },
+                        {
+                          "kvlistValue": {
+                            "values": [
+                              {
+                                "key": "type",
+                                "value": {
+                                  "stringValue": "text",
+                                },
+                              },
+                              {
+                                "key": "content",
+                                "value": {
+                                  "stringValue": " ",
+                                },
+                              },
+                            ],
+                          },
+                        },
+                        {
+                          "kvlistValue": {
+                            "values": [
+                              {
+                                "key": "type",
+                                "value": {
+                                  "stringValue": "text",
+                                },
+                              },
+                              {
+                                "key": "content",
+                                "value": {
+                                  "stringValue": "o",
+                                },
+                              },
+                            ],
+                          },
+                        },
+                        {
+                          "kvlistValue": {
+                            "values": [
+                              {
+                                "key": "type",
+                                "value": {
+                                  "stringValue": "text",
+                                },
+                              },
+                              {
+                                "key": "content",
+                                "value": {
+                                  "stringValue": "f",
+                                },
+                              },
+                            ],
+                          },
+                        },
+                        {
+                          "kvlistValue": {
+                            "values": [
+                              {
+                                "key": "type",
+                                "value": {
+                                  "stringValue": "text",
+                                },
+                              },
+                              {
+                                "key": "content",
+                                "value": {
+                                  "stringValue": " ",
+                                },
+                              },
+                            ],
+                          },
+                        },
+                        {
+                          "kvlistValue": {
+                            "values": [
+                              {
+                                "key": "type",
+                                "value": {
+                                  "stringValue": "text",
+                                },
+                              },
+                              {
+                                "key": "content",
+                                "value": {
+                                  "stringValue": "F",
+                                },
+                              },
+                            ],
+                          },
+                        },
+                        {
+                          "kvlistValue": {
+                            "values": [
+                              {
+                                "key": "type",
+                                "value": {
+                                  "stringValue": "text",
+                                },
+                              },
+                              {
+                                "key": "content",
+                                "value": {
+                                  "stringValue": "r",
+                                },
+                              },
+                            ],
+                          },
+                        },
+                        {
+                          "kvlistValue": {
+                            "values": [
+                              {
+                                "key": "type",
+                                "value": {
+                                  "stringValue": "text",
+                                },
+                              },
+                              {
+                                "key": "content",
+                                "value": {
+                                  "stringValue": "a",
+                                },
+                              },
+                            ],
+                          },
+                        },
+                        {
+                          "kvlistValue": {
+                            "values": [
+                              {
+                                "key": "type",
+                                "value": {
+                                  "stringValue": "text",
+                                },
+                              },
+                              {
+                                "key": "content",
+                                "value": {
+                                  "stringValue": "n",
+                                },
+                              },
+                            ],
+                          },
+                        },
+                        {
+                          "kvlistValue": {
+                            "values": [
+                              {
+                                "key": "type",
+                                "value": {
+                                  "stringValue": "text",
+                                },
+                              },
+                              {
+                                "key": "content",
+                                "value": {
+                                  "stringValue": "c",
+                                },
+                              },
+                            ],
+                          },
+                        },
+                        {
+                          "kvlistValue": {
+                            "values": [
+                              {
+                                "key": "type",
+                                "value": {
+                                  "stringValue": "text",
+                                },
+                              },
+                              {
+                                "key": "content",
+                                "value": {
+                                  "stringValue": "e",
+                                },
+                              },
+                            ],
+                          },
+                        },
+                        {
+                          "kvlistValue": {
+                            "values": [
+                              {
+                                "key": "type",
+                                "value": {
+                                  "stringValue": "text",
+                                },
+                              },
+                              {
+                                "key": "content",
+                                "value": {
+                                  "stringValue": "?",
+                                },
+                              },
+                            ],
+                          },
+                        },
+                      ],
+                    },
                   },
                 },
               ],
@@ -116,30 +659,7 @@ exports[`anthropic > should call anthropic via gateway > span 1`] = `
   },
   {
     "key": "gen_ai.output.messages",
-    "value": {
-      "arrayValue": {
-        "values": [
-          {
-            "kvlistValue": {
-              "values": [
-                {
-                  "key": "type",
-                  "value": {
-                    "stringValue": "text",
-                  },
-                },
-                {
-                  "key": "text",
-                  "value": {
-                    "stringValue": "The capital of France is Paris.",
-                  },
-                },
-              ],
-            },
-          },
-        ],
-      },
-    },
+    "value": {},
   },
   {
     "key": "http.response.status_code",

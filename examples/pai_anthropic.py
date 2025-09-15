@@ -3,6 +3,7 @@ from datetime import date
 import logfire
 from pydantic import BaseModel, field_validator
 from pydantic_ai import Agent
+from pydantic_ai.models.anthropic import AnthropicModelSettings
 
 logfire.configure(service_name='testing')
 logfire.instrument_pydantic_ai()
@@ -28,6 +29,7 @@ person_agent = Agent(
     'gateway:anthropic/claude-sonnet-4-0',
     output_type=Person,
     instructions='Extract information about the person',
+    model_settings=AnthropicModelSettings(max_tokens=1024),
 )
 result = person_agent.run_sync("Samuel lived in London and was born on Jan 28th '87")
 print(repr(result.output))

@@ -51,7 +51,7 @@ export async function gateway(request: Request, ctx: ExecutionContext, env: Gate
   const dispatchSpan = otel.startSpan()
   const result = await proxy.dispatch()
 
-  const [spanName, attributes, level] = genAiOtelAttributes(result, proxy.providerId())
+  const [spanName, attributes, level] = genAiOtelAttributes(result, proxy)
   dispatchSpan.end(spanName, attributes, { level })
 
   let response: Response

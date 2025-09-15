@@ -1,25 +1,34 @@
-import type { ProxySuccess, ProxyInvalidRequest, ProxyUnexpectedResponse } from './providers/default'
-import type { Level, Attributes } from './otel'
+import type {
+  ProxySuccess,
+  ProxyInvalidRequest,
+  ProxyUnexpectedResponse,
+  DefaultProviderProxy,
+} from '../providers/default'
+import type { Level, Attributes } from '.'
+import { InputMessages } from './genai-input-messages'
+import { OutputMessages } from './genai-output-messages'
 
 export function genAiOtelAttributes(
   result: ProxySuccess | ProxyInvalidRequest | ProxyUnexpectedResponse,
-  providerId: string,
+  provider: DefaultProviderProxy,
 ): [string, Attributes, Level] {
   const { requestModel } = result
   let spanName: string
   let attributes: Attributes = {
     'gen_ai.operation.name': 'chat',
     'gen_ai.request.model': requestModel,
-    'gen_ai.system': providerId,
+    'gen_ai.system': provider.providerId(),
   }
 
   let level: Level = 'info'
 
   if ('successStatus' in result) {
-    const { requestBody, successStatus, responseModel, usage, otelEvents, responseBody, responseId } = result
+    const { requestBody, successStatus, responseModel, usage, otelEvents, responseBody, responseId, otelAttributes } =
+      result
     spanName = `chat ${responseModel}`
     attributes = {
       ...attributes,
+      ...otelAttributes,
       'http.response.status_code': successStatus,
       'http.request.body.text': requestBody,
       'http.response.body.text': responseBody,
@@ -113,4 +122,21 @@ export interface ChoiceMessage {
   role: 'assistant'
   content?: unknown // todo
   tool_calls?: ToolCall[]
+}
+
+/** Semantic conventions for Generative AI
+ * @see https://opentelemetry.io/docs/specs/semconv/registry/attributes/gen-ai/
+ */
+export interface GenAIAttributes {
+  'gen_ai.request.max_tokens'?: number
+  'gen_ai.response.finish_reasons'?: string[]
+  'gen_ai.input.messages'?: InputMessages
+  'gen_ai.output.messages'?: OutputMessages
+}
+
+export interface GenAIAttributesExtractor {
+  requestMaxTokens(request: unknown): GenAIAttributes['gen_ai.request.max_tokens']
+  responseFinishReasons(response: unknown): GenAIAttributes['gen_ai.response.finish_reasons']
+  inputMessages(request: unknown): GenAIAttributes['gen_ai.input.messages']
+  outputMessages(response: unknown): GenAIAttributes['gen_ai.output.messages']
 }

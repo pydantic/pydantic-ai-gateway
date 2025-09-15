@@ -7,7 +7,7 @@ import type {
   ChatCompletion,
   ChatCompletionMessageParam,
 } from '@groq-chat/completions'
-import { GenAiOtelEvent, GenaiChoiceEvent } from '../otelAttributes'
+import { GenAiOtelEvent, GenaiChoiceEvent } from '../otel/attributes'
 
 import { DefaultProviderProxy } from './default'
 

@@ -19,8 +19,8 @@ import {
 import type { ReadableSpan } from '@opentelemetry/sdk-trace-base/build/src/export/ReadableSpan'
 import { resourceFromAttributes } from '@opentelemetry/resources'
 
-import type { OtelSettings, SubFetch } from './types'
-import type { GatewayEnv } from '.'
+import type { OtelSettings, SubFetch } from '../types'
+import type { GatewayEnv } from '../index'
 
 export type Attributes = Record<string, string | number | boolean | object | undefined>
 export type Level = 'debug' | 'info' | 'notice' | 'warn' | 'error'

@@ -9,7 +9,7 @@ import type {
   Part,
   Candidate,
 } from '@google/genai'
-import { GenAiOtelEvent, GenaiChoiceEvent, ToolCall } from '../../otelAttributes'
+import { GenAiOtelEvent, GenaiChoiceEvent, ToolCall } from '../../otel/attributes'
 
 export { GenerateContentResponse } from '@google/genai'
 

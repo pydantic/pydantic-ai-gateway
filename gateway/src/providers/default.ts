@@ -3,7 +3,9 @@ import { Usage, calcPrice, extractUsage, findProvider } from '@pydantic/genai-pr
 
 import { ApiKeyInfo, ProviderProxy } from '../types'
 import { GatewayEnv } from '..'
-import { GenAiOtelEvent } from '../otelAttributes'
+import { GenAiOtelEvent, GenAIAttributes, GenAIAttributesExtractor } from '../otel/attributes'
+import { InputMessages } from '../otel/genai-input-messages'
+import { OutputMessages } from '../otel/genai-output-messages'
 
 export interface ProxySuccess {
   requestModel?: string
@@ -14,6 +16,7 @@ export interface ProxySuccess {
   responseModel: string
   responseId?: string
   otelEvents?: GenAiOtelEvent[]
+  otelAttributes?: GenAIAttributes
   usage: Usage
   cost: number
 }
@@ -48,7 +51,7 @@ interface ProcessResponse {
   cost: number
 }
 
-export class DefaultProviderProxy {
+export class DefaultProviderProxy implements GenAIAttributesExtractor {
   protected request: Request
   protected env: GatewayEnv
   protected apiKey: ApiKeyInfo
@@ -167,14 +170,6 @@ export class DefaultProviderProxy {
     }
   }
 
-  protected otelEvents(_requestBody: unknown, _responseModel: unknown): GenAiOtelEvent[] {
-    return []
-  }
-
-  protected responseId(responseBody: JsonData): string | undefined {
-    return typeof responseBody.id === 'string' ? responseBody.id : undefined
-  }
-
   async dispatch(): Promise<ProxySuccess | ProxyInvalidRequest | ProxyUnexpectedResponse> {
     const checkResult = this.check()
     if (checkResult) {
@@ -229,13 +224,8 @@ export class DefaultProviderProxy {
       this.injectCost(responseBody, cost)
     }
 
-    let otelEvents
-    try {
-      otelEvents = this.otelEvents(requestBodyData, responseBody)
-    } catch (error) {
-      console.warn('Error error generating otel events', error)
-      logfire.reportError('Error error generating otel events', error as Error, { requestBodyData, responseBody })
-    }
+    const otelEvents = safe(this.otelEvents.bind(this))(requestBodyData, responseBody)
+    const otelAttributes = safe(this.otelAttributes.bind(this))(requestBodyData, responseBody)
 
     return {
       responseModel,
@@ -246,12 +236,66 @@ export class DefaultProviderProxy {
       responseId,
       requestModel,
       otelEvents,
+      otelAttributes,
       usage,
       cost,
     }
+  }
+
+  // Generative AI OpenTelemetry attributes
+
+  protected otelEvents(_requestBody: unknown, _responseModel: unknown): GenAiOtelEvent[] {
+    return []
+  }
+
+  protected otelAttributes(requestBody: JsonData, responseBody: JsonData): GenAIAttributes {
+    return {
+      'gen_ai.request.max_tokens': safe(this.requestMaxTokens.bind(this))(requestBody),
+      'gen_ai.response.finish_reasons': safe(this.responseFinishReasons.bind(this))(responseBody),
+      'gen_ai.input.messages': safe(this.inputMessages.bind(this))(requestBody),
+      'gen_ai.output.messages': safe(this.outputMessages.bind(this))(responseBody),
+    }
+  }
+
+  protected responseId(responseBody: JsonData): string | undefined {
+    return typeof responseBody.id === 'string' ? responseBody.id : undefined
+  }
+
+  requestMaxTokens(requestBody: unknown): number | undefined {
+    if (isMapping(requestBody) && typeof requestBody.max_completions_tokens === 'number') {
+      return requestBody.max_completions_tokens
+    }
+    return undefined
+  }
+
+  responseFinishReasons(responseBody: unknown): string[] | undefined {
+    if (isMapping(responseBody) && typeof responseBody.finish_reason === 'string') {
+      return [responseBody.finish_reason]
+    }
+    return undefined
+  }
+
+  inputMessages(_requestBody: unknown): InputMessages | undefined {
+    return undefined
+  }
+
+  outputMessages(_responseBody: unknown): OutputMessages | undefined {
+    return undefined
   }
 }
 
 function isMapping(v: unknown): v is Record<string, unknown> {
   return v !== null && !Array.isArray(v) && typeof v === 'object'
+}
+
+function safe<Args extends unknown[], T>(fn: (...args: Args) => T): (...args: Args) => T | undefined {
+  return (...args: Args): T | undefined => {
+    try {
+      return fn(...args)
+    } catch (error) {
+      console.warn(`Error in ${fn.name}`, error)
+      logfire.reportError(`Error in ${fn.name}`, error as Error, { args })
+      return undefined
+    }
+  }
 }

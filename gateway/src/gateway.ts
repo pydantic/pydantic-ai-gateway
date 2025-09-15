@@ -6,7 +6,7 @@ import { apiKeyAuth, disableApiKeyAuth } from './auth'
 import { type SpendScope, type ExceededScope, scopeIntervals, endOfMonth, endOfWeek } from './db'
 import { getProvider } from './providers'
 import { OtelTrace } from './otel'
-import { genAiOtelAttributes } from './otelAttributes'
+import { genAiOtelAttributes } from './otel/attributes'
 import type { GatewayEnv } from '.'
 
 export async function gateway(request: Request, ctx: ExecutionContext, env: GatewayEnv): Promise<Response> {
@@ -51,7 +51,7 @@ export async function gateway(request: Request, ctx: ExecutionContext, env: Gate
   const dispatchSpan = otel.startSpan()
   const result = await proxy.dispatch()
 
-  const [spanName, attributes, level] = genAiOtelAttributes(result, proxy.providerId())
+  const [spanName, attributes, level] = genAiOtelAttributes(result, proxy)
   dispatchSpan.end(spanName, attributes, { level })
 
   let response: Response

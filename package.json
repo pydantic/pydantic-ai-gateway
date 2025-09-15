@@ -20,7 +20,6 @@
     "limits-remote-db": "npm run limits-remote-db --workspace=deploy",
     "wrangler-secret-put": "npm run wrangler-secret-put --workspace=deploy",
     "generate-api-key": "npm run generate-api-key --workspace=deploy --silent",
-    "generate-genai-types": "npm run generate-genai-types --workspace=gateway",
     "typegen": "npm run typegen --workspace=deploy --silent"
   },
   "prettier": {

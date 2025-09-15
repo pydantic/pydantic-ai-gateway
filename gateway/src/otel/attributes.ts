@@ -5,8 +5,7 @@ import type {
   DefaultProviderProxy,
 } from '../providers/default'
 import type { Level, Attributes } from '.'
-import { InputMessages } from './genai-input-messages'
-import { OutputMessages } from './genai-output-messages'
+import { InputMessages, OutputMessages } from './genai'
 
 export function genAiOtelAttributes(
   result: ProxySuccess | ProxyInvalidRequest | ProxyUnexpectedResponse,

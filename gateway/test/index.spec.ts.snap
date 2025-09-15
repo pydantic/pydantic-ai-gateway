@@ -256,10 +256,9 @@ exports[`groq > should call groq via gateway > llm 1`] = `
 
 exports[`key status > should change key status if limit is exceeded > kv-value 1`] = `
 {
-  "id": "tiny-limit-id",
+  "id": 5,
   "key": "tiny-limit",
   "keySpendingLimitDaily": 0.01,
-  "org": "org1",
   "otelSettings": null,
   "providers": [
     {
@@ -270,10 +269,43 @@ exports[`key status > should change key status if limit is exceeded > kv-value 1
     },
   ],
   "status": "limit-exceeded",
-  "team": "team1",
+  "team": 1,
   "teamSpendingLimitMonthly": 4,
   "user": null,
 }
+`;
+
+exports[`key status > should not change key status if limit is not exceeded > spend-table 1`] = `
+[
+  {
+    "entityId": 3,
+    "entityType": 3,
+    "scope": 1,
+    "spend": 0.018,
+    "spendingLimit": 1,
+  },
+  {
+    "entityId": 3,
+    "entityType": 3,
+    "scope": 4,
+    "spend": 0.018,
+    "spendingLimit": 2,
+  },
+  {
+    "entityId": 2,
+    "entityType": 2,
+    "scope": 2,
+    "spend": 0.018,
+    "spendingLimit": 3,
+  },
+  {
+    "entityId": 1,
+    "entityType": 1,
+    "scope": 3,
+    "spend": 0.018,
+    "spendingLimit": 4,
+  },
+]
 `;
 
 exports[`openai > should call openai via gateway > llm 1`] = `

@@ -1,3 +1,5 @@
 declare module 'cloudflare:test' {
-  type ProvidedEnv = Env
+  interface ProvidedEnv extends Env {
+    limitsDB: D1Database
+  }
 }

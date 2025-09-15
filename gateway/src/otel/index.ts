@@ -138,7 +138,6 @@ class ActiveOtelSpan extends OtelSpan {
     const now = getTime()
     const duration: HrTime = [now[0] - this.start[0], now[1] - this.start[1]]
 
-    console.log('attributes', attributes)
     const span: ReadableSpan = {
       name: messageTemplate,
       kind: 0,

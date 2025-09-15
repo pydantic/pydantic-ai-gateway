@@ -19,8 +19,8 @@ import {
 import type { ReadableSpan } from '@opentelemetry/sdk-trace-base/build/src/export/ReadableSpan'
 import { resourceFromAttributes } from '@opentelemetry/resources'
 
-import type { OtelSettings, SubFetch } from './types'
-import type { GatewayEnv } from '.'
+import type { OtelSettings, SubFetch } from '../types'
+import type { GatewayEnv } from '../index'
 
 export type Attributes = Record<string, string | number | boolean | object | undefined>
 export type Level = 'debug' | 'info' | 'notice' | 'warn' | 'error'
@@ -138,6 +138,7 @@ class ActiveOtelSpan extends OtelSpan {
     const now = getTime()
     const duration: HrTime = [now[0] - this.start[0], now[1] - this.start[1]]
 
+    console.log('attributes', attributes)
     const span: ReadableSpan = {
       name: messageTemplate,
       kind: 0,

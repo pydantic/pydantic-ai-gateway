@@ -3,8 +3,10 @@ import type {
   ProxyInvalidRequest,
   ProxyUnexpectedResponse,
   DefaultProviderProxy,
-} from './providers/default'
-import type { Level, Attributes } from './otel'
+} from '../providers/default'
+import type { Level, Attributes } from '.'
+import { InputMessages } from './genai-input-messages'
+import { OutputMessages } from './genai-output-messages'
 
 export function genAiOtelAttributes(
   result: ProxySuccess | ProxyInvalidRequest | ProxyUnexpectedResponse,
@@ -128,8 +130,8 @@ export interface ChoiceMessage {
 export interface GenAIAttributes {
   'gen_ai.request.max_tokens'?: number
   'gen_ai.response.finish_reasons'?: string[]
-  'gen_ai.input.messages'?: unknown[]
-  'gen_ai.output.messages'?: unknown[]
+  'gen_ai.input.messages'?: InputMessages
+  'gen_ai.output.messages'?: OutputMessages
 }
 
 export interface GenAIAttributesExtractor {

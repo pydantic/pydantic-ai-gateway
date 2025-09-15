@@ -5,5 +5,5 @@
     "types": ["@cloudflare/workers-types"],
     "erasableSyntaxOnly": true
   },
-  "include": ["src/**/*.ts", "vitest.config.mts"]
+  "include": ["src/**/*.ts", "vitest.config.mts", "generate-genai-types.ts"]
 }

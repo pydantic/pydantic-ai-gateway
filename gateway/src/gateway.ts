@@ -6,7 +6,7 @@ import { apiKeyAuth, disableApiKeyAuth } from './auth'
 import type { IntervalSpend, SpendLimitScope } from './db'
 import { getProvider } from './providers'
 import { OtelTrace } from './otel'
-import { genAiOtelAttributes } from './otelAttributes'
+import { genAiOtelAttributes } from './otel/attributes'
 import type { GatewayEnv } from '.'
 
 export async function gateway(request: Request, ctx: ExecutionContext, env: GatewayEnv): Promise<Response> {

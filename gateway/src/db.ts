@@ -46,31 +46,13 @@ ON CONFLICT (id) DO UPDATE SET status = excluded.status, expiresAt = null`,
 
 export type EntityType = 'team' | 'user' | 'key'
 
-const entityTypeLookup: Record<EntityType, number> = {
-  team: 1,
-  user: 2,
-  key: 3,
-}
-const reverseEntityTypeLookup: Record<1 | 2 | 3, EntityType> = {
-  1: 'team',
-  2: 'user',
-  3: 'key',
-}
+const entityTypeLookup: Record<EntityType, number> = { team: 1, user: 2, key: 3 }
+const reverseEntityTypeLookup: Record<1 | 2 | 3, EntityType> = { 1: 'team', 2: 'user', 3: 'key' }
 
 export type Scope = 'daily' | 'weekly' | 'monthly' | 'total'
 
-const scopeLookup: Record<Scope, number> = {
-  daily: 1,
-  weekly: 2,
-  monthly: 3,
-  total: 4,
-}
-const reverseScopeLookup: Record<1 | 2 | 3 | 4, Scope> = {
-  1: 'daily',
-  2: 'weekly',
-  3: 'monthly',
-  4: 'total',
-}
+const scopeLookup: Record<Scope, number> = { daily: 1, weekly: 2, monthly: 3, total: 4 }
+const reverseScopeLookup: Record<1 | 2 | 3 | 4, Scope> = { 1: 'daily', 2: 'weekly', 3: 'monthly', 4: 'total' }
 
 export interface SpendScope {
   entityType: EntityType
@@ -246,11 +228,7 @@ export function scopeIntervals(): ScopeIntervas {
   const now = new Date()
   const day = new Date(now)
   day.setHours(0, 0, 0, 0)
-  return {
-    day: dateAsInt(day),
-    endOfWeek: dateAsInt(endOfWeek(now)),
-    endOfMonth: dateAsInt(endOfMonth(now)),
-  }
+  return { day: dateAsInt(day), endOfWeek: dateAsInt(endOfWeek(now)), endOfMonth: dateAsInt(endOfMonth(now)) }
 }
 
 const MS_PER_DAY = 24 * 60 * 60 * 1000

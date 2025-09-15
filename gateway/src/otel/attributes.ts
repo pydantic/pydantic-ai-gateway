@@ -46,10 +46,7 @@ export function genAiOtelAttributes(
   } else if ('error' in result) {
     const { error } = result
     spanName = `chat ${requestModel ?? 'unknown-model'}, invalid request {error}`
-    attributes = {
-      ...attributes,
-      error,
-    }
+    attributes = { ...attributes, error }
     level = 'error'
   } else {
     const { unexpectedStatus, requestBody, responseBody } = result
@@ -105,10 +102,7 @@ export interface GenAiAssistantEvent {
 export interface ToolCall {
   id: string
   type: 'function'
-  function: {
-    name: string
-    arguments: string
-  }
+  function: { name: string; arguments: string }
 }
 
 export interface GenaiChoiceEvent {

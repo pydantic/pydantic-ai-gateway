@@ -121,11 +121,7 @@ describe('openai', () => {
   it('should call openai via gateway', async () => {
     const { fetch, otelBatch } = testGateway()
 
-    const client = new OpenAI({
-      apiKey: 'healthy',
-      baseURL: 'https://example.com/openai',
-      fetch,
-    })
+    const client = new OpenAI({ apiKey: 'healthy', baseURL: 'https://example.com/openai', fetch })
 
     const completion = await client.chat.completions.create({
       model: 'gpt-5',
@@ -142,40 +138,16 @@ describe('openai', () => {
     const limitDb = new LimitDbD1(env.limitsDB)
     const teamStatus = await limitDb.spendStatus('team')
     expect(teamStatus).toEqual([
-      {
-        entityId: IDS.teamDefault,
-        limit: 4,
-        scope: 'monthly',
-        scopeInterval: expect.any(Date),
-        spend: 0.00013875,
-      },
+      { entityId: IDS.teamDefault, limit: 4, scope: 'monthly', scopeInterval: expect.any(Date), spend: 0.00013875 },
     ])
     const userStatus = await limitDb.spendStatus('user')
     expect(userStatus).toEqual([
-      {
-        entityId: IDS.userDefault,
-        limit: 3,
-        scope: 'weekly',
-        scopeInterval: expect.any(Date),
-        spend: 0.00013875,
-      },
+      { entityId: IDS.userDefault, limit: 3, scope: 'weekly', scopeInterval: expect.any(Date), spend: 0.00013875 },
     ])
     const keyStatus = await limitDb.spendStatus('key')
     expect(keyStatus.sort((a, b) => a.limit - b.limit)).toEqual([
-      {
-        entityId: IDS.keyHealthy,
-        limit: 1,
-        scope: 'daily',
-        scopeInterval: expect.any(Date),
-        spend: 0.00013875,
-      },
-      {
-        entityId: IDS.keyHealthy,
-        limit: 2,
-        scope: 'total',
-        scopeInterval: null,
-        spend: 0.00013875,
-      },
+      { entityId: IDS.keyHealthy, limit: 1, scope: 'daily', scopeInterval: expect.any(Date), spend: 0.00013875 },
+      { entityId: IDS.keyHealthy, limit: 2, scope: 'total', scopeInterval: null, spend: 0.00013875 },
     ])
   })
 })
@@ -183,11 +155,7 @@ describe('openai', () => {
 describe('groq', () => {
   it('should call groq via gateway', async () => {
     const { fetch } = testGateway()
-    const client = new Groq({
-      apiKey: 'healthy',
-      baseURL: 'https://example.com/groq',
-      fetch,
-    })
+    const client = new Groq({ apiKey: 'healthy', baseURL: 'https://example.com/groq', fetch })
 
     const completion = await client.chat.completions.create({
       model: 'llama-3.3-70b-versatile',
@@ -225,11 +193,7 @@ describe('anthropic', () => {
 describe('key status', () => {
   it('should not change key status if limit is not exceeded', async () => {
     const { fetch } = testGateway()
-    const client = new OpenAI({
-      apiKey: 'healthy',
-      baseURL: 'https://example.com/test',
-      fetch,
-    })
+    const client = new OpenAI({ apiKey: 'healthy', baseURL: 'https://example.com/test', fetch })
     await client.chat.completions.create({
       model: 'gpt-5',
       messages: [
@@ -241,13 +205,7 @@ describe('key status', () => {
       .prepare(
         `SELECT entityId, entityType, scope, round(spend, 3) spend, spendingLimit FROM spend order by spendingLimit`,
       )
-      .run<{
-        entityId: number
-        entityType: number
-        scope: number
-        spend: string
-        spendingLimit: number
-      }>()
+      .run<{ entityId: number; entityType: number; scope: number; spend: string; spendingLimit: number }>()
     expect(allSpends.results).toMatchSnapshot('spend-table')
     const allKeyStatus = await env.limitsDB
       .prepare('SELECT count(*) as count FROM keyStatus')
@@ -258,9 +216,7 @@ describe('key status', () => {
   it('should block request if key is disabled', async () => {
     const { fetch } = testGateway()
 
-    const response = await fetch('https://example.com/openai/xxx', {
-      headers: { Authorization: 'disabled' },
-    })
+    const response = await fetch('https://example.com/openai/xxx', { headers: { Authorization: 'disabled' } })
     const text = await response.text()
     expect(response.status, `got response: ${response.status} ${text}`).toBe(403)
     expect(text).toMatchInlineSnapshot(`"Unauthorized - Key disabled"`)
@@ -278,11 +234,7 @@ describe('key status', () => {
 
     expect(disableEvents).toEqual([])
 
-    const client = new OpenAI({
-      apiKey: 'tiny-limit',
-      baseURL: 'https://example.com/test',
-      fetch,
-    })
+    const client = new OpenAI({ apiKey: 'tiny-limit', baseURL: 'https://example.com/test', fetch })
     await client.chat.completions.create({
       model: 'gpt-5',
       messages: [
@@ -299,13 +251,7 @@ describe('key status', () => {
       .prepare(
         `SELECT entityId, entityType, scope, round(spend, 3) spend, spendingLimit FROM spend order by spendingLimit`,
       )
-      .run<{
-        entityId: number
-        entityType: number
-        scope: number
-        spend: string
-        spendingLimit: number
-      }>()
+      .run<{ entityId: number; entityType: number; scope: number; spend: string; spendingLimit: number }>()
     expect(allSpends1.results).toMatchInlineSnapshot(`
           [
             {
@@ -340,18 +286,12 @@ describe('key status', () => {
       .prepare("SELECT id, status, strftime('%s', expiresAt) - strftime('%s','now') as expiresAtDiff FROM keyStatus")
       .run<{ id: string; status: string; expiresAtDiff: number }>()
     expect(keyStatusQuery.results).toEqual([
-      {
-        id: IDS.keyTinyLimit,
-        status: 'limit-exceeded',
-        expiresAtDiff: expect.any(Number),
-      },
+      { id: IDS.keyTinyLimit, status: 'limit-exceeded', expiresAtDiff: expect.any(Number) },
     ])
     expect(Math.abs(keyStatusQuery.results[0]!.expiresAtDiff - disableEvents[0]!.expirationTtl!)).toBeLessThan(2)
 
     {
-      const response = await fetch('https://example.com/openai/xxx', {
-        headers: { Authorization: 'tiny-limit' },
-      })
+      const response = await fetch('https://example.com/openai/xxx', { headers: { Authorization: 'tiny-limit' } })
       const text = await response.text()
       expect(response.status, `got ${response.status} response: ${text}`).toBe(403)
       expect(text).toMatchInlineSnapshot(`"Unauthorized - Key limit-exceeded"`)

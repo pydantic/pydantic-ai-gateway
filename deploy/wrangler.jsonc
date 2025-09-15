@@ -10,9 +10,7 @@
     // if you set `LOGFIRE_TOKEN=pylf...` in .dev.vars, also set `LOGFIRE_ENVIRONMENT=dev`
     "LOGFIRE_ENVIRONMENT": "prod",
   },
-  "placement": {
-    "mode": "smart",
-  },
+  "placement": { "mode": "smart" },
   "d1_databases": [
     {
       "binding": "limitsDB",
@@ -20,10 +18,5 @@
       "database_id": "5937ac58-9a7a-4500-bfa2-2e7e2548c3d0",
     },
   ],
-  "kv_namespaces": [
-    {
-      "binding": "KV",
-      "id": "d1ae86ce76874a2584a1670ec8cdc6ee",
-    },
-  ],
+  "kv_namespaces": [{ "binding": "KV", "id": "d1ae86ce76874a2584a1670ec8cdc6ee" }],
 }

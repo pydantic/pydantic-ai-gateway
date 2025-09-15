@@ -48,12 +48,7 @@ export const config: Config<ProviderKeys> = {
       // credentials are used by the ProviderProxy to authenticate the forwarded request
       credentials: env.OPENAI_API_KEY,
     },
-    b: {
-      providerID: 'groq',
-      baseUrl: 'https://api.groq.com',
-      injectCost: true,
-      credentials: env.GROQ_API_KEY,
-    },
+    b: { providerID: 'groq', baseUrl: 'https://api.groq.com', injectCost: true, credentials: env.GROQ_API_KEY },
     c: {
       providerID: 'google-vertex',
       // NOTE: you'll need to replace `{gcp-project-name}` to set your GCP project here

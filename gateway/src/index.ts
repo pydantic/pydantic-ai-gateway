@@ -65,9 +65,7 @@ git sha: ${env.githubSha}
 GitHub: https://github.com/pydantic/pydantic-ai-gateway
 To connect, point your application at ${request.url}<provider-id>
 `,
-      {
-        headers: ctHeader('text/plain; charset=utf-8'),
-      },
+      { headers: ctHeader('text/plain; charset=utf-8') },
     )
   } else if (request.method === 'HEAD') {
     return new Response('', { headers: ctHeader('text/html') })

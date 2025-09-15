@@ -18,10 +18,7 @@ export class AnthropicProvider extends DefaultProviderProxy {
     const messages: InputMessages = []
 
     for (const message of requestBody.messages) {
-      messages.push({
-        role: message.role,
-        parts: mapInputParts(message.content),
-      })
+      messages.push({ role: message.role, parts: mapInputParts(message.content) })
     }
     return messages
   }
@@ -35,17 +32,11 @@ function mapInputParts(content: BetaMessageParam['content']): InputParts {
   const parts: InputParts = []
 
   if (typeof content === 'string') {
-    parts.push({
-      type: 'text',
-      content,
-    })
+    parts.push({ type: 'text', content })
   } else {
     for (const part of content) {
       if ('type' in part && part.type === 'text') {
-        parts.push({
-          type: 'text',
-          content: part.text,
-        })
+        parts.push({ type: 'text', content: part.text })
       } else {
         // TODO(Marcelo): Handle all the other part types
       }

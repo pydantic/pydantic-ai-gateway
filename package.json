@@ -29,6 +29,7 @@
     "trailingComma": "all",
     "tabWidth": 2,
     "printWidth": 119,
+    "objectWrap": "collapse",
     "bracketSpacing": true
   },
   "_": "@cloudflare/vitest-pool-workers is pinned because of https://github.com/cloudflare/workers-sdk/issues/10506",

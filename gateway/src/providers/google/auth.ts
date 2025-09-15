@@ -64,16 +64,7 @@ async function jwtSign(serviceAccount: ServiceAccount): Promise<string> {
   const privateKeyArray = Uint8Array.from(atob(privateKeyPem), (c) => c.charCodeAt(0))
 
   const algo = 'RSASSA-PKCS1-v1_5'
-  const key = await crypto.subtle.importKey(
-    'pkcs8',
-    privateKeyArray,
-    {
-      name: algo,
-      hash: 'SHA-256',
-    },
-    false,
-    ['sign'],
-  )
+  const key = await crypto.subtle.importKey('pkcs8', privateKeyArray, { name: algo, hash: 'SHA-256' }, false, ['sign'])
 
   const signature = await crypto.subtle.sign(algo, key, encoder.encode(signingInput))
 
@@ -81,16 +72,11 @@ async function jwtSign(serviceAccount: ServiceAccount): Promise<string> {
 }
 
 async function getAccessToken(jwt: string): Promise<string> {
-  const body = new URLSearchParams({
-    grant_type: 'urn:ietf:params:oauth:grant-type:jwt-bearer',
-    assertion: jwt,
-  })
+  const body = new URLSearchParams({ grant_type: 'urn:ietf:params:oauth:grant-type:jwt-bearer', assertion: jwt })
 
   const response = await fetch(tokenUrl, {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/x-www-form-urlencoded',
-    },
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
     signal: AbortSignal.timeout(10000),
     body,
   })

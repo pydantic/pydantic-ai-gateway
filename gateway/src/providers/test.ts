@@ -15,12 +15,7 @@ export class TestProvider extends DefaultProviderProxy {
         {
           finish_reason: 'stop',
           index: 0,
-          message: {
-            annotations: [],
-            content: `request URL: ${url}`,
-            refusal: null,
-            role: 'assistant',
-          },
+          message: { annotations: [], content: `request URL: ${url}`, refusal: null, role: 'assistant' },
         },
       ],
       created: Math.floor(Date.now() / 1000),
@@ -38,17 +33,11 @@ export class TestProvider extends DefaultProviderProxy {
           reasoning_tokens: 0,
           rejected_prediction_tokens: 0,
         },
-        prompt_tokens_details: {
-          audio_tokens: 0,
-          cached_tokens: 0,
-        },
+        prompt_tokens_details: { audio_tokens: 0, cached_tokens: 0 },
         total_tokens: 5790,
       },
     }
-    const headers = {
-      'Content-Type': 'application/json',
-      'pydantic-ai-gateway': 'test',
-    }
+    const headers = { 'Content-Type': 'application/json', 'pydantic-ai-gateway': 'test' }
     return Promise.resolve(new Response(JSON.stringify(data), { status: 200, headers }))
   }
 }

@@ -83,11 +83,7 @@ export class OtelTrace {
       logfire.error('Failed to serialize spans', { span: this.spans })
       return
     }
-    const response = await fetchRetry(this.subFetch, `${baseUrl}/v1/traces`, {
-      method: 'POST',
-      headers,
-      body,
-    })
+    const response = await fetchRetry(this.subFetch, `${baseUrl}/v1/traces`, { method: 'POST', headers, body })
     if (!response.ok) {
       const text = await response.text()
       const headers = Object.fromEntries(response.headers.entries())
@@ -158,13 +154,8 @@ class ActiveOtelSpan extends OtelSpan {
       events: [],
       duration,
       ended: true,
-      resource: resourceFromAttributes({
-        'service.name': 'PAIG',
-        'service.version': this.trace.version,
-      }),
-      instrumentationScope: {
-        name: 'pydantic-ai-gateway',
-      },
+      resource: resourceFromAttributes({ 'service.name': 'PAIG', 'service.version': this.trace.version }),
+      instrumentationScope: { name: 'pydantic-ai-gateway' },
       droppedAttributesCount: 0,
       droppedEventsCount: 0,
       droppedLinksCount: 0,

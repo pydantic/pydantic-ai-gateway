@@ -5,8 +5,7 @@
   "main": "src/index.ts",
   "scripts": {
     "typecheck": "tsc --noEmit && cd test && tsc --noEmit",
-    "test": "vitest",
-    "generate-genai-types": "npx tsx generate-genai-types.ts"
+    "test": "vitest"
   },
   "dependencies": {
     "@opentelemetry/api": "^1.9.0",
@@ -18,7 +17,6 @@
   "devDependencies": {
     "@anthropic-ai/sdk": "^0.62.0",
     "@google/genai": "^1.15.0",
-    "groq-sdk": "^0.30.0",
-    "json-schema-to-typescript": "^15.0.4"
+    "groq-sdk": "^0.30.0"
   }
 }

@@ -4,8 +4,7 @@ import { Usage, calcPrice, extractUsage, findProvider } from '@pydantic/genai-pr
 import { ApiKeyInfo, ProviderProxy } from '../types'
 import { GatewayEnv } from '..'
 import { GenAiOtelEvent, GenAIAttributes, GenAIAttributesExtractor } from '../otel/attributes'
-import { InputMessages } from '../otel/genai-input-messages'
-import { OutputMessages } from '../otel/genai-output-messages'
+import { InputMessages, OutputMessages } from '../otel/genai'
 
 export interface ProxySuccess {
   requestModel?: string

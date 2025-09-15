@@ -1,5 +1,4 @@
-import { InputMessages, Parts as InputParts } from '../otel/genai-input-messages'
-import { OutputMessages } from '../otel/genai-output-messages'
+import { InputMessages, JsonValue, MessagePart, OutputMessages } from '../otel/genai'
 import { DefaultProviderProxy } from './default'
 
 // TODO(Marcelo): We use the beta API in PydanticAI, but does it matter here?
@@ -28,17 +27,25 @@ export class AnthropicProvider extends DefaultProviderProxy {
   }
 }
 
-function mapInputParts(content: BetaMessageParam['content']): InputParts {
-  const parts: InputParts = []
+function mapInputParts(content: BetaMessageParam['content']): MessagePart[] {
+  const parts: MessagePart[] = []
 
   if (typeof content === 'string') {
     parts.push({ type: 'text', content })
   } else {
     for (const part of content) {
-      if ('type' in part && part.type === 'text') {
+      if (part.type === 'text') {
         parts.push({ type: 'text', content: part.text })
+      } else if (part.type === 'image' && part.source.type === 'base64') {
+        parts.push({ type: 'blob', mime_type: part.source.media_type, data: part.source.data })
+      } else if (part.type === 'image' && part.source.type === 'url') {
+        parts.push({ type: 'file_data', file_uri: part.source.url })
+      } else if (part.type === 'tool_use') {
+        parts.push({ type: 'tool_call', id: part.id, name: part.name, arguments: part.input as JsonValue })
+      } else if (part.type === 'tool_result') {
+        parts.push({ type: 'tool_call_response', id: part.tool_use_id, result: part.content as JsonValue })
       } else {
-        // TODO(Marcelo): Handle all the other part types
+        parts.push({ ...part })
       }
     }
   }

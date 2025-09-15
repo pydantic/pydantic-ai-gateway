@@ -24,7 +24,7 @@ export default defineWorkersConfig({
         },
         miniflare: {
           bindings: {
-            // put variables here
+            STATUS_AUTH_API_KEY: 'testing',
             OPENAI_API_KEY: process.env.OPENAI_API_KEY ?? 'OPENAI_API_KEY-unset',
           },
         },

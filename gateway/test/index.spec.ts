@@ -5,8 +5,8 @@ import { env, createExecutionContext, waitOnExecutionContext } from 'cloudflare:
 import { describe, it, expect, beforeAll, beforeEach } from 'vitest'
 import SQL from '../limits-schema.sql?raw'
 
-import { gatewayFetch } from '@pydantic/ai-gateway'
-import { buildGatewayEnv, DisableEvent } from './worker'
+import { gatewayFetch, LimitDbD1 } from '@pydantic/ai-gateway'
+import { buildGatewayEnv, DisableEvent, IDS } from './worker'
 
 beforeAll(async () => {
   try {
@@ -138,6 +138,45 @@ describe('openai', () => {
     expect(completion).toMatchSnapshot('llm')
     expect(otelBatch.length, 'otelBatch length not 1').toBe(1)
     expect(JSON.parse(otelBatch[0]!).resourceSpans?.[0].scopeSpans?.[0].spans?.[0]?.attributes).toMatchSnapshot('span')
+
+    const limitDb = new LimitDbD1(env.limitsDB)
+    const teamStatus = await limitDb.spendStatus('team')
+    expect(teamStatus).toEqual([
+      {
+        entityId: IDS.teamDefault,
+        limit: 4,
+        scope: 'monthly',
+        scopeInterval: expect.any(Date),
+        spend: 0.00013875,
+      },
+    ])
+    const userStatus = await limitDb.spendStatus('user')
+    expect(userStatus).toEqual([
+      {
+        entityId: IDS.userDefault,
+        limit: 3,
+        scope: 'weekly',
+        scopeInterval: expect.any(Date),
+        spend: 0.00013875,
+      },
+    ])
+    const keyStatus = await limitDb.spendStatus('key')
+    expect(keyStatus.sort((a, b) => a.limit - b.limit)).toEqual([
+      {
+        entityId: IDS.keyHealthy,
+        limit: 1,
+        scope: 'daily',
+        scopeInterval: expect.any(Date),
+        spend: 0.00013875,
+      },
+      {
+        entityId: IDS.keyHealthy,
+        limit: 2,
+        scope: 'total',
+        scopeInterval: null,
+        spend: 0.00013875,
+      },
+    ])
   })
 })
 
@@ -199,30 +238,17 @@ describe('key status', () => {
       ],
     })
     const allSpends = await env.limitsDB
-      .prepare(`SELECT id, round(spend, 3) spend, spendingLimit FROM spend order by spendingLimit`)
-      .run<{ id: string; spend: string; spendingLimit: number }>()
-    expect(allSpends.results).toEqual([
-      {
-        id: expect.stringMatching(/key-daily:healthy-id-\d{4}-\d{2}-\d{2}/),
-        spend: 0.018,
-        spendingLimit: 1,
-      },
-      {
-        id: 'key-total:healthy-id',
-        spend: 0.018,
-        spendingLimit: 2,
-      },
-      {
-        id: expect.stringMatching(/user-weekly:user1-\d{4}-\d{2}-\d{2}/),
-        spend: 0.018,
-        spendingLimit: 3,
-      },
-      {
-        id: expect.stringMatching(/team-monthly:team1-\d{4}-\d{2}-\d{2}/),
-        spend: 0.018,
-        spendingLimit: 4,
-      },
-    ])
+      .prepare(
+        `SELECT entityId, entityType, scope, round(spend, 3) spend, spendingLimit FROM spend order by spendingLimit`,
+      )
+      .run<{
+        entityId: number
+        entityType: number
+        scope: number
+        spend: string
+        spendingLimit: number
+      }>()
+    expect(allSpends.results).toMatchSnapshot('spend-table')
     const allKeyStatus = await env.limitsDB
       .prepare('SELECT count(*) as count FROM keyStatus')
       .first<{ count: number }>()
@@ -270,24 +296,38 @@ describe('key status', () => {
     expect(JSON.parse(apiValue!)).toMatchSnapshot('kv-value')
 
     const allSpends1 = await env.limitsDB
-      .prepare(`SELECT id, round(spend, 3) spend, spendingLimit FROM spend order by spendingLimit`)
-      .run<{ id: string; spend: string; spendingLimit: number }>()
-    expect(allSpends1.results).toEqual([
-      {
-        id: expect.stringMatching(/key-daily:tiny-limit-id-\d{4}-\d{2}-\d{2}/),
-        spend: 0.018,
-        spendingLimit: 0.01,
-      },
-      {
-        id: expect.stringMatching(/team-monthly:team1-\d{4}-\d{2}-\d{2}/),
-        spend: 0.018,
-        spendingLimit: 4,
-      },
-    ])
+      .prepare(
+        `SELECT entityId, entityType, scope, round(spend, 3) spend, spendingLimit FROM spend order by spendingLimit`,
+      )
+      .run<{
+        entityId: number
+        entityType: number
+        scope: number
+        spend: string
+        spendingLimit: number
+      }>()
+    expect(allSpends1.results).toMatchInlineSnapshot(`
+          [
+            {
+              "entityId": 5,
+              "entityType": 3,
+              "scope": 1,
+              "spend": 0.018,
+              "spendingLimit": 0.01,
+            },
+            {
+              "entityId": 1,
+              "entityType": 1,
+              "scope": 3,
+              "spend": 0.018,
+              "spendingLimit": 4,
+            },
+          ]
+        `)
 
     expect(disableEvents).toEqual([
       {
-        id: 'tiny-limit-id',
+        id: IDS.keyTinyLimit,
         reason: 'limits exceeded: key-daily',
         newStatus: 'limit-exceeded',
         expirationTtl: expect.any(Number),
@@ -301,7 +341,7 @@ describe('key status', () => {
       .run<{ id: string; status: string; expiresAtDiff: number }>()
     expect(keyStatusQuery.results).toEqual([
       {
-        id: 'tiny-limit-id',
+        id: IDS.keyTinyLimit,
         status: 'limit-exceeded',
         expiresAtDiff: expect.any(Number),
       },
@@ -319,11 +359,51 @@ describe('key status', () => {
 
     expect(disableEvents).toEqual([
       {
-        id: 'tiny-limit-id',
+        id: IDS.keyTinyLimit,
         reason: 'limits exceeded: key-daily',
         newStatus: 'limit-exceeded',
         expirationTtl: expect.any(Number),
       },
     ])
+  })
+})
+
+describe('LimitDbD1', () => {
+  it('updates limit', async () => {
+    const db = new LimitDbD1(env.limitsDB)
+    await db.incrementSpend(
+      [{ entityId: IDS.userDefault, entityType: 'user', scope: 'daily', scopeInterval: 123, limit: 2 }],
+      1,
+    )
+
+    {
+      const state = await env.limitsDB.prepare('SELECT * FROM spend').first()
+      expect(state).toMatchInlineSnapshot(`
+      {
+        "entityId": 2,
+        "entityType": 2,
+        "scope": 1,
+        "scopeInterval": 123,
+        "spend": 1,
+        "spendingLimit": 2,
+      }
+    `)
+    }
+
+    await db.updateUserLimits(IDS.userDefault, { daily: 3, weekly: 5 })
+
+    {
+      const state = await env.limitsDB.prepare('SELECT * FROM spend').first()
+      expect(state).toMatchInlineSnapshot(`
+      {
+        "entityId": 2,
+        "entityType": 2,
+        "scope": 1,
+        "scopeInterval": 123,
+        "spend": 1,
+        "spendingLimit": 3,
+      }
+    `)
+    }
   })
 })

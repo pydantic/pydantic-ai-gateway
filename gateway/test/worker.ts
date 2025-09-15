@@ -15,7 +15,7 @@ export default {
 } satisfies ExportedHandler<Env>
 
 export interface DisableEvent {
-  id: string
+  id: number
   reason: string
   newStatus: string
   expirationTtl?: number
@@ -30,6 +30,14 @@ export function buildGatewayEnv(env: Env, disableEvents: DisableEvent[], subFetc
     kvVersion: 'test',
     subFetch,
   }
+}
+
+export namespace IDS {
+  export const teamDefault = 1
+  export const userDefault = 2
+  export const keyHealthy = 3
+  export const keyDisabled = 4
+  export const keyTinyLimit = 5
 }
 
 class TestKeysDB extends KeysDbD1 {
@@ -75,12 +83,11 @@ class TestKeysDB extends KeysDbD1 {
     switch (key) {
       case 'healthy':
         return {
-          id: 'healthy-id',
-          user: 'user1',
-          team: 'team1',
-          org: 'org1',
+          id: IDS.keyHealthy,
+          user: IDS.userDefault,
+          team: IDS.teamDefault,
           key,
-          status: (await this.getDbKeyStatus('healthy-id')) ?? 'active',
+          status: (await this.getDbKeyStatus(IDS.keyHealthy)) ?? 'active',
           // key limits
           keySpendingLimitDaily: 1,
           keySpendingLimitTotal: 2,
@@ -97,10 +104,9 @@ class TestKeysDB extends KeysDbD1 {
         }
       case 'disabled':
         return {
-          id: 'disabled-id',
+          id: IDS.keyDisabled,
           user: null,
-          team: 'team1',
-          org: 'org1',
+          team: IDS.teamDefault,
           key,
           status: 'disabled',
           providers: this.allProviders,
@@ -108,12 +114,11 @@ class TestKeysDB extends KeysDbD1 {
         }
       case 'tiny-limit':
         return {
-          id: 'tiny-limit-id',
+          id: IDS.keyTinyLimit,
           user: null,
-          team: 'team1',
-          org: 'org1',
+          team: IDS.teamDefault,
           key,
-          status: (await this.getDbKeyStatus('tiny-limit-id')) ?? 'active',
+          status: (await this.getDbKeyStatus(IDS.keyTinyLimit)) ?? 'active',
           keySpendingLimitDaily: 0.01,
           teamSpendingLimitMonthly: 4,
           providers: [this.allProviders[0]!],
@@ -124,7 +129,7 @@ class TestKeysDB extends KeysDbD1 {
     }
   }
 
-  async disableKey(id: string, reason: string, newStatus: string, expirationTtl?: number): Promise<void> {
+  async disableKey(id: number, reason: string, newStatus: string, expirationTtl?: number): Promise<void> {
     await super.disableKey(id, reason, newStatus, expirationTtl)
     this.disableEvents.push({ id, reason, newStatus, expirationTtl })
   }

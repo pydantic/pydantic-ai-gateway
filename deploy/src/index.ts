@@ -21,13 +21,21 @@ import { instrument } from '@pydantic/logfire-cf-workers'
 import { gatewayFetch, GatewayEnv, LimitDbD1 } from '@pydantic/ai-gateway'
 import { config } from './config'
 import { ConfigDB, hash } from './db'
+import { status } from './status'
 
 const handler = {
   async fetch(request, env, ctx): Promise<Response> {
+    const { pathname } = new URL(request.url)
+    const limitDb = new LimitDbD1(env.limitsDB)
+
+    if (pathname === '/status' || pathname === '/status/') {
+      return await status(request, env, limitDb)
+    }
+
     const gatewayEnv: GatewayEnv = {
       githubSha: env.GITHUB_SHA,
       keysDb: new ConfigDB(env.limitsDB),
-      limitDb: new LimitDbD1(env.limitsDB),
+      limitDb,
       kv: env.KV,
       kvVersion: await hash(JSON.stringify(config)),
       subFetch: fetch,

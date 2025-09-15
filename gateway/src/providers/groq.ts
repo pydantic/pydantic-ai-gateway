@@ -31,43 +31,21 @@ function mapRequestMessage(message: ChatCompletionMessageParam): GenAiOtelEvent 
   const { role } = message
   if (role === 'system' || role === 'developer') {
     const { content } = message
-    return {
-      'event.name': 'gen_ai.system.message',
-      role: 'system',
-      content,
-    }
+    return { 'event.name': 'gen_ai.system.message', role: 'system', content }
   } else if (role === 'user') {
     const { content } = message
-    return {
-      'event.name': 'gen_ai.user.message',
-      role: 'user',
-      content,
-    }
+    return { 'event.name': 'gen_ai.user.message', role: 'user', content }
   } else if (role === 'tool') {
     const { content, tool_call_id } = message
-    return {
-      'event.name': 'gen_ai.tool.message',
-      role: 'tool',
-      id: tool_call_id,
-      content,
-    }
+    return { 'event.name': 'gen_ai.tool.message', role: 'tool', id: tool_call_id, content }
   } else if (role === 'assistant') {
     const { content, tool_calls } = message
-    return {
-      'event.name': 'gen_ai.assistant.message',
-      role: 'assistant',
-      content,
-      tool_calls,
-    }
+    return { 'event.name': 'gen_ai.assistant.message', role: 'assistant', content, tool_calls }
     // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
   } else if (role === 'function') {
     // deprecated, shouldn't happen
     const { content } = message
-    return {
-      'event.name': 'gen_ai.assistant.message',
-      role: 'assistant',
-      content,
-    }
+    return { 'event.name': 'gen_ai.assistant.message', role: 'assistant', content }
   } else {
     const neverRole: never = role
     // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
@@ -80,10 +58,6 @@ function mapResponseMessage(choice: ChatCompletion.Choice): GenaiChoiceEvent {
     'event.name': 'gen_ai.choice',
     finish_reason: choice.finish_reason,
     index: 0,
-    message: {
-      role: 'assistant',
-      content: choice.message.content,
-      tool_calls: choice.message.tool_calls,
-    },
+    message: { role: 'assistant', content: choice.message.content, tool_calls: choice.message.tool_calls },
   }
 }

@@ -13,14 +13,8 @@ export default defineConfig(
   neostandard({ noJsx: true, noStyle: true }),
   eslintPluginPrettierRecommended,
   eslintConfigPrettier,
-  {
-    ignores: ['dist'],
-  },
-  {
-    languageOptions: {
-      globals: globals.node,
-    },
-  },
+  { ignores: ['dist'] },
+  { languageOptions: { globals: globals.node } },
   {
     rules: {
       'no-redeclare': 'off',
@@ -48,13 +42,7 @@ export default defineConfig(
       ],
     },
   },
-  {
-    files: ['**/*.ts'],
-    rules: {
-      'no-undef': 'off',
-      '@typescript-eslint/no-non-null-assertion': 'off',
-    },
-  },
+  { files: ['**/*.ts'], rules: { 'no-undef': 'off', '@typescript-eslint/no-non-null-assertion': 'off' } },
   {
     files: ['gateway/test/**/*.ts', 'deploy/test/**/*.ts'],
     rules: {
@@ -66,12 +54,5 @@ export default defineConfig(
       '@typescript-eslint/no-namespace': 'off',
     },
   },
-  {
-    languageOptions: {
-      parserOptions: {
-        projectService: true,
-        tsconfigRootDir: import.meta.dirname,
-      },
-    },
-  },
+  { languageOptions: { parserOptions: { projectService: true, tsconfigRootDir: import.meta.dirname } } },
 )

@@ -48,12 +48,7 @@ class TestKeysDB extends KeysDbD1 {
     super(env.limitsDB)
     this.disableEvents = disableEvents
     this.allProviders = [
-      {
-        baseUrl: 'http://test.example.com/test',
-        providerID: 'test',
-        injectCost: true,
-        credentials: 'test',
-      },
+      { baseUrl: 'http://test.example.com/test', providerID: 'test', injectCost: true, credentials: 'test' },
       {
         // baseUrl decides what URL the request will be forwarded to
         baseUrl: 'http://localhost:8005/openai',
@@ -64,12 +59,7 @@ class TestKeysDB extends KeysDbD1 {
         // credentials are used by the ProviderProxy to authenticate the forwarded request
         credentials: env.OPENAI_API_KEY,
       },
-      {
-        baseUrl: 'http://localhost:8005/groq',
-        providerID: 'groq',
-        injectCost: true,
-        credentials: env.GROQ_API_KEY,
-      },
+      { baseUrl: 'http://localhost:8005/groq', providerID: 'groq', injectCost: true, credentials: env.GROQ_API_KEY },
       {
         baseUrl: 'http://localhost:8005/anthropic',
         providerID: 'anthropic',

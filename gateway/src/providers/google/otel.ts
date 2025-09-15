@@ -68,11 +68,7 @@ function systemEvents(systemInstruction?: ContentUnion): GenAiOtelEvent[] {
     // Part (probably, technically could be Content with no parts or role)
     chunks.push(...convertSystemParts(systemInstruction as Part, systemInstruction))
   }
-  return chunks.map((content) => ({
-    'event.name': 'gen_ai.system.message',
-    role: 'system',
-    content,
-  }))
+  return chunks.map((content) => ({ 'event.name': 'gen_ai.system.message', role: 'system', content }))
 }
 
 const extraPartFields = [
@@ -90,42 +86,19 @@ function mapContent({ role, parts }: Content): GenAiOtelEvent {
 
   if (toolResponse) {
     // https://pydantic.slack.com/archives/C05AF4A4WRM/p1756295262502169
-    return {
-      'event.name': 'gen_ai.tool.message',
-      role: 'tool',
-      content,
-      id: toolResponse.id,
-      name: toolResponse.name,
-    }
+    return { 'event.name': 'gen_ai.tool.message', role: 'tool', content, id: toolResponse.id, name: toolResponse.name }
   }
 
   switch (role) {
     case 'system':
-      return {
-        'event.name': 'gen_ai.system.message',
-        role: 'system',
-        content,
-      }
+      return { 'event.name': 'gen_ai.system.message', role: 'system', content }
     case 'user':
-      return {
-        'event.name': 'gen_ai.user.message',
-        role: 'user',
-        content,
-      }
+      return { 'event.name': 'gen_ai.user.message', role: 'user', content }
     case 'model':
-      return {
-        'event.name': 'gen_ai.assistant.message',
-        role: 'assistant',
-        content,
-        tool_calls: toolCalls,
-      }
+      return { 'event.name': 'gen_ai.assistant.message', role: 'assistant', content, tool_calls: toolCalls }
     default:
       logfire.warning('unknown role for part', { role, parts })
-      return {
-        'event.name': 'gen_ai.user.message',
-        role: 'user',
-        content: `<unknown role: ${role}> ${content}`,
-      }
+      return { 'event.name': 'gen_ai.user.message', role: 'user', content: `<unknown role: ${role}> ${content}` }
   }
 }
 
@@ -154,10 +127,7 @@ function convertParts(parts?: Part[]): PartsInfo {
       const toolCall: ToolCall = {
         id: id ?? 'unknown',
         type: 'function',
-        function: {
-          name: name ?? 'unknown',
-          arguments: JSON.stringify(args ?? {}),
-        },
+        function: { name: name ?? 'unknown', arguments: JSON.stringify(args ?? {}) },
       }
       toolCalls.push(toolCall)
     }
@@ -170,10 +140,7 @@ function convertParts(parts?: Part[]): PartsInfo {
           contentText.push(JSON.stringify(response))
         }
       }
-      toolResponse = {
-        id: id ?? 'unknown',
-        name,
-      }
+      toolResponse = { id: id ?? 'unknown', name }
     }
     const extraFields = extraPartFields.filter((field) => field in part)
     if (extraFields.length > 0) {
@@ -181,11 +148,7 @@ function convertParts(parts?: Part[]): PartsInfo {
     }
   }
   const content = contentText.join('')
-  return {
-    content,
-    toolCalls,
-    toolResponse,
-  }
+  return { content, toolCalls, toolResponse }
 }
 
 function convertSystemParts(part: Part, systemInstruction: ContentUnion): string[] {
@@ -215,10 +178,6 @@ function mapResponseCandidate({ finishReason, content: candidateContent }: Candi
     'event.name': 'gen_ai.choice',
     finish_reason: finishReason ?? 'stop',
     index: 0,
-    message: {
-      role: 'assistant',
-      content,
-      tool_calls: toolCalls,
-    },
+    message: { role: 'assistant', content, tool_calls: toolCalls },
   }
 }

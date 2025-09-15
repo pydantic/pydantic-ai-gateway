@@ -68,11 +68,7 @@ export async function status(request: Request, env: Env, limitdb: LimitDb): Prom
       spendingLimitTotal: keyInfo.spendingLimitTotal,
     })),
   }
-  return new Response(JSON.stringify(data, null, 2), {
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  })
+  return new Response(JSON.stringify(data, null, 2), { headers: { 'Content-Type': 'application/json' } })
 }
 
 function auth(request: Request, env: Env): Response | 'ok' {

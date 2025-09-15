@@ -6,22 +6,13 @@ export default defineWorkersConfig({
     testTimeout: 30000,
     resolveSnapshotPath: (testPath, snapshotExtension) => testPath + snapshotExtension,
     deps: {
-      optimizer: {
-        ssr: {
-          enabled: true,
-          include: ['@pydantic/logfire-cf-workers', '@opentelemetry/resources'],
-        },
-      },
+      optimizer: { ssr: { enabled: true, include: ['@pydantic/logfire-cf-workers', '@opentelemetry/resources'] } },
     },
-    alias: {
-      './config': '../test.config.ts',
-    },
+    alias: { './config': '../test.config.ts' },
     poolOptions: {
       workers: {
         singleWorker: true,
-        wrangler: {
-          configPath: './wrangler.jsonc',
-        },
+        wrangler: { configPath: './wrangler.jsonc' },
         miniflare: {
           bindings: {
             STATUS_AUTH_API_KEY: 'testing',

@@ -35,10 +35,7 @@ export async function apiKeyAuth(request: Request, env: GatewayEnv): Promise<Api
     if (!apiKey) {
       throw new ResponseError(401, 'Unauthorized - Key not found')
     }
-    await env.kv.put(cacheKey, JSON.stringify(apiKey), {
-      metadata: CACHE_VERSION,
-      expirationTtl: CACHE_TTL,
-    })
+    await env.kv.put(cacheKey, JSON.stringify(apiKey), { metadata: CACHE_VERSION, expirationTtl: CACHE_TTL })
   }
   // check all key validity in gateway.ts
   return apiKey
@@ -46,10 +43,7 @@ export async function apiKeyAuth(request: Request, env: GatewayEnv): Promise<Api
 
 export async function disableApiKeyAuth(apiKey: ApiKeyInfo, env: GatewayEnv, expirationTtl?: number) {
   const cacheKey = apiKeyCacheKey(apiKey.key, env)
-  await env.kv.put(cacheKey, JSON.stringify(apiKey), {
-    metadata: CACHE_VERSION,
-    expirationTtl,
-  })
+  await env.kv.put(cacheKey, JSON.stringify(apiKey), { metadata: CACHE_VERSION, expirationTtl })
 }
 
 const apiKeyCacheKey = (key: string, env: GatewayEnv) => `apiKeyAuth:${env.kvVersion}:${key}`

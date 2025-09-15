@@ -52,12 +52,7 @@ export const config: Config<ProviderKeys> = {
       injectCost: true,
       credentials: env.ANTHROPIC_API_KEY,
     },
-    test: {
-      baseUrl: 'http://test.example.com/test',
-      providerID: 'test',
-      injectCost: true,
-      credentials: 'test',
-    },
+    test: { baseUrl: 'http://test.example.com/test', providerID: 'test', injectCost: true, credentials: 'test' },
   },
   // individual apiKeys
   apiKeys: {
@@ -70,11 +65,6 @@ export const config: Config<ProviderKeys> = {
       spendingLimitMonthly: 3,
       spendingLimitTotal: 4,
     },
-    'low-limit-key': {
-      id: 4,
-      team: 1,
-      providers: '__all__',
-      spendingLimitDaily: 0.01,
-    },
+    'low-limit-key': { id: 4, team: 1, providers: '__all__', spendingLimitDaily: 0.01 },
   },
 }

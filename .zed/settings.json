@@ -1,12 +1,7 @@
 {
   "languages": {
     "TypeScript": {
-      "formatter": {
-        "external": {
-          "command": "npx",
-          "arguments": ["prettier", "--stdin-filepath", "{buffer_path}"]
-        }
-      }
+      "formatter": { "external": { "command": "npx", "arguments": ["prettier", "--stdin-filepath", "{buffer_path}"] } }
     }
   }
 }

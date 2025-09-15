@@ -58,10 +58,7 @@ export async function gateway(request: Request, ctx: ExecutionContext, env: Gate
   if ('successStatus' in result) {
     const { successStatus, responseHeaders, responseBody, cost } = result
     runAfter(ctx, 'recordSpend', recordSpend(apiKey, cost, env))
-    response = new Response(responseBody, {
-      status: successStatus,
-      headers: responseHeaders,
-    })
+    response = new Response(responseBody, { status: successStatus, headers: responseHeaders })
   } else if ('error' in result) {
     const { error, disableKey } = result
     if (disableKey) {
@@ -72,10 +69,7 @@ export async function gateway(request: Request, ctx: ExecutionContext, env: Gate
     }
   } else {
     const { unexpectedStatus, responseHeaders, responseBody } = result
-    response = new Response(responseBody, {
-      status: unexpectedStatus,
-      headers: responseHeaders,
-    })
+    response = new Response(responseBody, { status: unexpectedStatus, headers: responseHeaders })
   }
   runAfter(ctx, 'otel.send', otel.send())
   return response
@@ -144,12 +138,7 @@ async function recordSpend(apiKey: ApiKeyInfo, spend: number, env: GatewayEnv): 
     })
   }
   if (isSet(apiKey.keySpendingLimitTotal)) {
-    intervalSpends.push({
-      entityId: id,
-      entityType: 'key',
-      scope: 'total',
-      limit: apiKey.keySpendingLimitTotal,
-    })
+    intervalSpends.push({ entityId: id, entityType: 'key', scope: 'total', limit: apiKey.keySpendingLimitTotal })
   }
 
   if (user != null) {

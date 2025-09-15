@@ -224,15 +224,8 @@ export class DefaultProviderProxy implements GenAIAttributesExtractor {
       this.injectCost(responseBody, cost)
     }
 
-    let otelEvents
-    try {
-      otelEvents = this.otelEvents(requestBodyData, responseBody)
-    } catch (error) {
-      console.warn('Error error generating otel events', error)
-      logfire.reportError('Error error generating otel events', error as Error, { requestBodyData, responseBody })
-    }
-
-    const otelAttributes = this.otelAttributes(requestBodyData, responseBody)
+    const otelEvents = safe(this.otelEvents.bind(this))(requestBodyData, responseBody)
+    const otelAttributes = safe(this.otelAttributes.bind(this))(requestBodyData, responseBody)
 
     return {
       responseModel,

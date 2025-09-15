@@ -26,8 +26,7 @@ export class AnthropicProvider extends DefaultProviderProxy {
     return messages
   }
 
-  outputMessages(responseBody: BetaMessage): OutputMessages | undefined {
-    console.log('outputMessages', responseBody)
+  outputMessages(_responseBody: BetaMessage): OutputMessages | undefined {
     return undefined
   }
 }

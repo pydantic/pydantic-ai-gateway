@@ -1,4 +1,4 @@
-import { InputMessages, JsonValue, MessagePart, OutputMessages } from '../otel/genai'
+import { InputMessages, JsonValue, MessagePart, OutputMessages, TextPart } from '../otel/genai'
 import { DefaultProviderProxy } from './default'
 
 // TODO(Marcelo): We use the beta API in PydanticAI, but does it matter here?
@@ -10,6 +10,30 @@ import type {
 } from '@anthropic-ai/sdk/resources/beta'
 
 export class AnthropicProvider extends DefaultProviderProxy {
+  requestStopSequences(requestBody: MessageCreateParams): string[] | undefined {
+    return requestBody.stop_sequences
+  }
+
+  requestTemperature(requestBody: MessageCreateParams): number | undefined {
+    return requestBody.temperature
+  }
+
+  requestTopP(requestBody: MessageCreateParams): number | undefined {
+    return requestBody.top_p
+  }
+
+  systemInstructions(requestBody: MessageCreateParams): TextPart[] | undefined {
+    if (requestBody.system === undefined) {
+      return undefined
+    }
+
+    if (typeof requestBody.system === 'string') {
+      return [{ type: 'text', content: requestBody.system }]
+    } else {
+      return requestBody.system.map((part) => ({ type: 'text', content: part.text }))
+    }
+  }
+
   requestMaxTokens(requestBody: MessageCreateParams): number | undefined {
     return requestBody.max_tokens
   }

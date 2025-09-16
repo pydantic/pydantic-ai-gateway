@@ -5,7 +5,7 @@ import type {
   DefaultProviderProxy,
 } from '../providers/default'
 import type { Level, Attributes } from '.'
-import { InputMessages, OutputMessages } from './genai'
+import { InputMessages, OutputMessages, TextPart } from './genai'
 
 export function genAiOtelAttributes(
   result: ProxySuccess | ProxyInvalidRequest | ProxyUnexpectedResponse,
@@ -122,13 +122,23 @@ export interface ChoiceMessage {
  */
 export interface GenAIAttributes {
   'gen_ai.request.max_tokens'?: number
+  'gen_ai.request.seed'?: number
+  'gen_ai.request.stop_sequences'?: string[]
+  'gen_ai.request.temperature'?: number
+  'gen_ai.request.top_p'?: number
   'gen_ai.response.finish_reasons'?: string[]
   'gen_ai.input.messages'?: InputMessages
   'gen_ai.output.messages'?: OutputMessages
+  'gen_ai.system_instructions'?: TextPart[]
 }
 
 export interface GenAIAttributesExtractor {
   requestMaxTokens(request: unknown): GenAIAttributes['gen_ai.request.max_tokens']
+  requestSeed(request: unknown): GenAIAttributes['gen_ai.request.seed']
+  requestStopSequences(request: unknown): GenAIAttributes['gen_ai.request.stop_sequences']
+  requestTemperature(request: unknown): GenAIAttributes['gen_ai.request.temperature']
+  requestTopP(request: unknown): GenAIAttributes['gen_ai.request.top_p']
+  systemInstructions(request: unknown): GenAIAttributes['gen_ai.system_instructions']
   responseFinishReasons(response: unknown): GenAIAttributes['gen_ai.response.finish_reasons']
   inputMessages(request: unknown): GenAIAttributes['gen_ai.input.messages']
   outputMessages(response: unknown): GenAIAttributes['gen_ai.output.messages']

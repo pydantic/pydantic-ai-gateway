@@ -4,7 +4,7 @@ import { Usage, calcPrice, extractUsage, findProvider } from '@pydantic/genai-pr
 import { ApiKeyInfo, ProviderProxy } from '../types'
 import { GatewayEnv } from '..'
 import { GenAiOtelEvent, GenAIAttributes, GenAIAttributesExtractor } from '../otel/attributes'
-import { InputMessages, OutputMessages } from '../otel/genai'
+import { InputMessages, OutputMessages, TextPart } from '../otel/genai'
 
 export interface ProxySuccess {
   requestModel?: string
@@ -258,6 +258,26 @@ export class DefaultProviderProxy implements GenAIAttributesExtractor {
 
   protected responseId(responseBody: JsonData): string | undefined {
     return typeof responseBody.id === 'string' ? responseBody.id : undefined
+  }
+
+  requestSeed(_requestBody: unknown): number | undefined {
+    return undefined
+  }
+
+  requestStopSequences(_requestBody: unknown): string[] | undefined {
+    return undefined
+  }
+
+  requestTemperature(_requestBody: unknown): number | undefined {
+    return undefined
+  }
+
+  requestTopP(_requestBody: unknown): number | undefined {
+    return undefined
+  }
+
+  systemInstructions(_requestBody: unknown): TextPart[] | undefined {
+    return undefined
   }
 
   requestMaxTokens(requestBody: unknown): number | undefined {

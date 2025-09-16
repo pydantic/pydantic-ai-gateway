@@ -1,0 +1,78 @@
+/* eslint-disable no-empty-pattern */
+import { expect, beforeAll, beforeEach, test as baseTest } from 'vitest'
+import SQL from '../limits-schema.sql?raw'
+import { DisableEvent, buildGatewayEnv } from './worker'
+import { env, createExecutionContext, waitOnExecutionContext } from 'cloudflare:test'
+
+import { gatewayFetch } from '@pydantic/ai-gateway'
+
+declare module 'vitest' {
+  export interface TestContext {
+    gateway: TestGateway
+  }
+}
+
+beforeAll(async () => {
+  try {
+    const response = await fetch('http://localhost:8005')
+    expect(response.status, 'The Proxy VCR seems to be facing issues, please check the logs.').toBe(204)
+  } catch {
+    throw new Error('Proxy VCR is not running. Run `make run-proxy-vcr` to enable tests.')
+  }
+})
+
+const RESET_SQL = `\
+DROP TABLE IF EXISTS spend;
+DROP TABLE IF EXISTS keyStatus;
+
+${SQL}`
+
+beforeEach(async () => {
+  await env.limitsDB.prepare(RESET_SQL).run()
+})
+
+interface TestGateway {
+  fetch: (url: RequestInfo | URL, init?: RequestInit) => Promise<Response>
+  ctx: ExecutionContext
+  otelBatch: string[]
+  disableEvents: DisableEvent[]
+}
+
+function testGateway(): TestGateway {
+  const ctx = createExecutionContext()
+  const otelBatch: string[] = []
+  const disableEvents: DisableEvent[] = []
+
+  async function subFetch(url: RequestInfo | URL, init?: RequestInit): Promise<Response> {
+    let hostname: string
+    if (url instanceof Request) {
+      hostname = new URL(url.url).hostname
+    } else {
+      hostname = new URL(url).hostname
+    }
+    if (hostname === 'logfire.pydantic.dev') {
+      const bodyArray = init?.body as Uint8Array
+      otelBatch.push(new TextDecoder().decode(bodyArray))
+      return new Response('OK', { status: 200 })
+    } else {
+      return await fetch(url, init)
+    }
+  }
+
+  async function mockFetch(url: RequestInfo | URL, init?: RequestInit): Promise<Response> {
+    const request = new Request<unknown, IncomingRequestCfProperties>(
+      url,
+      init as RequestInit<IncomingRequestCfProperties>,
+    )
+    const response = await gatewayFetch(request, ctx, buildGatewayEnv(env, disableEvents, subFetch))
+    await waitOnExecutionContext(ctx)
+    return response
+  }
+  return { fetch: mockFetch, ctx, otelBatch, disableEvents }
+}
+
+export const test = baseTest.extend<{ gateway: TestGateway }>({
+  gateway: async ({}, use) => {
+    await use(testGateway())
+  },
+})

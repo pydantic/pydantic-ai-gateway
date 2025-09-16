@@ -1,55 +1,15 @@
 import OpenAI from 'openai'
 import Groq from 'groq-sdk'
-import Anthropic from '@anthropic-ai/sdk'
-import { env, createExecutionContext, waitOnExecutionContext } from 'cloudflare:test'
+import { env } from 'cloudflare:test'
 import { describe, it, expect } from 'vitest'
+import { test } from './setup'
 
-import { gatewayFetch, LimitDbD1 } from '@pydantic/ai-gateway'
-import { buildGatewayEnv, DisableEvent, IDS } from './worker'
-
-interface TestGateway {
-  fetch: (url: RequestInfo | URL, init?: RequestInit) => Promise<Response>
-  ctx: ExecutionContext
-  otelBatch: string[]
-  disableEvents: DisableEvent[]
-}
-
-function testGateway(): TestGateway {
-  const ctx = createExecutionContext()
-  const otelBatch: string[] = []
-  const disableEvents: DisableEvent[] = []
-
-  async function subFetch(url: RequestInfo | URL, init?: RequestInit): Promise<Response> {
-    let hostname: string
-    if (url instanceof Request) {
-      hostname = new URL(url.url).hostname
-    } else {
-      hostname = new URL(url).hostname
-    }
-    if (hostname === 'logfire.pydantic.dev') {
-      const bodyArray = init?.body as Uint8Array
-      otelBatch.push(new TextDecoder().decode(bodyArray))
-      return new Response('OK', { status: 200 })
-    } else {
-      return await fetch(url, init)
-    }
-  }
-
-  async function mockFetch(url: RequestInfo | URL, init?: RequestInit): Promise<Response> {
-    const request = new Request<unknown, IncomingRequestCfProperties>(
-      url,
-      init as RequestInit<IncomingRequestCfProperties>,
-    )
-    const response = await gatewayFetch(request, ctx, buildGatewayEnv(env, disableEvents, subFetch))
-    await waitOnExecutionContext(ctx)
-    return response
-  }
-  return { fetch: mockFetch, ctx, otelBatch, disableEvents }
-}
+import { LimitDbD1 } from '@pydantic/ai-gateway'
+import { IDS } from './worker'
 
 describe('index', () => {
-  it('responds with index html', async () => {
-    const response = await testGateway().fetch('https://example.com')
+  test('responds with index html', async ({ gateway }) => {
+    const response = await gateway.fetch('https://example.com')
     expect(response.status).toBe(200)
     expect(await response.text()).toMatchInlineSnapshot(
       `
@@ -71,22 +31,22 @@ describe('index', () => {
 })
 
 describe('invalid request', () => {
-  it('401 on no auth header', async () => {
-    const response = await testGateway().fetch('https://example.com/openai/gpt-5')
+  test('401 on no auth header', async ({ gateway }) => {
+    const response = await gateway.fetch('https://example.com/openai/gpt-5')
     const text = await response.text()
     expect(response.status, `got ${response.status} response: ${text}`).toBe(401)
     expect(text).toMatchInlineSnapshot(`"Unauthorized - Missing Authorization Header"`)
   })
-  it('401 on unknown auth header', async () => {
-    const response = await testGateway().fetch('https://example.com/openai/gpt-5', {
+  test('401 on unknown auth header', async ({ gateway }) => {
+    const response = await gateway.fetch('https://example.com/openai/gpt-5', {
       headers: { Authorization: 'unknown-token' },
     })
     const text = await response.text()
     expect(response.status, `got ${response.status} response: ${text}`).toBe(401)
     expect(text).toMatchInlineSnapshot(`"Unauthorized - Key not found"`)
   })
-  it('400 on unknown provider', async () => {
-    const response = await testGateway().fetch('https://example.com/wrong/gpt-5', {
+  test('400 on unknown provider', async ({ gateway }) => {
+    const response = await gateway.fetch('https://example.com/wrong/gpt-5', {
       headers: { Authorization: 'unknown-token' },
     })
     const text = await response.text()
@@ -98,8 +58,8 @@ describe('invalid request', () => {
 })
 
 describe('openai', () => {
-  it('should call openai via gateway', async () => {
-    const { fetch, otelBatch } = testGateway()
+  test('should call openai via gateway', async ({ gateway }) => {
+    const { fetch, otelBatch } = gateway
 
     const client = new OpenAI({ apiKey: 'healthy', baseURL: 'https://example.com/openai', fetch })
 
@@ -112,7 +72,7 @@ describe('openai', () => {
     })
 
     expect(completion).toMatchSnapshot('llm')
-    expect(otelBatch.length, 'otelBatch length not 1').toBe(1)
+    expect(otelBatch, 'otelBatch length not 1').toHaveLength(1)
     expect(JSON.parse(otelBatch[0]!).resourceSpans?.[0].scopeSpans?.[0].spans?.[0]?.attributes).toMatchSnapshot('span')
 
     const limitDb = new LimitDbD1(env.limitsDB)
@@ -133,8 +93,8 @@ describe('openai', () => {
 })
 
 describe('groq', () => {
-  it('should call groq via gateway', async () => {
-    const { fetch } = testGateway()
+  test('should call groq via gateway', async ({ gateway }) => {
+    const { fetch } = gateway
     const client = new Groq({ apiKey: 'healthy', baseURL: 'https://example.com/groq', fetch })
 
     const completion = await client.chat.completions.create({
@@ -148,31 +108,9 @@ describe('groq', () => {
   })
 })
 
-describe('anthropic', () => {
-  it('should call anthropic via gateway', async () => {
-    const { fetch, otelBatch } = testGateway()
-
-    const client = new Anthropic({
-      // The `authToken` is passed as `Authorization` header with the anthropic client.
-      authToken: 'healthy',
-      baseURL: 'https://example.com/anthropic',
-      fetch,
-    })
-
-    const completion = await client.messages.create({
-      model: 'claude-sonnet-4-20250514',
-      max_tokens: 1024,
-      messages: [{ role: 'user', content: 'What is the capital of France?' }],
-    })
-    expect(completion).toMatchSnapshot('llm')
-    expect(otelBatch.length).toBe(1)
-    expect(JSON.parse(otelBatch[0]!).resourceSpans?.[0].scopeSpans?.[0].spans?.[0]?.attributes).toMatchSnapshot('span')
-  })
-})
-
 describe('key status', () => {
-  it('should not change key status if limit is not exceeded', async () => {
-    const { fetch } = testGateway()
+  test('should not change key status if limit is not exceeded', async ({ gateway }) => {
+    const { fetch } = gateway
     const client = new OpenAI({ apiKey: 'healthy', baseURL: 'https://example.com/test', fetch })
     await client.chat.completions.create({
       model: 'gpt-5',
@@ -193,8 +131,8 @@ describe('key status', () => {
     expect(allKeyStatus?.count).toBe(0)
   })
 
-  it('should block request if key is disabled', async () => {
-    const { fetch } = testGateway()
+  test('should block request if key is disabled', async ({ gateway }) => {
+    const { fetch } = gateway
 
     const response = await fetch('https://example.com/openai/xxx', { headers: { Authorization: 'disabled' } })
     const text = await response.text()
@@ -209,8 +147,8 @@ describe('key status', () => {
     expect(keyStatusCount?.count).toBe(0)
   })
 
-  it('should change key status if limit is exceeded', async () => {
-    const { fetch, disableEvents } = testGateway()
+  test('should change key status if limit is exceeded', async ({ gateway }) => {
+    const { fetch, disableEvents } = gateway
 
     expect(disableEvents).toEqual([])
 

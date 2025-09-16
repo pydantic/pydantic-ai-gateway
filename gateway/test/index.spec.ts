@@ -2,7 +2,7 @@ import OpenAI from 'openai'
 import Groq from 'groq-sdk'
 import { env } from 'cloudflare:test'
 import { describe, it, expect } from 'vitest'
-import { test } from './conftest'
+import { test } from './setup'
 
 import { LimitDbD1 } from '@pydantic/ai-gateway'
 import { IDS } from './worker'

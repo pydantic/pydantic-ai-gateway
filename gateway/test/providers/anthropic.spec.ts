@@ -1,6 +1,6 @@
 import Anthropic from '@anthropic-ai/sdk'
 import { describe, expect } from 'vitest'
-import { test } from '../conftest'
+import { test } from '../setup'
 
 describe('anthropic', () => {
   test('should call anthropic via gateway', async ({ gateway }) => {

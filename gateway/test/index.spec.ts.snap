@@ -137,7 +137,57 @@ exports[`anthropic > should call anthropic via gateway > span 1`] = `
   },
   {
     "key": "gen_ai.output.messages",
-    "value": {},
+    "value": {
+      "arrayValue": {
+        "values": [
+          {
+            "kvlistValue": {
+              "values": [
+                {
+                  "key": "role",
+                  "value": {
+                    "stringValue": "assistant",
+                  },
+                },
+                {
+                  "key": "parts",
+                  "value": {
+                    "arrayValue": {
+                      "values": [
+                        {
+                          "kvlistValue": {
+                            "values": [
+                              {
+                                "key": "type",
+                                "value": {
+                                  "stringValue": "text",
+                                },
+                              },
+                              {
+                                "key": "content",
+                                "value": {
+                                  "stringValue": "The capital of France is Paris.",
+                                },
+                              },
+                            ],
+                          },
+                        },
+                      ],
+                    },
+                  },
+                },
+                {
+                  "key": "finish_reason",
+                  "value": {
+                    "stringValue": "end_turn",
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
   },
   {
     "key": "http.response.status_code",

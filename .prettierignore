@@ -1,6 +1,6 @@
 /node_modules/
-/oss-gateway/node_modules/
-/oss-gateway/.wrangler/
+/deploy/node_modules/
+/deploy/.wrangler/
 /scratch/
 /.venv/
 /.logfire/

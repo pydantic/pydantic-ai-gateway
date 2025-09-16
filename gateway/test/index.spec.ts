@@ -2,30 +2,10 @@ import OpenAI from 'openai'
 import Groq from 'groq-sdk'
 import Anthropic from '@anthropic-ai/sdk'
 import { env, createExecutionContext, waitOnExecutionContext } from 'cloudflare:test'
-import { describe, it, expect, beforeAll, beforeEach } from 'vitest'
-import SQL from '../limits-schema.sql?raw'
+import { describe, it, expect } from 'vitest'
 
 import { gatewayFetch, LimitDbD1 } from '@pydantic/ai-gateway'
 import { buildGatewayEnv, DisableEvent, IDS } from './worker'
-
-beforeAll(async () => {
-  try {
-    const response = await fetch('http://localhost:8005')
-    expect(response.status, 'The Proxy VCR seems to be facing issues, please check the logs.').toBe(204)
-  } catch {
-    throw new Error('Proxy VCR is not running. Run `make run-proxy-vcr` to enable tests.')
-  }
-})
-
-const RESET_SQL = `\
-DROP TABLE IF EXISTS spend;
-DROP TABLE IF EXISTS keyStatus;
-
-${SQL}`
-
-beforeEach(async () => {
-  await env.limitsDB.prepare(RESET_SQL).run()
-})
 
 interface TestGateway {
   fetch: (url: RequestInfo | URL, init?: RequestInit) => Promise<Response>

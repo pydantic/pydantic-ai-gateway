@@ -246,7 +246,7 @@ export class DefaultProviderProxy<RequestBody extends JsonData = JsonData, Respo
 
   // Generative AI OpenTelemetry attributes
 
-  protected otelEvents(_requestBody: unknown, _responseModel: unknown): GenAiOtelEvent[] {
+  protected otelEvents(_requestBody: RequestBody, _responseModel: ResponseBody): GenAiOtelEvent[] {
     return []
   }
 

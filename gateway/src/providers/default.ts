@@ -272,7 +272,6 @@ export class DefaultProviderProxy<RequestBody extends JsonData, ResponseBody ext
     // @ts-expect-error inherit from GenAIAttributesExtractor
     if (extractorName in this && this[extractorName] && typeof this[extractorName] === 'function') {
       // @ts-expect-error inherit from GenAIAttributesExtractor
-
       return safe(this[extractorName])(...args) as ReturnType<
         NonNullable<GenAIAttributesExtractor<RequestBody, ResponseBody>[T]>
       >

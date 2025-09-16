@@ -16,6 +16,11 @@ describe('anthropic', () => {
     const completion = await client.messages.create({
       model: 'claude-sonnet-4-20250514',
       max_tokens: 1024,
+      top_p: 0.95,
+      top_k: 1,
+      temperature: 0.5,
+      stop_sequences: ['potato'],
+      system: 'You are a helpful assistant.',
       messages: [{ role: 'user', content: 'What is the capital of France?' }],
     })
     expect(completion).toMatchSnapshot('llm')

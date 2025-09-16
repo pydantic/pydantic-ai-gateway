@@ -8,7 +8,7 @@ exports[`anthropic > should call anthropic via gateway > llm 1`] = `
       "type": "text",
     },
   ],
-  "id": "msg_01585PaGjM59gXCuvKbohmSX",
+  "id": "msg_01AnaoqzjPAqtxoDKUYWGrYH",
   "model": "claude-sonnet-4-20250514",
   "role": "assistant",
   "stop_reason": "end_turn",
@@ -21,10 +21,10 @@ exports[`anthropic > should call anthropic via gateway > llm 1`] = `
     },
     "cache_creation_input_tokens": 0,
     "cache_read_input_tokens": 0,
-    "input_tokens": 14,
+    "input_tokens": 20,
     "output_tokens": 10,
     "pydantic_ai_gateway": {
-      "cost_estimate": 0.00019199999999999998,
+      "cost_estimate": 0.00020999999999999998,
     },
     "service_tier": "standard",
   },
@@ -42,7 +42,7 @@ exports[`anthropic > should call anthropic via gateway > span 1`] = `
   {
     "key": "logfire.json_schema",
     "value": {
-      "stringValue": "{"type":"object","properties":{"gen_ai.operation.name":{"type":"string"},"gen_ai.request.model":{"type":"string"},"gen_ai.system":{"type":"string"},"gen_ai.request.max_tokens":{"type":"number"},"gen_ai.response.finish_reasons":{},"gen_ai.input.messages":{},"gen_ai.output.messages":{},"http.response.status_code":{"type":"number"},"http.request.body.text":{"type":"string"},"http.response.body.text":{"type":"string"},"gen_ai.response.model":{"type":"string"},"gen_ai.response.id":{"type":"string"},"gen_ai.usage.input_tokens":{"type":"number"},"gen_ai.usage.cache_read_tokens":{"type":"number"},"gen_ai.usage.cache_write_tokens":{"type":"number"},"gen_ai.usage.output_tokens":{"type":"number"},"gen_ai.usage.input_audio_tokens":{},"gen_ai.usage.cache_audio_read_tokens":{},"gen_ai.usage.output_audio_tokens":{},"events":{}}}",
+      "stringValue": "{"type":"object","properties":{"gen_ai.operation.name":{"type":"string"},"gen_ai.request.model":{"type":"string"},"gen_ai.system":{"type":"string"},"gen_ai.request.max_tokens":{"type":"number"},"gen_ai.request.top_k":{"type":"number"},"gen_ai.request.top_p":{"type":"number"},"gen_ai.request.temperature":{"type":"number"},"gen_ai.request.stop_sequences":{},"gen_ai.request.seed":{},"gen_ai.system_instructions":{},"gen_ai.response.finish_reasons":{},"gen_ai.input.messages":{},"gen_ai.output.messages":{},"http.response.status_code":{"type":"number"},"http.request.body.text":{"type":"string"},"http.response.body.text":{"type":"string"},"gen_ai.response.model":{"type":"string"},"gen_ai.response.id":{"type":"string"},"gen_ai.usage.input_tokens":{"type":"number"},"gen_ai.usage.cache_read_tokens":{"type":"number"},"gen_ai.usage.cache_write_tokens":{"type":"number"},"gen_ai.usage.output_tokens":{"type":"number"},"gen_ai.usage.input_audio_tokens":{},"gen_ai.usage.cache_audio_read_tokens":{},"gen_ai.usage.output_audio_tokens":{},"events":{}}}",
     },
   },
   {
@@ -73,6 +73,67 @@ exports[`anthropic > should call anthropic via gateway > span 1`] = `
     "key": "gen_ai.request.max_tokens",
     "value": {
       "intValue": 1024,
+    },
+  },
+  {
+    "key": "gen_ai.request.top_k",
+    "value": {
+      "intValue": 1,
+    },
+  },
+  {
+    "key": "gen_ai.request.top_p",
+    "value": {
+      "doubleValue": 0.95,
+    },
+  },
+  {
+    "key": "gen_ai.request.temperature",
+    "value": {
+      "doubleValue": 0.5,
+    },
+  },
+  {
+    "key": "gen_ai.request.stop_sequences",
+    "value": {
+      "arrayValue": {
+        "values": [
+          {
+            "stringValue": "potato",
+          },
+        ],
+      },
+    },
+  },
+  {
+    "key": "gen_ai.request.seed",
+    "value": {},
+  },
+  {
+    "key": "gen_ai.system_instructions",
+    "value": {
+      "arrayValue": {
+        "values": [
+          {
+            "kvlistValue": {
+              "values": [
+                {
+                  "key": "type",
+                  "value": {
+                    "stringValue": "text",
+                  },
+                },
+                {
+                  "key": "content",
+                  "value": {
+                    "stringValue": "You are a helpful assistant.",
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
     },
   },
   {
@@ -198,13 +259,13 @@ exports[`anthropic > should call anthropic via gateway > span 1`] = `
   {
     "key": "http.request.body.text",
     "value": {
-      "stringValue": "{"model":"claude-sonnet-4-20250514","max_tokens":1024,"messages":[{"role":"user","content":"What is the capital of France?"}]}",
+      "stringValue": "{"model":"claude-sonnet-4-20250514","max_tokens":1024,"top_p":0.95,"top_k":1,"temperature":0.5,"stop_sequences":["potato"],"system":"You are a helpful assistant.","messages":[{"role":"user","content":"What is the capital of France?"}]}",
     },
   },
   {
     "key": "http.response.body.text",
     "value": {
-      "stringValue": "{"id":"msg_01585PaGjM59gXCuvKbohmSX","type":"message","role":"assistant","model":"claude-sonnet-4-20250514","content":[{"type":"text","text":"The capital of France is Paris."}],"stop_reason":"end_turn","stop_sequence":null,"usage":{"input_tokens":14,"cache_creation_input_tokens":0,"cache_read_input_tokens":0,"cache_creation":{"ephemeral_5m_input_tokens":0,"ephemeral_1h_input_tokens":0},"output_tokens":10,"service_tier":"standard","pydantic_ai_gateway":{"cost_estimate":0.00019199999999999998}}}",
+      "stringValue": "{"id":"msg_01AnaoqzjPAqtxoDKUYWGrYH","type":"message","role":"assistant","model":"claude-sonnet-4-20250514","content":[{"type":"text","text":"The capital of France is Paris."}],"stop_reason":"end_turn","stop_sequence":null,"usage":{"input_tokens":20,"cache_creation_input_tokens":0,"cache_read_input_tokens":0,"cache_creation":{"ephemeral_5m_input_tokens":0,"ephemeral_1h_input_tokens":0},"output_tokens":10,"service_tier":"standard","pydantic_ai_gateway":{"cost_estimate":0.00020999999999999998}}}",
     },
   },
   {
@@ -216,13 +277,13 @@ exports[`anthropic > should call anthropic via gateway > span 1`] = `
   {
     "key": "gen_ai.response.id",
     "value": {
-      "stringValue": "msg_01585PaGjM59gXCuvKbohmSX",
+      "stringValue": "msg_01AnaoqzjPAqtxoDKUYWGrYH",
     },
   },
   {
     "key": "gen_ai.usage.input_tokens",
     "value": {
-      "intValue": 14,
+      "intValue": 20,
     },
   },
   {

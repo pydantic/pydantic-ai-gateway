@@ -4,7 +4,7 @@ import { Usage, calcPrice, extractUsage, findProvider } from '@pydantic/genai-pr
 import { ApiKeyInfo, ProviderProxy } from '../types'
 import { GatewayEnv } from '..'
 import { GenAiOtelEvent, GenAIAttributes, GenAIAttributesExtractor } from '../otel/attributes'
-import { InputMessages, OutputMessages } from '../otel/genai'
+import { InputMessages, OutputMessages, TextPart } from '../otel/genai'
 
 export interface ProxySuccess {
   requestModel?: string
@@ -250,6 +250,12 @@ export class DefaultProviderProxy implements GenAIAttributesExtractor {
   protected otelAttributes(requestBody: JsonData, responseBody: JsonData): GenAIAttributes {
     return {
       'gen_ai.request.max_tokens': safe(this.requestMaxTokens.bind(this))(requestBody),
+      'gen_ai.request.top_k': safe(this.requestTopK.bind(this))(requestBody),
+      'gen_ai.request.top_p': safe(this.requestTopP.bind(this))(requestBody),
+      'gen_ai.request.temperature': safe(this.requestTemperature.bind(this))(requestBody),
+      'gen_ai.request.stop_sequences': safe(this.requestStopSequences.bind(this))(requestBody),
+      'gen_ai.request.seed': safe(this.requestSeed.bind(this))(requestBody),
+      'gen_ai.system_instructions': safe(this.systemInstructions.bind(this))(requestBody),
       'gen_ai.response.finish_reasons': safe(this.responseFinishReasons.bind(this))(responseBody),
       'gen_ai.input.messages': safe(this.inputMessages.bind(this))(requestBody),
       'gen_ai.output.messages': safe(this.outputMessages.bind(this))(responseBody),
@@ -258,6 +264,30 @@ export class DefaultProviderProxy implements GenAIAttributesExtractor {
 
   protected responseId(responseBody: JsonData): string | undefined {
     return typeof responseBody.id === 'string' ? responseBody.id : undefined
+  }
+
+  requestSeed(_requestBody: unknown): number | undefined {
+    return undefined
+  }
+
+  requestStopSequences(_requestBody: unknown): string[] | undefined {
+    return undefined
+  }
+
+  requestTemperature(_requestBody: unknown): number | undefined {
+    return undefined
+  }
+
+  requestTopK(_requestBody: unknown): number | undefined {
+    return undefined
+  }
+
+  requestTopP(_requestBody: unknown): number | undefined {
+    return undefined
+  }
+
+  systemInstructions(_requestBody: unknown): TextPart[] | undefined {
+    return undefined
   }
 
   requestMaxTokens(requestBody: unknown): number | undefined {

@@ -4,7 +4,6 @@ import { Usage, calcPrice, extractUsage, findProvider } from '@pydantic/genai-pr
 import { ApiKeyInfo, ProviderProxy } from '../types'
 import { GatewayEnv } from '..'
 import { GenAiOtelEvent, GenAIAttributes, GenAIAttributesExtractor } from '../otel/attributes'
-import { InputMessages, OutputMessages, TextPart } from '../otel/genai'
 
 export interface ProxySuccess {
   requestModel?: string
@@ -35,22 +34,24 @@ export interface ProxyUnexpectedResponse {
   responseBody: string
 }
 
-interface Prepare {
+interface Prepare<RequestBody> {
   requestBodyText: string
-  requestBodyData: JsonData
+  requestBodyData: RequestBody
   requestModel?: string
 }
 
-export type JsonData = Record<string, unknown>
+export type JsonData = object
 
-interface ProcessResponse {
-  responseBody: JsonData
+interface ProcessResponse<ResponseBody> {
+  responseBody: ResponseBody
   responseModel: string
   usage: Usage
   cost: number
 }
 
-export class DefaultProviderProxy implements GenAIAttributesExtractor {
+export class DefaultProviderProxy<RequestBody extends JsonData, ResponseBody extends JsonData>
+  implements GenAIAttributesExtractor<RequestBody, ResponseBody>
+{
   protected request: Request
   protected env: GatewayEnv
   protected apiKey: ApiKeyInfo
@@ -112,13 +113,15 @@ export class DefaultProviderProxy implements GenAIAttributesExtractor {
     headers.set('Authorization', `Bearer ${this.providerProxy.credentials}`)
   }
 
-  protected async prepRequest(): Promise<Prepare | ProxyInvalidRequest> {
+  protected async prepRequest(): Promise<Prepare<RequestBody> | ProxyInvalidRequest> {
     const requestBodyText = await this.request.text()
-    let requestBodyData: JsonData
-    let requestModel: string
+    let requestBodyData: RequestBody
+    let requestModel: string | undefined
     try {
-      requestBodyData = JSON.parse(requestBodyText) as unknown as JsonData
-      requestModel = requestBodyData.model as string
+      requestBodyData = JSON.parse(requestBodyText) as RequestBody
+      if ('model' in requestBodyData) {
+        requestModel = requestBodyData.model as string
+      }
     } catch {
       return { error: 'invalid request JSON' }
     }
@@ -134,10 +137,10 @@ export class DefaultProviderProxy implements GenAIAttributesExtractor {
     return subFetch(url, init)
   }
 
-  protected async extractUsage(response: Response): Promise<ProcessResponse | ProxyInvalidRequest> {
+  protected async extractUsage(response: Response): Promise<ProcessResponse<ResponseBody> | ProxyInvalidRequest> {
     const bodyText = await response.text()
     try {
-      const responseBody = JSON.parse(bodyText) as unknown as JsonData
+      const responseBody = JSON.parse(bodyText) as unknown as ResponseBody
       const provider = findProvider({ providerId: this.providerId() })
       if (!provider) {
         return { error: 'invalid response JSON, provider not found' }
@@ -160,9 +163,9 @@ export class DefaultProviderProxy implements GenAIAttributesExtractor {
     return undefined
   }
 
-  protected injectCost(responseBody: JsonData, cost: number) {
+  protected injectCost(responseBody: ResponseBody, cost: number) {
     if (this.usageField && this.usageField in responseBody) {
-      const usage = responseBody[this.usageField]
+      const usage = (responseBody as Record<string, unknown>)[this.usageField]
       if (isMapping(usage)) {
         usage.pydantic_ai_gateway = { cost_estimate: cost }
       }
@@ -247,77 +250,62 @@ export class DefaultProviderProxy implements GenAIAttributesExtractor {
     return []
   }
 
-  protected otelAttributes(requestBody: JsonData, responseBody: JsonData): GenAIAttributes {
+  protected otelAttributes(requestBody: RequestBody, responseBody: ResponseBody): GenAIAttributes {
     return {
-      'gen_ai.request.max_tokens': safe(this.requestMaxTokens.bind(this))(requestBody),
-      'gen_ai.request.top_k': safe(this.requestTopK.bind(this))(requestBody),
-      'gen_ai.request.top_p': safe(this.requestTopP.bind(this))(requestBody),
-      'gen_ai.request.temperature': safe(this.requestTemperature.bind(this))(requestBody),
-      'gen_ai.request.stop_sequences': safe(this.requestStopSequences.bind(this))(requestBody),
-      'gen_ai.request.seed': safe(this.requestSeed.bind(this))(requestBody),
-      'gen_ai.system_instructions': safe(this.systemInstructions.bind(this))(requestBody),
-      'gen_ai.response.finish_reasons': safe(this.responseFinishReasons.bind(this))(responseBody),
-      'gen_ai.input.messages': safe(this.inputMessages.bind(this))(requestBody),
-      'gen_ai.output.messages': safe(this.outputMessages.bind(this))(responseBody),
+      'gen_ai.request.max_tokens': this.genAIAttributes('requestMaxTokens', requestBody),
+      'gen_ai.request.top_k': this.genAIAttributes('requestTopK', requestBody),
+      'gen_ai.request.top_p': this.genAIAttributes('requestTopP', requestBody),
+      'gen_ai.request.temperature': this.genAIAttributes('requestTemperature', requestBody),
+      'gen_ai.request.stop_sequences': this.genAIAttributes('requestStopSequences', requestBody),
+      'gen_ai.request.seed': this.genAIAttributes('requestSeed', requestBody),
+      'gen_ai.system_instructions': this.genAIAttributes('systemInstructions', requestBody),
+      'gen_ai.response.finish_reasons': this.genAIAttributes('responseFinishReasons', responseBody),
+      'gen_ai.input.messages': this.genAIAttributes('inputMessages', requestBody),
+      'gen_ai.output.messages': this.genAIAttributes('outputMessages', responseBody),
     }
   }
 
-  protected responseId(responseBody: JsonData): string | undefined {
-    return typeof responseBody.id === 'string' ? responseBody.id : undefined
-  }
+  genAIAttributes<T extends keyof GenAIAttributesExtractor<RequestBody, ResponseBody>>(
+    extractorName: T,
+    ...args: Parameters<NonNullable<GenAIAttributesExtractor<RequestBody, ResponseBody>[T]>>
+  ): ReturnType<NonNullable<GenAIAttributesExtractor<RequestBody, ResponseBody>[T]>> | undefined {
+    // @ts-expect-error inherit from GenAIAttributesExtractor
+    if (extractorName in this && this[extractorName] && typeof this[extractorName] === 'function') {
+      // @ts-expect-error inherit from GenAIAttributesExtractor
 
-  requestSeed(_requestBody: unknown): number | undefined {
+      return safe(this[extractorName])(...args) as ReturnType<
+        NonNullable<GenAIAttributesExtractor<RequestBody, ResponseBody>[T]>
+      >
+    }
     return undefined
   }
 
-  requestStopSequences(_requestBody: unknown): string[] | undefined {
-    return undefined
+  protected responseId(responseBody: ResponseBody): string | undefined {
+    return isMapping(responseBody) && typeof responseBody.id === 'string' ? responseBody.id : undefined
   }
 
-  requestTemperature(_requestBody: unknown): number | undefined {
-    return undefined
-  }
-
-  requestTopK(_requestBody: unknown): number | undefined {
-    return undefined
-  }
-
-  requestTopP(_requestBody: unknown): number | undefined {
-    return undefined
-  }
-
-  systemInstructions(_requestBody: unknown): TextPart[] | undefined {
-    return undefined
-  }
-
-  requestMaxTokens(requestBody: unknown): number | undefined {
+  requestMaxTokens = (requestBody: RequestBody): number | undefined => {
     if (isMapping(requestBody) && typeof requestBody.max_completions_tokens === 'number') {
       return requestBody.max_completions_tokens
     }
     return undefined
   }
 
-  responseFinishReasons(responseBody: unknown): string[] | undefined {
+  responseFinishReasons = (responseBody: ResponseBody): string[] | undefined => {
     if (isMapping(responseBody) && typeof responseBody.finish_reason === 'string') {
       return [responseBody.finish_reason]
     }
     return undefined
   }
-
-  inputMessages(_requestBody: unknown): InputMessages | undefined {
-    return undefined
-  }
-
-  outputMessages(_responseBody: unknown): OutputMessages | undefined {
-    return undefined
-  }
 }
 
-function isMapping(v: unknown): v is Record<string, unknown> {
+export function isMapping(v: unknown): v is Record<string, unknown> {
   return v !== null && !Array.isArray(v) && typeof v === 'object'
 }
 
-function safe<Args extends unknown[], T>(fn: (...args: Args) => T): (...args: Args) => T | undefined {
+type Fn<Args extends unknown[], T> = (...args: Args) => T | undefined
+
+function safe<Args extends unknown[], T>(fn: Fn<Args, T>): Fn<Args, T> {
   return (...args: Args): T | undefined => {
     try {
       return fn(...args)

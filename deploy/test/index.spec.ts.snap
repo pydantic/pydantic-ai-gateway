@@ -52,7 +52,7 @@ exports[`deploy > should call openai via gateway > span 1`] = `
   {
     "key": "logfire.json_schema",
     "value": {
-      "stringValue": "{"type":"object","properties":{"gen_ai.operation.name":{"type":"string"},"gen_ai.request.model":{"type":"string"},"gen_ai.system":{"type":"string"},"gen_ai.request.max_tokens":{},"gen_ai.response.finish_reasons":{},"gen_ai.input.messages":{},"gen_ai.output.messages":{},"http.response.status_code":{"type":"number"},"http.request.body.text":{"type":"string"},"http.response.body.text":{"type":"string"},"gen_ai.response.model":{"type":"string"},"gen_ai.response.id":{"type":"string"},"gen_ai.usage.input_tokens":{"type":"number"},"gen_ai.usage.cache_read_tokens":{"type":"number"},"gen_ai.usage.cache_write_tokens":{},"gen_ai.usage.output_tokens":{"type":"number"},"gen_ai.usage.input_audio_tokens":{},"gen_ai.usage.cache_audio_read_tokens":{},"gen_ai.usage.output_audio_tokens":{"type":"number"},"events":{}}}",
+      "stringValue": "{"type":"object","properties":{"gen_ai.operation.name":{"type":"string"},"gen_ai.request.model":{"type":"string"},"gen_ai.system":{"type":"string"},"gen_ai.request.max_tokens":{},"gen_ai.request.top_k":{},"gen_ai.request.top_p":{},"gen_ai.request.temperature":{},"gen_ai.request.stop_sequences":{},"gen_ai.request.seed":{},"gen_ai.system_instructions":{},"gen_ai.response.finish_reasons":{},"gen_ai.input.messages":{},"gen_ai.output.messages":{},"http.response.status_code":{"type":"number"},"http.request.body.text":{"type":"string"},"http.response.body.text":{"type":"string"},"gen_ai.response.model":{"type":"string"},"gen_ai.response.id":{"type":"string"},"gen_ai.usage.input_tokens":{"type":"number"},"gen_ai.usage.cache_read_tokens":{"type":"number"},"gen_ai.usage.cache_write_tokens":{},"gen_ai.usage.output_tokens":{"type":"number"},"gen_ai.usage.input_audio_tokens":{},"gen_ai.usage.cache_audio_read_tokens":{},"gen_ai.usage.output_audio_tokens":{"type":"number"},"events":{}}}",
     },
   },
   {
@@ -81,6 +81,30 @@ exports[`deploy > should call openai via gateway > span 1`] = `
   },
   {
     "key": "gen_ai.request.max_tokens",
+    "value": {},
+  },
+  {
+    "key": "gen_ai.request.top_k",
+    "value": {},
+  },
+  {
+    "key": "gen_ai.request.top_p",
+    "value": {},
+  },
+  {
+    "key": "gen_ai.request.temperature",
+    "value": {},
+  },
+  {
+    "key": "gen_ai.request.stop_sequences",
+    "value": {},
+  },
+  {
+    "key": "gen_ai.request.seed",
+    "value": {},
+  },
+  {
+    "key": "gen_ai.system_instructions",
     "value": {},
   },
   {
@@ -238,42 +262,6 @@ exports[`deploy > should call openai via gateway > status-after-requests 1`] = `
           "spend": 0.00013875
         }
       ],
-      "spendingLimitMonthly": 3,
-      "spendingLimitTotal": 4
-    },
-    {
-      "id": 4,
-      "name": "low-l...",
-      "spend": [],
-      "spendingLimitDaily": 0.01
-    }
-  ]
-}"
-`;
-
-exports[`deploy > status > status-empty 1`] = `
-"{
-  "teams": [
-    {
-      "id": 1,
-      "name": "default",
-      "spendingLimitDaily": 1,
-      "spend": [],
-      "users": [
-        {
-          "id": 2,
-          "name": "testberto",
-          "spend": [],
-          "spendingLimitWeekly": 2
-        }
-      ]
-    }
-  ],
-  "keys": [
-    {
-      "id": 3,
-      "name": "healt...",
-      "spend": [],
       "spendingLimitMonthly": 3,
       "spendingLimitTotal": 4
     },

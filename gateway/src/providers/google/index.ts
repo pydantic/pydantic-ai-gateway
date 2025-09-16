@@ -1,8 +1,8 @@
-import { DefaultProviderProxy, JsonData } from '../default'
+import { DefaultProviderProxy, JsonData, isMapping } from '../default'
 import { authToken } from './auth'
 import { otelEvents, GoogleRequest, GenerateContentResponse } from './otel'
 
-export class GoogleVertexProvider extends DefaultProviderProxy {
+export class GoogleVertexProvider extends DefaultProviderProxy<JsonData, JsonData> {
   protected usageField = 'usageMetadata'
 
   url() {
@@ -44,6 +44,6 @@ export class GoogleVertexProvider extends DefaultProviderProxy {
   }
 
   responseId(responseBody: JsonData): string | undefined {
-    return responseBody.responseId === 'string' ? responseBody.responseId : undefined
+    return isMapping(responseBody) && typeof responseBody.responseId === 'string' ? responseBody.responseId : undefined
   }
 }

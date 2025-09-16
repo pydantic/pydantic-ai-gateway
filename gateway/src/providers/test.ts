@@ -1,6 +1,6 @@
 import { DefaultProviderProxy } from './default'
 
-export class TestProvider extends DefaultProviderProxy {
+export class TestProvider extends DefaultProviderProxy<object, object> {
   providerId(): string {
     return 'openai'
   }

@@ -18,6 +18,10 @@ export class AnthropicProvider extends DefaultProviderProxy {
     return requestBody.temperature
   }
 
+  requestTopK(requestBody: MessageCreateParams): number | undefined {
+    return requestBody.top_k
+  }
+
   requestTopP(requestBody: MessageCreateParams): number | undefined {
     return requestBody.top_p
   }

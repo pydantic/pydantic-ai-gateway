@@ -250,6 +250,12 @@ export class DefaultProviderProxy implements GenAIAttributesExtractor {
   protected otelAttributes(requestBody: JsonData, responseBody: JsonData): GenAIAttributes {
     return {
       'gen_ai.request.max_tokens': safe(this.requestMaxTokens.bind(this))(requestBody),
+      'gen_ai.request.top_k': safe(this.requestTopK.bind(this))(requestBody),
+      'gen_ai.request.top_p': safe(this.requestTopP.bind(this))(requestBody),
+      'gen_ai.request.temperature': safe(this.requestTemperature.bind(this))(requestBody),
+      'gen_ai.request.stop_sequences': safe(this.requestStopSequences.bind(this))(requestBody),
+      'gen_ai.request.seed': safe(this.requestSeed.bind(this))(requestBody),
+      'gen_ai.system_instructions': safe(this.systemInstructions.bind(this))(requestBody),
       'gen_ai.response.finish_reasons': safe(this.responseFinishReasons.bind(this))(responseBody),
       'gen_ai.input.messages': safe(this.inputMessages.bind(this))(requestBody),
       'gen_ai.output.messages': safe(this.outputMessages.bind(this))(responseBody),
@@ -269,6 +275,10 @@ export class DefaultProviderProxy implements GenAIAttributesExtractor {
   }
 
   requestTemperature(_requestBody: unknown): number | undefined {
+    return undefined
+  }
+
+  requestTopK(_requestBody: unknown): number | undefined {
     return undefined
   }
 

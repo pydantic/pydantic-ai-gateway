@@ -2,7 +2,7 @@ import { DefaultProviderProxy, JsonData, isMapping } from '../default'
 import { authToken } from './auth'
 import { otelEvents, GoogleRequest, GenerateContentResponse } from './otel'
 
-export class GoogleVertexProvider extends DefaultProviderProxy<JsonData, JsonData> {
+export class GoogleVertexProvider extends DefaultProviderProxy {
   protected usageField = 'usageMetadata'
 
   url() {

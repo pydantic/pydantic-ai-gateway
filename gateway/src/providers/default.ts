@@ -49,7 +49,7 @@ interface ProcessResponse<ResponseBody> {
   cost: number
 }
 
-export class DefaultProviderProxy<RequestBody extends JsonData, ResponseBody extends JsonData>
+export class DefaultProviderProxy<RequestBody extends JsonData = JsonData, ResponseBody extends JsonData = JsonData>
   implements GenAIAttributesExtractor<RequestBody, ResponseBody>
 {
   protected request: Request

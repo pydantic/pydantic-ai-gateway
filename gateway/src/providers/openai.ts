@@ -1,7 +1,6 @@
 import { DefaultProviderProxy } from './default'
 
-// TODO(Marcelo): The types (object, object) should change to the actual types.
-export class OpenAIProvider extends DefaultProviderProxy<object, object> {
+export class OpenAIProvider extends DefaultProviderProxy {
   flavor: 'chat' | 'responses' = 'chat'
 
   check() {

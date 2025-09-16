@@ -13,7 +13,7 @@ export default defineConfig(
   neostandard({ noJsx: true, noStyle: true }),
   eslintPluginPrettierRecommended,
   eslintConfigPrettier,
-  { ignores: ['dist'] },
+  { ignores: ['dist', 'deploy/.wrangler'] },
   { languageOptions: { globals: globals.node } },
   {
     rules: {

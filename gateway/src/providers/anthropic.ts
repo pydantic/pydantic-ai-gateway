@@ -2,7 +2,12 @@ import { InputMessages, JsonValue, MessagePart, OutputMessages } from '../otel/g
 import { DefaultProviderProxy } from './default'
 
 // TODO(Marcelo): We use the beta API in PydanticAI, but does it matter here?
-import type { MessageCreateParams, BetaMessage, BetaMessageParam } from '@anthropic-ai/sdk/resources/beta'
+import type {
+  MessageCreateParams,
+  BetaMessage,
+  BetaContentBlock,
+  BetaContentBlockParam,
+} from '@anthropic-ai/sdk/resources/beta'
 
 export class AnthropicProvider extends DefaultProviderProxy {
   requestMaxTokens(requestBody: MessageCreateParams): number | undefined {
@@ -17,17 +22,23 @@ export class AnthropicProvider extends DefaultProviderProxy {
     const messages: InputMessages = []
 
     for (const message of requestBody.messages) {
-      messages.push({ role: message.role, parts: mapInputParts(message.content) })
+      messages.push({ role: message.role, parts: mapParts(message.content) })
     }
     return messages
   }
 
   outputMessages(_responseBody: BetaMessage): OutputMessages | undefined {
-    return undefined
+    return [
+      {
+        role: _responseBody.role,
+        parts: mapParts(_responseBody.content),
+        finish_reason: _responseBody.stop_reason ?? undefined,
+      },
+    ]
   }
 }
 
-function mapInputParts(content: BetaMessageParam['content']): MessagePart[] {
+function mapParts(content: string | BetaContentBlockParam[] | BetaContentBlock[]): MessagePart[] {
   const parts: MessagePart[] = []
 
   if (typeof content === 'string') {
@@ -36,6 +47,8 @@ function mapInputParts(content: BetaMessageParam['content']): MessagePart[] {
     for (const part of content) {
       if (part.type === 'text') {
         parts.push({ type: 'text', content: part.text })
+      } else if (part.type === 'thinking') {
+        parts.push({ type: 'thinking', content: part.thinking })
       } else if (part.type === 'image' && part.source.type === 'base64') {
         parts.push({ type: 'blob', mime_type: part.source.media_type, data: part.source.data })
       } else if (part.type === 'image' && part.source.type === 'url') {

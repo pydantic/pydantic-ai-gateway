@@ -9,24 +9,24 @@ import type {
   BetaContentBlockParam,
 } from '@anthropic-ai/sdk/resources/beta'
 
-export class AnthropicProvider extends DefaultProviderProxy {
-  requestStopSequences(requestBody: MessageCreateParams): string[] | undefined {
+export class AnthropicProvider extends DefaultProviderProxy<MessageCreateParams, BetaMessage> {
+  requestStopSequences = (requestBody: MessageCreateParams): string[] | undefined => {
     return requestBody.stop_sequences
   }
 
-  requestTemperature(requestBody: MessageCreateParams): number | undefined {
+  requestTemperature = (requestBody: MessageCreateParams): number | undefined => {
     return requestBody.temperature
   }
 
-  requestTopK(requestBody: MessageCreateParams): number | undefined {
+  requestTopK = (requestBody: MessageCreateParams): number | undefined => {
     return requestBody.top_k
   }
 
-  requestTopP(requestBody: MessageCreateParams): number | undefined {
+  requestTopP = (requestBody: MessageCreateParams): number | undefined => {
     return requestBody.top_p
   }
 
-  systemInstructions(requestBody: MessageCreateParams): TextPart[] | undefined {
+  systemInstructions = (requestBody: MessageCreateParams): TextPart[] | undefined => {
     if (requestBody.system === undefined) {
       return undefined
     }
@@ -38,15 +38,15 @@ export class AnthropicProvider extends DefaultProviderProxy {
     }
   }
 
-  requestMaxTokens(requestBody: MessageCreateParams): number | undefined {
+  requestMaxTokens = (requestBody: MessageCreateParams): number | undefined => {
     return requestBody.max_tokens
   }
 
-  responseFinishReasons(responseBody: BetaMessage): string[] | undefined {
+  responseFinishReasons = (responseBody: BetaMessage): string[] | undefined => {
     return responseBody.stop_reason ? [responseBody.stop_reason] : undefined
   }
 
-  inputMessages(requestBody: MessageCreateParams): InputMessages | undefined {
+  inputMessages = (requestBody: MessageCreateParams): InputMessages | undefined => {
     const messages: InputMessages = []
 
     for (const message of requestBody.messages) {
@@ -55,12 +55,12 @@ export class AnthropicProvider extends DefaultProviderProxy {
     return messages
   }
 
-  outputMessages(_responseBody: BetaMessage): OutputMessages | undefined {
+  outputMessages = (responseBody: BetaMessage): OutputMessages | undefined => {
     return [
       {
-        role: _responseBody.role,
-        parts: mapParts(_responseBody.content),
-        finish_reason: _responseBody.stop_reason ?? undefined,
+        role: responseBody.role,
+        parts: mapParts(responseBody.content),
+        finish_reason: responseBody.stop_reason ?? undefined,
       },
     ]
   }

@@ -1,6 +1,6 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`deploy > should call openai via gateway > llm 1`] = `
+exports[`openai > should call openai via gateway > llm 1`] = `
 {
   "choices": [
     {
@@ -14,8 +14,8 @@ exports[`deploy > should call openai via gateway > llm 1`] = `
       },
     },
   ],
-  "created": 1757583776,
-  "id": "chatcmpl-CEY7M6BwbBtavblK5zBwrXgbDdIaF",
+  "created": 1758039745,
+  "id": "chatcmpl-CGSjhFYJYSYhI8qgi6FO4lYz6rfLc",
   "model": "gpt-5-2025-08-07",
   "object": "chat.completion",
   "service_tier": "default",
@@ -41,7 +41,7 @@ exports[`deploy > should call openai via gateway > llm 1`] = `
 }
 `;
 
-exports[`deploy > should call openai via gateway > span 1`] = `
+exports[`openai > should call openai via gateway > span 1`] = `
 [
   {
     "key": "logfire.msg",
@@ -52,7 +52,7 @@ exports[`deploy > should call openai via gateway > span 1`] = `
   {
     "key": "logfire.json_schema",
     "value": {
-      "stringValue": "{"type":"object","properties":{"gen_ai.operation.name":{"type":"string"},"gen_ai.request.model":{"type":"string"},"gen_ai.system":{"type":"string"},"gen_ai.request.max_tokens":{},"gen_ai.request.top_k":{},"gen_ai.request.top_p":{},"gen_ai.request.temperature":{},"gen_ai.request.stop_sequences":{},"gen_ai.request.seed":{},"gen_ai.system_instructions":{},"gen_ai.response.finish_reasons":{},"gen_ai.input.messages":{},"gen_ai.output.messages":{},"http.response.status_code":{"type":"number"},"http.request.body.text":{"type":"string"},"http.response.body.text":{"type":"string"},"gen_ai.response.model":{"type":"string"},"gen_ai.response.id":{"type":"string"},"gen_ai.usage.input_tokens":{"type":"number"},"gen_ai.usage.cache_read_tokens":{"type":"number"},"gen_ai.usage.cache_write_tokens":{},"gen_ai.usage.output_tokens":{"type":"number"},"gen_ai.usage.input_audio_tokens":{},"gen_ai.usage.cache_audio_read_tokens":{},"gen_ai.usage.output_audio_tokens":{"type":"number"},"events":{}}}",
+      "stringValue": "{"type":"object","properties":{"gen_ai.operation.name":{"type":"string"},"gen_ai.request.model":{"type":"string"},"gen_ai.system":{"type":"string"},"gen_ai.request.max_tokens":{"type":"number"},"gen_ai.request.top_k":{},"gen_ai.request.top_p":{},"gen_ai.request.temperature":{},"gen_ai.request.stop_sequences":{},"gen_ai.request.seed":{},"gen_ai.system_instructions":{},"gen_ai.response.finish_reasons":{},"gen_ai.input.messages":{},"gen_ai.output.messages":{},"http.response.status_code":{"type":"number"},"http.request.body.text":{"type":"string"},"http.response.body.text":{"type":"string"},"gen_ai.response.model":{"type":"string"},"gen_ai.response.id":{"type":"string"},"gen_ai.usage.input_tokens":{"type":"number"},"gen_ai.usage.cache_read_tokens":{"type":"number"},"gen_ai.usage.cache_write_tokens":{},"gen_ai.usage.output_tokens":{"type":"number"},"gen_ai.usage.input_audio_tokens":{},"gen_ai.usage.cache_audio_read_tokens":{},"gen_ai.usage.output_audio_tokens":{"type":"number"},"events":{}}}",
     },
   },
   {
@@ -81,7 +81,9 @@ exports[`deploy > should call openai via gateway > span 1`] = `
   },
   {
     "key": "gen_ai.request.max_tokens",
-    "value": {},
+    "value": {
+      "intValue": 1024,
+    },
   },
   {
     "key": "gen_ai.request.top_k",
@@ -280,14 +282,15 @@ exports[`deploy > should call openai via gateway > span 1`] = `
       "role": "user",
       "content": "What is the capital of France?"
     }
-  ]
+  ],
+  "max_completion_tokens": 1024
 }",
     },
   },
   {
     "key": "http.response.body.text",
     "value": {
-      "stringValue": "{"id":"chatcmpl-CEY7M6BwbBtavblK5zBwrXgbDdIaF","object":"chat.completion","created":1757583776,"model":"gpt-5-2025-08-07","choices":[{"index":0,"message":{"role":"assistant","content":"Paris.","refusal":null,"annotations":[]},"finish_reason":"stop"}],"usage":{"prompt_tokens":23,"completion_tokens":11,"total_tokens":34,"prompt_tokens_details":{"cached_tokens":0,"audio_tokens":0},"completion_tokens_details":{"reasoning_tokens":0,"audio_tokens":0,"accepted_prediction_tokens":0,"rejected_prediction_tokens":0},"pydantic_ai_gateway":{"cost_estimate":0.00013875}},"service_tier":"default","system_fingerprint":null}",
+      "stringValue": "{"id":"chatcmpl-CGSjhFYJYSYhI8qgi6FO4lYz6rfLc","object":"chat.completion","created":1758039745,"model":"gpt-5-2025-08-07","choices":[{"index":0,"message":{"role":"assistant","content":"Paris.","refusal":null,"annotations":[]},"finish_reason":"stop"}],"usage":{"prompt_tokens":23,"completion_tokens":11,"total_tokens":34,"prompt_tokens_details":{"cached_tokens":0,"audio_tokens":0},"completion_tokens_details":{"reasoning_tokens":0,"audio_tokens":0,"accepted_prediction_tokens":0,"rejected_prediction_tokens":0},"pydantic_ai_gateway":{"cost_estimate":0.00013875}},"service_tier":"default","system_fingerprint":null}",
     },
   },
   {
@@ -299,7 +302,7 @@ exports[`deploy > should call openai via gateway > span 1`] = `
   {
     "key": "gen_ai.response.id",
     "value": {
-      "stringValue": "chatcmpl-CEY7M6BwbBtavblK5zBwrXgbDdIaF",
+      "stringValue": "chatcmpl-CGSjhFYJYSYhI8qgi6FO4lYz6rfLc",
     },
   },
   {
@@ -347,107 +350,4 @@ exports[`deploy > should call openai via gateway > span 1`] = `
     },
   },
 ]
-`;
-
-exports[`deploy > should call openai via gateway > status-after-requests 1`] = `
-"{
-  "teams": [
-    {
-      "id": 1,
-      "name": "default",
-      "spendingLimitDaily": 1,
-      "spend": [
-        {
-          "entityId": 1,
-          "scope": "daily",
-          "scopeInterval": "YYYY-MM-DDT00:00:00.000Z",
-          "limit": 1,
-          "spend": 0.00013875
-        }
-      ],
-      "users": [
-        {
-          "id": 2,
-          "name": "testberto",
-          "spend": [
-            {
-              "entityId": 2,
-              "scope": "weekly",
-              "scopeInterval": "YYYY-MM-DDT00:00:00.000Z",
-              "limit": 2,
-              "spend": 0.00013875
-            }
-          ],
-          "spendingLimitWeekly": 2
-        }
-      ]
-    }
-  ],
-  "keys": [
-    {
-      "id": 3,
-      "name": "healt...",
-      "spend": [
-        {
-          "entityId": 3,
-          "scope": "monthly",
-          "scopeInterval": "YYYY-MM-DDT00:00:00.000Z",
-          "limit": 3,
-          "spend": 0.00013875
-        },
-        {
-          "entityId": 3,
-          "scope": "total",
-          "scopeInterval": null,
-          "limit": 4,
-          "spend": 0.00013875
-        }
-      ],
-      "spendingLimitMonthly": 3,
-      "spendingLimitTotal": 4
-    },
-    {
-      "id": 4,
-      "name": "low-l...",
-      "spend": [],
-      "spendingLimitDaily": 0.01
-    }
-  ]
-}"
-`;
-
-exports[`deploy > status auth works > status-empty 1`] = `
-"{
-  "teams": [
-    {
-      "id": 1,
-      "name": "default",
-      "spendingLimitDaily": 1,
-      "spend": [],
-      "users": [
-        {
-          "id": 2,
-          "name": "testberto",
-          "spend": [],
-          "spendingLimitWeekly": 2
-        }
-      ]
-    }
-  ],
-  "keys": [
-    {
-      "id": 3,
-      "name": "healt...",
-      "spend": [],
-      "spendingLimitMonthly": 3,
-      "spendingLimitTotal": 4
-    },
-    {
-      "id": 4,
-      "name": "low-l...",
-      "spend": [],
-      "spendingLimitDaily": 0.01
-    }
-  ]
-}"
 `;

@@ -7,7 +7,12 @@ export default defineWorkersConfig({
     setupFiles: './test/setup.ts',
     resolveSnapshotPath: (testPath, snapshotExtension) => testPath + snapshotExtension,
     deps: {
-      optimizer: { ssr: { enabled: true, include: ['@pydantic/logfire-cf-workers', '@opentelemetry/resources'] } },
+      optimizer: {
+        ssr: {
+          enabled: true,
+          include: ['@pydantic/logfire-cf-workers', '@opentelemetry/resources', 'mime-types', 'mime-db'],
+        },
+      },
     },
     poolOptions: {
       workers: {

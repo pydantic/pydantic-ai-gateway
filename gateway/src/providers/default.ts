@@ -4,7 +4,6 @@ import { Usage, calcPrice, extractUsage, findProvider } from '@pydantic/genai-pr
 import { ApiKeyInfo, ProviderProxy } from '../types'
 import { GatewayEnv } from '..'
 import { GenAiOtelEvent, GenAIAttributes, GenAIAttributesExtractor } from '../otel/attributes'
-import { TextPart, InputMessages, OutputMessages } from '../otel/genai'
 
 export interface ProxySuccess {
   requestModel?: string
@@ -73,14 +72,6 @@ export class DefaultProviderProxy<RequestBody extends JsonData = JsonData, Respo
     this.providerProxy = providerProxy
     this.restOfPath = restOfPath
   }
-  requestSeed?: ((request: RequestBody) => number | undefined) | undefined
-  requestStopSequences?: ((request: RequestBody) => string[] | undefined) | undefined
-  requestTemperature?: ((request: RequestBody) => number | undefined) | undefined
-  requestTopK?: ((request: RequestBody) => number | undefined) | undefined
-  requestTopP?: ((request: RequestBody) => number | undefined) | undefined
-  systemInstructions?: ((request: RequestBody) => TextPart[] | undefined) | undefined
-  inputMessages?: ((request: RequestBody) => InputMessages | undefined) | undefined
-  outputMessages?: ((response: ResponseBody) => OutputMessages | undefined) | undefined
 
   providerId(): string {
     return this.providerProxy.providerID
@@ -275,6 +266,7 @@ export class DefaultProviderProxy<RequestBody extends JsonData = JsonData, Respo
     extractorName: T,
     ...args: Parameters<NonNullable<GenAIAttributesExtractor<RequestBody, ResponseBody>[T]>>
   ): ReturnType<NonNullable<GenAIAttributesExtractor<RequestBody, ResponseBody>[T]>> | undefined {
+    // @ts-expect-error inherit from GenAIAttributesExtractor
     if (extractorName in this && this[extractorName] && typeof this[extractorName] === 'function') {
       // @ts-expect-error inherit from GenAIAttributesExtractor
       return safe(this[extractorName])(...args) as ReturnType<

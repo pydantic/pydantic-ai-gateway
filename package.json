@@ -23,6 +23,9 @@
     "typegen": "npm run typegen --workspace=deploy --silent"
   },
   "prettier": {
+    "plugins": [
+      "prettier-plugin-organize-imports"
+    ],
     "singleQuote": true,
     "semi": false,
     "trailingComma": "all",
@@ -43,6 +46,7 @@
     "globals": "^16.3.0",
     "neostandard": "^0.12.2",
     "prettier": "^3.6.2",
+    "prettier-plugin-organize-imports": "^4.2.0",
     "typescript": "^5.5.2",
     "typescript-eslint": "^8.41.0",
     "vitest": "~3.2.0"

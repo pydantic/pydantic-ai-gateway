@@ -15,14 +15,14 @@ You should have received a copy of the GNU Affero General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-import { ApiKeyInfo, ProviderProxy, ProviderID } from '../types'
 import { GatewayEnv } from '..'
+import { ApiKeyInfo, ProviderID, ProviderProxy } from '../types'
 
-import { OpenAIProvider } from './openai'
+import { AnthropicProvider } from './anthropic'
+import { DefaultProviderProxy } from './default'
 import { GoogleVertexProvider } from './google'
 import { GroqProvider } from './groq'
-import { DefaultProviderProxy } from './default'
-import { AnthropicProvider } from './anthropic'
+import { OpenAIProvider } from './openai'
 import { TestProvider } from './test'
 
 type providerSig = new (

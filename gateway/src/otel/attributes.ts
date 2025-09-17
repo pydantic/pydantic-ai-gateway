@@ -1,11 +1,11 @@
+import type { Attributes, Level } from '.'
 import type {
-  ProxySuccess,
-  ProxyInvalidRequest,
-  ProxyUnexpectedResponse,
   DefaultProviderProxy,
   JsonData,
+  ProxyInvalidRequest,
+  ProxySuccess,
+  ProxyUnexpectedResponse,
 } from '../providers/default'
-import type { Level, Attributes } from '.'
 import { InputMessages, OutputMessages, TextPart } from './genai'
 
 export function genAiOtelAttributes<RequestBody extends JsonData, ResponseBody extends JsonData>(

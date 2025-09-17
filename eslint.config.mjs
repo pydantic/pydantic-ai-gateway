@@ -1,7 +1,7 @@
 import pluginJs from '@eslint/js'
 import eslintConfigPrettier from 'eslint-config-prettier/flat'
-import { defineConfig } from 'eslint/config'
 import eslintPluginPrettierRecommended from 'eslint-plugin-prettier/recommended'
+import { defineConfig } from 'eslint/config'
 import globals from 'globals'
 import neostandard from 'neostandard'
 import tseslint from 'typescript-eslint'

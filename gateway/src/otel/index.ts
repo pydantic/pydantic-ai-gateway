@@ -1,26 +1,26 @@
 import * as logfire from '@pydantic/logfire-api'
 
 import {
-  ProtobufTraceSerializer,
-  JsonTraceSerializer,
   type ISerializer,
   IExportTraceServiceResponse,
+  JsonTraceSerializer,
+  ProtobufTraceSerializer,
 } from '@opentelemetry/otlp-transformer'
 
 import {
   type Context,
-  propagation,
-  TraceFlags,
   type HrTime,
   type SpanContext,
+  propagation,
   TextMapGetter,
   trace,
+  TraceFlags,
 } from '@opentelemetry/api'
-import type { ReadableSpan } from '@opentelemetry/sdk-trace-base/build/src/export/ReadableSpan'
 import { resourceFromAttributes } from '@opentelemetry/resources'
+import type { ReadableSpan } from '@opentelemetry/sdk-trace-base/build/src/export/ReadableSpan'
 
-import type { OtelSettings, SubFetch } from '../types'
 import type { GatewayEnv } from '../index'
+import type { OtelSettings, SubFetch } from '../types'
 
 export type Attributes = Record<string, string | number | boolean | object | undefined>
 export type Level = 'debug' | 'info' | 'notice' | 'warn' | 'error'

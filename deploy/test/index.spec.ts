@@ -1,6 +1,6 @@
-import OpenAI from 'openai'
 import { SELF, env, fetchMock } from 'cloudflare:test'
-import { describe, it, expect, beforeAll, afterEach, beforeEach } from 'vitest'
+import OpenAI from 'openai'
+import { afterEach, beforeAll, beforeEach, describe, expect, it } from 'vitest'
 import SQL from '../../gateway/limits-schema.sql?raw'
 
 beforeAll(async () => {

@@ -1,5 +1,5 @@
-import { env } from 'cloudflare:workers'
 import type { Config } from '@deploy/types'
+import { env } from 'cloudflare:workers'
 
 // can be whatever you want, just used to make linking apiKeys to providers typesafe.
 type ProviderKeys = 'a' | 'b' | 'c' | 'd'

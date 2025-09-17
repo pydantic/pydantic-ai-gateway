@@ -1,4 +1,4 @@
-import { SpendStatus, LimitDb } from '@pydantic/ai-gateway'
+import { LimitDb, SpendStatus } from '@pydantic/ai-gateway'
 import { config } from './config'
 
 interface EntityStatus {

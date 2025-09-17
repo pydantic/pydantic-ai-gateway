@@ -1,5 +1,5 @@
-import { ApiKeyInfo } from './types'
 import { GatewayEnv } from '.'
+import { ApiKeyInfo } from './types'
 import { ResponseError } from './utils'
 
 const CACHE_VERSION = 1

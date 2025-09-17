@@ -3,8 +3,8 @@
 import * as logfire from '@pydantic/logfire-api'
 
 import type {
-  ChatCompletionCreateParamsBase,
   ChatCompletion,
+  ChatCompletionCreateParamsBase,
   ChatCompletionMessageParam,
 } from '@groq-chat/completions'
 import { GenAiOtelEvent, GenaiChoiceEvent } from '../otel/attributes'

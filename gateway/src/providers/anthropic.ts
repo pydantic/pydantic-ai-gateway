@@ -3,10 +3,10 @@ import { DefaultProviderProxy } from './default'
 
 // TODO(Marcelo): We use the beta API in PydanticAI, but does it matter here?
 import type {
-  MessageCreateParams,
-  BetaMessage,
   BetaContentBlock,
   BetaContentBlockParam,
+  BetaMessage,
+  MessageCreateParams,
 } from '@anthropic-ai/sdk/resources/beta'
 
 export class AnthropicProvider extends DefaultProviderProxy<MessageCreateParams, BetaMessage> {

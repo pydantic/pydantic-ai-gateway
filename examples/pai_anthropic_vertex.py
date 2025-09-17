@@ -1,0 +1,49 @@
+import os
+from datetime import date
+
+import logfire
+from anthropic import AnthropicVertex
+from google.auth.api_key import Credentials
+from pydantic import BaseModel, field_validator
+from pydantic_ai import Agent
+from pydantic_ai.models.anthropic import AnthropicModel
+from pydantic_ai.providers.anthropic import AnthropicProvider
+
+logfire.configure(service_name='testing')
+logfire.instrument_pydantic_ai()
+
+GATEWAY_API_KEY = os.getenv('GATEWAY_API_KEY')
+assert GATEWAY_API_KEY, 'GATEWAY_API_KEY is not set'
+
+
+class Person(BaseModel, use_attribute_docstrings=True):
+    name: str
+    """The name of the person."""
+    dob: date
+    """The date of birth of the person. MUST BE A VALID ISO 8601 date."""
+    city: str
+    """The city where the person lives."""
+
+    @field_validator('dob')
+    def validate_dob(cls, v: date) -> date:
+        if v >= date(1900, 1, 1):
+            raise ValueError('The person must be born in the 19th century')
+        return v
+
+
+client = AnthropicVertex(
+    base_url='http://localhost:8787/google-vertex',
+    region='unset',
+    project_id='unset',
+    credentials=Credentials(token=GATEWAY_API_KEY),
+)
+provider = AnthropicProvider(anthropic_client=client)
+model = AnthropicModel('claude-sonnet-4-20250514', provider=provider)
+
+person_agent = Agent(
+    model=model,
+    output_type=Person,
+    instructions='Extract information about the person',
+)
+result = person_agent.run_sync("Samuel lived in London and was born on Jan 28th '87")
+print(repr(result.output))

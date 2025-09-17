@@ -51,14 +51,12 @@ async def proxy(request: Request) -> JSONResponse:
         with vcr.use_cassette(f'{body_hash}.yaml'):  # type: ignore[reportUnknownReturnType]
             headers = {'Authorization': auth_header, 'content-type': 'application/json'}
             response = await client.post(url, content=body, headers=headers)
-        return JSONResponse(response.json(), status_code=response.status_code)
     elif request.url.path.startswith('/groq'):
         client = cast(httpx.AsyncClient, request.scope['state']['httpx_client'])
         url = GROQ_BASE_URL + request.url.path[len('/groq') :]
         with vcr.use_cassette(f'{body_hash}.yaml'):  # type: ignore[reportUnknownReturnType]
             headers = {'Authorization': auth_header, 'content-type': 'application/json'}
             response = await client.post(url, content=body, headers=headers)
-        return JSONResponse(response.json(), status_code=response.status_code)
     elif request.url.path.startswith('/anthropic'):
         client = cast(httpx.AsyncClient, request.scope['state']['httpx_client'])
         url = ANTHROPIC_BASE_URL + request.url.path[len('/anthropic') :]
@@ -70,9 +68,9 @@ async def proxy(request: Request) -> JSONResponse:
                 'anthropic-version': request.headers.get('anthropic-version', '2023-06-01'),
             }
             response = await client.post(url, content=body, headers=headers)
-        return JSONResponse(response.json(), status_code=response.status_code)
-    raise HTTPException(status_code=400, detail='Invalid user agent')
-    # raise HTTPException(status_code=404, detail=f'Path {request.url.path} not supported')
+    else:
+        raise HTTPException(status_code=404, detail=f'Path {request.url.path} not supported')
+    return JSONResponse(response.json(), status_code=response.status_code)
 
 
 async def health_check(_: Request) -> Response:

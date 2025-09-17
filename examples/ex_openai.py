@@ -1,3 +1,5 @@
+import os
+
 import logfire
 from devtools import debug
 from openai import OpenAI
@@ -5,8 +7,12 @@ from openai import OpenAI
 logfire.configure()
 logfire.instrument_httpx(capture_all=True)
 
+
+GATEWAY_API_KEY = os.getenv('GATEWAY_API_KEY')
+assert GATEWAY_API_KEY, 'GATEWAY_API_KEY is not set'
+
 client = OpenAI(
-    api_key='VOE4JMpVGr71RgvEEidPCXd4ov42L24ODw9q5RI7uYc',
+    api_key=GATEWAY_API_KEY,
     base_url='http://localhost:8787/openai',
     # base_url='https://pydantic-ai-gateway.pydantic.workers.dev/openai',
 )

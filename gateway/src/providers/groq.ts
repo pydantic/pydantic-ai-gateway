@@ -1,63 +1,41 @@
-/* eslint-disable camelcase */
 /** we're working with snake_case keys from the Groq API */
-import * as logfire from '@pydantic/logfire-api'
 
-import type {
-  ChatCompletion,
-  ChatCompletionCreateParamsBase,
-  ChatCompletionMessageParam,
-} from '@groq-chat/completions'
-import { GenAiOtelEvent, GenaiChoiceEvent } from '../otel/attributes'
+import type { ChatCompletion, ChatCompletionCreateParamsBase } from '@groq-chat/completions'
 
+import { InputMessages, OutputMessages } from '../otel/genai'
 import { DefaultProviderProxy } from './default'
+import { mapInputMessage, mapOutputMessage } from './openai'
 
 export class GroqProvider extends DefaultProviderProxy<ChatCompletionCreateParamsBase, ChatCompletion> {
   defaultBaseUrl = 'https://api.groq.com'
 
-  otelEvents(requestBody: ChatCompletionCreateParamsBase, responseBody: ChatCompletion): GenAiOtelEvent[] {
-    const events = requestBody.messages.map(mapRequestMessage)
-
-    const choice = responseBody.choices[0]
-    if (choice) {
-      events.push(mapResponseMessage(choice))
-    } else {
-      logfire.warning('No choice found in Groq response', { responseBody })
-    }
-    return events
+  requestStopSequences = (requestBody: ChatCompletionCreateParamsBase): string[] | undefined => {
+    return typeof requestBody.stop === 'string' ? [requestBody.stop] : (requestBody.stop ?? undefined)
   }
-}
 
-function mapRequestMessage(message: ChatCompletionMessageParam): GenAiOtelEvent {
-  const { role } = message
-  if (role === 'system' || role === 'developer') {
-    const { content } = message
-    return { 'event.name': 'gen_ai.system.message', role: 'system', content }
-  } else if (role === 'user') {
-    const { content } = message
-    return { 'event.name': 'gen_ai.user.message', role: 'user', content }
-  } else if (role === 'tool') {
-    const { content, tool_call_id } = message
-    return { 'event.name': 'gen_ai.tool.message', role: 'tool', id: tool_call_id, content }
-  } else if (role === 'assistant') {
-    const { content, tool_calls } = message
-    return { 'event.name': 'gen_ai.assistant.message', role: 'assistant', content, tool_calls }
-    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-  } else if (role === 'function') {
-    // deprecated, shouldn't happen
-    const { content } = message
-    return { 'event.name': 'gen_ai.assistant.message', role: 'assistant', content }
-  } else {
-    const neverRole: never = role
-    // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-    throw new Error(`Unexpected role: ${neverRole}`)
+  requestTemperature = (requestBody: ChatCompletionCreateParamsBase): number | undefined => {
+    return requestBody.temperature ?? undefined
   }
-}
 
-function mapResponseMessage(choice: ChatCompletion.Choice): GenaiChoiceEvent {
-  return {
-    'event.name': 'gen_ai.choice',
-    finish_reason: choice.finish_reason,
-    index: 0,
-    message: { role: 'assistant', content: choice.message.content, tool_calls: choice.message.tool_calls },
+  requestTopP = (requestBody: ChatCompletionCreateParamsBase): number | undefined => requestBody.top_p ?? undefined
+
+  requestMaxTokens = (requestBody: ChatCompletionCreateParamsBase): number | undefined => {
+    return requestBody.max_completion_tokens ?? undefined
+  }
+
+  responseId = (responseBody: ChatCompletion): string | undefined => responseBody.id
+
+  responseFinishReasons = (responseBody: ChatCompletion): string[] | undefined => {
+    return responseBody.choices.map((choice) => choice.finish_reason)
+  }
+
+  inputMessages = (_requestBody: ChatCompletionCreateParamsBase): InputMessages | undefined => {
+    // @ts-expect-error TODO(Marcelo): We should create a better API to extract OTel in Chat Completions.
+    return _requestBody.messages.map(mapInputMessage)
+  }
+
+  outputMessages = (_responseBody: ChatCompletion): OutputMessages | undefined => {
+    // @ts-expect-error TODO(Marcelo): We should create a better API to extract OTel in Chat Completions.
+    return _responseBody.choices.map(mapOutputMessage)
   }
 }

@@ -10,21 +10,12 @@ import type {
 } from '@anthropic-ai/sdk/resources/beta'
 
 export class AnthropicProvider extends DefaultProviderProxy<MessageCreateParams, BetaMessage> {
-  requestStopSequences = (requestBody: MessageCreateParams): string[] | undefined => {
-    return requestBody.stop_sequences
-  }
-
-  requestTemperature = (requestBody: MessageCreateParams): number | undefined => {
-    return requestBody.temperature
-  }
-
-  requestTopK = (requestBody: MessageCreateParams): number | undefined => {
-    return requestBody.top_k
-  }
-
-  requestTopP = (requestBody: MessageCreateParams): number | undefined => {
-    return requestBody.top_p
-  }
+  requestStopSequences = (requestBody: MessageCreateParams): string[] | undefined => requestBody.stop_sequences
+  requestTemperature = (requestBody: MessageCreateParams): number | undefined => requestBody.temperature
+  requestTopK = (requestBody: MessageCreateParams): number | undefined => requestBody.top_k
+  requestTopP = (requestBody: MessageCreateParams): number | undefined => requestBody.top_p
+  requestMaxTokens = (requestBody: MessageCreateParams): number | undefined => requestBody.max_tokens
+  responseId = (responseBody: BetaMessage): string | undefined => responseBody.id
 
   systemInstructions = (requestBody: MessageCreateParams): TextPart[] | undefined => {
     if (requestBody.system === undefined) {
@@ -36,10 +27,6 @@ export class AnthropicProvider extends DefaultProviderProxy<MessageCreateParams,
     } else {
       return requestBody.system.map((part) => ({ type: 'text', content: part.text }))
     }
-  }
-
-  requestMaxTokens = (requestBody: MessageCreateParams): number | undefined => {
-    return requestBody.max_tokens
   }
 
   responseFinishReasons = (responseBody: BetaMessage): string[] | undefined => {

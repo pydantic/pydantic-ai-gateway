@@ -140,9 +140,9 @@ export interface GenAIAttributesExtractor<RequestBody, ResponseBody> {
   requestTemperature?: (request: RequestBody) => GenAIAttributes['gen_ai.request.temperature']
   requestTopK?: (request: RequestBody) => GenAIAttributes['gen_ai.request.top_k']
   requestTopP?: (request: RequestBody) => GenAIAttributes['gen_ai.request.top_p']
-  systemInstructions?: (request: RequestBody) => GenAIAttributes['gen_ai.system_instructions']
-  responseId?: (response: ResponseBody) => GenAIAttributes['gen_ai.response.id']
   responseFinishReasons?: (response: ResponseBody) => GenAIAttributes['gen_ai.response.finish_reasons']
+  responseId?: (response: ResponseBody) => GenAIAttributes['gen_ai.response.id']
   inputMessages?: (request: RequestBody) => GenAIAttributes['gen_ai.input.messages']
   outputMessages?: (response: ResponseBody) => GenAIAttributes['gen_ai.output.messages']
+  systemInstructions?: (request: RequestBody) => GenAIAttributes['gen_ai.system_instructions']
 }

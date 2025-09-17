@@ -23,8 +23,7 @@ export function genAiOtelAttributes<RequestBody extends JsonData, ResponseBody e
   let level: Level = 'info'
 
   if ('successStatus' in result) {
-    const { requestBody, successStatus, responseModel, usage, otelEvents, responseBody, responseId, otelAttributes } =
-      result
+    const { requestBody, successStatus, responseModel, usage, otelEvents, responseBody, otelAttributes } = result
     spanName = `chat ${responseModel}`
     attributes = {
       ...attributes,
@@ -33,7 +32,6 @@ export function genAiOtelAttributes<RequestBody extends JsonData, ResponseBody e
       'http.request.body.text': requestBody,
       'http.response.body.text': responseBody,
       'gen_ai.response.model': responseModel,
-      'gen_ai.response.id': responseId,
       'gen_ai.usage.input_tokens': usage.input_tokens,
       'gen_ai.usage.cache_read_tokens': usage.cache_read_tokens,
       'gen_ai.usage.cache_write_tokens': usage.cache_write_tokens,
@@ -128,6 +126,7 @@ export interface GenAIAttributes {
   'gen_ai.request.temperature'?: number
   'gen_ai.request.top_k'?: number
   'gen_ai.request.top_p'?: number
+  'gen_ai.response.id'?: string
   'gen_ai.response.finish_reasons'?: string[]
   'gen_ai.input.messages'?: InputMessages
   'gen_ai.output.messages'?: OutputMessages
@@ -142,6 +141,7 @@ export interface GenAIAttributesExtractor<RequestBody, ResponseBody> {
   requestTopK?: (request: RequestBody) => GenAIAttributes['gen_ai.request.top_k']
   requestTopP?: (request: RequestBody) => GenAIAttributes['gen_ai.request.top_p']
   systemInstructions?: (request: RequestBody) => GenAIAttributes['gen_ai.system_instructions']
+  responseId?: (response: ResponseBody) => GenAIAttributes['gen_ai.response.id']
   responseFinishReasons?: (response: ResponseBody) => GenAIAttributes['gen_ai.response.finish_reasons']
   inputMessages?: (request: RequestBody) => GenAIAttributes['gen_ai.input.messages']
   outputMessages?: (response: ResponseBody) => GenAIAttributes['gen_ai.output.messages']

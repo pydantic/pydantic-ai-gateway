@@ -4,6 +4,7 @@ import { Usage, calcPrice, extractUsage, findProvider } from '@pydantic/genai-pr
 import { ApiKeyInfo, ProviderProxy } from '../types'
 import { GatewayEnv } from '..'
 import { GenAiOtelEvent, GenAIAttributes, GenAIAttributesExtractor } from '../otel/attributes'
+import { TextPart, InputMessages, OutputMessages } from '../otel/genai'
 
 export interface ProxySuccess {
   requestModel?: string
@@ -12,7 +13,6 @@ export interface ProxySuccess {
   responseHeaders: Headers
   responseBody: string
   responseModel: string
-  responseId?: string
   otelEvents?: GenAiOtelEvent[]
   otelAttributes?: GenAIAttributes
   usage: Usage
@@ -73,6 +73,14 @@ export class DefaultProviderProxy<RequestBody extends JsonData = JsonData, Respo
     this.providerProxy = providerProxy
     this.restOfPath = restOfPath
   }
+  requestSeed?: ((request: RequestBody) => number | undefined) | undefined
+  requestStopSequences?: ((request: RequestBody) => string[] | undefined) | undefined
+  requestTemperature?: ((request: RequestBody) => number | undefined) | undefined
+  requestTopK?: ((request: RequestBody) => number | undefined) | undefined
+  requestTopP?: ((request: RequestBody) => number | undefined) | undefined
+  systemInstructions?: ((request: RequestBody) => TextPart[] | undefined) | undefined
+  inputMessages?: ((request: RequestBody) => InputMessages | undefined) | undefined
+  outputMessages?: ((response: ResponseBody) => OutputMessages | undefined) | undefined
 
   providerId(): string {
     return this.providerProxy.providerID
@@ -215,8 +223,6 @@ export class DefaultProviderProxy<RequestBody extends JsonData = JsonData, Respo
     }
     const { responseBody, usage, responseModel, cost } = processResponse
 
-    const responseId = this.responseId(responseBody)
-
     // TODO we will want to remove some response headers, e.g. openai org
     const responseHeaders = new Headers(response.headers)
     responseHeaders.set('pydantic-ai-gateway-price-estimate', `${cost.toFixed(4)}USD`)
@@ -235,7 +241,6 @@ export class DefaultProviderProxy<RequestBody extends JsonData = JsonData, Respo
       successStatus: response.status,
       responseHeaders,
       responseBody: JSON.stringify(responseBody),
-      responseId,
       requestModel,
       otelEvents,
       otelAttributes,
@@ -260,6 +265,7 @@ export class DefaultProviderProxy<RequestBody extends JsonData = JsonData, Respo
       'gen_ai.request.seed': this.genAIAttributes('requestSeed', requestBody),
       'gen_ai.system_instructions': this.genAIAttributes('systemInstructions', requestBody),
       'gen_ai.response.finish_reasons': this.genAIAttributes('responseFinishReasons', responseBody),
+      'gen_ai.response.id': this.genAIAttributes('responseId', responseBody),
       'gen_ai.input.messages': this.genAIAttributes('inputMessages', requestBody),
       'gen_ai.output.messages': this.genAIAttributes('outputMessages', responseBody),
     }
@@ -269,7 +275,6 @@ export class DefaultProviderProxy<RequestBody extends JsonData = JsonData, Respo
     extractorName: T,
     ...args: Parameters<NonNullable<GenAIAttributesExtractor<RequestBody, ResponseBody>[T]>>
   ): ReturnType<NonNullable<GenAIAttributesExtractor<RequestBody, ResponseBody>[T]>> | undefined {
-    // @ts-expect-error inherit from GenAIAttributesExtractor
     if (extractorName in this && this[extractorName] && typeof this[extractorName] === 'function') {
       // @ts-expect-error inherit from GenAIAttributesExtractor
       return safe(this[extractorName])(...args) as ReturnType<
@@ -279,22 +284,20 @@ export class DefaultProviderProxy<RequestBody extends JsonData = JsonData, Respo
     return undefined
   }
 
-  protected responseId(responseBody: ResponseBody): string | undefined {
+  responseId = (responseBody: ResponseBody): string | undefined => {
     return isMapping(responseBody) && typeof responseBody.id === 'string' ? responseBody.id : undefined
   }
 
   requestMaxTokens = (requestBody: RequestBody): number | undefined => {
-    if (isMapping(requestBody) && typeof requestBody.max_completions_tokens === 'number') {
-      return requestBody.max_completions_tokens
-    }
-    return undefined
+    return isMapping(requestBody) && typeof requestBody.max_completions_tokens === 'number'
+      ? requestBody.max_completions_tokens
+      : undefined
   }
 
   responseFinishReasons = (responseBody: ResponseBody): string[] | undefined => {
-    if (isMapping(responseBody) && typeof responseBody.finish_reason === 'string') {
-      return [responseBody.finish_reason]
-    }
-    return undefined
+    return isMapping(responseBody) && typeof responseBody.finish_reason === 'string'
+      ? [responseBody.finish_reason]
+      : undefined
   }
 }
 

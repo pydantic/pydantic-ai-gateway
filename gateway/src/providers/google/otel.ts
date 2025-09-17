@@ -1,14 +1,14 @@
-import * as logfire from '@pydantic/logfire-api'
 import type {
-  Content,
-  GenerateContentResponse,
-  ContentUnion,
-  Tool,
-  GenerationConfig,
-  ToolConfig,
-  Part,
   Candidate,
+  Content,
+  ContentUnion,
+  GenerateContentResponse,
+  GenerationConfig,
+  Part,
+  Tool,
+  ToolConfig,
 } from '@google/genai'
+import * as logfire from '@pydantic/logfire-api'
 import { GenAiOtelEvent, GenaiChoiceEvent, ToolCall } from '../../otel/attributes'
 
 export { GenerateContentResponse } from '@google/genai'

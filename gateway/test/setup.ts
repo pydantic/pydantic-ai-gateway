@@ -1,8 +1,8 @@
 /* eslint-disable no-empty-pattern */
-import { expect, beforeAll, beforeEach, test as baseTest } from 'vitest'
+import { createExecutionContext, env, waitOnExecutionContext } from 'cloudflare:test'
+import { test as baseTest, beforeAll, beforeEach, expect } from 'vitest'
 import SQL from '../limits-schema.sql?raw'
 import { DisableEvent, buildGatewayEnv } from './worker'
-import { env, createExecutionContext, waitOnExecutionContext } from 'cloudflare:test'
 
 import { gatewayFetch } from '@pydantic/ai-gateway'
 

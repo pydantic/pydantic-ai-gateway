@@ -1,8 +1,8 @@
-import OpenAI from 'openai'
+import { LimitDbD1 } from '@pydantic/ai-gateway'
 import { env } from 'cloudflare:test'
+import OpenAI from 'openai'
 import { describe, expect } from 'vitest'
 import { test } from '../setup'
-import { LimitDbD1 } from '@pydantic/ai-gateway'
 import { IDS } from '../worker'
 
 describe('openai', () => {

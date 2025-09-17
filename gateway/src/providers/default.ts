@@ -1,9 +1,9 @@
-import * as logfire from '@pydantic/logfire-api'
 import { Usage, calcPrice, extractUsage, findProvider } from '@pydantic/genai-prices'
+import * as logfire from '@pydantic/logfire-api'
 
-import { ApiKeyInfo, ProviderProxy } from '../types'
 import { GatewayEnv } from '..'
-import { GenAiOtelEvent, GenAIAttributes, GenAIAttributesExtractor } from '../otel/attributes'
+import { GenAIAttributes, GenAIAttributesExtractor, GenAiOtelEvent } from '../otel/attributes'
+import { ApiKeyInfo, ProviderProxy } from '../types'
 
 export interface ProxySuccess {
   requestModel?: string

@@ -1,12 +1,12 @@
-import { ChatMessage, InputMessages, OutputMessages, MessagePart, OutputMessage } from '../otel/genai'
 import * as logfire from '@pydantic/logfire-api'
 import mime from 'mime-types'
-import { DefaultProviderProxy } from './default'
 import type {
-  ChatCompletionCreateParams,
   ChatCompletion,
+  ChatCompletionCreateParams,
   ChatCompletionMessageParam,
 } from 'openai/resources/chat/completions'
+import { ChatMessage, InputMessages, MessagePart, OutputMessage, OutputMessages } from '../otel/genai'
+import { DefaultProviderProxy } from './default'
 
 export class OpenAIProvider extends DefaultProviderProxy<ChatCompletionCreateParams, ChatCompletion> {
   flavor: 'chat' | 'responses' = 'chat'

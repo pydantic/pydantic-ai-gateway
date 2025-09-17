@@ -1,4 +1,4 @@
-import { KeysDbD1, ApiKeyInfo, KeyStatus, ProviderProxy } from '@pydantic/ai-gateway'
+import { ApiKeyInfo, KeysDbD1, KeyStatus, ProviderProxy } from '@pydantic/ai-gateway'
 import { config } from './config'
 
 export class ConfigDB extends KeysDbD1 {

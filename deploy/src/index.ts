@@ -15,10 +15,10 @@ You should have received a copy of the GNU Affero General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-import { env } from 'cloudflare:workers'
+import { GatewayEnv, gatewayFetch, LimitDbD1 } from '@pydantic/ai-gateway'
 import * as logfire from '@pydantic/logfire-api'
 import { instrument } from '@pydantic/logfire-cf-workers'
-import { gatewayFetch, GatewayEnv, LimitDbD1 } from '@pydantic/ai-gateway'
+import { env } from 'cloudflare:workers'
 import { config } from './config'
 import { ConfigDB, hash } from './db'
 import { status } from './status'

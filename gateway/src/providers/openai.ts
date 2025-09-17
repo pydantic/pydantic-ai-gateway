@@ -24,23 +24,20 @@ export class OpenAIProvider extends DefaultProviderProxy<ChatCompletionCreatePar
   }
 
   requestStopSequences = (requestBody: ChatCompletionCreateParams): string[] | undefined => {
-    if (typeof requestBody.stop === 'string') {
-      return [requestBody.stop]
-    }
-    return requestBody.stop ?? undefined
+    return typeof requestBody.stop === 'string' ? [requestBody.stop] : (requestBody.stop ?? undefined)
   }
 
   requestTemperature = (requestBody: ChatCompletionCreateParams): number | undefined => {
     return requestBody.temperature ?? undefined
   }
 
-  requestTopP = (requestBody: ChatCompletionCreateParams): number | undefined => {
-    return requestBody.top_p ?? undefined
-  }
+  requestTopP = (requestBody: ChatCompletionCreateParams): number | undefined => requestBody.top_p ?? undefined
 
   requestMaxTokens = (requestBody: ChatCompletionCreateParams): number | undefined => {
     return requestBody.max_completion_tokens ?? undefined
   }
+
+  responseId = (responseBody: ChatCompletion): string | undefined => responseBody.id
 
   responseFinishReasons = (responseBody: ChatCompletion): string[] | undefined => {
     return responseBody.choices.map((choice) => choice.finish_reason)
@@ -55,7 +52,7 @@ export class OpenAIProvider extends DefaultProviderProxy<ChatCompletionCreatePar
   }
 }
 
-function mapInputMessage(message: ChatCompletionMessageParam): ChatMessage {
+export function mapInputMessage(message: ChatCompletionMessageParam): ChatMessage {
   return { role: message.role, parts: mapInputParts(message.content) }
 }
 
@@ -88,7 +85,7 @@ function mapInputParts(content: ChatCompletionMessageParam['content']): MessageP
   return parts
 }
 
-function mapOutputMessage(choice: ChatCompletion.Choice): OutputMessage {
+export function mapOutputMessage(choice: ChatCompletion.Choice): OutputMessage {
   return { role: choice.message.role, parts: mapOutputParts(choice.message), finish_reason: choice.finish_reason }
 }
 

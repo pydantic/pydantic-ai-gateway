@@ -3,6 +3,7 @@ import * as logfire from '@pydantic/logfire-api'
 
 import { GatewayEnv } from '..'
 import { GenAIAttributes, GenAIAttributesExtractor, GenAiOtelEvent } from '../otel/attributes'
+import { InputMessages, OutputMessages, TextPart } from '../otel/genai'
 import { ApiKeyInfo, ProviderProxy } from '../types'
 
 export interface ProxySuccess {
@@ -254,42 +255,39 @@ export class DefaultProviderProxy<RequestBody extends JsonData = JsonData, Respo
       'gen_ai.request.temperature': this.genAIAttributes('requestTemperature', requestBody),
       'gen_ai.request.stop_sequences': this.genAIAttributes('requestStopSequences', requestBody),
       'gen_ai.request.seed': this.genAIAttributes('requestSeed', requestBody),
-      'gen_ai.system_instructions': this.genAIAttributes('systemInstructions', requestBody),
       'gen_ai.response.finish_reasons': this.genAIAttributes('responseFinishReasons', responseBody),
       'gen_ai.response.id': this.genAIAttributes('responseId', responseBody),
       'gen_ai.input.messages': this.genAIAttributes('inputMessages', requestBody),
       'gen_ai.output.messages': this.genAIAttributes('outputMessages', responseBody),
+      'gen_ai.system_instructions': this.genAIAttributes('systemInstructions', requestBody),
     }
   }
+
+  // GenAIAttributesExtractor interface implementation
+
+  requestMaxTokens = (_request: RequestBody): number | undefined => undefined
+  requestSeed = (_request: RequestBody): number | undefined => undefined
+  requestStopSequences = (_request: RequestBody): string[] | undefined => undefined
+  requestTemperature = (_request: RequestBody): number | undefined => undefined
+  requestTopK = (_request: RequestBody): number | undefined => undefined
+  requestTopP = (_request: RequestBody): number | undefined => undefined
+  responseFinishReasons = (_response: ResponseBody): string[] | undefined => undefined
+  responseId = (_response: ResponseBody): string | undefined => undefined
+  inputMessages = (_request: RequestBody): InputMessages | undefined => undefined
+  outputMessages = (_response: ResponseBody): OutputMessages | undefined => undefined
+  systemInstructions = (_request: RequestBody): TextPart[] | undefined => undefined
 
   genAIAttributes<T extends keyof GenAIAttributesExtractor<RequestBody, ResponseBody>>(
     extractorName: T,
     ...args: Parameters<NonNullable<GenAIAttributesExtractor<RequestBody, ResponseBody>[T]>>
   ): ReturnType<NonNullable<GenAIAttributesExtractor<RequestBody, ResponseBody>[T]>> | undefined {
-    // @ts-expect-error inherit from GenAIAttributesExtractor
-    if (extractorName in this && this[extractorName] && typeof this[extractorName] === 'function') {
+    if (extractorName in this && typeof this[extractorName] === 'function') {
       // @ts-expect-error inherit from GenAIAttributesExtractor
       return safe(this[extractorName])(...args) as ReturnType<
         NonNullable<GenAIAttributesExtractor<RequestBody, ResponseBody>[T]>
       >
     }
     return undefined
-  }
-
-  responseId = (responseBody: ResponseBody): string | undefined => {
-    return isMapping(responseBody) && typeof responseBody.id === 'string' ? responseBody.id : undefined
-  }
-
-  requestMaxTokens = (requestBody: RequestBody): number | undefined => {
-    return isMapping(requestBody) && typeof requestBody.max_completions_tokens === 'number'
-      ? requestBody.max_completions_tokens
-      : undefined
-  }
-
-  responseFinishReasons = (responseBody: ResponseBody): string[] | undefined => {
-    return isMapping(responseBody) && typeof responseBody.finish_reason === 'string'
-      ? [responseBody.finish_reason]
-      : undefined
   }
 }
 

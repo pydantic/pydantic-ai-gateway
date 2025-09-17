@@ -1,5 +1,4 @@
 import { env } from 'cloudflare:test'
-import Groq from 'groq-sdk'
 import OpenAI from 'openai'
 import { describe, expect, it } from 'vitest'
 import { test } from './setup'
@@ -54,22 +53,6 @@ describe('invalid request', () => {
     expect(text).toMatchInlineSnapshot(
       `"Invalid provider 'wrong', should be one of groq, openai, google-vertex, anthropic"`,
     )
-  })
-})
-
-describe('groq', () => {
-  test('should call groq via gateway', async ({ gateway }) => {
-    const { fetch } = gateway
-    const client = new Groq({ apiKey: 'healthy', baseURL: 'https://example.com/groq', fetch })
-
-    const completion = await client.chat.completions.create({
-      model: 'llama-3.3-70b-versatile',
-      messages: [
-        { role: 'developer', content: 'You are a helpful assistant.' },
-        { role: 'user', content: 'What is the capital of France?' },
-      ],
-    })
-    expect(completion).toMatchSnapshot('llm')
   })
 })
 

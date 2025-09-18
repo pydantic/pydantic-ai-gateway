@@ -51,28 +51,31 @@ async def proxy(request: Request) -> JSONResponse:
         with vcr.use_cassette(f'{body_hash}.yaml'):  # type: ignore[reportUnknownReturnType]
             headers = {'Authorization': auth_header, 'content-type': 'application/json'}
             response = await client.post(url, content=body, headers=headers)
-        return JSONResponse(response.json(), status_code=response.status_code)
     elif request.url.path.startswith('/groq'):
         client = cast(httpx.AsyncClient, request.scope['state']['httpx_client'])
         url = GROQ_BASE_URL + request.url.path[len('/groq') :]
         with vcr.use_cassette(f'{body_hash}.yaml'):  # type: ignore[reportUnknownReturnType]
             headers = {'Authorization': auth_header, 'content-type': 'application/json'}
             response = await client.post(url, content=body, headers=headers)
-        return JSONResponse(response.json(), status_code=response.status_code)
     elif request.url.path.startswith('/anthropic'):
         client = cast(httpx.AsyncClient, request.scope['state']['httpx_client'])
         url = ANTHROPIC_BASE_URL + request.url.path[len('/anthropic') :]
         api_key = auth_header.replace('Bearer ', '')
         with vcr.use_cassette(f'{body_hash}.yaml'):  # type: ignore[reportUnknownReturnType]
+            anthropic_beta_headers = {}
+            if anthropic_beta := request.headers.get('anthropic-beta'):
+                anthropic_beta_headers = {'anthropic-beta': anthropic_beta}
+
             headers = {
                 'x-api-key': api_key,
                 'content-type': 'application/json',
                 'anthropic-version': request.headers.get('anthropic-version', '2023-06-01'),
+                **anthropic_beta_headers,
             }
             response = await client.post(url, content=body, headers=headers)
-        return JSONResponse(response.json(), status_code=response.status_code)
-    raise HTTPException(status_code=400, detail='Invalid user agent')
-    # raise HTTPException(status_code=404, detail=f'Path {request.url.path} not supported')
+    else:
+        raise HTTPException(status_code=404, detail=f'Path {request.url.path} not supported')
+    return JSONResponse(response.json(), status_code=response.status_code)
 
 
 async def health_check(_: Request) -> Response:

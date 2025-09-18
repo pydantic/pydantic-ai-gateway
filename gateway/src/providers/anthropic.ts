@@ -68,9 +68,17 @@ function mapParts(content: string | BetaContentBlockParam[] | BetaContentBlock[]
         parts.push({ type: 'blob', mime_type: part.source.media_type, data: part.source.data })
       } else if (part.type === 'image' && part.source.type === 'url') {
         parts.push({ type: 'file_data', file_uri: part.source.url })
-      } else if (part.type === 'tool_use') {
+        // TODO(Marcelo): Currently, there's no semantic convention for built-in tools: https://github.com/open-telemetry/semantic-conventions/issues/2585
+      } else if (part.type === 'tool_use' || part.type === 'server_tool_use') {
         parts.push({ type: 'tool_call', id: part.id, name: part.name, arguments: part.input as JsonValue })
-      } else if (part.type === 'tool_result') {
+      } else if (
+        part.type === 'tool_result' ||
+        part.type === 'code_execution_tool_result' ||
+        part.type === 'bash_code_execution_tool_result' ||
+        part.type === 'text_editor_code_execution_tool_result' ||
+        part.type === 'web_search_tool_result' ||
+        part.type === 'web_fetch_tool_result'
+      ) {
         parts.push({ type: 'tool_call_response', id: part.tool_use_id, result: part.content as JsonValue })
       } else {
         parts.push({ ...part })

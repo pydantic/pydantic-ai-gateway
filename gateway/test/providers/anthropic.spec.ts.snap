@@ -748,6 +748,12 @@ print(f"Sample standard deviation (s) = √{variance_sample:.2f} = {std_dev_samp
                                   },
                                 },
                               },
+                              {
+                                "key": "builtin",
+                                "value": {
+                                  "boolValue": true,
+                                },
+                              },
                             ],
                           },
                         },
@@ -793,6 +799,12 @@ print(f"Sample standard deviation (s) = √{variance_sample:.2f} = {std_dev_samp
                                   },
                                 },
                               },
+                              {
+                                "key": "builtin",
+                                "value": {
+                                  "boolValue": true,
+                                },
+                              },
                             ],
                           },
                         },
@@ -830,6 +842,12 @@ print(f"Sample standard deviation (s) = √{variance_sample:.2f} = {std_dev_samp
                                       },
                                     ],
                                   },
+                                },
+                              },
+                              {
+                                "key": "builtin",
+                                "value": {
+                                  "boolValue": true,
                                 },
                               },
                             ],
@@ -925,6 +943,12 @@ Sample standard deviation (s) = √9.17 = 3.027650
                                       },
                                     ],
                                   },
+                                },
+                              },
+                              {
+                                "key": "builtin",
+                                "value": {
+                                  "boolValue": true,
                                 },
                               },
                             ],

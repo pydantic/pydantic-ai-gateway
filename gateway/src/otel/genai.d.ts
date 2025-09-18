@@ -57,7 +57,7 @@ export type MessagePart =
   | ThinkingPart
   | GenericPart
 
-export type Role = string
+export type Role = 'system' | 'user' | 'assistant' | 'tool'
 
 export interface ChatMessage {
   role: Role

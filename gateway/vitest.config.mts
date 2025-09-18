@@ -3,7 +3,7 @@ import { defineWorkersConfig } from '@cloudflare/vitest-pool-workers/config'
 export default defineWorkersConfig({
   test: {
     // from https://github.com/cloudflare/workers-sdk/issues/6581#issuecomment-2653472683
-    testTimeout: 30000,
+    testTimeout: 60000,
     setupFiles: './test/setup.ts',
     resolveSnapshotPath: (testPath, snapshotExtension) => testPath + snapshotExtension,
     deps: {

@@ -767,6 +767,12 @@ print(f"Sample standard deviation (s) = √{variance_sample:.2f} = {std_dev_samp
                                 },
                               },
                               {
+                                "key": "name",
+                                "value": {
+                                  "stringValue": "text_editor_code_execution",
+                                },
+                              },
+                              {
                                 "key": "result",
                                 "value": {
                                   "kvlistValue": {
@@ -842,6 +848,12 @@ print(f"Sample standard deviation (s) = √{variance_sample:.2f} = {std_dev_samp
                                 "key": "id",
                                 "value": {
                                   "stringValue": "srvtoolu_01SbMesS7arx1TtgPE4C7CKk",
+                                },
+                              },
+                              {
+                                "key": "name",
+                                "value": {
+                                  "stringValue": "bash_code_execution",
                                 },
                               },
                               {

@@ -55,6 +55,7 @@ export class AnthropicProvider extends DefaultProviderProxy<MessageCreateParams,
 
 function mapParts(content: string | BetaContentBlockParam[] | BetaContentBlock[]): MessagePart[] {
   const parts: MessagePart[] = []
+  const mapToolCallIdToName: Record<string, string> = {}
 
   if (typeof content === 'string') {
     parts.push({ type: 'text', content })
@@ -70,7 +71,14 @@ function mapParts(content: string | BetaContentBlockParam[] | BetaContentBlock[]
         parts.push({ type: 'file_data', file_uri: part.source.url })
         // TODO(Marcelo): Currently, there's no semantic convention for built-in tools: https://github.com/open-telemetry/semantic-conventions/issues/2585
       } else if (part.type === 'tool_use' || part.type === 'server_tool_use') {
-        parts.push({ type: 'tool_call', id: part.id, name: part.name, arguments: part.input as JsonValue })
+        mapToolCallIdToName[part.id] = part.name
+        parts.push({
+          type: 'tool_call',
+          id: part.id,
+          name: part.name,
+          arguments: part.input as JsonValue,
+          builtin: part.type === 'server_tool_use',
+        })
       } else if (
         part.type === 'tool_result' ||
         part.type === 'code_execution_tool_result' ||
@@ -79,7 +87,13 @@ function mapParts(content: string | BetaContentBlockParam[] | BetaContentBlock[]
         part.type === 'web_search_tool_result' ||
         part.type === 'web_fetch_tool_result'
       ) {
-        parts.push({ type: 'tool_call_response', id: part.tool_use_id, result: part.content as JsonValue })
+        parts.push({
+          type: 'tool_call_response',
+          id: part.tool_use_id,
+          name: mapToolCallIdToName[part.tool_use_id],
+          result: part.content as JsonValue,
+          builtin: !(part.type === 'tool_result'),
+        })
       } else {
         parts.push({ ...part })
       }

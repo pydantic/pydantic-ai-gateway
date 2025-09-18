@@ -132,7 +132,7 @@ exports[`deploy > should call openai via gateway > span 1`] = `
                 {
                   "key": "role",
                   "value": {
-                    "stringValue": "developer",
+                    "stringValue": "system",
                   },
                 },
                 {

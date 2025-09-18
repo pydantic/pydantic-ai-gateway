@@ -3,6 +3,7 @@ from datetime import date
 import logfire
 from pydantic import BaseModel, field_validator
 from pydantic_ai import Agent
+from pydantic_ai.models.google import GoogleModelSettings
 
 logfire.configure(service_name='testing')
 logfire.instrument_pydantic_ai()
@@ -27,6 +28,7 @@ person_agent = Agent(
     'gateway:google-vertex/gemini-2.5-flash',
     output_type=Person,
     instructions='Extract information about the person',
+    model_settings=GoogleModelSettings(stop_sequences=['potato'], temperature=0.5, top_p=0.9),
 )
 result = person_agent.run_sync("Samuel lived in London and was born on Jan 28th '87")
 print(repr(result.output))

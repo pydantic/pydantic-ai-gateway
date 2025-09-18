@@ -53,7 +53,9 @@ export class OpenAIProvider extends DefaultProviderProxy<ChatCompletionCreatePar
 }
 
 export function mapInputMessage(message: ChatCompletionMessageParam): ChatMessage {
-  return { role: message.role, parts: mapInputParts(message.content) }
+  // TODO(Marcelo): There's probably a cuter way to do this.
+  const role = message.role === 'function' ? 'tool' : message.role === 'developer' ? 'system' : message.role
+  return { role, parts: mapInputParts(message.content) }
 }
 
 function mapInputParts(content: ChatCompletionMessageParam['content']): MessagePart[] {

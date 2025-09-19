@@ -5,7 +5,7 @@ export class TestProvider extends DefaultProviderProxy {
     return 'openai'
   }
 
-  apiFlavour(): string | undefined {
+  apiFlavor(): string | undefined {
     return 'chat'
   }
 

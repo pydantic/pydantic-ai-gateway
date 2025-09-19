@@ -31,7 +31,7 @@ type providerSig = new (
   apiKey: ApiKeyInfo,
   provider: ProviderProxy,
   restOfPath: string,
-) => DefaultProviderProxy<any, any> // eslint-disable-line @typescript-eslint/no-explicit-any
+) => DefaultProviderProxy
 
 export function getProvider(providerId: ProviderID): providerSig {
   switch (providerId) {

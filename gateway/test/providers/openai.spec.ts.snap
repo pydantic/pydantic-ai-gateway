@@ -343,11 +343,7 @@ exports[`openai > should call openai via gateway > span 1`] = `
   },
   {
     "key": "events",
-    "value": {
-      "arrayValue": {
-        "values": [],
-      },
-    },
+    "value": {},
   },
 ]
 `;

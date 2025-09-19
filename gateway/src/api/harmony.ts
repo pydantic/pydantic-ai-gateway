@@ -4,6 +4,4 @@
 
 import { BaseAPI } from './base'
 
-export class HarmonyAPI<RequestBody, ResponseBody> extends BaseAPI<RequestBody, ResponseBody> {
-  apiFlavor = 'harmony'
-}
+export class HarmonyAPI extends BaseAPI<object, object> {}

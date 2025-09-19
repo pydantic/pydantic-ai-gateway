@@ -7,9 +7,9 @@ import type {
 import { InputMessages, JsonValue, MessagePart, OutputMessages, TextPart } from '../otel/genai'
 import { BaseAPI } from './base'
 
-export class AnthropicAPI extends BaseAPI<MessageCreateParams, BetaMessage> {
-  apiFlavor = 'anthropic'
+// TODO(Marcelo): We use the beta API in PydanticAI, but does it matter here?
 
+export class AnthropicAPI extends BaseAPI<MessageCreateParams, BetaMessage> {
   requestStopSequences = (requestBody: MessageCreateParams): string[] | undefined => requestBody.stop_sequences
   requestTemperature = (requestBody: MessageCreateParams): number | undefined => requestBody.temperature
   requestTopK = (requestBody: MessageCreateParams): number | undefined => requestBody.top_k

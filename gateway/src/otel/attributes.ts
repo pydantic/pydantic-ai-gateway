@@ -1,16 +1,15 @@
 import type { Attributes, Level } from '.'
 import type {
   DefaultProviderProxy,
-  JsonData,
   ProxyInvalidRequest,
   ProxySuccess,
   ProxyUnexpectedResponse,
 } from '../providers/default'
 import { InputMessages, OutputMessages, TextPart } from './genai'
 
-export function genAiOtelAttributes<RequestBody extends JsonData, ResponseBody extends JsonData>(
+export function genAiOtelAttributes(
   result: ProxySuccess | ProxyInvalidRequest | ProxyUnexpectedResponse,
-  provider: DefaultProviderProxy<RequestBody, ResponseBody>,
+  provider: DefaultProviderProxy,
 ): [string, Attributes, Level] {
   const { requestModel } = result
   let spanName: string

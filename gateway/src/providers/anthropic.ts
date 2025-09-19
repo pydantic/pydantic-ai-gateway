@@ -1,10 +1,9 @@
-import { APIFlavor } from '../api'
+import { ModelAPI } from '../api'
+import { AnthropicAPI } from '../api/anthropic'
 import { DefaultProviderProxy } from './default'
 
-// TODO(Marcelo): We use the beta API in PydanticAI, but does it matter here?
-
 export class AnthropicProvider extends DefaultProviderProxy {
-  protected apiFlavor(): keyof APIFlavor {
-    return 'anthropic'
+  protected modelAPI(): ModelAPI | undefined {
+    return new AnthropicAPI()
   }
 }

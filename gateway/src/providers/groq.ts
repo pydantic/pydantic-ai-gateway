@@ -1,12 +1,13 @@
 /** we're working with snake_case keys from the Groq API */
 
-import { APIFlavor } from '../api'
+import { ModelAPI } from '../api'
+import { ChatCompletionAPI } from '../api/chat'
 import { DefaultProviderProxy } from './default'
 
 export class GroqProvider extends DefaultProviderProxy {
   defaultBaseUrl = 'https://api.groq.com'
 
-  protected apiFlavor(): keyof APIFlavor {
-    return 'chat'
+  protected modelAPI(): ModelAPI | undefined {
+    return new ChatCompletionAPI()
   }
 }

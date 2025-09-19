@@ -2,7 +2,7 @@ import { Usage, calcPrice, extractUsage, findProvider } from '@pydantic/genai-pr
 import * as logfire from '@pydantic/logfire-api'
 
 import { GatewayEnv } from '..'
-import { APIFlavor, createAPI } from '../api'
+import { ModelAPI } from '../api'
 import { GenAIAttributes, GenAiOtelEvent } from '../otel/attributes'
 import { ApiKeyInfo, ProviderProxy } from '../types'
 
@@ -80,8 +80,8 @@ export class DefaultProviderProxy {
     return undefined
   }
 
-  protected getAPI<T extends keyof APIFlavor>(apiFlavor: T): APIFlavor[T] {
-    return createAPI(apiFlavor)
+  protected modelAPI(): ModelAPI | undefined {
+    return undefined
   }
 
   /**
@@ -242,8 +242,11 @@ export class DefaultProviderProxy {
   }
 
   protected otelAttributes(requestBody: JsonData, responseBody: JsonData): GenAIAttributes {
-    const api = this.getAPI(this.apiFlavor() as keyof APIFlavor)
-    return api.extractOtelAttributes(requestBody, responseBody)
+    const modelAPI = this.modelAPI()
+    if (!modelAPI) {
+      return {}
+    }
+    return modelAPI.extractOtelAttributes(requestBody, responseBody)
   }
 }
 

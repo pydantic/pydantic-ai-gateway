@@ -1,4 +1,6 @@
-import { APIFlavor } from '../api'
+import { ModelAPI } from '../api'
+import { ChatCompletionAPI } from '../api/chat'
+import { ResponsesAPI } from '../api/responses'
 import { DefaultProviderProxy } from './default'
 
 export class OpenAIProvider extends DefaultProviderProxy {
@@ -12,7 +14,15 @@ export class OpenAIProvider extends DefaultProviderProxy {
     }
   }
 
-  apiFlavor(): keyof APIFlavor {
+  apiFlavor(): string | undefined {
     return this.flavor
+  }
+
+  modelAPI(): ModelAPI | undefined {
+    if (this.flavor === 'responses') {
+      return new ResponsesAPI()
+    } else {
+      return new ChatCompletionAPI()
+    }
   }
 }

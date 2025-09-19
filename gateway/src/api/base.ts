@@ -5,7 +5,8 @@ import { JsonData, safe } from '../providers/default'
 export abstract class BaseAPI<RequestBody, ResponseBody>
   implements GenAIAttributesExtractor<RequestBody, ResponseBody>
 {
-  abstract apiFlavor: string
+  /** @apiFlavor: the flavor of the API, used to determine the response model and usage */
+  apiFlavor: string | undefined = undefined
 
   requestMaxTokens?: (requestBody: RequestBody) => number | undefined
   requestSeed?: (requestBody: RequestBody) => number | undefined

@@ -17,8 +17,6 @@ import { JsonData, isMapping } from '../providers/default'
 export { GenerateContentResponse } from '@google/genai'
 
 export class GoogleAPI extends BaseAPI<GoogleRequest, GenerateContentResponse> {
-  apiFlavor = 'google'
-
   requestStopSequences = (_request: GoogleRequest): string[] | undefined => {
     return _request.generationConfig?.stopSequences ?? undefined
   }

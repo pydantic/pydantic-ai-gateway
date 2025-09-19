@@ -4,6 +4,6 @@
 
 import { BaseAPI } from './base'
 
-export class ResponsesAPI<RequestBody, ResponseBody> extends BaseAPI<RequestBody, ResponseBody> {
+export class ResponsesAPI extends BaseAPI<object, object> {
   apiFlavor = 'responses'
 }

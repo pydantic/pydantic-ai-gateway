@@ -3,7 +3,7 @@ import * as logfire from '@pydantic/logfire-api'
 
 import { GatewayEnv } from '..'
 import { ModelAPI } from '../api'
-import { GenAIAttributes, GenAiOtelEvent } from '../otel/attributes'
+import { GenAIAttributes } from '../otel/attributes'
 import { ApiKeyInfo, ProviderProxy } from '../types'
 
 export interface ProxySuccess {
@@ -13,7 +13,6 @@ export interface ProxySuccess {
   responseHeaders: Headers
   responseBody: string
   responseModel: string
-  otelEvents?: GenAiOtelEvent[]
   otelAttributes?: GenAIAttributes
   usage: Usage
   cost: number

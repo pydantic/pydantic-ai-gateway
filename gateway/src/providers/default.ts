@@ -2,8 +2,8 @@ import { Usage, calcPrice, extractUsage, findProvider } from '@pydantic/genai-pr
 import * as logfire from '@pydantic/logfire-api'
 
 import { GatewayEnv } from '..'
-import { GenAIAttributes, GenAIAttributesExtractor, GenAiOtelEvent } from '../otel/attributes'
-import { InputMessages, OutputMessages, TextPart } from '../otel/genai'
+import { ModelAPI } from '../api'
+import { GenAIAttributes } from '../otel/attributes'
 import { ApiKeyInfo, ProviderProxy } from '../types'
 
 export interface ProxySuccess {
@@ -13,7 +13,6 @@ export interface ProxySuccess {
   responseHeaders: Headers
   responseBody: string
   responseModel: string
-  otelEvents?: GenAiOtelEvent[]
   otelAttributes?: GenAIAttributes
   usage: Usage
   cost: number
@@ -34,24 +33,22 @@ export interface ProxyUnexpectedResponse {
   responseBody: string
 }
 
-interface Prepare<RequestBody> {
+interface Prepare {
   requestBodyText: string
-  requestBodyData: RequestBody
+  requestBodyData: JsonData
   requestModel?: string
 }
 
 export type JsonData = object
 
-interface ProcessResponse<ResponseBody> {
-  responseBody: ResponseBody
+interface ProcessResponse {
+  responseBody: JsonData
   responseModel: string
   usage: Usage
   cost: number
 }
 
-export class DefaultProviderProxy<RequestBody extends JsonData = JsonData, ResponseBody extends JsonData = JsonData>
-  implements GenAIAttributesExtractor<RequestBody, ResponseBody>
-{
+export class DefaultProviderProxy {
   protected request: Request
   protected env: GatewayEnv
   protected apiKey: ApiKeyInfo
@@ -78,7 +75,11 @@ export class DefaultProviderProxy<RequestBody extends JsonData = JsonData, Respo
     return this.providerProxy.providerID
   }
 
-  protected apiFlavour(): string | undefined {
+  protected apiFlavor(): string | undefined {
+    return undefined
+  }
+
+  protected modelAPI(): ModelAPI | undefined {
     return undefined
   }
 
@@ -113,12 +114,12 @@ export class DefaultProviderProxy<RequestBody extends JsonData = JsonData, Respo
     headers.set('Authorization', `Bearer ${this.providerProxy.credentials}`)
   }
 
-  protected async prepRequest(): Promise<Prepare<RequestBody> | ProxyInvalidRequest> {
+  protected async prepRequest(): Promise<Prepare | ProxyInvalidRequest> {
     const requestBodyText = await this.request.text()
-    let requestBodyData: RequestBody
+    let requestBodyData: JsonData
     let requestModel: string | undefined
     try {
-      requestBodyData = JSON.parse(requestBodyText) as RequestBody
+      requestBodyData = JSON.parse(requestBodyText) as JsonData
       if ('model' in requestBodyData) {
         requestModel = requestBodyData.model as string
       }
@@ -137,15 +138,15 @@ export class DefaultProviderProxy<RequestBody extends JsonData = JsonData, Respo
     return subFetch(url, init)
   }
 
-  protected async extractUsage(response: Response): Promise<ProcessResponse<ResponseBody> | ProxyInvalidRequest> {
+  protected async extractUsage(response: Response): Promise<ProcessResponse | ProxyInvalidRequest> {
     const bodyText = await response.text()
     try {
-      const responseBody = JSON.parse(bodyText) as unknown as ResponseBody
+      const responseBody = JSON.parse(bodyText) as unknown as JsonData
       const provider = findProvider({ providerId: this.providerId() })
       if (!provider) {
         return { error: 'invalid response JSON, provider not found' }
       }
-      const [responseModel, usage] = extractUsage(provider, responseBody, this.apiFlavour())
+      const [responseModel, usage] = extractUsage(provider, responseBody, this.apiFlavor())
 
       const price = calcPrice(usage, responseModel, { provider })
       if (price) {
@@ -163,7 +164,7 @@ export class DefaultProviderProxy<RequestBody extends JsonData = JsonData, Respo
     return undefined
   }
 
-  protected injectCost(responseBody: ResponseBody, cost: number) {
+  protected injectCost(responseBody: JsonData, cost: number) {
     if (this.usageField && this.usageField in responseBody) {
       const usage = (responseBody as Record<string, unknown>)[this.usageField]
       if (isMapping(usage)) {
@@ -224,7 +225,6 @@ export class DefaultProviderProxy<RequestBody extends JsonData = JsonData, Respo
       this.injectCost(responseBody, cost)
     }
 
-    const otelEvents = safe(this.otelEvents.bind(this))(requestBodyData, responseBody)
     const otelAttributes = safe(this.otelAttributes.bind(this))(requestBodyData, responseBody)
 
     return {
@@ -234,60 +234,18 @@ export class DefaultProviderProxy<RequestBody extends JsonData = JsonData, Respo
       responseHeaders,
       responseBody: JSON.stringify(responseBody),
       requestModel,
-      otelEvents,
       otelAttributes,
       usage,
       cost,
     }
   }
 
-  // Generative AI OpenTelemetry attributes
-
-  protected otelEvents(_requestBody: RequestBody, _responseModel: ResponseBody): GenAiOtelEvent[] {
-    return []
-  }
-
-  protected otelAttributes(requestBody: RequestBody, responseBody: ResponseBody): GenAIAttributes {
-    return {
-      'gen_ai.request.max_tokens': this.genAIAttributes('requestMaxTokens', requestBody),
-      'gen_ai.request.top_k': this.genAIAttributes('requestTopK', requestBody),
-      'gen_ai.request.top_p': this.genAIAttributes('requestTopP', requestBody),
-      'gen_ai.request.temperature': this.genAIAttributes('requestTemperature', requestBody),
-      'gen_ai.request.stop_sequences': this.genAIAttributes('requestStopSequences', requestBody),
-      'gen_ai.request.seed': this.genAIAttributes('requestSeed', requestBody),
-      'gen_ai.response.finish_reasons': this.genAIAttributes('responseFinishReasons', responseBody),
-      'gen_ai.response.id': this.genAIAttributes('responseId', responseBody),
-      'gen_ai.input.messages': this.genAIAttributes('inputMessages', requestBody),
-      'gen_ai.output.messages': this.genAIAttributes('outputMessages', responseBody),
-      'gen_ai.system_instructions': this.genAIAttributes('systemInstructions', requestBody),
+  protected otelAttributes(requestBody: JsonData, responseBody: JsonData): GenAIAttributes {
+    const modelAPI = this.modelAPI()
+    if (!modelAPI) {
+      return {}
     }
-  }
-
-  // GenAIAttributesExtractor interface implementation
-
-  requestMaxTokens = (_request: RequestBody): number | undefined => undefined
-  requestSeed = (_request: RequestBody): number | undefined => undefined
-  requestStopSequences = (_request: RequestBody): string[] | undefined => undefined
-  requestTemperature = (_request: RequestBody): number | undefined => undefined
-  requestTopK = (_request: RequestBody): number | undefined => undefined
-  requestTopP = (_request: RequestBody): number | undefined => undefined
-  responseFinishReasons = (_response: ResponseBody): string[] | undefined => undefined
-  responseId = (_response: ResponseBody): string | undefined => undefined
-  inputMessages = (_request: RequestBody): InputMessages | undefined => undefined
-  outputMessages = (_response: ResponseBody): OutputMessages | undefined => undefined
-  systemInstructions = (_request: RequestBody): TextPart[] | undefined => undefined
-
-  genAIAttributes<T extends keyof GenAIAttributesExtractor<RequestBody, ResponseBody>>(
-    extractorName: T,
-    ...args: Parameters<NonNullable<GenAIAttributesExtractor<RequestBody, ResponseBody>[T]>>
-  ): ReturnType<NonNullable<GenAIAttributesExtractor<RequestBody, ResponseBody>[T]>> | undefined {
-    if (extractorName in this && typeof this[extractorName] === 'function') {
-      // @ts-expect-error inherit from GenAIAttributesExtractor
-      return safe(this[extractorName])(...args) as ReturnType<
-        NonNullable<GenAIAttributesExtractor<RequestBody, ResponseBody>[T]>
-      >
-    }
-    return undefined
+    return modelAPI.extractOtelAttributes(requestBody, responseBody)
   }
 }
 
@@ -297,7 +255,7 @@ export function isMapping(v: unknown): v is Record<string, unknown> {
 
 type Fn<Args extends unknown[], T> = (...args: Args) => T | undefined
 
-function safe<Args extends unknown[], T>(fn: Fn<Args, T>): Fn<Args, T> {
+export function safe<Args extends unknown[], T>(fn: Fn<Args, T>): Fn<Args, T> {
   return (...args: Args): T | undefined => {
     try {
       return fn(...args)

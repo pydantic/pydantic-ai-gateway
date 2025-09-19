@@ -42,7 +42,7 @@ exports[`anthropic > should call anthropic via gateway > span 1`] = `
   {
     "key": "logfire.json_schema",
     "value": {
-      "stringValue": "{"type":"object","properties":{"gen_ai.operation.name":{"type":"string"},"gen_ai.request.model":{"type":"string"},"gen_ai.system":{"type":"string"},"gen_ai.request.max_tokens":{"type":"number"},"gen_ai.request.top_k":{"type":"number"},"gen_ai.request.top_p":{"type":"number"},"gen_ai.request.temperature":{"type":"number"},"gen_ai.request.stop_sequences":{},"gen_ai.request.seed":{},"gen_ai.response.finish_reasons":{},"gen_ai.response.id":{"type":"string"},"gen_ai.input.messages":{},"gen_ai.output.messages":{},"gen_ai.system_instructions":{},"http.response.status_code":{"type":"number"},"http.request.body.text":{"type":"string"},"http.response.body.text":{"type":"string"},"gen_ai.response.model":{"type":"string"},"gen_ai.usage.input_tokens":{"type":"number"},"gen_ai.usage.cache_read_tokens":{"type":"number"},"gen_ai.usage.cache_write_tokens":{"type":"number"},"gen_ai.usage.output_tokens":{"type":"number"},"gen_ai.usage.input_audio_tokens":{},"gen_ai.usage.cache_audio_read_tokens":{},"gen_ai.usage.output_audio_tokens":{},"events":{}}}",
+      "stringValue": "{"type":"object","properties":{"gen_ai.operation.name":{"type":"string"},"gen_ai.request.model":{"type":"string"},"gen_ai.system":{"type":"string"},"gen_ai.request.max_tokens":{"type":"number"},"gen_ai.request.top_k":{"type":"number"},"gen_ai.request.top_p":{"type":"number"},"gen_ai.request.temperature":{"type":"number"},"gen_ai.request.stop_sequences":{},"gen_ai.request.seed":{},"gen_ai.response.finish_reasons":{},"gen_ai.response.id":{"type":"string"},"gen_ai.input.messages":{},"gen_ai.output.messages":{},"gen_ai.system_instructions":{},"http.response.status_code":{"type":"number"},"http.request.body.text":{"type":"string"},"http.response.body.text":{"type":"string"},"gen_ai.response.model":{"type":"string"},"gen_ai.usage.input_tokens":{"type":"number"},"gen_ai.usage.cache_read_tokens":{"type":"number"},"gen_ai.usage.cache_write_tokens":{"type":"number"},"gen_ai.usage.output_tokens":{"type":"number"},"gen_ai.usage.input_audio_tokens":{},"gen_ai.usage.cache_audio_read_tokens":{},"gen_ai.usage.output_audio_tokens":{}}}",
     },
   },
   {
@@ -316,14 +316,6 @@ exports[`anthropic > should call anthropic via gateway > span 1`] = `
     "key": "gen_ai.usage.output_audio_tokens",
     "value": {},
   },
-  {
-    "key": "events",
-    "value": {
-      "arrayValue": {
-        "values": [],
-      },
-    },
-  },
 ]
 `;
 
@@ -504,7 +496,7 @@ exports[`anthropic > should call anthropic via gateway with builtin tools > span
   {
     "key": "logfire.json_schema",
     "value": {
-      "stringValue": "{"type":"object","properties":{"gen_ai.operation.name":{"type":"string"},"gen_ai.request.model":{"type":"string"},"gen_ai.system":{"type":"string"},"gen_ai.request.max_tokens":{"type":"number"},"gen_ai.request.top_k":{},"gen_ai.request.top_p":{},"gen_ai.request.temperature":{},"gen_ai.request.stop_sequences":{},"gen_ai.request.seed":{},"gen_ai.response.finish_reasons":{},"gen_ai.response.id":{"type":"string"},"gen_ai.input.messages":{},"gen_ai.output.messages":{},"gen_ai.system_instructions":{},"http.response.status_code":{"type":"number"},"http.request.body.text":{"type":"string"},"http.response.body.text":{"type":"string"},"gen_ai.response.model":{"type":"string"},"gen_ai.usage.input_tokens":{"type":"number"},"gen_ai.usage.cache_read_tokens":{"type":"number"},"gen_ai.usage.cache_write_tokens":{"type":"number"},"gen_ai.usage.output_tokens":{"type":"number"},"gen_ai.usage.input_audio_tokens":{},"gen_ai.usage.cache_audio_read_tokens":{},"gen_ai.usage.output_audio_tokens":{},"events":{}}}",
+      "stringValue": "{"type":"object","properties":{"gen_ai.operation.name":{"type":"string"},"gen_ai.request.model":{"type":"string"},"gen_ai.system":{"type":"string"},"gen_ai.request.max_tokens":{"type":"number"},"gen_ai.request.top_k":{},"gen_ai.request.top_p":{},"gen_ai.request.temperature":{},"gen_ai.request.stop_sequences":{},"gen_ai.request.seed":{},"gen_ai.response.finish_reasons":{},"gen_ai.response.id":{"type":"string"},"gen_ai.input.messages":{},"gen_ai.output.messages":{},"gen_ai.system_instructions":{},"http.response.status_code":{"type":"number"},"http.request.body.text":{"type":"string"},"http.response.body.text":{"type":"string"},"gen_ai.response.model":{"type":"string"},"gen_ai.usage.input_tokens":{"type":"number"},"gen_ai.usage.cache_read_tokens":{"type":"number"},"gen_ai.usage.cache_write_tokens":{"type":"number"},"gen_ai.usage.output_tokens":{"type":"number"},"gen_ai.usage.input_audio_tokens":{},"gen_ai.usage.cache_audio_read_tokens":{},"gen_ai.usage.output_audio_tokens":{}}}",
     },
   },
   {
@@ -1068,14 +1060,6 @@ The calculation shows that on average, the data points deviate from the mean by 
   {
     "key": "gen_ai.usage.output_audio_tokens",
     "value": {},
-  },
-  {
-    "key": "events",
-    "value": {
-      "arrayValue": {
-        "values": [],
-      },
-    },
   },
 ]
 `;

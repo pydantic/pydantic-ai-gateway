@@ -748,6 +748,12 @@ print(f"Sample standard deviation (s) = √{variance_sample:.2f} = {std_dev_samp
                                   },
                                 },
                               },
+                              {
+                                "key": "builtin",
+                                "value": {
+                                  "boolValue": true,
+                                },
+                              },
                             ],
                           },
                         },
@@ -764,6 +770,12 @@ print(f"Sample standard deviation (s) = √{variance_sample:.2f} = {std_dev_samp
                                 "key": "id",
                                 "value": {
                                   "stringValue": "srvtoolu_01TfbhPpCwNcNZQZj1H7XAqG",
+                                },
+                              },
+                              {
+                                "key": "name",
+                                "value": {
+                                  "stringValue": "text_editor_code_execution",
                                 },
                               },
                               {
@@ -785,6 +797,12 @@ print(f"Sample standard deviation (s) = √{variance_sample:.2f} = {std_dev_samp
                                       },
                                     ],
                                   },
+                                },
+                              },
+                              {
+                                "key": "builtin",
+                                "value": {
+                                  "boolValue": true,
                                 },
                               },
                             ],
@@ -826,6 +844,12 @@ print(f"Sample standard deviation (s) = √{variance_sample:.2f} = {std_dev_samp
                                   },
                                 },
                               },
+                              {
+                                "key": "builtin",
+                                "value": {
+                                  "boolValue": true,
+                                },
+                              },
                             ],
                           },
                         },
@@ -842,6 +866,12 @@ print(f"Sample standard deviation (s) = √{variance_sample:.2f} = {std_dev_samp
                                 "key": "id",
                                 "value": {
                                   "stringValue": "srvtoolu_01SbMesS7arx1TtgPE4C7CKk",
+                                },
+                              },
+                              {
+                                "key": "name",
+                                "value": {
+                                  "stringValue": "bash_code_execution",
                                 },
                               },
                               {
@@ -913,6 +943,12 @@ Sample standard deviation (s) = √9.17 = 3.027650
                                       },
                                     ],
                                   },
+                                },
+                              },
+                              {
+                                "key": "builtin",
+                                "value": {
+                                  "boolValue": true,
                                 },
                               },
                             ],

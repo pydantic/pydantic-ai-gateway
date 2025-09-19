@@ -16,6 +16,7 @@ export interface ToolCallPart {
   id: string
   name: string
   arguments?: JsonValue
+  builtin?: boolean
 }
 
 export interface ToolCallResponsePart {
@@ -23,6 +24,7 @@ export interface ToolCallResponsePart {
   id: string
   name?: string
   result?: JsonValue
+  builtin?: boolean
 }
 
 // https://github.com/open-telemetry/semantic-conventions/pull/2754/

@@ -51,7 +51,7 @@ describe('invalid request', () => {
     const text = await response.text()
     expect(response.status, `got ${response.status} response: ${text}`).toBe(400)
     expect(text).toMatchInlineSnapshot(
-      `"Invalid provider 'wrong', should be one of groq, openai, google-vertex, anthropic"`,
+      `"Invalid provider 'wrong', should be one of groq, openai, google-vertex, anthropic, bedrock"`,
     )
   })
 })

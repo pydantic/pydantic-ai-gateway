@@ -6,8 +6,7 @@
     "useIgnoreFile": true
   },
   "files": {
-    "ignoreUnknown": false,
-    "includes": ["deploy/worker-configuration.d.ts"]
+    "ignoreUnknown": false
   },
   "formatter": {
     "enabled": true,
@@ -35,11 +34,6 @@
       }
     }
   },
-  "css": {
-    "formatter": {
-      "quoteStyle": "single"
-    }
-  },
   "javascript": {
     "formatter": {
       "trailingCommas": "all",
@@ -54,17 +48,5 @@
         "organizeImports": "on"
       }
     }
-  },
-  "overrides": [
-    {
-      "includes": ["deploy/worker-configuration.d.ts"],
-      "linter": {
-        "rules": {
-          "style": {
-            "useNamingConvention": "off"
-          }
-        }
-      }
-    }
-  ]
+  }
 }

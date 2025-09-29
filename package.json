@@ -8,9 +8,8 @@
     "deploy"
   ],
   "scripts": {
-    "format": "biome format",
     "lint": "biome check",
-    "lint-fix": "biome check --write",
+    "format": "biome check --write",
     "typecheck": "npm run typecheck --workspaces",
     "test-deploy": "npm run test --workspace=deploy --silent",
     "test-gateway": "npm run test --workspace=gateway --silent",

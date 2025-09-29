@@ -70,7 +70,8 @@ function testGateway(): TestGateway {
 }
 
 export const test = baseTest.extend<{ gateway: TestGateway }>({
-  gateway: async (_, use) => {
+  // biome-ignore lint/correctness/noEmptyPattern: required
+  gateway: async ({}, use) => {
     await use(testGateway())
   },
 })

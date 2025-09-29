@@ -40,6 +40,7 @@
     "@cloudflare/workers-types": "^4.20250712.0",
     "@eslint/js": "^9.34.0",
     "@typescript-eslint/utils": "^8.41.0",
+    "@typescript/native-preview": "^7.0.0-dev.20250929.1",
     "eslint": "^9.34.0",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-prettier": "^5.5.4",
@@ -47,7 +48,6 @@
     "neostandard": "^0.12.2",
     "prettier": "^3.6.2",
     "prettier-plugin-organize-imports": "^4.2.0",
-    "typescript": "^5.5.2",
     "typescript-eslint": "^8.41.0",
     "vitest": "~3.2.0"
   },

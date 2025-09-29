@@ -51,6 +51,5 @@
       "@google/genai": ["./node_modules/@google/genai/dist/genai.d.ts"]
     }
   },
-  "types": ["@cloudflare/workers-types"],
-  "include": []
+  "types": ["@cloudflare/workers-types"]
 }

@@ -21,10 +21,6 @@
       "suspicious": {
         "useAwait": "error"
       },
-      "correctness": {
-        // this rule seems daft
-        "useUniqueElementIds": "off"
-      },
       "style": {
         "noNonNullAssertion": "off",
         // maybe but seems unnecessarily opinionated

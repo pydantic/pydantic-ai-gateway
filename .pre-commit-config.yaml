@@ -31,10 +31,10 @@ repos:
         language: system
         types_or: [javascript, ts, json]
         pass_filenames: false
-      - id: lint-ts
-        name: lint typescript
-        entry: make
-        args: [lint-ts]
+      - id: lint-fix-ts
+        name: lint fix typescript
+        entry: npm
+        args: [run, lint-fix]
         language: system
         types_or: [javascript, ts, json]
         pass_filenames: false

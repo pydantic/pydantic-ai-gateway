@@ -1,4 +1,4 @@
-import { OtelSettings, ProviderProxy } from '@pydantic/ai-gateway'
+import type { OtelSettings, ProviderProxy } from '@pydantic/ai-gateway'
 
 export interface Config<ProviderKey extends string = string> {
   /** @param team: record keys are the team ids */

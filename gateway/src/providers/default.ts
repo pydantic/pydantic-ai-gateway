@@ -1,10 +1,10 @@
-import { Usage, calcPrice, extractUsage, findProvider } from '@pydantic/genai-prices'
+import { calcPrice, extractUsage, findProvider, type Usage } from '@pydantic/genai-prices'
 import * as logfire from '@pydantic/logfire-api'
 
-import { GatewayEnv } from '..'
-import { ModelAPI } from '../api'
-import { GenAIAttributes } from '../otel/attributes'
-import { ApiKeyInfo, ProviderProxy } from '../types'
+import type { GatewayEnv } from '..'
+import type { ModelAPI } from '../api'
+import type { GenAIAttributes } from '../otel/attributes'
+import type { ApiKeyInfo, ProviderProxy } from '../types'
 
 export interface ProxySuccess {
   requestModel?: string
@@ -109,7 +109,7 @@ export class DefaultProviderProxy {
     return `${String(userAgent)} via Pydantic AI Gateway ${this.env.githubSha.substring(0, 7)}, contact engineering@pydantic.dev`
   }
 
-  // eslint-disable-next-line @typescript-eslint/require-await
+  // biome-ignore lint/suspicious/useAwait: base class
   protected async requestHeaders(headers: Headers): Promise<void> {
     headers.set('Authorization', `Bearer ${this.providerProxy.credentials}`)
   }
@@ -160,9 +160,7 @@ export class DefaultProviderProxy {
     }
   }
 
-  protected responseHeaders(_headers: Headers): void {
-    return undefined
-  }
+  protected responseHeaders(_headers: Headers): void {}
 
   protected injectCost(responseBody: JsonData, cost: number) {
     if (this.usageField && this.usageField in responseBody) {

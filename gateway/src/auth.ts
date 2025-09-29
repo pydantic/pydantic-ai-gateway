@@ -1,5 +1,5 @@
-import { GatewayEnv } from '.'
-import { ApiKeyInfo } from './types'
+import type { GatewayEnv } from '.'
+import type { ApiKeyInfo } from './types'
 import { ResponseError } from './utils'
 
 const CACHE_VERSION = 1
@@ -8,7 +8,7 @@ const CACHE_TTL = 86400
 export async function apiKeyAuth(request: Request, env: GatewayEnv): Promise<ApiKeyInfo> {
   const authHeader = request.headers.get('authorization')
 
-  let key
+  let key: string
   if (authHeader) {
     if (authHeader.toLowerCase().startsWith('bearer ')) {
       key = authHeader.substring(7)
@@ -26,8 +26,7 @@ export async function apiKeyAuth(request: Request, env: GatewayEnv): Promise<Api
   const cacheKey = apiKeyCacheKey(key, env)
   const cacheResult = await env.kv.getWithMetadata<ApiKeyInfo, number>(cacheKey, { type: 'json' })
 
-  let apiKey
-  // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+  let apiKey: ApiKeyInfo | null
   if (cacheResult && cacheResult.metadata === CACHE_VERSION && cacheResult.value) {
     apiKey = cacheResult.value
   } else {

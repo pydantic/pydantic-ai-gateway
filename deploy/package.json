@@ -12,7 +12,7 @@
     "limits-remote-db": "wrangler d1 execute pydantic-ai-gateway-limits --remote --file ../gateway/limits-schema.sql",
     "wrangler-secret-put": "wrangler secret put",
     "generate-api-key": "node generate_api_key.js",
-    "typegen": "wrangler types --strict-vars false --include-runtime false && prettier worker-configuration.d.ts --write"
+    "typegen": "wrangler types --strict-vars false --include-runtime false"
   },
   "dependencies": {
     "@pydantic/logfire-api": "^0.8.1",

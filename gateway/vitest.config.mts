@@ -1,3 +1,4 @@
+/** biome-ignore-all lint/style/useNamingConvention: env vars */
 import { defineWorkersConfig } from '@cloudflare/vitest-pool-workers/config'
 
 export default defineWorkersConfig({

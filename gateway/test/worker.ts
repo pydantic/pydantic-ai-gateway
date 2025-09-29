@@ -1,11 +1,11 @@
 import {
-  ApiKeyInfo,
-  GatewayEnv,
+  type ApiKeyInfo,
+  type GatewayEnv,
   gatewayFetch,
   KeysDbD1,
   LimitDbD1,
-  ProviderProxy,
-  SubFetch,
+  type ProviderProxy,
+  type SubFetch,
 } from '@pydantic/ai-gateway'
 
 export default {

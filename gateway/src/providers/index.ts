@@ -15,8 +15,8 @@ You should have received a copy of the GNU Affero General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-import { GatewayEnv } from '..'
-import { ApiKeyInfo, ProviderID, ProviderProxy } from '../types'
+import type { GatewayEnv } from '..'
+import type { ApiKeyInfo, ProviderID, ProviderProxy } from '../types'
 
 import { AnthropicProvider } from './anthropic'
 import { DefaultProviderProxy } from './default'
@@ -25,7 +25,7 @@ import { GroqProvider } from './groq'
 import { OpenAIProvider } from './openai'
 import { TestProvider } from './test'
 
-type providerSig = new (
+type ProviderSig = new (
   request: Request,
   env: GatewayEnv,
   apiKey: ApiKeyInfo,
@@ -33,7 +33,7 @@ type providerSig = new (
   restOfPath: string,
 ) => DefaultProviderProxy
 
-export function getProvider(providerId: ProviderID): providerSig {
+export function getProvider(providerId: ProviderID): ProviderSig {
   switch (providerId) {
     case 'openai':
       return OpenAIProvider

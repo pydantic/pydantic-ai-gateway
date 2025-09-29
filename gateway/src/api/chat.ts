@@ -8,7 +8,7 @@ import type {
   ChatCompletionCreateParams,
   ChatCompletionMessageParam,
 } from 'openai/resources/chat/completions'
-import { ChatMessage, InputMessages, MessagePart, OutputMessage, OutputMessages } from '../otel/genai'
+import type { ChatMessage, InputMessages, MessagePart, OutputMessage, OutputMessages } from '../otel/genai'
 import { BaseAPI } from './base'
 
 export class ChatCompletionAPI extends BaseAPI<ChatCompletionCreateParams, ChatCompletion> {

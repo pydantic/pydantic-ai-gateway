@@ -1,4 +1,4 @@
-import { LimitDb, SpendStatus } from '@pydantic/ai-gateway'
+import type { LimitDb, SpendStatus } from '@pydantic/ai-gateway'
 import { config } from './config'
 
 interface EntityStatus {
@@ -80,7 +80,7 @@ function auth(request: Request, env: Env): Response | 'ok' {
 
   const authHeader = request.headers.get('authorization')
 
-  let key
+  let key: string
   if (authHeader) {
     if (authHeader.toLowerCase().startsWith('bearer ')) {
       key = authHeader.substring(7)

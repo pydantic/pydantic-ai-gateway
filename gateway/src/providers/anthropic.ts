@@ -1,4 +1,4 @@
-import { ModelAPI } from '../api'
+import type { ModelAPI } from '../api'
 import { AnthropicAPI } from '../api/anthropic'
 import { DefaultProviderProxy } from './default'
 

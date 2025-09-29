@@ -1,9 +1,8 @@
 import { env } from 'cloudflare:test'
+import { LimitDbD1 } from '@pydantic/ai-gateway'
 import OpenAI from 'openai'
 import { describe, expect, it } from 'vitest'
 import { test } from './setup'
-
-import { LimitDbD1 } from '@pydantic/ai-gateway'
 import { IDS } from './worker'
 
 describe('index', () => {

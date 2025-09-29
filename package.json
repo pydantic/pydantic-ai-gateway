@@ -8,8 +8,8 @@
     "deploy"
   ],
   "scripts": {
-    "format": "prettier --write -- .",
-    "lint": "eslint gateway deploy",
+    "lint": "biome check",
+    "format": "biome check --write",
     "typecheck": "npm run typecheck --workspaces",
     "test-deploy": "npm run test --workspace=deploy --silent",
     "test-gateway": "npm run test --workspace=gateway --silent",
@@ -22,33 +22,12 @@
     "generate-api-key": "npm run generate-api-key --workspace=deploy --silent",
     "typegen": "npm run typegen --workspace=deploy --silent"
   },
-  "prettier": {
-    "plugins": [
-      "prettier-plugin-organize-imports"
-    ],
-    "singleQuote": true,
-    "semi": false,
-    "trailingComma": "all",
-    "tabWidth": 2,
-    "printWidth": 119,
-    "objectWrap": "collapse",
-    "bracketSpacing": true
-  },
   "_": "@cloudflare/vitest-pool-workers is pinned because of https://github.com/cloudflare/workers-sdk/issues/10506",
   "devDependencies": {
+    "@biomejs/biome": "^2.2.4",
     "@cloudflare/vitest-pool-workers": "0.8.44",
     "@cloudflare/workers-types": "^4.20250712.0",
-    "@eslint/js": "^9.34.0",
-    "@typescript-eslint/utils": "^8.41.0",
     "@typescript/native-preview": "^7.0.0-dev.20250929.1",
-    "eslint": "^9.34.0",
-    "eslint-config-prettier": "^10.1.8",
-    "eslint-plugin-prettier": "^5.5.4",
-    "globals": "^16.3.0",
-    "neostandard": "^0.12.2",
-    "prettier": "^3.6.2",
-    "prettier-plugin-organize-imports": "^4.2.0",
-    "typescript-eslint": "^8.41.0",
     "vitest": "~3.2.0"
   },
   "engines": {

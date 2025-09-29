@@ -1,11 +1,11 @@
-import type { Attributes, Level } from '.'
 import type {
   DefaultProviderProxy,
   ProxyInvalidRequest,
   ProxySuccess,
   ProxyUnexpectedResponse,
 } from '../providers/default'
-import { InputMessages, OutputMessages, TextPart } from './genai'
+import type { Attributes, Level } from '.'
+import type { InputMessages, OutputMessages, TextPart } from './genai'
 
 export function genAiOtelAttributes(
   result: ProxySuccess | ProxyInvalidRequest | ProxyUnexpectedResponse,

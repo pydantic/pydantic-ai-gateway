@@ -13,7 +13,7 @@ repos:
     rev: v2.3.0
     hooks:
       - id: codespell
-        args: ['--skip=*.snap']
+        args: ["--skip=*.snap"]
 
   - repo: local
     hooks:
@@ -28,13 +28,6 @@ repos:
         name: format typescript
         entry: make
         args: [format-ts]
-        language: system
-        types_or: [javascript, ts, json]
-        pass_filenames: false
-      - id: lint-ts
-        name: lint typescript
-        entry: make
-        args: [lint-ts]
         language: system
         types_or: [javascript, ts, json]
         pass_filenames: false

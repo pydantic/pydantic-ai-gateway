@@ -1,4 +1,4 @@
-import { ModelAPI } from '../api'
+import type { ModelAPI } from '../api'
 import { BedrockAPI } from '../api/bedrock'
 import { DefaultProviderProxy } from './default'
 

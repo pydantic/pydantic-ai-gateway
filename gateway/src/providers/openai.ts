@@ -1,4 +1,4 @@
-import { ModelAPI } from '../api'
+import type { ModelAPI } from '../api'
 import { ChatCompletionAPI } from '../api/chat'
 import { ResponsesAPI } from '../api/responses'
 import { DefaultProviderProxy } from './default'

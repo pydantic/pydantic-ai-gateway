@@ -18,7 +18,7 @@ import * as logfire from '@pydantic/logfire-api'
 import type { KeysDb, LimitDb } from './db'
 import { gateway } from './gateway'
 import type { SubFetch } from './types'
-import { ctHeader, response405, ResponseError } from './utils'
+import { ctHeader, ResponseError, response405 } from './utils'
 
 export * from './db'
 export * from './types'

@@ -239,11 +239,11 @@ export class DefaultProviderProxy {
   }
 
   protected otelAttributes(requestBody: JsonData, responseBody: JsonData): GenAIAttributes {
-    const modelApi = this.modelAPI()
-    if (!modelApi) {
+    const modelAPI = this.modelAPI()
+    if (!modelAPI) {
       return {}
     }
-    return modelApi.extractOtelAttributes(requestBody, responseBody)
+    return modelAPI.extractOtelAttributes(requestBody, responseBody)
   }
 }
 

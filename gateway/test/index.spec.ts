@@ -1,6 +1,6 @@
 import { env } from 'cloudflare:test'
 import { LimitDbD1 } from '@pydantic/ai-gateway'
-import OpenAi from 'openai'
+import OpenAI from 'openai'
 import { describe, expect, it } from 'vitest'
 import { test } from './setup'
 import { IDS } from './worker'
@@ -58,7 +58,7 @@ describe('invalid request', () => {
 describe('key status', () => {
   test('should not change key status if limit is not exceeded', async ({ gateway }) => {
     const { fetch } = gateway
-    const client = new OpenAi({ apiKey: 'healthy', baseURL: 'https://example.com/test', fetch })
+    const client = new OpenAI({ apiKey: 'healthy', baseURL: 'https://example.com/test', fetch })
     await client.chat.completions.create({
       model: 'gpt-5',
       messages: [
@@ -99,7 +99,7 @@ describe('key status', () => {
 
     expect(disableEvents).toEqual([])
 
-    const client = new OpenAi({ apiKey: 'tiny-limit', baseURL: 'https://example.com/test', fetch })
+    const client = new OpenAI({ apiKey: 'tiny-limit', baseURL: 'https://example.com/test', fetch })
     await client.chat.completions.create({
       model: 'gpt-5',
       messages: [

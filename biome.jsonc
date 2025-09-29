@@ -48,5 +48,13 @@
         "organizeImports": "on"
       }
     }
-  }
+  },
+  "overrides": [
+    {
+      "includes": ["**/*.ts"],
+      "formatter": {
+        "expand": "never"
+      }
+    }
+  ]
 }

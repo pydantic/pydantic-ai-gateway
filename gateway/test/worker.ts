@@ -24,7 +24,7 @@ export interface DisableEvent {
 export function buildGatewayEnv(env: Env, disableEvents: DisableEvent[], subFetch: SubFetch): GatewayEnv {
   return {
     githubSha: 'test',
-    keysDb: new TestKeysDb(env, disableEvents),
+    keysDb: new TestKeysDB(env, disableEvents),
     limitDb: new LimitDbD1(env.limitsDB),
     kv: env.KV,
     kvVersion: 'test',
@@ -40,7 +40,7 @@ export namespace IDS {
   export const keyTinyLimit = 5
 }
 
-class TestKeysDb extends KeysDbD1 {
+class TestKeysDB extends KeysDbD1 {
   allProviders: ProviderProxy[]
   disableEvents: DisableEvent[]
 

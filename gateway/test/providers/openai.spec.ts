@@ -1,6 +1,6 @@
 import { env } from 'cloudflare:test'
 import { LimitDbD1 } from '@pydantic/ai-gateway'
-import OpenAi from 'openai'
+import OpenAI from 'openai'
 import { describe, expect } from 'vitest'
 import { test } from '../setup'
 import { IDS } from '../worker'
@@ -9,7 +9,7 @@ describe('openai', () => {
   test('should call openai via gateway', async ({ gateway }) => {
     const { fetch, otelBatch } = gateway
 
-    const client = new OpenAi({ apiKey: 'healthy', baseURL: 'https://example.com/openai', fetch })
+    const client = new OpenAI({ apiKey: 'healthy', baseURL: 'https://example.com/openai', fetch })
 
     const completion = await client.chat.completions.create({
       model: 'gpt-5',

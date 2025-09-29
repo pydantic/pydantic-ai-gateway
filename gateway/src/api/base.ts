@@ -1,6 +1,6 @@
-import { GenAIAttributes, GenAIAttributesExtractor } from '../otel/attributes'
-import { InputMessages, OutputMessages, TextPart } from '../otel/genai'
-import { JsonData, safe } from '../providers/default'
+import type { GenAIAttributes, GenAIAttributesExtractor } from '../otel/attributes'
+import type { InputMessages, OutputMessages, TextPart } from '../otel/genai'
+import { type JsonData, safe } from '../providers/default'
 
 export abstract class BaseAPI<RequestBody, ResponseBody>
   implements GenAIAttributesExtractor<RequestBody, ResponseBody>

@@ -1,11 +1,11 @@
 import {
-  ApiKeyInfo,
-  GatewayEnv,
+  type ApiKeyInfo,
+  type GatewayEnv,
   gatewayFetch,
   KeysDbD1,
   LimitDbD1,
-  ProviderProxy,
-  SubFetch,
+  type ProviderProxy,
+  type SubFetch,
 } from '@pydantic/ai-gateway'
 
 export default {
@@ -24,7 +24,7 @@ export interface DisableEvent {
 export function buildGatewayEnv(env: Env, disableEvents: DisableEvent[], subFetch: SubFetch): GatewayEnv {
   return {
     githubSha: 'test',
-    keysDb: new TestKeysDB(env, disableEvents),
+    keysDb: new TestKeysDb(env, disableEvents),
     limitDb: new LimitDbD1(env.limitsDB),
     kv: env.KV,
     kvVersion: 'test',
@@ -40,7 +40,7 @@ export namespace IDS {
   export const keyTinyLimit = 5
 }
 
-class TestKeysDB extends KeysDbD1 {
+class TestKeysDb extends KeysDbD1 {
   allProviders: ProviderProxy[]
   disableEvents: DisableEvent[]
 

@@ -1,0 +1,74 @@
+{
+  "$schema": "https://biomejs.dev/schemas/2.2.4/schema.json",
+  "vcs": {
+    "enabled": true,
+    "clientKind": "git",
+    "useIgnoreFile": true
+  },
+  "files": {
+    "ignoreUnknown": false,
+    "includes": ["deploy/worker-configuration.d.ts"]
+  },
+  "formatter": {
+    "enabled": true,
+    "indentStyle": "space",
+    "lineWidth": 119
+  },
+  "linter": {
+    "enabled": true,
+    "rules": {
+      "recommended": true,
+      "suspicious": {
+        "useAwait": "error"
+      },
+      "correctness": {
+        // this rule seems daft
+        "useUniqueElementIds": "off"
+      },
+      "style": {
+        "noNonNullAssertion": "off",
+        // maybe but seems unnecessarily opinionated
+        "useTemplate": "off",
+        // could anable this, but it's annoying with `...API` etc.
+        // "useNamingConvention": "error",
+        "noRestrictedImports": "error"
+      },
+      "nursery": {
+        "recommended": true,
+        "noFloatingPromises": "error"
+      }
+    }
+  },
+  "css": {
+    "formatter": {
+      "quoteStyle": "single"
+    }
+  },
+  "javascript": {
+    "formatter": {
+      "trailingCommas": "all",
+      "quoteStyle": "single",
+      "semicolons": "asNeeded"
+    }
+  },
+  "assist": {
+    "enabled": true,
+    "actions": {
+      "source": {
+        "organizeImports": "on"
+      }
+    }
+  },
+  "overrides": [
+    {
+      "includes": ["deploy/worker-configuration.d.ts"],
+      "linter": {
+        "rules": {
+          "style": {
+            "useNamingConvention": "off"
+          }
+        }
+      }
+    }
+  ]
+}

@@ -1,5 +1,5 @@
-import { SELF, env, fetchMock } from 'cloudflare:test'
-import OpenAI from 'openai'
+import { env, fetchMock, SELF } from 'cloudflare:test'
+import OpenAi from 'openai'
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from 'vitest'
 import SQL from '../../gateway/limits-schema.sql?raw'
 
@@ -70,7 +70,7 @@ describe('deploy', () => {
     const otelBatch: string[] = []
     recordOtelBatch(otelBatch)
 
-    const client = new OpenAI({
+    const client = new OpenAi({
       apiKey: 'healthy-key',
       baseURL: 'https://example.com/openai',
       fetch: SELF.fetch.bind(SELF),

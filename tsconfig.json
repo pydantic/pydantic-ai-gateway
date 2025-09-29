@@ -52,5 +52,5 @@
     }
   },
   "types": ["@cloudflare/workers-types"],
-  "include": ["eslint.config.mjs"]
+  "include": []
 }

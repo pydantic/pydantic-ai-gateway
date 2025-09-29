@@ -1,7 +1,6 @@
+import type { GoogleRequest } from '../../api/google'
 import { DefaultProviderProxy } from '../default'
 import { authToken } from './auth'
-
-import { GoogleRequest } from '../../api/google'
 
 export class GoogleVertexProvider extends DefaultProviderProxy {
   protected usageField = 'usageMetadata'
@@ -21,9 +20,9 @@ export class GoogleVertexProvider extends DefaultProviderProxy {
 
   async prepRequest() {
     const requestBodyText = await this.request.text()
-    let requestBodyData
+    let requestBodyData: GoogleRequest
     try {
-      requestBodyData = JSON.parse(requestBodyText) as GoogleRequest
+      requestBodyData = JSON.parse(requestBodyText)
     } catch (_error) {
       return { error: 'invalid request JSON' }
     }

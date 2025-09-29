@@ -1,5 +1,5 @@
-import type { Config } from '@deploy/types'
 import { env } from 'cloudflare:workers'
+import type { Config } from '@deploy/types'
 
 type ProviderKeys = 'openai' | 'groq' | 'anthropic' | 'test'
 

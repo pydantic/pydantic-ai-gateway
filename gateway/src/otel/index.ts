@@ -1,23 +1,22 @@
-import * as logfire from '@pydantic/logfire-api'
-
-import {
-  type ISerializer,
-  IExportTraceServiceResponse,
-  JsonTraceSerializer,
-  ProtobufTraceSerializer,
-} from '@opentelemetry/otlp-transformer'
-
 import {
   type Context,
   type HrTime,
-  type SpanContext,
   propagation,
-  TextMapGetter,
-  trace,
+  type SpanContext,
+  type TextMapGetter,
   TraceFlags,
+  trace,
 } from '@opentelemetry/api'
+
+import {
+  type IExportTraceServiceResponse,
+  type ISerializer,
+  JsonTraceSerializer,
+  ProtobufTraceSerializer,
+} from '@opentelemetry/otlp-transformer'
 import { resourceFromAttributes } from '@opentelemetry/resources'
 import type { ReadableSpan } from '@opentelemetry/sdk-trace-base/build/src/export/ReadableSpan'
+import * as logfire from '@pydantic/logfire-api'
 
 import type { GatewayEnv } from '../index'
 import type { OtelSettings, SubFetch } from '../types'
@@ -140,7 +139,6 @@ class ActiveOtelSpan extends OtelSpan {
       spanContext: () => this.spanContext,
       parentSpanContext: this.parent,
       //TODO: should we we make start | undefined?
-      // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
       startTime: this.start || now,
       endTime: now,
       status: { code: 1 },
@@ -182,7 +180,6 @@ function renderMessage(messageTemplate: string, attributes: Attributes): string 
   let message = messageTemplate
   for (const [key, value] of Object.entries(attributes)) {
     if (value !== undefined) {
-      // eslint-disable-next-line @typescript-eslint/no-base-to-string
       message = message.replace(`{${key}}`, value.toString())
     }
   }
@@ -207,7 +204,7 @@ function attributesJsonSchema(attributes: Attributes): string {
 }
 
 function getTime(): HrTime {
-  const now = new Date().getTime()
+  const now = Date.now()
   const seconds = Math.floor(now / 1000)
   const nanos = (now - seconds * 1000) * 1000000
   return [seconds, nanos]
@@ -244,7 +241,6 @@ function mapLevel(levelName: Level): number {
     case 'error':
       return 17
     default:
-      // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
       throw new Error(`Unknown log level ${levelName}`)
   }
 }
@@ -261,7 +257,6 @@ function extractSpanContext(headers: Headers): SpanContext | undefined {
       return this
     },
     deleteValue(key: symbol): Context {
-      // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
       delete contextData[key]
       return this
     },
@@ -313,7 +308,7 @@ export async function fetchRetry(subFetch: SubFetch, url: string, input: Request
   }
 }
 
-async function sleep(ms: number): Promise<void> {
+function sleep(ms: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, ms))
 }
 

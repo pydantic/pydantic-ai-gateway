@@ -4,7 +4,7 @@ import type {
   BetaMessage,
   MessageCreateParams,
 } from '@anthropic-ai/sdk/resources/beta'
-import { InputMessages, JsonValue, MessagePart, OutputMessages, TextPart } from '../otel/genai'
+import type { InputMessages, JsonValue, MessagePart, OutputMessages, TextPart } from '../otel/genai'
 import { BaseAPI } from './base'
 
 // TODO(Marcelo): We use the beta API in PydanticAI, but does it matter here?

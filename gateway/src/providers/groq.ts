@@ -1,6 +1,6 @@
 /** we're working with snake_case keys from the Groq API */
 
-import { ModelAPI } from '../api'
+import type { ModelAPI } from '../api'
 import { ChatCompletionAPI } from '../api/chat'
 import { DefaultProviderProxy } from './default'
 

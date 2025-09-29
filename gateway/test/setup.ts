@@ -1,10 +1,8 @@
-/* eslint-disable no-empty-pattern */
 import { createExecutionContext, env, waitOnExecutionContext } from 'cloudflare:test'
+import { gatewayFetch } from '@pydantic/ai-gateway'
 import { test as baseTest, beforeAll, beforeEach, expect } from 'vitest'
 import SQL from '../limits-schema.sql?raw'
-import { DisableEvent, buildGatewayEnv } from './worker'
-
-import { gatewayFetch } from '@pydantic/ai-gateway'
+import { buildGatewayEnv, type DisableEvent } from './worker'
 
 declare module 'vitest' {
   export interface TestContext {
@@ -72,7 +70,7 @@ function testGateway(): TestGateway {
 }
 
 export const test = baseTest.extend<{ gateway: TestGateway }>({
-  gateway: async ({}, use) => {
+  gateway: async (_, use) => {
     await use(testGateway())
   },
 })

@@ -1,6 +1,3 @@
-import { ChatMessage, InputMessages, MessagePart, OutputMessage, OutputMessages, TextPart } from '../otel/genai'
-import { BaseAPI } from './base'
-
 import type {
   Candidate,
   Content,
@@ -12,7 +9,9 @@ import type {
   ToolConfig,
 } from '@google/genai'
 import * as logfire from '@pydantic/logfire-api'
-import { JsonData, isMapping } from '../providers/default'
+import type { ChatMessage, InputMessages, MessagePart, OutputMessage, OutputMessages, TextPart } from '../otel/genai'
+import { isMapping, type JsonData } from '../providers/default'
+import { BaseAPI } from './base'
 
 export { GenerateContentResponse } from '@google/genai'
 

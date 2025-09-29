@@ -11,9 +11,9 @@ export abstract class KeysDb {
 export abstract class KeysDbD1 extends KeysDb {
   private Db: D1Database
 
-  constructor(DB: D1Database) {
+  constructor(Db: D1Database) {
     super()
-    this.Db = DB
+    this.Db = Db
   }
 
   async getDbKeyStatus(keyId: number): Promise<KeyStatus | undefined> {

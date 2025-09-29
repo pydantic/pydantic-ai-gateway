@@ -15,9 +15,9 @@ export async function authToken(credentials: string, kv: KVNamespace): Promise<s
 }
 
 function getServiceAccount(credentials: string): ServiceAccount {
-  let sa
+  let sa: ServiceAccount
   try {
-    sa = JSON.parse(credentials) as ServiceAccount
+    sa = JSON.parse(credentials)
   } catch (error) {
     throw new ResponseError(400, `provider credentials are not valid JSON: ${error as Error}`)
   }

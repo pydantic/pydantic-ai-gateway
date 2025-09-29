@@ -42,14 +42,13 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true,
-    "baseUrl": ".",
     "paths": {
       /* these are used by deploy, but we can't extend "paths", hence including them here */
-      "@deploy/*": ["deploy/src/*"],
-      "@pydantic/ai-gateway": ["gateway/src"],
+      "@deploy/*": ["./deploy/src/*"],
+      "@pydantic/ai-gateway": ["./gateway/src"],
       /* paths for API types: */
-      "@groq-chat/completions": ["node_modules/groq-sdk/resources/chat/completions"],
-      "@google/genai": ["node_modules/@google/genai/dist/genai.d.ts"]
+      "@groq-chat/completions": ["./node_modules/groq-sdk/resources/chat/completions"],
+      "@google/genai": ["./node_modules/@google/genai/dist/genai.d.ts"]
     }
   },
   "types": ["@cloudflare/workers-types"],

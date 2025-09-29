@@ -4,7 +4,7 @@
   "private": true,
   "license": "AGPL-3.0",
   "scripts": {
-    "typecheck": "tsc --noEmit && cd test && tsc --noEmit",
+    "typecheck": "tsgo --noEmit && cd test && tsgo --noEmit",
     "deploy": "wrangler deploy --var GITHUB_SHA:`git rev-parse HEAD`",
     "dev": "wrangler dev",
     "test": "vitest",

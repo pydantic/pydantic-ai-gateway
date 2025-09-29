@@ -9,15 +9,16 @@ export abstract class KeysDb {
 }
 
 export abstract class KeysDbD1 extends KeysDb {
-  private Db: D1Database
+  private db: D1Database
 
-  constructor(Db: D1Database) {
+  constructor(db: D1Database) {
     super()
-    this.Db = Db
+    this.db = db
   }
 
   async getDbKeyStatus(keyId: number): Promise<KeyStatus | undefined> {
-    const result = await this.Db.prepare(`SELECT status FROM keyStatus WHERE id = ? and expiresAt > datetime('now')`)
+    const result = await this.db
+      .prepare(`SELECT status FROM keyStatus WHERE id = ? and expiresAt > datetime('now')`)
       .bind(keyId)
       .first<{ status: KeyStatus }>()
     return result?.status
@@ -25,19 +26,21 @@ export abstract class KeysDbD1 extends KeysDb {
 
   async disableKey(id: number, _reason: string, newStatus: string, expirationTtl?: number): Promise<void> {
     if (typeof expirationTtl === 'number') {
-      await this.Db.prepare(
-        `
+      await this.db
+        .prepare(
+          `
 INSERT INTO keyStatus (id, status, expiresAt) VALUES (?, ?, datetime('now', ?))
 ON CONFLICT (id) DO UPDATE SET status = excluded.status, expiresAt = excluded.expiresAt`,
-      )
+        )
         .bind(id, newStatus, `${expirationTtl} seconds`)
         .run()
     } else {
-      await this.Db.prepare(
-        `
+      await this.db
+        .prepare(
+          `
 INSERT INTO keyStatus (id, status) VALUES (?, ?)
 ON CONFLICT (id) DO UPDATE SET status = excluded.status, expiresAt = null`,
-      )
+        )
         .bind(id, newStatus)
         .run()
     }

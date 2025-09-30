@@ -10,26 +10,25 @@ export type KeyStatus =
 // Info about an API key for a particular provider returned by the DB during a request
 export interface ApiKeyInfo {
   id: number
-  user: number | null
+  user?: number
   team: number
   key: string
   status: KeyStatus
-  // limits are both optional and nullable to allow for databases that return null
   // limits per apiKey - note the extra field since keys can have a total limit
-  keySpendingLimitDaily?: number | null
-  keySpendingLimitWeekly?: number | null
-  keySpendingLimitMonthly?: number | null
-  keySpendingLimitTotal?: number | null
+  keySpendingLimitDaily?: number
+  keySpendingLimitWeekly?: number
+  keySpendingLimitMonthly?: number
+  keySpendingLimitTotal?: number
   // limits per team
-  teamSpendingLimitDaily?: number | null
-  teamSpendingLimitWeekly?: number | null
-  teamSpendingLimitMonthly?: number | null
+  teamSpendingLimitDaily?: number
+  teamSpendingLimitWeekly?: number
+  teamSpendingLimitMonthly?: number
   // limits per user
-  userSpendingLimitDaily?: number | null
-  userSpendingLimitWeekly?: number | null
-  userSpendingLimitMonthly?: number | null
+  userSpendingLimitDaily?: number
+  userSpendingLimitWeekly?: number
+  userSpendingLimitMonthly?: number
   providers: ProviderProxy[]
-  otelSettings: OtelSettings | null
+  otelSettings?: OtelSettings
 }
 
 export type ProviderID = 'groq' | 'openai' | 'google-vertex' | 'anthropic' | 'test' | 'bedrock'

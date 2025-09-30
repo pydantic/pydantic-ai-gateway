@@ -25,14 +25,14 @@ export type Attributes = Record<string, string | number | boolean | object | und
 export type Level = 'debug' | 'info' | 'notice' | 'warn' | 'error'
 
 export class OtelTrace {
-  private otelSettings: OtelSettings | null
+  private otelSettings: OtelSettings | undefined
   version: string
   private remoteParent?: SpanContext
   traceId: string
   private spans: ReadableSpan[] = []
   private subFetch: SubFetch
 
-  constructor(request: Request, otelSettings: OtelSettings | null, env: GatewayEnv) {
+  constructor(request: Request, otelSettings: OtelSettings | undefined, env: GatewayEnv) {
     this.otelSettings = otelSettings
     this.version = env.githubSha
     this.subFetch = env.subFetch

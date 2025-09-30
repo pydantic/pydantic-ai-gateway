@@ -18,7 +18,7 @@ describe('index', () => {
 
       Pydantic AI Gateway
 
-      git sha: test
+      git SHA: test
       GitHub: https://github.com/pydantic/pydantic-ai-gateway
       To connect, point your application at https://example.com/<provider-id>
       "

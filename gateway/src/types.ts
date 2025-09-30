@@ -35,7 +35,7 @@ export interface ApiKeyInfo {
 export type ProviderID = 'groq' | 'openai' | 'google-vertex' | 'anthropic' | 'test' | 'bedrock'
 // TODO | 'azure' | 'fireworks' | 'mistral' | 'cohere'
 
-const providerIDs: Record<ProviderID, boolean> = {
+const providerIds: Record<ProviderID, boolean> = {
   groq: true,
   openai: true,
   'google-vertex': true,
@@ -44,17 +44,17 @@ const providerIDs: Record<ProviderID, boolean> = {
   bedrock: true,
 }
 
-export const providerIdArray = Object.keys(providerIDs).filter((id) => id !== 'test') as ProviderID[]
+export const providerIdArray = Object.keys(providerIds).filter((id) => id !== 'test') as ProviderID[]
 
 export function guardProviderID(id: string): id is ProviderID {
-  return id in providerIDs
+  return id in providerIds
 }
 
 export interface ProviderProxy {
   /** @providerId: decides on the logic used to process the request and response */
-  providerID: ProviderID
+  providerId: ProviderID
   /** @baseUrl: decides what URL the request will be forwarded to */
-  baseUrl?: string
+  baseUrl: string
   /** @injectCost: if injectCost is True, the cost of request from genai-prices is injected in the usage object in the response */
   injectCost: boolean
   /** @credentials: credentials are used by the ProviderProxy to authenticate the forwarded request,

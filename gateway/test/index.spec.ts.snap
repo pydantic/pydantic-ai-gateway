@@ -11,7 +11,7 @@ exports[`key status > should change key status if limit is exceeded > kv-value 1
       "baseUrl": "http://test.example.com/test",
       "credentials": "test",
       "injectCost": true,
-      "providerID": "test",
+      "providerId": "test",
     },
   ],
   "status": "limit-exceeded",

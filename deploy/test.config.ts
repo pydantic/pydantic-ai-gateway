@@ -27,7 +27,7 @@ export const config: Config<ProviderKeys> = {
       // baseUrl decides what URL the request will be forwarded to
       baseUrl: 'http://localhost:8005/openai',
       // providerId decides on the logic used to process the request and response
-      providerID: 'openai',
+      providerId: 'openai',
       // if injectCost is True, the cost of request from genai-prices is injected in the usage object in the response
       injectCost: true,
       // credentials are used by the ProviderProxy to authenticate the forwarded request
@@ -35,7 +35,7 @@ export const config: Config<ProviderKeys> = {
     },
     groq: {
       baseUrl: 'http://localhost:8005/groq',
-      providerID: 'groq',
+      providerId: 'groq',
       injectCost: true,
       credentials: env.GROQ_API_KEY,
     },
@@ -48,11 +48,11 @@ export const config: Config<ProviderKeys> = {
     // },
     anthropic: {
       baseUrl: 'http://localhost:8005/anthropic',
-      providerID: 'anthropic',
+      providerId: 'anthropic',
       injectCost: true,
       credentials: env.ANTHROPIC_API_KEY,
     },
-    test: { baseUrl: 'http://test.example.com/test', providerID: 'test', injectCost: true, credentials: 'test' },
+    test: { baseUrl: 'http://test.example.com/test', providerId: 'test', injectCost: true, credentials: 'test' },
   },
   // individual apiKeys
   apiKeys: {

@@ -18,7 +18,7 @@ import * as logfire from '@pydantic/logfire-api'
 import type { KeysDb, LimitDb } from './db'
 import { gateway } from './gateway'
 import type { SubFetch } from './types'
-import { ctHeader, ResponseError, response405 } from './utils'
+import { ctHeader, ResponseError, response405, textResponse } from './utils'
 
 export * from './db'
 export * from './types'
@@ -51,6 +51,7 @@ export async function gatewayFetch(request: Request, ctx: ExecutionContext, env:
 }
 
 function index(request: Request, env: GatewayEnv): Response {
+  const url = request.url.replace(/\/$/, '')
   if (request.method === 'GET') {
     return new Response(
       `\
@@ -61,14 +62,14 @@ function index(request: Request, env: GatewayEnv): Response {
 
 Pydantic AI Gateway
 
-git sha: ${env.githubSha}
+git SHA: ${env.githubSha}
 GitHub: https://github.com/pydantic/pydantic-ai-gateway
-To connect, point your application at ${request.url}<provider-id>
+To connect, point your application at ${url}/<provider-id>
 `,
       { headers: ctHeader('text/plain; charset=utf-8') },
     )
   } else if (request.method === 'HEAD') {
-    return new Response('', { headers: ctHeader('text/html') })
+    return textResponse(200, '')
   } else {
     return response405('GET', 'HEAD')
   }

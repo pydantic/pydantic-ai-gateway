@@ -7,7 +7,7 @@
   "compatibility_flags": ["nodejs_compat_v2"],
   "vars": {
     "GITHUB_SHA": "unknown",
-    // if you set `LOGFIRE_TOKEN=pylf...` in .dev.vars, also set `LOGFIRE_ENVIRONMENT=dev`
+    // if you set `LOGFIRE_TOKEN=pylf...` in .env.local, also set `LOGFIRE_ENVIRONMENT=dev`
     "LOGFIRE_ENVIRONMENT": "prod"
   },
   "placement": { "mode": "smart" },

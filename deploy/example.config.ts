@@ -40,7 +40,7 @@ export const config: Config<ProviderKeys> = {
     // you would use this provider by using the model id `gateway:openai-chat/gpt-5` in Pydantic AI
     a: {
       // providerId decides on the logic used to process the request and response
-      providerID: 'openai',
+      providerId: 'openai',
       // baseUrl decides what URL the request will be forwarded to
       baseUrl: 'https://api.openai.com/v1',
       // if injectCost is True, the cost of request from genai-prices is injected in the usage object in the response
@@ -48,9 +48,9 @@ export const config: Config<ProviderKeys> = {
       // credentials are used by the ProviderProxy to authenticate the forwarded request
       credentials: env.OPENAI_API_KEY,
     },
-    b: { providerID: 'groq', baseUrl: 'https://api.groq.com', injectCost: true, credentials: env.GROQ_API_KEY },
+    b: { providerId: 'groq', baseUrl: 'https://api.groq.com', injectCost: true, credentials: env.GROQ_API_KEY },
     c: {
-      providerID: 'google-vertex',
+      providerId: 'google-vertex',
       // NOTE: you'll need to replace `{gcp-project-name}` to set your GCP project here
       baseUrl:
         'https://us-central1-aiplatform.googleapis.com/v1beta1/projects/{gcp-project-name}/locations/us-central1/publishers/google/models',
@@ -58,7 +58,7 @@ export const config: Config<ProviderKeys> = {
       credentials: env.GOOGLE_SERVICE_ACCOUNT_KEY,
     },
     d: {
-      providerID: 'anthropic',
+      providerId: 'anthropic',
       baseUrl: 'https://api.anthropic.com',
       injectCost: true,
       credentials: env.ANTHROPIC_API_KEY,

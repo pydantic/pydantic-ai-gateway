@@ -3,7 +3,7 @@ export function ctHeader(contentType: string) {
 }
 
 export function textResponse(status: number, message: string) {
-  return new Response(message, { status, headers: ctHeader('text/plain') })
+  return new Response(message, { status, headers: ctHeader('text/plain; charset=utf-8') })
 }
 
 export function jsonResponse(data: unknown) {
@@ -14,7 +14,7 @@ export function response405(...allowMethods: string[]): Response {
   const allow = allowMethods.join(', ')
   return new Response(`405: Method not allowed, Allowed: ${allow}`, {
     status: 405,
-    headers: { allow, ...ctHeader('text/plain') },
+    headers: { allow, ...ctHeader('text/plain; charset=utf-8') },
   })
 }
 

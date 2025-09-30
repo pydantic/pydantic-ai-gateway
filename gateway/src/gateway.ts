@@ -27,7 +27,7 @@ export async function gateway(request: Request, ctx: ExecutionContext, env: Gate
     return textResponse(403, `Unauthorized - Key ${apiKey.status}`)
   }
 
-  let providerProxies = apiKey.providers.filter((p) => p.providerID === provider)
+  let providerProxies = apiKey.providers.filter((p) => p.providerId === provider)
 
   const profile = request.headers.get('pydantic-ai-gateway-profile')
   if (profile !== null) {
@@ -44,7 +44,7 @@ export async function gateway(request: Request, ctx: ExecutionContext, env: Gate
 
   const otel = new OtelTrace(request, apiKey.otelSettings, env)
 
-  const ProxyCls = getProvider(providerProxy.providerID)
+  const ProxyCls = getProvider(providerProxy.providerId)
 
   const proxy = new ProxyCls(request, env, apiKey, providerProxy, rest)
 

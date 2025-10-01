@@ -21,7 +21,12 @@ export interface DisableEvent {
   expirationTtl?: number
 }
 
-export function buildGatewayEnv(env: Env, disableEvents: DisableEvent[], subFetch: SubFetch): GatewayEnv {
+export function buildGatewayEnv(
+  env: Env,
+  disableEvents: DisableEvent[],
+  subFetch: SubFetch,
+  proxyRegex?: RegExp,
+): GatewayEnv {
   return {
     githubSha: 'test',
     keysDb: new TestKeysDB(env, disableEvents),
@@ -29,6 +34,7 @@ export function buildGatewayEnv(env: Env, disableEvents: DisableEvent[], subFetc
     kv: env.KV,
     kvVersion: 'test',
     subFetch,
+    proxyRegex,
   }
 }
 

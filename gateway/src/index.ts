@@ -30,6 +30,8 @@ export interface GatewayEnv {
   kv: KVNamespace
   kvVersion: string
   subFetch: SubFetch
+  /** proxyRegex: defaults to `/^\/([^/]+)\/(.*)$/`, e.g. proxy at the root */
+  proxyRegex?: RegExp
 }
 
 export async function gatewayFetch(request: Request, ctx: ExecutionContext, env: GatewayEnv): Promise<Response> {

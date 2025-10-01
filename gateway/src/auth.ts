@@ -30,7 +30,7 @@ export async function apiKeyAuth(request: Request, env: GatewayEnv): Promise<Api
   if (cacheResult && cacheResult.metadata === CACHE_VERSION && cacheResult.value) {
     apiKey = cacheResult.value
   } else {
-    apiKey = await env.keysDb.apiKeyAuth(key)
+    apiKey = await env.keysDb.getApiKey(key)
     if (!apiKey) {
       throw new ResponseError(401, 'Unauthorized - Key not found')
     }

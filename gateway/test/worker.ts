@@ -75,7 +75,7 @@ class TestKeysDB extends KeysDbD1 {
     ]
   }
 
-  async apiKeyAuth(key: string): Promise<ApiKeyInfo | null> {
+  async getApiKey(key: string): Promise<ApiKeyInfo | null> {
     switch (key) {
       case 'healthy':
         return {

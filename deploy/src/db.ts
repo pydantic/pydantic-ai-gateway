@@ -2,7 +2,7 @@ import { type ApiKeyInfo, type KeyStatus, KeysDbD1, type ProviderProxy } from '@
 import { config } from './config'
 
 export class ConfigDB extends KeysDbD1 {
-  async apiKeyAuth(key: string): Promise<ApiKeyInfo | null> {
+  async getApiKey(key: string): Promise<ApiKeyInfo | null> {
     const keyInfo = config.apiKeys[key]
     if (!keyInfo) {
       return null

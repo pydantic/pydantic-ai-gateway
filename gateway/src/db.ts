@@ -9,7 +9,7 @@ export abstract class KeysDb {
 }
 
 export abstract class KeysDbD1 extends KeysDb {
-  private db: D1Database
+  protected db: D1Database
 
   constructor(db: D1Database) {
     super()

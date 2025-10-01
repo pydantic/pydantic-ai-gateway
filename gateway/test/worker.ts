@@ -93,26 +93,16 @@ class TestKeysDB extends KeysDbD1 {
           },
         }
       case 'disabled':
-        return {
-          id: IDS.keyDisabled,
-          user: null,
-          team: IDS.teamDefault,
-          key,
-          status: 'disabled',
-          providers: this.allProviders,
-          otelSettings: null,
-        }
+        return { id: IDS.keyDisabled, team: IDS.teamDefault, key, status: 'disabled', providers: this.allProviders }
       case 'tiny-limit':
         return {
           id: IDS.keyTinyLimit,
-          user: null,
           team: IDS.teamDefault,
           key,
           status: (await this.getDbKeyStatus(IDS.keyTinyLimit)) ?? 'active',
           keySpendingLimitDaily: 0.01,
           teamSpendingLimitMonthly: 4,
           providers: [this.allProviders[0]!],
-          otelSettings: null,
         }
       default:
         return null

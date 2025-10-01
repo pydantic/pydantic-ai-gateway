@@ -30,25 +30,25 @@ export class ConfigDB extends KeysDbD1 {
 
     return {
       id: keyId,
-      user: keyInfo.user ?? null,
+      user: keyInfo.user,
       team: keyInfo.team,
       key,
       status,
       // key limits
-      keySpendingLimitDaily: keyInfo.spendingLimitDaily ?? null,
-      keySpendingLimitWeekly: keyInfo.spendingLimitWeekly ?? null,
-      keySpendingLimitMonthly: keyInfo.spendingLimitMonthly ?? null,
-      keySpendingLimitTotal: keyInfo.spendingLimitTotal ?? null,
+      keySpendingLimitDaily: keyInfo.spendingLimitDaily,
+      keySpendingLimitWeekly: keyInfo.spendingLimitWeekly,
+      keySpendingLimitMonthly: keyInfo.spendingLimitMonthly,
+      keySpendingLimitTotal: keyInfo.spendingLimitTotal,
       // team limits
-      teamSpendingLimitDaily: team.spendingLimitDaily ?? null,
-      teamSpendingLimitWeekly: team.spendingLimitWeekly ?? null,
-      teamSpendingLimitMonthly: team.spendingLimitMonthly ?? null,
+      teamSpendingLimitDaily: team.spendingLimitDaily,
+      teamSpendingLimitWeekly: team.spendingLimitWeekly,
+      teamSpendingLimitMonthly: team.spendingLimitMonthly,
       // user limits
-      userSpendingLimitDaily: user?.spendingLimitDaily ?? null,
-      userSpendingLimitWeekly: user?.spendingLimitWeekly ?? null,
-      userSpendingLimitMonthly: user?.spendingLimitMonthly ?? null,
+      userSpendingLimitDaily: user?.spendingLimitDaily,
+      userSpendingLimitWeekly: user?.spendingLimitWeekly,
+      userSpendingLimitMonthly: user?.spendingLimitMonthly,
       providers,
-      otelSettings: user?.otel ?? team.otel ?? null,
+      otelSettings: user?.otel ?? team.otel,
     }
   }
 }

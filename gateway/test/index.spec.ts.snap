@@ -5,7 +5,6 @@ exports[`key status > should change key status if limit is exceeded > kv-value 1
   "id": 5,
   "key": "tiny-limit",
   "keySpendingLimitDaily": 0.01,
-  "otelSettings": null,
   "providers": [
     {
       "baseUrl": "http://test.example.com/test",
@@ -17,7 +16,6 @@ exports[`key status > should change key status if limit is exceeded > kv-value 1
   "status": "limit-exceeded",
   "team": 1,
   "teamSpendingLimitMonthly": 4,
-  "user": null,
 }
 `;
 

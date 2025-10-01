@@ -1,5 +1,46 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
+exports[`custom proxyRegex > proxyRegex > proxyRegex 1`] = `
+{
+  "choices": [
+    {
+      "finish_reason": "stop",
+      "index": 0,
+      "message": {
+        "annotations": [],
+        "content": "Paris.",
+        "refusal": null,
+        "role": "assistant",
+      },
+    },
+  ],
+  "created": 1758119097,
+  "id": "chatcmpl-CGnNZyR6FU8Xsw5X4N2YdTtaYBuWV",
+  "model": "gpt-5-2025-08-07",
+  "object": "chat.completion",
+  "service_tier": "default",
+  "system_fingerprint": null,
+  "usage": {
+    "completion_tokens": 11,
+    "completion_tokens_details": {
+      "accepted_prediction_tokens": 0,
+      "audio_tokens": 0,
+      "reasoning_tokens": 0,
+      "rejected_prediction_tokens": 0,
+    },
+    "prompt_tokens": 23,
+    "prompt_tokens_details": {
+      "audio_tokens": 0,
+      "cached_tokens": 0,
+    },
+    "pydantic_ai_gateway": {
+      "cost_estimate": 0.00013875,
+    },
+    "total_tokens": 34,
+  },
+}
+`;
+
 exports[`key status > should change key status if limit is exceeded > kv-value 1`] = `
 {
   "id": 5,

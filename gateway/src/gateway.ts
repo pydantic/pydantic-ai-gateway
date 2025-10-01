@@ -11,7 +11,7 @@ import { textResponse } from './utils'
 
 export async function gateway(request: Request, ctx: ExecutionContext, env: GatewayEnv): Promise<Response> {
   const { pathname } = new URL(request.url)
-  const proxyRegex = env.proxyRegex ?? /^\/([^/]+)\/(.*)$/
+  const proxyRegex = env.proxyRegex ?? /^\/(.+?)\/(.*)$/
   const providerMatch = proxyRegex.exec(pathname)
   if (!providerMatch) {
     return textResponse(404, 'Path not found')

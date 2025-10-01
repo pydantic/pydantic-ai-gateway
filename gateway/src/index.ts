@@ -30,7 +30,7 @@ export interface GatewayEnv {
   kv: KVNamespace
   kvVersion: string
   subFetch: SubFetch
-  /** proxyRegex: defaults to `/^\/([^/]+)\/(.*)$/`, e.g. proxy at the root */
+  /** proxyRegex: defaults to `/^\/(.+?)\/(.*)$/`, e.g. proxy at the root */
   proxyRegex?: RegExp
 }
 

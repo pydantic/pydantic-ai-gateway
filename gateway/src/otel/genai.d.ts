@@ -27,17 +27,28 @@ export interface ToolCallResponsePart {
   builtin?: boolean
 }
 
+type Modality = 'audio' | 'image' | 'text' | string
+
 // https://github.com/open-telemetry/semantic-conventions/pull/2754/
 export interface BlobPart {
   type: 'blob'
-  mime_type: string
-  data: string
+  content: string
+  mime_type?: string
+  modality: Modality
 }
 
-export interface FileDataPart {
-  type: 'file_data'
+export interface FilePart {
+  type: 'file'
+  file_id: string
   mime_type?: string
-  file_uri: string
+  modality: Modality
+}
+
+export interface UriPart {
+  type: 'uri'
+  uri: string
+  modality: Modality
+  mime_type?: string
 }
 
 export interface ThinkingPart {
@@ -45,9 +56,9 @@ export interface ThinkingPart {
   content?: string
 }
 
-export interface GenericPart {
-  type: string
-  [key: string]: unknown
+export interface UnknownPart {
+  type: 'unknown'
+  part: { [key: string]: unknown }
 }
 
 export type MessagePart =
@@ -55,9 +66,10 @@ export type MessagePart =
   | ToolCallPart
   | ToolCallResponsePart
   | BlobPart
-  | FileDataPart
+  | FilePart
+  | UriPart
   | ThinkingPart
-  | GenericPart
+  | UnknownPart
 
 export type Role = 'system' | 'user' | 'assistant' | 'tool'
 

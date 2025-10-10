@@ -210,7 +210,8 @@ export class DefaultProviderProxy {
 
     const processResponse = await this.extractUsage(response)
     if ('error' in processResponse) {
-      return { ...processResponse, disableKey: true, requestModel }
+      // TODO(Marcelo): should set disableKey to true.
+      return { ...processResponse, disableKey: false, requestModel }
     }
     const { responseBody, usage, responseModel, cost } = processResponse
 

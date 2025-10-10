@@ -72,6 +72,12 @@ class TestKeysDB extends KeysDbD1 {
         injectCost: true,
         credentials: env.ANTHROPIC_API_KEY,
       },
+      {
+        baseUrl: 'http://localhost:8005/bedrock',
+        providerId: 'bedrock',
+        injectCost: true,
+        credentials: env.AWS_BEARER_TOKEN_BEDROCK,
+      },
     ]
   }
 

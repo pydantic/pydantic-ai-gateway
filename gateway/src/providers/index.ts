@@ -19,6 +19,7 @@ import type { GatewayEnv } from '..'
 import type { ApiKeyInfo, ProviderID, ProviderProxy } from '../types'
 
 import { AnthropicProvider } from './anthropic'
+import { BedrockProvider } from './bedrock'
 import { DefaultProviderProxy } from './default'
 import { GoogleVertexProvider } from './google'
 import { GroqProvider } from './groq'
@@ -43,6 +44,8 @@ export function getProvider(providerId: ProviderID): ProviderSig {
       return GoogleVertexProvider
     case 'anthropic':
       return AnthropicProvider
+    case 'bedrock':
+      return BedrockProvider
     case 'test':
       return TestProvider
     default:

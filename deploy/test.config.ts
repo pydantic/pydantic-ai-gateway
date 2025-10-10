@@ -1,7 +1,7 @@
 import { env } from 'cloudflare:workers'
 import type { Config } from '@deploy/types'
 
-type ProviderKeys = 'openai' | 'groq' | 'anthropic' | 'test'
+type ProviderKeys = 'openai' | 'groq' | 'anthropic' | 'bedrock' | 'test'
 
 export const config: Config<ProviderKeys> = {
   teams: {
@@ -51,6 +51,12 @@ export const config: Config<ProviderKeys> = {
       providerId: 'anthropic',
       injectCost: true,
       credentials: env.ANTHROPIC_API_KEY,
+    },
+    bedrock: {
+      baseUrl: 'http://localhost:8005/bedrock',
+      providerId: 'bedrock',
+      injectCost: true,
+      credentials: env.AWS_BEARER_TOKEN_BEDROCK,
     },
     test: { baseUrl: 'http://test.example.com/test', providerId: 'test', injectCost: true, credentials: 'test' },
   },

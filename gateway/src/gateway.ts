@@ -47,7 +47,7 @@ export async function gateway(request: Request, ctx: ExecutionContext, env: Gate
 
   const ProxyCls = getProvider(providerProxy.providerId)
 
-  const proxy = new ProxyCls(request, env, apiKey, providerProxy, rest)
+  const proxy = new ProxyCls(request, env, apiKey, providerProxy, rest, [])
 
   const dispatchSpan = otel.startSpan()
   const result = await proxy.dispatch()

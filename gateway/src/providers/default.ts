@@ -49,12 +49,12 @@ interface ProcessResponse {
 }
 
 type Next = (proxy: DefaultProviderProxy) => Promise<ProxySuccess | ProxyInvalidRequest | ProxyUnexpectedResponse>
-type Middleware = (next: Next) => Next
+export type Middleware = (next: Next) => Next
 
 function _resolveMiddlewares(middlewares: Middleware[]): Next {
   return middlewares.reduceRight(
     (next, middleware) => middleware(next),
-    (proxy: DefaultProviderProxy) => proxy.dispatch(),
+    (proxy: DefaultProviderProxy) => proxy._dispatch(),
   )
 }
 

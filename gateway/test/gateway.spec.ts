@@ -1,5 +1,5 @@
 import { createExecutionContext, env, waitOnExecutionContext } from 'cloudflare:test'
-import { gatewayFetch, LimitDbD1 } from '@pydantic/ai-gateway'
+import { type GatewayEnv, gatewayFetch, type Layer, LimitDbD1 } from '@pydantic/ai-gateway'
 import OpenAI from 'openai'
 import { describe, expect, it } from 'vitest'
 import { test } from './setup'
@@ -220,5 +220,31 @@ describe('custom proxyRegex', () => {
       max_completion_tokens: 1024,
     })
     expect(completion).toMatchSnapshot('proxyRegex')
+  })
+})
+
+describe('custom middleware', () => {
+  it('middleware', async () => {
+    const requests: Request[] = []
+    const responses: Response[] = []
+
+    const ctx = createExecutionContext()
+    const request = new Request<unknown, IncomingRequestCfProperties>('https://example.com/openai/gpt-5', {
+      headers: { Authorization: 'healthy' },
+    })
+
+    function collectMiddleware(next: Layer): Layer {
+      return async (req: Request, ctx: ExecutionContext, env: GatewayEnv) => {
+        requests.push(req)
+        const response = await next(req, ctx, env)
+        responses.push(response)
+
+        return response
+      }
+    }
+
+    await gatewayFetch(request, ctx, buildGatewayEnv(env, [], fetch), [collectMiddleware])
+    expect(responses).lengthOf(1)
+    expect(requests).lengthOf(1)
   })
 })

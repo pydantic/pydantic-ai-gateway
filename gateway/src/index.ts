@@ -34,13 +34,23 @@ export interface GatewayEnv {
   proxyRegex?: RegExp
 }
 
-export async function gatewayFetch(request: Request, ctx: ExecutionContext, env: GatewayEnv): Promise<Response> {
+export type Layer = (req: Request, ctx: ExecutionContext, env: GatewayEnv) => Promise<Response>
+export type Middleware = (next: Layer) => Layer
+
+export async function gatewayFetch(
+  request: Request,
+  ctx: ExecutionContext,
+  env: GatewayEnv,
+  middlewares: Middleware[] = [],
+): Promise<Response> {
+  const layers = buildMiddlewares(middlewares)
+
   const url = new URL(request.url)
   try {
     if (url.pathname === '/') {
       return index(request, env)
     } else {
-      return await gateway(request, ctx, env)
+      return await layers(request, ctx, env)
     }
   } catch (error) {
     if (error instanceof ResponseError) {
@@ -75,4 +85,8 @@ To connect, point your application at ${url}/<provider-id>
   } else {
     return response405('GET', 'HEAD')
   }
+}
+
+function buildMiddlewares(middlewares: Middleware[]): Layer {
+  return middlewares.reduceRight((next, middleware) => middleware(next), gateway)
 }

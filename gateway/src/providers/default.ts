@@ -48,6 +48,16 @@ interface ProcessResponse {
   cost: number
 }
 
+type Next = (proxy: DefaultProviderProxy) => Promise<ProxySuccess | ProxyInvalidRequest | ProxyUnexpectedResponse>
+type Middleware = (next: Next) => Next
+
+function _resolveMiddlewares(middlewares: Middleware[]): Next {
+  return middlewares.reduceRight(
+    (next, middleware) => middleware(next),
+    (proxy: DefaultProviderProxy) => proxy.dispatch(),
+  )
+}
+
 export class DefaultProviderProxy {
   protected request: Request
   protected env: GatewayEnv
@@ -57,18 +67,22 @@ export class DefaultProviderProxy {
   protected defaultBaseUrl: string | null = null
   protected usageField: string | null = 'usage'
 
+  dispatch: () => Promise<ProxySuccess | ProxyInvalidRequest | ProxyUnexpectedResponse>
+
   constructor(
     request: Request,
     env: GatewayEnv,
     apiKey: ApiKeyInfo,
     providerProxy: ProviderProxy,
     restOfPath: string,
+    middlewares: Middleware[],
   ) {
     this.request = request
     this.env = env
     this.apiKey = apiKey
     this.providerProxy = providerProxy
     this.restOfPath = restOfPath
+    this.dispatch = () => _resolveMiddlewares(middlewares)(this)
   }
 
   providerId(): string {
@@ -171,7 +185,7 @@ export class DefaultProviderProxy {
     }
   }
 
-  async dispatch(): Promise<ProxySuccess | ProxyInvalidRequest | ProxyUnexpectedResponse> {
+  async _dispatch(): Promise<ProxySuccess | ProxyInvalidRequest | ProxyUnexpectedResponse> {
     const checkResult = this.check()
     if (checkResult) {
       return checkResult

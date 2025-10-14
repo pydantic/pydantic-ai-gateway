@@ -1,5 +1,6 @@
 import { calcPrice, extractUsage, findProvider, type Usage } from '@pydantic/genai-prices'
 import * as logfire from '@pydantic/logfire-api'
+
 import type { GatewayEnv } from '..'
 import type { ModelAPI } from '../api'
 import type { GenAIAttributes } from '../otel/attributes'

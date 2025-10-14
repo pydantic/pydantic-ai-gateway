@@ -1,3 +1,5 @@
+import * as logfire from '@pydantic/logfire-api'
+
 export function ctHeader(contentType: string) {
   return { 'Content-Type': contentType }
 }
@@ -40,5 +42,18 @@ export class ResponseError extends Error {
 
   response(): Response {
     return textResponse(this.status, this.message)
+  }
+}
+
+export function runAfter(ctx: ExecutionContext, name: string, promise: Promise<unknown>) {
+  ctx.waitUntil(wrapLogfire(name, promise))
+}
+
+async function wrapLogfire(functionName: string, promise: Promise<unknown>): Promise<void> {
+  try {
+    await promise
+  } catch (error) {
+    logfire.reportError(`Error running ${functionName} in ctx.waitUntil`, error as Error)
+    throw error
   }
 }

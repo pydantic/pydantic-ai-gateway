@@ -1,5 +1,5 @@
 import { createExecutionContext, env, waitOnExecutionContext } from 'cloudflare:test'
-import { gatewayFetch, LimitDbD1, type Next } from '@pydantic/ai-gateway'
+import { gatewayFetch, LimitDbD1, type Middleware, type Next } from '@pydantic/ai-gateway'
 import OpenAI from 'openai'
 import { describe, expect, it } from 'vitest'
 import type {
@@ -238,15 +238,17 @@ describe('custom middleware', () => {
       headers: { Authorization: 'healthy' },
     })
 
-    function collectMiddleware(next: Next): Next {
-      return async (proxy: DefaultProviderProxy) => {
-        const response = await next(proxy)
-        responses.push(response)
-        return response
+    class CollectMiddleware implements Middleware {
+      dispatch(next: Next): Next {
+        return async (proxy: DefaultProviderProxy) => {
+          const response = await next(proxy)
+          responses.push(response)
+          return response
+        }
       }
     }
 
-    await gatewayFetch(request, ctx, buildGatewayEnv(env, [], fetch, undefined, [collectMiddleware]))
+    await gatewayFetch(request, ctx, buildGatewayEnv(env, [], fetch, undefined, [new CollectMiddleware()]))
     expect(responses).lengthOf(1)
   })
 })

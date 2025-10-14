@@ -19,7 +19,7 @@ import type { GatewayEnv } from '..'
 import type { ApiKeyInfo, ProviderID, ProviderProxy } from '../types'
 
 import { AnthropicProvider } from './anthropic'
-import { DefaultProviderProxy, type Middleware } from './default'
+import { DefaultProviderProxy, type ProviderOptions } from './default'
 import { GoogleVertexProvider } from './google'
 import { GroqProvider } from './groq'
 import { OpenAIProvider } from './openai'
@@ -31,7 +31,7 @@ type ProviderSig = new (
   apiKey: ApiKeyInfo,
   provider: ProviderProxy,
   restOfPath: string,
-  middlewares: Middleware[],
+  options: ProviderOptions,
 ) => DefaultProviderProxy
 
 export function getProvider(providerId: ProviderID): ProviderSig {

@@ -48,14 +48,13 @@ interface ProcessResponse {
   cost: number
 }
 
-type Next = (proxy: DefaultProviderProxy) => Promise<ProxySuccess | ProxyInvalidRequest | ProxyUnexpectedResponse>
+export type Next = (
+  proxy: DefaultProviderProxy,
+) => Promise<ProxySuccess | ProxyInvalidRequest | ProxyUnexpectedResponse>
 export type Middleware = (next: Next) => Next
 
-function _resolveMiddlewares(middlewares: Middleware[]): Next {
-  return middlewares.reduceRight(
-    (next, middleware) => middleware(next),
-    (proxy: DefaultProviderProxy) => proxy._dispatch(),
-  )
+export interface ProviderOptions {
+  middlewares?: Middleware[]
 }
 
 export class DefaultProviderProxy {
@@ -66,8 +65,7 @@ export class DefaultProviderProxy {
   protected restOfPath: string
   protected defaultBaseUrl: string | null = null
   protected usageField: string | null = 'usage'
-
-  dispatch: () => Promise<ProxySuccess | ProxyInvalidRequest | ProxyUnexpectedResponse>
+  protected middlewares: Middleware[]
 
   constructor(
     request: Request,
@@ -75,14 +73,14 @@ export class DefaultProviderProxy {
     apiKey: ApiKeyInfo,
     providerProxy: ProviderProxy,
     restOfPath: string,
-    middlewares: Middleware[],
+    options: ProviderOptions,
   ) {
     this.request = request
     this.env = env
     this.apiKey = apiKey
     this.providerProxy = providerProxy
     this.restOfPath = restOfPath
-    this.dispatch = () => _resolveMiddlewares(middlewares)(this)
+    this.middlewares = options.middlewares ?? []
   }
 
   providerId(): string {
@@ -183,6 +181,14 @@ export class DefaultProviderProxy {
         usage.pydantic_ai_gateway = { cost_estimate: cost }
       }
     }
+  }
+
+  async dispatch(): Promise<ProxySuccess | ProxyInvalidRequest | ProxyUnexpectedResponse> {
+    const layers = this.middlewares.reduceRight(
+      (next, middleware) => middleware(next),
+      (proxy: DefaultProviderProxy) => proxy._dispatch(),
+    )
+    return await layers(this)
   }
 
   async _dispatch(): Promise<ProxySuccess | ProxyInvalidRequest | ProxyUnexpectedResponse> {

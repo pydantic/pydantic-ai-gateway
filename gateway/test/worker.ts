@@ -7,6 +7,7 @@ import {
   type ProviderProxy,
   type SubFetch,
 } from '@pydantic/ai-gateway'
+import type { Middleware } from '../src/providers/default'
 
 export default {
   async fetch(request, env, ctx): Promise<Response> {
@@ -26,6 +27,7 @@ export function buildGatewayEnv(
   disableEvents: DisableEvent[],
   subFetch: SubFetch,
   proxyRegex?: RegExp,
+  proxyMiddlewares?: Middleware[],
 ): GatewayEnv {
   return {
     githubSha: 'test',
@@ -35,6 +37,7 @@ export function buildGatewayEnv(
     kvVersion: 'test',
     subFetch,
     proxyRegex,
+    proxyMiddlewares,
   }
 }
 

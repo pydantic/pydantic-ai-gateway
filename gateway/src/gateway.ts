@@ -16,7 +16,7 @@ export async function gateway(request: Request, ctx: ExecutionContext, env: Gate
   if (!providerMatch) {
     return textResponse(404, 'Path not found')
   }
-  const [, provider, rest] = providerMatch as unknown as [string, string, string]
+  const [, provider, restOfPath] = providerMatch as unknown as [string, string, string]
 
   if (!guardProviderID(provider)) {
     return textResponse(400, `Invalid provider '${provider}', should be one of ${providerIdArray.join(', ')}`)
@@ -47,7 +47,7 @@ export async function gateway(request: Request, ctx: ExecutionContext, env: Gate
 
   const ProxyCls = getProvider(providerProxy.providerId)
 
-  const proxy = new ProxyCls(request, env, apiKey, providerProxy, rest)
+  const proxy = new ProxyCls({ request, env, apiKey, providerProxy, restOfPath, middlewares: env.proxyMiddlewares })
 
   const dispatchSpan = otel.startSpan()
   const result = await proxy.dispatch()

@@ -54,6 +54,11 @@ export type Next = (
 export type Middleware = (next: Next) => Next
 
 export interface ProviderOptions {
+  request: Request
+  env: GatewayEnv
+  apiKey: ApiKeyInfo
+  providerProxy: ProviderProxy
+  restOfPath: string
   middlewares?: Middleware[]
 }
 
@@ -67,19 +72,12 @@ export class DefaultProviderProxy {
   protected usageField: string | null = 'usage'
   protected middlewares: Middleware[]
 
-  constructor(
-    request: Request,
-    env: GatewayEnv,
-    apiKey: ApiKeyInfo,
-    providerProxy: ProviderProxy,
-    restOfPath: string,
-    options: ProviderOptions,
-  ) {
-    this.request = request
-    this.env = env
-    this.apiKey = apiKey
-    this.providerProxy = providerProxy
-    this.restOfPath = restOfPath
+  constructor(options: ProviderOptions) {
+    this.request = options.request
+    this.env = options.env
+    this.apiKey = options.apiKey
+    this.providerProxy = options.providerProxy
+    this.restOfPath = options.restOfPath
     this.middlewares = options.middlewares ?? []
   }
 

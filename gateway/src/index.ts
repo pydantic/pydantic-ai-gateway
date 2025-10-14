@@ -34,7 +34,7 @@ export interface GatewayEnv {
   subFetch: SubFetch
   /** proxyRegex: defaults to `/^\/(.+?)\/(.*)$/`, e.g. proxy at the root */
   proxyRegex?: RegExp
-  /** middlewares:  */
+  /** proxyMiddlewares: perform actions before and after the request is made to the providers */
   proxyMiddlewares?: Middleware[]
 }
 

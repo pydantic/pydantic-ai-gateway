@@ -21,7 +21,7 @@ import type { Middleware, Next } from './providers/default'
 import type { SubFetch } from './types'
 import { ctHeader, ResponseError, response405, textResponse } from './utils'
 
-export type { Next }
+export type { Next, Middleware }
 export * from './db'
 export * from './types'
 

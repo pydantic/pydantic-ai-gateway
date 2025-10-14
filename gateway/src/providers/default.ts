@@ -5,6 +5,7 @@ import type { GatewayEnv } from '..'
 import type { ModelAPI } from '../api'
 import type { GenAIAttributes } from '../otel/attributes'
 import type { ApiKeyInfo, ProviderProxy } from '../types'
+import { runAfter } from '../utils'
 
 export interface ProxySuccess {
   requestModel?: string
@@ -51,7 +52,10 @@ interface ProcessResponse {
 export type Next = (
   proxy: DefaultProviderProxy,
 ) => Promise<ProxySuccess | ProxyInvalidRequest | ProxyUnexpectedResponse>
-export type Middleware = (next: Next) => Next
+
+export interface Middleware {
+  dispatch(next: Next): Next
+}
 
 export interface ProviderOptions {
   request: Request
@@ -59,6 +63,7 @@ export interface ProviderOptions {
   apiKey: ApiKeyInfo
   providerProxy: ProviderProxy
   restOfPath: string
+  ctx: ExecutionContext
   middlewares?: Middleware[]
 }
 
@@ -71,6 +76,7 @@ export class DefaultProviderProxy {
   protected defaultBaseUrl: string | null = null
   protected usageField: string | null = 'usage'
   protected middlewares: Middleware[]
+  protected ctx: ExecutionContext
 
   constructor(options: ProviderOptions) {
     this.request = options.request
@@ -78,7 +84,18 @@ export class DefaultProviderProxy {
     this.apiKey = options.apiKey
     this.providerProxy = options.providerProxy
     this.restOfPath = options.restOfPath
+    this.ctx = options.ctx
     this.middlewares = options.middlewares ?? []
+  }
+
+  /**
+   * Run a promise after the dispatch is complete.
+   * This is useful for running code that should be executed after the response is sent.
+   * @param name - The name of the function to run. It's used for logging and error reporting.
+   * @param promise - The promise to run.
+   */
+  runAfter(name: string, promise: Promise<unknown>) {
+    runAfter(this.ctx, name, promise)
   }
 
   providerId(): string {
@@ -183,7 +200,7 @@ export class DefaultProviderProxy {
 
   async dispatch(): Promise<ProxySuccess | ProxyInvalidRequest | ProxyUnexpectedResponse> {
     const layers = this.middlewares.reduceRight(
-      (next, middleware) => middleware(next),
+      (next, middleware) => middleware.dispatch(next),
       (proxy: DefaultProviderProxy) => proxy._dispatch(),
     )
     return await layers(this)

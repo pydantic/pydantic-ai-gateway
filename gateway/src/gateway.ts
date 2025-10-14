@@ -1,5 +1,3 @@
-import * as logfire from '@pydantic/logfire-api'
-
 import type { GatewayEnv } from '.'
 import { apiKeyAuth, disableApiKeyAuth } from './auth'
 import { type ExceededScope, endOfMonth, endOfWeek, type SpendScope, scopeIntervals } from './db'
@@ -7,7 +5,7 @@ import { OtelTrace } from './otel'
 import { genAiOtelAttributes } from './otel/attributes'
 import { getProvider } from './providers'
 import { type ApiKeyInfo, guardProviderID, providerIdArray } from './types'
-import { textResponse } from './utils'
+import { runAfter, textResponse } from './utils'
 
 export async function gateway(request: Request, ctx: ExecutionContext, env: GatewayEnv): Promise<Response> {
   const { pathname } = new URL(request.url)
@@ -47,7 +45,15 @@ export async function gateway(request: Request, ctx: ExecutionContext, env: Gate
 
   const ProxyCls = getProvider(providerProxy.providerId)
 
-  const proxy = new ProxyCls({ request, env, apiKey, providerProxy, restOfPath, middlewares: env.proxyMiddlewares })
+  const proxy = new ProxyCls({
+    request,
+    env,
+    apiKey,
+    providerProxy,
+    restOfPath,
+    ctx,
+    middlewares: env.proxyMiddlewares,
+  })
 
   const dispatchSpan = otel.startSpan()
   const result = await proxy.dispatch()
@@ -74,19 +80,6 @@ export async function gateway(request: Request, ctx: ExecutionContext, env: Gate
   }
   runAfter(ctx, 'otel.send', otel.send())
   return response
-}
-
-function runAfter(ctx: ExecutionContext, name: string, promise: Promise<unknown>) {
-  ctx.waitUntil(wrapLogfire(name, promise))
-}
-
-async function wrapLogfire(functionName: string, promise: Promise<unknown>): Promise<void> {
-  try {
-    await promise
-  } catch (error) {
-    logfire.reportError(`Error running ${functionName} in ctx.waitUntil`, error as Error)
-    throw error
-  }
 }
 
 async function blockApiKey(apiKey: ApiKeyInfo, env: GatewayEnv, reason: string): Promise<void> {

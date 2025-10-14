@@ -64,6 +64,8 @@ export interface ProviderProxy {
   profile?: string
   /** @priority: higher priority providers will be used first */
   priority?: number
+  /** @disableKey: weather to disable the key in case of error, if missing defaults to True. */
+  disableKey?: boolean
 }
 
 export interface OtelSettings {

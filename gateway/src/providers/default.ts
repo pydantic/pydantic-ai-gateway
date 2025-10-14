@@ -102,6 +102,10 @@ export class DefaultProviderProxy {
     return this.providerProxy.providerId
   }
 
+  disableKey(): boolean {
+    return this.providerProxy.disableKey || true
+  }
+
   protected apiFlavor(): string | undefined {
     return undefined
   }
@@ -109,7 +113,6 @@ export class DefaultProviderProxy {
   protected modelAPI(): ModelAPI | undefined {
     return undefined
   }
-
   /**
    * Check that the model being used is supported.
    * In particular that we can accurately determine the token usage from the response.
@@ -245,7 +248,7 @@ export class DefaultProviderProxy {
 
     const processResponse = await this.extractUsage(response)
     if ('error' in processResponse) {
-      return { ...processResponse, disableKey: true, requestModel }
+      return { ...processResponse, disableKey: this.disableKey(), requestModel }
     }
     const { responseBody, usage, responseModel, cost } = processResponse
 

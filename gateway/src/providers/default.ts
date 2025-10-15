@@ -60,7 +60,7 @@ export interface Middleware {
 export interface ProviderOptions {
   request: Request
   env: GatewayEnv
-  apiKey: ApiKeyInfo
+  apiKeyInfo: ApiKeyInfo
   providerProxy: ProviderProxy
   restOfPath: string
   ctx: ExecutionContext
@@ -70,7 +70,6 @@ export interface ProviderOptions {
 export class DefaultProviderProxy {
   protected request: Request
   protected env: GatewayEnv
-  protected apiKeyInfo: ApiKeyInfo
   protected providerProxy: ProviderProxy
   protected restOfPath: string
   protected defaultBaseUrl: string | null = null
@@ -78,10 +77,12 @@ export class DefaultProviderProxy {
   protected middlewares: Middleware[]
   protected ctx: ExecutionContext
 
+  readonly apiKeyInfo: ApiKeyInfo
+
   constructor(options: ProviderOptions) {
     this.request = options.request
     this.env = options.env
-    this.apiKeyInfo = options.apiKey
+    this.apiKeyInfo = options.apiKeyInfo
     this.providerProxy = options.providerProxy
     this.restOfPath = options.restOfPath
     this.ctx = options.ctx
@@ -96,13 +97,6 @@ export class DefaultProviderProxy {
    */
   runAfter(name: string, promise: Promise<unknown>) {
     runAfter(this.ctx, name, promise)
-  }
-
-  /**
-   * Get the API key that is being used.
-   */
-  apiKey(): string {
-    return this.apiKeyInfo.key
   }
 
   providerId(): string {

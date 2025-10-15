@@ -17,9 +17,11 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 import * as logfire from '@pydantic/logfire-api'
 import type { KeysDb, LimitDb } from './db'
 import { gateway } from './gateway'
+import type { Middleware, Next } from './providers/default'
 import type { SubFetch } from './types'
 import { ctHeader, ResponseError, response405, textResponse } from './utils'
 
+export type { Next, Middleware }
 export * from './db'
 export * from './types'
 
@@ -32,6 +34,8 @@ export interface GatewayEnv {
   subFetch: SubFetch
   /** proxyRegex: defaults to `/^\/(.+?)\/(.*)$/`, e.g. proxy at the root */
   proxyRegex?: RegExp
+  /** proxyMiddlewares: perform actions before and after the request is made to the providers */
+  proxyMiddlewares?: Middleware[]
 }
 
 export async function gatewayFetch(request: Request, ctx: ExecutionContext, env: GatewayEnv): Promise<Response> {

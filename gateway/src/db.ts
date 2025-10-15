@@ -91,7 +91,7 @@ export interface SpendStatus {
 
 export abstract class LimitDb {
   // increment spends and return IDs of any scopes that have exceeded the spending limit
-  abstract incrementSpend(spenScopes: SpendScope[], spend: number): Promise<ExceededScope[]>
+  abstract incrementSpend(spendScopes: SpendScope[], spend: number): Promise<ExceededScope[]>
 
   abstract updateTeamLimits(teamId: number, update: LimitUpdate): Promise<void>
 
@@ -221,13 +221,13 @@ WHERE entityType = ? ${entityIdClause}
   }
 }
 
-interface ScopeIntervas {
+interface ScopeIntervals {
   day: number
   endOfWeek: number
   endOfMonth: number
 }
 
-export function scopeIntervals(): ScopeIntervas {
+export function scopeIntervals(): ScopeIntervals {
   const now = new Date()
   const day = new Date(now)
   day.setHours(0, 0, 0, 0)
@@ -249,10 +249,10 @@ export function endOfWeek(date: Date): Date {
   const d = new Date(date)
   d.setHours(0, 0, 0, 0)
   if (dayOfWeek === 0) {
-    // sunday -  return this date as it's the end of the week
+    // Sunday -  return this date as it's the end of the week
     return d
   } else {
-    // else if not sunday, add enough days to get to the next sunday
+    // else if not Sunday, add enough days to get to the next Sunday
     d.setDate(d.getDate() + (7 - dayOfWeek))
     return d
   }

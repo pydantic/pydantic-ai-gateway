@@ -1,5 +1,3 @@
-import * as logfire from '@pydantic/logfire-api'
-
 import type { GatewayEnv } from '.'
 import { apiKeyAuth, disableApiKeyAuth } from './auth'
 import { type ExceededScope, endOfMonth, endOfWeek, type SpendScope, scopeIntervals } from './db'
@@ -7,7 +5,7 @@ import { OtelTrace } from './otel'
 import { genAiOtelAttributes } from './otel/attributes'
 import { getProvider } from './providers'
 import { type ApiKeyInfo, guardProviderID, providerIdArray } from './types'
-import { textResponse } from './utils'
+import { runAfter, textResponse } from './utils'
 
 export async function gateway(request: Request, ctx: ExecutionContext, env: GatewayEnv): Promise<Response> {
   const { pathname } = new URL(request.url)
@@ -16,19 +14,19 @@ export async function gateway(request: Request, ctx: ExecutionContext, env: Gate
   if (!providerMatch) {
     return textResponse(404, 'Path not found')
   }
-  const [, provider, rest] = providerMatch as unknown as [string, string, string]
+  const [, provider, restOfPath] = providerMatch as unknown as [string, string, string]
 
   if (!guardProviderID(provider)) {
     return textResponse(400, `Invalid provider '${provider}', should be one of ${providerIdArray.join(', ')}`)
   }
 
-  const apiKey = await apiKeyAuth(request, env)
+  const apiKeyInfo = await apiKeyAuth(request, env)
 
-  if (apiKey.status !== 'active') {
-    return textResponse(403, `Unauthorized - Key ${apiKey.status}`)
+  if (apiKeyInfo.status !== 'active') {
+    return textResponse(403, `Unauthorized - Key ${apiKeyInfo.status}`)
   }
 
-  let providerProxies = apiKey.providers.filter((p) => p.providerId === provider)
+  let providerProxies = apiKeyInfo.providers.filter((p) => p.providerId === provider)
 
   const profile = request.headers.get('pydantic-ai-gateway-profile')
   if (profile !== null) {
@@ -43,11 +41,19 @@ export async function gateway(request: Request, ctx: ExecutionContext, env: Gate
     return textResponse(403, 'Forbidden - Provider not supported by this API Key')
   }
 
-  const otel = new OtelTrace(request, apiKey.otelSettings, env)
+  const otel = new OtelTrace(request, apiKeyInfo.otelSettings, env)
 
   const ProxyCls = getProvider(providerProxy.providerId)
 
-  const proxy = new ProxyCls(request, env, apiKey, providerProxy, rest)
+  const proxy = new ProxyCls({
+    request,
+    env,
+    apiKeyInfo,
+    providerProxy,
+    restOfPath,
+    ctx,
+    middlewares: env.proxyMiddlewares,
+  })
 
   const dispatchSpan = otel.startSpan()
   const result = await proxy.dispatch()
@@ -58,12 +64,12 @@ export async function gateway(request: Request, ctx: ExecutionContext, env: Gate
   let response: Response
   if ('successStatus' in result) {
     const { successStatus, responseHeaders, responseBody, cost } = result
-    runAfter(ctx, 'recordSpend', recordSpend(apiKey, cost, env))
+    runAfter(ctx, 'recordSpend', recordSpend(apiKeyInfo, cost, env))
     response = new Response(responseBody, { status: successStatus, headers: responseHeaders })
   } else if ('error' in result) {
     const { error, disableKey } = result
     if (disableKey) {
-      runAfter(ctx, 'disableApiKey', blockApiKey(apiKey, env, 'Invalid request'))
+      runAfter(ctx, 'disableApiKey', blockApiKey(apiKeyInfo, env, 'Invalid request'))
       response = textResponse(400, `${error}, API key disabled`)
     } else {
       response = textResponse(400, error)
@@ -74,19 +80,6 @@ export async function gateway(request: Request, ctx: ExecutionContext, env: Gate
   }
   runAfter(ctx, 'otel.send', otel.send())
   return response
-}
-
-function runAfter(ctx: ExecutionContext, name: string, promise: Promise<unknown>) {
-  ctx.waitUntil(wrapLogfire(name, promise))
-}
-
-async function wrapLogfire(functionName: string, promise: Promise<unknown>): Promise<void> {
-  try {
-    await promise
-  } catch (error) {
-    logfire.reportError(`Error running ${functionName} in ctx.waitUntil`, error as Error)
-    throw error
-  }
 }
 
 async function blockApiKey(apiKey: ApiKeyInfo, env: GatewayEnv, reason: string): Promise<void> {

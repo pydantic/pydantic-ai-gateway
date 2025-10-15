@@ -356,7 +356,7 @@ dependencies = [
 requires-dist = [
     { name = "devtools", specifier = ">=0.12.2" },
     { name = "logfire", extras = ["httpx"], specifier = ">=4.3.3" },
-    { name = "pydantic-ai" },
+    { name = "pydantic-ai", git = "https://github.com/pydantic/pydantic-ai.git?branch=main" },
 ]
 
 [[package]]
@@ -1258,14 +1258,10 @@ wheels = [
 
 [[package]]
 name = "pydantic-ai"
-version = "1.0.15"
-source = { registry = "https://pypi.org/simple" }
+version = "1.0.19.dev5+b3b34f9"
+source = { git = "https://github.com/pydantic/pydantic-ai.git?branch=main#b3b34f94ff0b8bdfb9e0ccbc3b1d60374e25cfee" }
 dependencies = [
     { name = "pydantic-ai-slim", extra = ["ag-ui", "anthropic", "bedrock", "cli", "cohere", "evals", "google", "groq", "huggingface", "logfire", "mcp", "mistral", "openai", "retries", "temporal", "vertexai"] },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/3a/17/6de11e398a8ab91eb204ac2110c574675f0ad1dd31fe06ef1b19bee3fa40/pydantic_ai-1.0.15.tar.gz", hash = "sha256:2798f70ef53b056e486f1b2ff661820cbc6bc9990e022ba1393f79ab2684535c", size = 100447681, upload-time = "2025-10-03T23:49:27.801Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/15/d3/b8f112c0e56523d3e62c849c3063337384bbd3c6941ca1f23d086f4429cb/pydantic_ai-1.0.15-py3-none-any.whl", hash = "sha256:b1c2e055f13bf5c89fc18bb764b5b3564416922082df53f5d812ad1fc0bc5d9e", size = 11677, upload-time = "2025-10-03T23:49:18.263Z" },
 ]
 
 [[package]]
@@ -1289,8 +1285,8 @@ dev = [
 
 [[package]]
 name = "pydantic-ai-slim"
-version = "1.0.15"
-source = { registry = "https://pypi.org/simple" }
+version = "1.0.19.dev5+b3b34f9"
+source = { git = "https://github.com/pydantic/pydantic-ai.git?subdirectory=pydantic_ai_slim&branch=main#b3b34f94ff0b8bdfb9e0ccbc3b1d60374e25cfee" }
 dependencies = [
     { name = "genai-prices" },
     { name = "griffe" },
@@ -1299,10 +1295,6 @@ dependencies = [
     { name = "pydantic" },
     { name = "pydantic-graph" },
     { name = "typing-inspection" },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/56/2d/b8dda22ffe532df5ee73f73c0a359900a4525c8f8f03c19cf7509af31eab/pydantic_ai_slim-1.0.15.tar.gz", hash = "sha256:45141ad0b0e76a6473d006ccb191874218b15504f3a9133be7be1274e4de2b51", size = 262510, upload-time = "2025-10-03T23:49:33.743Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/bb/dd/66cf84d6a9ac175d2c0511d0600d08396fc713b3f86ab96364760e0e9310/pydantic_ai_slim-1.0.15-py3-none-any.whl", hash = "sha256:f6f2d556d40ddb8419d7936b8d4513952a4c9ddea43f257880bf8b963d36b87a", size = 344917, upload-time = "2025-10-03T23:49:21.326Z" },
 ]
 
 [package.optional-dependencies]
@@ -1404,8 +1396,8 @@ wheels = [
 
 [[package]]
 name = "pydantic-evals"
-version = "1.0.15"
-source = { registry = "https://pypi.org/simple" }
+version = "1.0.19.dev5+b3b34f9"
+source = { git = "https://github.com/pydantic/pydantic-ai.git?subdirectory=pydantic_evals&branch=main#b3b34f94ff0b8bdfb9e0ccbc3b1d60374e25cfee" }
 dependencies = [
     { name = "anyio" },
     { name = "logfire-api" },
@@ -1414,24 +1406,16 @@ dependencies = [
     { name = "pyyaml" },
     { name = "rich" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/81/45/f5dc751d08a2e75b85aa9d99197ee6bd085ccf52b9abbafc8442fbbe1bcf/pydantic_evals-1.0.15.tar.gz", hash = "sha256:271fd12233bf6c98e92a3d31f2968c15a36ccf267b205c2f9c31437ed01bee08", size = 45868, upload-time = "2025-10-03T23:49:34.78Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/d5/45/cb23f25a72c92ac62f9b403c7e3acdf8f791ca71b7afbeb821b2ad9ec30c/pydantic_evals-1.0.15-py3-none-any.whl", hash = "sha256:4bf0a39a8d55bfc41d39da0bfb6d3d4e86560f9e7040f61b8df1155a08694ea2", size = 55015, upload-time = "2025-10-03T23:49:23.002Z" },
-]
 
 [[package]]
 name = "pydantic-graph"
-version = "1.0.15"
-source = { registry = "https://pypi.org/simple" }
+version = "1.0.19.dev5+b3b34f9"
+source = { git = "https://github.com/pydantic/pydantic-ai.git?subdirectory=pydantic_graph&branch=main#b3b34f94ff0b8bdfb9e0ccbc3b1d60374e25cfee" }
 dependencies = [
     { name = "httpx" },
     { name = "logfire-api" },
     { name = "pydantic" },
     { name = "typing-inspection" },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/7d/9d/53bfb44f18f8693faa4a000aae8c16e61066318ce340395e9fac2c746d69/pydantic_graph-1.0.15.tar.gz", hash = "sha256:c4ddf8574b0f7b8d3a310f7d5ce218aa3563e15d7251c596b1dfb61ae61d4097", size = 21903, upload-time = "2025-10-03T23:49:35.619Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/77/0a/9cf13c0e0cd7cbea87538d3a0e45e501b3c11e4942a21860d13d985c3e94/pydantic_graph-1.0.15-py3-none-any.whl", hash = "sha256:c1f3b093429365c48f4b27f034fae0f3ba1a82eb24859a601a1f15cc688aad63", size = 27548, upload-time = "2025-10-03T23:49:24.413Z" },
 ]
 
 [[package]]

@@ -20,13 +20,13 @@ export async function gateway(request: Request, ctx: ExecutionContext, env: Gate
     return textResponse(400, `Invalid provider '${provider}', should be one of ${providerIdArray.join(', ')}`)
   }
 
-  const apiKey = await apiKeyAuth(request, env)
+  const apiKeyInfo = await apiKeyAuth(request, env)
 
-  if (apiKey.status !== 'active') {
-    return textResponse(403, `Unauthorized - Key ${apiKey.status}`)
+  if (apiKeyInfo.status !== 'active') {
+    return textResponse(403, `Unauthorized - Key ${apiKeyInfo.status}`)
   }
 
-  let providerProxies = apiKey.providers.filter((p) => p.providerId === provider)
+  let providerProxies = apiKeyInfo.providers.filter((p) => p.providerId === provider)
 
   const profile = request.headers.get('pydantic-ai-gateway-profile')
   if (profile !== null) {
@@ -41,14 +41,14 @@ export async function gateway(request: Request, ctx: ExecutionContext, env: Gate
     return textResponse(403, 'Forbidden - Provider not supported by this API Key')
   }
 
-  const otel = new OtelTrace(request, apiKey.otelSettings, env)
+  const otel = new OtelTrace(request, apiKeyInfo.otelSettings, env)
 
   const ProxyCls = getProvider(providerProxy.providerId)
 
   const proxy = new ProxyCls({
     request,
     env,
-    apiKey,
+    apiKeyInfo,
     providerProxy,
     restOfPath,
     ctx,
@@ -64,12 +64,12 @@ export async function gateway(request: Request, ctx: ExecutionContext, env: Gate
   let response: Response
   if ('successStatus' in result) {
     const { successStatus, responseHeaders, responseBody, cost } = result
-    runAfter(ctx, 'recordSpend', recordSpend(apiKey, cost, env))
+    runAfter(ctx, 'recordSpend', recordSpend(apiKeyInfo, cost, env))
     response = new Response(responseBody, { status: successStatus, headers: responseHeaders })
   } else if ('error' in result) {
     const { error, disableKey } = result
     if (disableKey) {
-      runAfter(ctx, 'disableApiKey', blockApiKey(apiKey, env, 'Invalid request'))
+      runAfter(ctx, 'disableApiKey', blockApiKey(apiKeyInfo, env, 'Invalid request'))
       response = textResponse(400, `${error}, API key disabled`)
     } else {
       response = textResponse(400, error)

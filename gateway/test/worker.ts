@@ -102,7 +102,13 @@ class TestKeysDB extends KeysDbD1 {
           },
         }
       case 'disabled':
-        return { id: IDS.keyDisabled, project: IDS.projectDefault, key, status: 'disabled', providers: this.allProviders }
+        return {
+          id: IDS.keyDisabled,
+          project: IDS.projectDefault,
+          key,
+          status: 'disabled',
+          providers: this.allProviders,
+        }
       case 'tiny-limit':
         return {
           id: IDS.keyTinyLimit,

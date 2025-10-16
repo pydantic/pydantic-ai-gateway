@@ -46,6 +46,8 @@ exports[`key status > should change key status if limit is exceeded > kv-value 1
   "id": 5,
   "key": "tiny-limit",
   "keySpendingLimitDaily": 0.01,
+  "project": 1,
+  "projectSpendingLimitMonthly": 4,
   "providers": [
     {
       "baseUrl": "http://test.example.com/test",
@@ -55,8 +57,6 @@ exports[`key status > should change key status if limit is exceeded > kv-value 1
     },
   ],
   "status": "limit-exceeded",
-  "project": 1,
-  "projectSpendingLimitMonthly": 4,
 }
 `;
 

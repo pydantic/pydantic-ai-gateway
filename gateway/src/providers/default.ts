@@ -104,7 +104,7 @@ export class DefaultProviderProxy {
   }
 
   disableKey(): boolean {
-    return this.providerProxy.disableKey || true
+    return this.providerProxy.disableKey ?? true
   }
 
   protected apiFlavor(): string | undefined {
@@ -177,8 +177,14 @@ export class DefaultProviderProxy {
       if (!provider) {
         return { error: 'invalid response JSON, provider not found' }
       }
-      const [responseModel, usage] = extractUsage(provider, responseBody, this.apiFlavor())
-
+      let { model: responseModel, usage } = extractUsage(provider, responseBody, this.apiFlavor())
+      if (!responseModel) {
+        // If the response model cannot be extracted from the `responseBody`, we try to infer from the URL.
+        responseModel = this.inferResponseModel()
+        if (!responseModel) {
+          return { error: 'Unable to infer response model' }
+        }
+      }
       const price = calcPrice(usage, responseModel, { provider })
       if (price) {
         return { responseBody, responseModel, usage, cost: price.total_price }
@@ -189,6 +195,10 @@ export class DefaultProviderProxy {
       logfire.reportError('Error extracting usage from response', error as Error, { bodyText })
       return { error: 'invalid response, unable to extract usage' }
     }
+  }
+
+  protected inferResponseModel(): string | null {
+    return null
   }
 
   protected responseHeaders(_headers: Headers): void {}

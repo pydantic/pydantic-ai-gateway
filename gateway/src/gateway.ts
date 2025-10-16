@@ -14,7 +14,10 @@ export async function gateway(request: Request, ctx: ExecutionContext, env: Gate
   if (!providerMatch) {
     return textResponse(404, 'Path not found')
   }
-  const [, provider, restOfPath] = providerMatch as unknown as [string, string, string]
+  const [, provider, restOfPathRaw] = providerMatch as unknown as [string, string, string]
+
+  // We need to decode the rest of the path because it may contain encoded characters like "%3A" (:).
+  const restOfPath = decodeURIComponent(restOfPathRaw)
 
   if (!guardProviderID(provider)) {
     return textResponse(400, `Invalid provider '${provider}', should be one of ${providerIdArray.join(', ')}`)

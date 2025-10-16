@@ -9,8 +9,6 @@ export class BedrockAPI extends BaseAPI<ConverseRequest, ConverseResponse> {
   defaultBaseUrl = 'https://bedrock-runtime.us-east-1.amazonaws.com'
 
   requestStopSequences = (requestBody: ConverseRequest): string[] | undefined => {
-    console.log('hi there')
-    console.log('requestBody', requestBody)
     return requestBody.inferenceConfig?.stopSequences
   }
 
@@ -26,8 +24,10 @@ export class BedrockAPI extends BaseAPI<ConverseRequest, ConverseResponse> {
     return requestBody.inferenceConfig?.maxTokens
   }
 
-  responseId = (responseBody: ConverseResponse): string | undefined => {
-    console.log('responseBody', responseBody)
+  // NOTE: It seems Bedrock does not return an ID in the response body.
+  responseId = (_responseBody: ConverseResponse): string | undefined => {
     return undefined
   }
 }
+
+// TODO(Marcelo): Add input/output messages extraction.

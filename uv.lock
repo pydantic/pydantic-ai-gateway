@@ -349,6 +349,7 @@ source = { virtual = "examples" }
 dependencies = [
     { name = "devtools" },
     { name = "logfire", extra = ["httpx"] },
+    { name = "opentelemetry-instrumentation-botocore" },
     { name = "pydantic-ai" },
 ]
 
@@ -356,6 +357,7 @@ dependencies = [
 requires-dist = [
     { name = "devtools", specifier = ">=0.12.2" },
     { name = "logfire", extras = ["httpx"], specifier = ">=4.3.3" },
+    { name = "opentelemetry-instrumentation-botocore", specifier = ">=0.57b0" },
     { name = "pydantic-ai", git = "https://github.com/pydantic/pydantic-ai.git?branch=main" },
 ]
 
@@ -1034,6 +1036,21 @@ wheels = [
 ]
 
 [[package]]
+name = "opentelemetry-instrumentation-botocore"
+version = "0.57b0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "opentelemetry-api" },
+    { name = "opentelemetry-instrumentation" },
+    { name = "opentelemetry-propagator-aws-xray" },
+    { name = "opentelemetry-semantic-conventions" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/ab/25/b4ce31ac4ea1d428fb6491533d5caeddd41aafdcf0cea37bbd4d98e50919/opentelemetry_instrumentation_botocore-0.57b0.tar.gz", hash = "sha256:e8a5af491590cf83d2bdbc3b62b38b80de133d67cc927e17ff94efd8c94795b7", size = 118801, upload-time = "2025-07-29T15:42:52.966Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/52/0f/cd75d378f9a9a482f8fbe44cb89235a9c8efda4cac00a30ca3f44383addd/opentelemetry_instrumentation_botocore-0.57b0-py3-none-any.whl", hash = "sha256:473c83e6dbdb817746a171b1ab9aabe58ccd1394f7208fad0e28e395e04fc5c5", size = 35806, upload-time = "2025-07-29T15:41:55.166Z" },
+]
+
+[[package]]
 name = "opentelemetry-instrumentation-httpx"
 version = "0.57b0"
 source = { registry = "https://pypi.org/simple" }
@@ -1047,6 +1064,18 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/01/28/65fea8b8e7f19502a8af1229c62384f9211c1480f5dee1776841810d6551/opentelemetry_instrumentation_httpx-0.57b0.tar.gz", hash = "sha256:ea5669cdb17185f8d247c2dbf756ae5b95b53110ca4d58424f2be5cc7223dbdd", size = 19511, upload-time = "2025-07-29T15:43:00.575Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/bd/24/e59b319a5c6a41c6b4230f5e25651edbeb3a8d248afa1b411fd07cc3f9bf/opentelemetry_instrumentation_httpx-0.57b0-py3-none-any.whl", hash = "sha256:729fef97624016d3e5b03b71f51c9a1a2f7480b023373186d643fbed7496712a", size = 15111, upload-time = "2025-07-29T15:42:06.501Z" },
+]
+
+[[package]]
+name = "opentelemetry-propagator-aws-xray"
+version = "1.0.2"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "opentelemetry-api" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/f4/31/40004e9e55b1e5694ef3a7526f0b7637df44196fc68a8b7d248a3684680f/opentelemetry_propagator_aws_xray-1.0.2.tar.gz", hash = "sha256:6b2cee5479d2ef0172307b66ed2ed151f598a0fd29b3c01133ac87ca06326260", size = 10994, upload-time = "2024-08-05T17:45:57.601Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/ea/89/849a0847871fd9745315896ad9e23d6479db84d90b8b36c4c26dc46e92b8/opentelemetry_propagator_aws_xray-1.0.2-py3-none-any.whl", hash = "sha256:1c99181ee228e99bddb638a0c911a297fa21f1c3a0af951f841e79919b5f1934", size = 10856, upload-time = "2024-08-05T17:45:56.492Z" },
 ]
 
 [[package]]

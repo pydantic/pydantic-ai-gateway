@@ -1,8 +1,7 @@
-import '../polyfills'
 import { describe, expect } from 'vitest'
 import { test } from '../setup'
 
-describe.only('bedrock', () => {
+describe('bedrock', () => {
   test('should call bedrock via gateway', async ({ gateway }) => {
     const { fetch, otelBatch } = gateway
 

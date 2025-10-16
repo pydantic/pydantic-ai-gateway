@@ -5,6 +5,6 @@
     "types": ["@cloudflare/workers-types", "@cloudflare/vitest-pool-workers", "vite/client", "./env.d.ts"],
     "erasableSyntaxOnly": false
   },
-  "include": ["./**/*.ts", "./polyfills.js"],
+  "include": ["./**/*.ts"],
   "exclude": []
 }

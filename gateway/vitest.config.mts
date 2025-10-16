@@ -11,14 +11,7 @@ export default defineWorkersConfig({
       optimizer: {
         ssr: {
           enabled: true,
-          include: [
-            '@pydantic/logfire-cf-workers',
-            '@opentelemetry/resources',
-            'mime-types',
-            'mime-db',
-            'tslib',
-            '@xmldom/xmldom',
-          ],
+          include: ['@pydantic/logfire-cf-workers', '@opentelemetry/resources', 'mime-types', 'mime-db'],
         },
       },
     },

@@ -18,6 +18,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 import type { ProviderID } from '../types'
 
 import { AnthropicProvider } from './anthropic'
+import { BedrockProvider } from './bedrock'
 import { DefaultProviderProxy, type ProviderOptions } from './default'
 import { GoogleVertexProvider } from './google'
 import { GroqProvider } from './groq'
@@ -36,6 +37,8 @@ export function getProvider(providerId: ProviderID): ProviderSig {
       return GoogleVertexProvider
     case 'anthropic':
       return AnthropicProvider
+    case 'bedrock':
+      return BedrockProvider
     case 'test':
       return TestProvider
     default:

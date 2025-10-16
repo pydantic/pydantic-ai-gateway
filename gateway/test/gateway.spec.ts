@@ -202,10 +202,7 @@ describe('custom proxyRegex', () => {
     const disableEvents: DisableEvent[] = []
 
     async function mockFetch(url: RequestInfo | URL, init?: RequestInit): Promise<Response> {
-      const request = new Request<unknown, IncomingRequestCfProperties>(
-        url,
-        init as RequestInit<IncomingRequestCfProperties>,
-      )
+      const request = new Request(url, init as RequestInit<IncomingRequestCfProperties>)
       const response = await gatewayFetch(
         request,
         ctx,

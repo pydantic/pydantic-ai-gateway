@@ -1,0 +1,198 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`bedrock > should call bedrock via gateway > bedrock 1`] = `
+{
+  "metrics": {
+    "latencyMs": 518,
+  },
+  "output": {
+    "message": {
+      "content": [
+        {
+          "text": "The capital of France is Paris. Paris is not only the capital city but also the most populous city in France, known for its cultural, historical, and economic significance. It is famous for landmarks such as the Eiffel Tower, the Louvre Museum, and the Notre-Dame Cathedral, among other attractions.",
+        },
+      ],
+      "role": "assistant",
+    },
+  },
+  "stopReason": "end_turn",
+  "usage": {
+    "inputTokens": 13,
+    "outputTokens": 60,
+    "pydantic_ai_gateway": {
+      "cost_estimate": 0.000008855,
+    },
+    "serverToolUsage": {},
+    "totalTokens": 73,
+  },
+}
+`;
+
+exports[`bedrock > should call bedrock via gateway > llm 1`] = `
+{
+  "metrics": {
+    "latencyMs": 518,
+  },
+  "output": {
+    "message": {
+      "content": [
+        {
+          "text": "The capital of France is Paris. Paris is not only the capital city but also the most populous city in France, known for its cultural, historical, and economic significance. It is famous for landmarks such as the Eiffel Tower, the Louvre Museum, and the Notre-Dame Cathedral, among other attractions.",
+        },
+      ],
+      "role": "assistant",
+    },
+  },
+  "stopReason": "end_turn",
+  "usage": {
+    "inputTokens": 13,
+    "outputTokens": 60,
+    "pydantic_ai_gateway": {
+      "cost_estimate": 0.000008855,
+    },
+    "serverToolUsage": {},
+    "totalTokens": 73,
+  },
+}
+`;
+
+exports[`bedrock > should call bedrock via gateway > span 1`] = `
+[
+  {
+    "key": "logfire.msg",
+    "value": {
+      "stringValue": "chat amazon.nova-micro-v1:0",
+    },
+  },
+  {
+    "key": "logfire.json_schema",
+    "value": {
+      "stringValue": "{"type":"object","properties":{"gen_ai.operation.name":{"type":"string"},"gen_ai.request.model":{"type":"string"},"gen_ai.system":{"type":"string"},"gen_ai.request.max_tokens":{},"gen_ai.request.top_k":{},"gen_ai.request.top_p":{},"gen_ai.request.temperature":{},"gen_ai.request.stop_sequences":{},"gen_ai.request.seed":{},"gen_ai.response.finish_reasons":{},"gen_ai.response.id":{},"gen_ai.input.messages":{},"gen_ai.output.messages":{},"gen_ai.system_instructions":{},"http.response.status_code":{"type":"number"},"http.request.body.text":{"type":"string"},"http.response.body.text":{"type":"string"},"gen_ai.response.model":{"type":"string"},"gen_ai.usage.input_tokens":{"type":"number"},"gen_ai.usage.cache_read_tokens":{},"gen_ai.usage.cache_write_tokens":{},"gen_ai.usage.output_tokens":{"type":"number"},"gen_ai.usage.input_audio_tokens":{},"gen_ai.usage.cache_audio_read_tokens":{},"gen_ai.usage.output_audio_tokens":{}}}",
+    },
+  },
+  {
+    "key": "logfire.level_num",
+    "value": {
+      "intValue": 9,
+    },
+  },
+  {
+    "key": "gen_ai.operation.name",
+    "value": {
+      "stringValue": "chat",
+    },
+  },
+  {
+    "key": "gen_ai.request.model",
+    "value": {
+      "stringValue": "m",
+    },
+  },
+  {
+    "key": "gen_ai.system",
+    "value": {
+      "stringValue": "bedrock",
+    },
+  },
+  {
+    "key": "gen_ai.request.max_tokens",
+    "value": {},
+  },
+  {
+    "key": "gen_ai.request.top_k",
+    "value": {},
+  },
+  {
+    "key": "gen_ai.request.top_p",
+    "value": {},
+  },
+  {
+    "key": "gen_ai.request.temperature",
+    "value": {},
+  },
+  {
+    "key": "gen_ai.request.stop_sequences",
+    "value": {},
+  },
+  {
+    "key": "gen_ai.request.seed",
+    "value": {},
+  },
+  {
+    "key": "gen_ai.response.finish_reasons",
+    "value": {},
+  },
+  {
+    "key": "gen_ai.response.id",
+    "value": {},
+  },
+  {
+    "key": "gen_ai.input.messages",
+    "value": {},
+  },
+  {
+    "key": "gen_ai.output.messages",
+    "value": {},
+  },
+  {
+    "key": "gen_ai.system_instructions",
+    "value": {},
+  },
+  {
+    "key": "http.response.status_code",
+    "value": {
+      "intValue": 200,
+    },
+  },
+  {
+    "key": "http.request.body.text",
+    "value": {
+      "stringValue": "{"modelId":"amazon.nova-premier-v1:0","system":[{"text":"You are a helpful assistant."}],"messages":[{"role":"user","content":[{"text":"What is the capital of France?"}]}]}",
+    },
+  },
+  {
+    "key": "http.response.body.text",
+    "value": {
+      "stringValue": "{"metrics":{"latencyMs":518},"output":{"message":{"content":[{"text":"The capital of France is Paris. Paris is not only the capital city but also the most populous city in France, known for its cultural, historical, and economic significance. It is famous for landmarks such as the Eiffel Tower, the Louvre Museum, and the Notre-Dame Cathedral, among other attractions."}],"role":"assistant"}},"stopReason":"end_turn","usage":{"inputTokens":13,"outputTokens":60,"serverToolUsage":{},"totalTokens":73,"pydantic_ai_gateway":{"cost_estimate":0.000008855}}}",
+    },
+  },
+  {
+    "key": "gen_ai.response.model",
+    "value": {
+      "stringValue": "amazon.nova-micro-v1:0",
+    },
+  },
+  {
+    "key": "gen_ai.usage.input_tokens",
+    "value": {
+      "intValue": 13,
+    },
+  },
+  {
+    "key": "gen_ai.usage.cache_read_tokens",
+    "value": {},
+  },
+  {
+    "key": "gen_ai.usage.cache_write_tokens",
+    "value": {},
+  },
+  {
+    "key": "gen_ai.usage.output_tokens",
+    "value": {
+      "intValue": 60,
+    },
+  },
+  {
+    "key": "gen_ai.usage.input_audio_tokens",
+    "value": {},
+  },
+  {
+    "key": "gen_ai.usage.cache_audio_read_tokens",
+    "value": {},
+  },
+  {
+    "key": "gen_ai.usage.output_audio_tokens",
+    "value": {},
+  },
+]
+`;

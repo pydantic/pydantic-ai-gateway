@@ -18,6 +18,7 @@ from vcr.record_mode import RecordMode  # type: ignore[reportMissingTypeStubs]
 OPENAI_BASE_URL = 'https://api.openai.com/v1/'
 GROQ_BASE_URL = 'https://api.groq.com'
 ANTHROPIC_BASE_URL = 'https://api.anthropic.com'
+BEDROCK_BASE_URL = 'https://bedrock-runtime.us-east-1.amazonaws.com'
 
 current_file_dir = pathlib.Path(__file__).parent
 
@@ -56,6 +57,16 @@ async def proxy(request: Request) -> JSONResponse:
         url = GROQ_BASE_URL + request.url.path[len('/groq') :]
         with vcr.use_cassette(f'{body_hash}.yaml'):  # type: ignore[reportUnknownReturnType]
             headers = {'Authorization': auth_header, 'content-type': 'application/json'}
+            response = await client.post(url, content=body, headers=headers)
+    elif request.url.path.startswith('/bedrock'):
+        client = cast(httpx.AsyncClient, request.scope['state']['httpx_client'])
+        url = BEDROCK_BASE_URL + request.url.path[len('/bedrock') :]
+        with vcr.use_cassette(f'{body_hash}.yaml'):  # type: ignore[reportUnknownReturnType]
+            headers = {
+                'Authorization': auth_header,
+                'content-type': 'application/json',
+                'x-amz-security-token': auth_header.replace('Bearer ', ''),
+            }
             response = await client.post(url, content=body, headers=headers)
     elif request.url.path.startswith('/anthropic'):
         client = cast(httpx.AsyncClient, request.scope['state']['httpx_client'])

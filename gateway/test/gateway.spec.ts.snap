@@ -55,8 +55,8 @@ exports[`key status > should change key status if limit is exceeded > kv-value 1
     },
   ],
   "status": "limit-exceeded",
-  "team": 1,
-  "teamSpendingLimitMonthly": 4,
+  "project": 1,
+  "projectSpendingLimitMonthly": 4,
 }
 `;
 

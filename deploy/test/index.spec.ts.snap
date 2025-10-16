@@ -343,7 +343,7 @@ exports[`deploy > should call openai via gateway > span 1`] = `
 
 exports[`deploy > should call openai via gateway > status-after-requests 1`] = `
 "{
-  "teams": [
+  "projects": [
     {
       "id": 1,
       "name": "default",
@@ -410,7 +410,7 @@ exports[`deploy > should call openai via gateway > status-after-requests 1`] = `
 
 exports[`deploy > status auth works > status-empty 1`] = `
 "{
-  "teams": [
+  "projects": [
     {
       "id": 1,
       "name": "default",

@@ -4,22 +4,22 @@ import type { Config } from '@deploy/types'
 // can be whatever you want, just used to make linking apiKeys to providers typesafe.
 type ProviderKeys = 'a' | 'b' | 'c' | 'd'
 
-// teams, users and keys must have numeric keys, using constants here to make it easier to understand
-// of course, keys must be unique within a type (e.g. team ids must be unique) but users and teams can have the same id
+// projects, users and keys must have numeric keys, using constants here to make it easier to understand
+// of course, keys must be unique within a type (e.g. project ids must be unique) but users and projects can have the same id
 // we just use different ids here for clarity
 const TEAM_DEFAULT_ID = 1
 const USER_SAMUEL_ID = 2
 const MAIN_API_KEY_ID = 3
 
 export const config: Config<ProviderKeys> = {
-  teams: {
+  projects: {
     [TEAM_DEFAULT_ID]: {
       name: 'default',
       otel: {
         // For sending proxy telemetry to Logfire or other OTel service, generate at logfire.pydantic.dev
         writeToken: 'pylf_...',
       },
-      // users in this team
+      // users in this project
       users: {
         [USER_SAMUEL_ID]: {
           name: 'Samuel',
@@ -29,7 +29,7 @@ export const config: Config<ProviderKeys> = {
           spendingLimitMonthly: 10,
         },
       },
-      /// similarly team limits are optional
+      /// similarly project limits are optional
       spendingLimitDaily: 10,
       spendingLimitWeekly: 50,
       spendingLimitMonthly: 100,
@@ -68,8 +68,8 @@ export const config: Config<ProviderKeys> = {
   apiKeys: {
     'REPLACE ME! run `npm run generate-api-key` and copy the output here': {
       id: MAIN_API_KEY_ID,
-      // team is required
-      team: TEAM_DEFAULT_ID,
+      // project is required
+      project: TEAM_DEFAULT_ID,
       // user is optional
       user: USER_SAMUEL_ID,
       // providers is required and identifies which providers this apiKey is allowed to use

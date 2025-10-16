@@ -7,8 +7,8 @@ export class ConfigDB extends KeysDbD1 {
     if (!keyInfo) {
       return null
     }
-    const team = config.teams[keyInfo.team]!
-    const user = keyInfo.user ? team.users[keyInfo.user] : undefined
+    const project = config.projects[keyInfo.project]!
+    const user = keyInfo.user ? project.users[keyInfo.user] : undefined
 
     let providers: ProviderProxy[]
     if (keyInfo.providers === '__all__') {
@@ -31,7 +31,7 @@ export class ConfigDB extends KeysDbD1 {
     return {
       id: keyId,
       user: keyInfo.user,
-      team: keyInfo.team,
+      project: keyInfo.project,
       key,
       status,
       // key limits
@@ -39,16 +39,16 @@ export class ConfigDB extends KeysDbD1 {
       keySpendingLimitWeekly: keyInfo.spendingLimitWeekly,
       keySpendingLimitMonthly: keyInfo.spendingLimitMonthly,
       keySpendingLimitTotal: keyInfo.spendingLimitTotal,
-      // team limits
-      teamSpendingLimitDaily: team.spendingLimitDaily,
-      teamSpendingLimitWeekly: team.spendingLimitWeekly,
-      teamSpendingLimitMonthly: team.spendingLimitMonthly,
+      // project limits
+      projectSpendingLimitDaily: project.spendingLimitDaily,
+      projectSpendingLimitWeekly: project.spendingLimitWeekly,
+      projectSpendingLimitMonthly: project.spendingLimitMonthly,
       // user limits
       userSpendingLimitDaily: user?.spendingLimitDaily,
       userSpendingLimitWeekly: user?.spendingLimitWeekly,
       userSpendingLimitMonthly: user?.spendingLimitMonthly,
       providers,
-      otelSettings: user?.otel ?? team.otel,
+      otelSettings: user?.otel ?? project.otel,
     }
   }
 }

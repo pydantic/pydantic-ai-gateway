@@ -1,4 +1,5 @@
 import type { ConverseRequest } from '@aws-sdk/client-bedrock-runtime'
+import * as logfire from '@pydantic/logfire-api'
 import type { ModelAPI } from '../api'
 import { BedrockAPI } from '../api/bedrock'
 import { DefaultProviderProxy } from './default'
@@ -30,6 +31,13 @@ export class BedrockProvider extends DefaultProviderProxy {
   }
 
   inferResponseModel(): string | null {
-    return this.inferModel(this.restOfPath)
+    // We need to decode the rest of the path because it may contain encoded characters like "%3A" (:).
+    try {
+      const decodedRestOfPath = decodeURIComponent(this.restOfPath)
+      return this.inferModel(decodedRestOfPath)
+    } catch (error) {
+      logfire.reportError('Error decoding URI', error as Error)
+      return null
+    }
   }
 }

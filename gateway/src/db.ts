@@ -47,10 +47,10 @@ ON CONFLICT (id) DO UPDATE SET status = excluded.status, expiresAt = null`,
   }
 }
 
-export type EntityType = 'team' | 'user' | 'key'
+export type EntityType = 'project' | 'user' | 'key'
 
-const entityTypeLookup: Record<EntityType, number> = { team: 1, user: 2, key: 3 }
-const reverseEntityTypeLookup: Record<1 | 2 | 3, EntityType> = { 1: 'team', 2: 'user', 3: 'key' }
+const entityTypeLookup: Record<EntityType, number> = { project: 1, user: 2, key: 3 }
+const reverseEntityTypeLookup: Record<1 | 2 | 3, EntityType> = { 1: 'project', 2: 'user', 3: 'key' }
 
 export type Scope = 'daily' | 'weekly' | 'monthly' | 'total'
 
@@ -93,7 +93,7 @@ export abstract class LimitDb {
   // increment spends and return IDs of any scopes that have exceeded the spending limit
   abstract incrementSpend(spendScopes: SpendScope[], spend: number): Promise<ExceededScope[]>
 
-  abstract updateTeamLimits(teamId: number, update: LimitUpdate): Promise<void>
+  abstract updateProjectLimits(projectId: number, update: LimitUpdate): Promise<void>
 
   abstract updateUserLimits(userId: number, update: LimitUpdate): Promise<void>
 
@@ -147,15 +147,15 @@ RETURNING entityType, scope, spend > spendingLimit as ex;`,
       }))
   }
 
-  async updateTeamLimits(teamId: number, { daily, weekly, monthly }: LimitUpdate) {
+  async updateProjectLimits(projectId: number, { daily, weekly, monthly }: LimitUpdate) {
     if (daily) {
-      await this.updateSpend(daily, 'team', teamId, 'daily')
+      await this.updateSpend(daily, 'project', projectId, 'daily')
     }
     if (weekly) {
-      await this.updateSpend(weekly, 'team', teamId, 'weekly')
+      await this.updateSpend(weekly, 'project', projectId, 'weekly')
     }
     if (monthly) {
-      await this.updateSpend(monthly, 'team', teamId, 'monthly')
+      await this.updateSpend(monthly, 'project', projectId, 'monthly')
     }
   }
 

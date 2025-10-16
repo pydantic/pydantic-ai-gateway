@@ -1,7 +1,7 @@
 CREATE TABLE IF NOT EXISTS spend (
-  -- one of (1=team, 2=user, 3=key)
+  -- one of (1=project, 2=user, 3=key)
   entityType INTEGER CHECK(entityType IN (1, 2, 3)) NOT NULL,
-  -- team id, user id, or key id
+  -- project id, user id, or key id
   entityId INTEGER NOT NULL,
   -- scope (1=daily, 2=weekly, 3=monthly, 4=total)
   scope INTEGER CHECK(scope IN (1, 2, 3, 4)) NOT NULL,

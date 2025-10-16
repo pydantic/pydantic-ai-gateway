@@ -11,7 +11,7 @@ export type KeyStatus =
 export interface ApiKeyInfo {
   id: number
   user?: number
-  team: number
+  project: number
   key: string
   status: KeyStatus
   // limits per apiKey - note the extra field since keys can have a total limit
@@ -19,10 +19,10 @@ export interface ApiKeyInfo {
   keySpendingLimitWeekly?: number
   keySpendingLimitMonthly?: number
   keySpendingLimitTotal?: number
-  // limits per team
-  teamSpendingLimitDaily?: number
-  teamSpendingLimitWeekly?: number
-  teamSpendingLimitMonthly?: number
+  // limits per project
+  projectSpendingLimitDaily?: number
+  projectSpendingLimitWeekly?: number
+  projectSpendingLimitMonthly?: number
   // limits per user
   userSpendingLimitDaily?: number
   userSpendingLimitWeekly?: number

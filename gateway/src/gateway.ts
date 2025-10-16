@@ -99,7 +99,7 @@ export async function disableApiKey(
 }
 
 async function recordSpend(apiKey: ApiKeyInfo, spend: number, env: GatewayEnv): Promise<void> {
-  const { id, team, user } = apiKey
+  const { id, project, user } = apiKey
 
   const { day, endOfWeek, endOfMonth } = scopeIntervals()
 
@@ -165,31 +165,31 @@ async function recordSpend(apiKey: ApiKeyInfo, spend: number, env: GatewayEnv): 
     }
   }
 
-  if (isSet(apiKey.teamSpendingLimitDaily)) {
+  if (isSet(apiKey.projectSpendingLimitDaily)) {
     intervalSpends.push({
-      entityId: team,
-      entityType: 'team',
+      entityId: project,
+      entityType: 'project',
       scope: 'daily',
       scopeInterval: day,
-      limit: apiKey.teamSpendingLimitDaily,
+      limit: apiKey.projectSpendingLimitDaily,
     })
   }
-  if (isSet(apiKey.teamSpendingLimitWeekly)) {
+  if (isSet(apiKey.projectSpendingLimitWeekly)) {
     intervalSpends.push({
-      entityId: team,
-      entityType: 'team',
+      entityId: project,
+      entityType: 'project',
       scope: 'weekly',
       scopeInterval: endOfWeek,
-      limit: apiKey.teamSpendingLimitWeekly,
+      limit: apiKey.projectSpendingLimitWeekly,
     })
   }
-  if (isSet(apiKey.teamSpendingLimitMonthly)) {
+  if (isSet(apiKey.projectSpendingLimitMonthly)) {
     intervalSpends.push({
-      entityId: team,
-      entityType: 'team',
+      entityId: project,
+      entityType: 'project',
       scope: 'monthly',
       scopeInterval: endOfMonth,
-      limit: apiKey.teamSpendingLimitMonthly,
+      limit: apiKey.projectSpendingLimitMonthly,
     })
   }
   const scopesExceeded = await env.limitDb.incrementSpend(intervalSpends, spend)

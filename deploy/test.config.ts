@@ -4,11 +4,11 @@ import type { Config } from '@deploy/types'
 type ProviderKeys = 'openai' | 'groq' | 'anthropic' | 'test'
 
 export const config: Config<ProviderKeys> = {
-  teams: {
+  projects: {
     1: {
       name: 'default',
       otel: { writeToken: 'write-token', baseUrl: 'https://logfire.pydantic.dev', exporterProtocol: 'http/json' },
-      // users in this team
+      // users in this project
       users: {
         2: {
           name: 'testberto',
@@ -16,7 +16,7 @@ export const config: Config<ProviderKeys> = {
           spendingLimitWeekly: 2,
         },
       },
-      /// similarly team limits are optional
+      /// similarly project limits are optional
       spendingLimitDaily: 1,
     },
   },
@@ -58,13 +58,13 @@ export const config: Config<ProviderKeys> = {
   apiKeys: {
     'healthy-key': {
       id: 3,
-      // team is required
-      team: 1,
+      // project is required
+      project: 1,
       user: 2,
       providers: ['openai', 'groq', 'anthropic', 'test'],
       spendingLimitMonthly: 3,
       spendingLimitTotal: 4,
     },
-    'low-limit-key': { id: 4, team: 1, providers: '__all__', spendingLimitDaily: 0.01 },
+    'low-limit-key': { id: 4, project: 1, providers: '__all__', spendingLimitDaily: 0.01 },
   },
 }

@@ -42,7 +42,7 @@ export function buildGatewayEnv(
 }
 
 export namespace IDS {
-  export const teamDefault = 1
+  export const projectDefault = 1
   export const userDefault = 2
   export const keyHealthy = 3
   export const keyDisabled = 4
@@ -84,7 +84,7 @@ class TestKeysDB extends KeysDbD1 {
         return {
           id: IDS.keyHealthy,
           user: IDS.userDefault,
-          team: IDS.teamDefault,
+          project: IDS.projectDefault,
           key,
           status: (await this.getDbKeyStatus(IDS.keyHealthy)) ?? 'active',
           // key limits
@@ -92,8 +92,8 @@ class TestKeysDB extends KeysDbD1 {
           keySpendingLimitTotal: 2,
           // user limits
           userSpendingLimitWeekly: 3,
-          // team limits
-          teamSpendingLimitMonthly: 4,
+          // project limits
+          projectSpendingLimitMonthly: 4,
           providers: this.allProviders,
           otelSettings: {
             writeToken: 'write-token',
@@ -102,15 +102,21 @@ class TestKeysDB extends KeysDbD1 {
           },
         }
       case 'disabled':
-        return { id: IDS.keyDisabled, team: IDS.teamDefault, key, status: 'disabled', providers: this.allProviders }
+        return {
+          id: IDS.keyDisabled,
+          project: IDS.projectDefault,
+          key,
+          status: 'disabled',
+          providers: this.allProviders,
+        }
       case 'tiny-limit':
         return {
           id: IDS.keyTinyLimit,
-          team: IDS.teamDefault,
+          project: IDS.projectDefault,
           key,
           status: (await this.getDbKeyStatus(IDS.keyTinyLimit)) ?? 'active',
           keySpendingLimitDaily: 0.01,
-          teamSpendingLimitMonthly: 4,
+          projectSpendingLimitMonthly: 4,
           providers: [this.allProviders[0]!],
         }
       default:

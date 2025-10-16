@@ -10,7 +10,7 @@ interface EntityStatus {
   spend: SpendStatus[]
 }
 
-interface TeamStatus extends EntityStatus {
+interface ProjectStatus extends EntityStatus {
   users: EntityStatus[]
 }
 
@@ -20,7 +20,7 @@ interface KeyStatus extends EntityStatus {
 }
 
 interface Status {
-  teams: TeamStatus[]
+  projects: ProjectStatus[]
   keys: KeyStatus[]
 }
 
@@ -30,21 +30,21 @@ export async function status(request: Request, env: Env, limitdb: LimitDb): Prom
     return authResponse
   }
 
-  const teamStatus = await limitdb.spendStatus('team')
+  const projectStatus = await limitdb.spendStatus('project')
   const userStatus = await limitdb.spendStatus('user')
   const keyStatus = await limitdb.spendStatus('key')
 
   const data: Status = {
-    teams: Object.entries(config.teams).map(([id, team]) => {
-      const teamId = Number(id)
+    projects: Object.entries(config.projects).map(([id, project]) => {
+      const projectId = Number(id)
       return {
-        id: teamId,
-        name: team.name,
-        spendingLimitDaily: team.spendingLimitDaily,
-        spendingLimitWeekly: team.spendingLimitWeekly,
-        spendingLimitMonthly: team.spendingLimitMonthly,
-        spend: teamStatus.filter((t) => t.entityId === teamId),
-        users: Object.entries(team.users).map(([id, user]) => {
+        id: projectId,
+        name: project.name,
+        spendingLimitDaily: project.spendingLimitDaily,
+        spendingLimitWeekly: project.spendingLimitWeekly,
+        spendingLimitMonthly: project.spendingLimitMonthly,
+        spend: projectStatus.filter((t) => t.entityId === projectId),
+        users: Object.entries(project.users).map(([id, user]) => {
           const userId = Number(id)
           return {
             id: userId,

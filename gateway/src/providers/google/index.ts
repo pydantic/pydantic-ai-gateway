@@ -6,6 +6,7 @@ import { authToken } from './auth'
 
 export class GoogleVertexProvider extends DefaultProviderProxy {
   protected usageField = 'usageMetadata'
+  flavor: 'default' | 'anthropic' = 'default'
 
   url() {
     if (this.providerProxy.baseUrl) {
@@ -15,6 +16,7 @@ export class GoogleVertexProvider extends DefaultProviderProxy {
       }
 
       if (api === 'anthropic') {
+        this.flavor = 'anthropic'
         return this.urlAnthropic(model)
       } else {
         return this.urlGoogleVertex()
@@ -25,9 +27,7 @@ export class GoogleVertexProvider extends DefaultProviderProxy {
   }
 
   protected modelAPI(): ModelAPI | undefined {
-    const [api, _, _model] = this.restOfPath.split('/').slice(-3)
-
-    if (api === 'anthropic') {
+    if (this.flavor === 'anthropic') {
       return new AnthropicAPI()
     } else {
       return new GoogleAPI()

@@ -247,6 +247,9 @@ export class DefaultProviderProxy {
     const { requestBodyText, requestBodyData, requestModel } = prepResult
     const response = await this.fetch(url, { method, headers: requestHeaders, body: requestBodyText })
 
+    // Each provider should be able to modify the response headers, e.g. remove openai org
+    const responseHeaders = this.responseHeaders(response.headers)
+
     if (!response.ok) {
       // CAUTION: can we be charged in any way for failed requests?
       const responseBody = await response.text()
@@ -254,7 +257,7 @@ export class DefaultProviderProxy {
         requestModel,
         requestBody: requestBodyText,
         unexpectedStatus: response.status,
-        responseHeaders: this.responseHeaders(response.headers),
+        responseHeaders,
         responseBody,
       }
     }
@@ -265,8 +268,6 @@ export class DefaultProviderProxy {
     }
     const { responseBody, usage, responseModel, cost } = processResponse
 
-    // Each provider should be able to modify the response headers, e.g. remove openai org
-    const responseHeaders = this.responseHeaders(response.headers)
     responseHeaders.set('pydantic-ai-gateway-price-estimate', `${cost.toFixed(4)}USD`)
 
     if (this.providerProxy.injectCost) {

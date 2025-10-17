@@ -10,7 +10,7 @@ import uvicorn
 from starlette.applications import Starlette
 from starlette.exceptions import HTTPException
 from starlette.requests import Request
-from starlette.responses import JSONResponse, Response
+from starlette.responses import JSONResponse, Response, StreamingResponse
 from starlette.routing import Route
 from vcr import VCR  # type: ignore[reportMissingTypeStubs]
 from vcr.record_mode import RecordMode  # type: ignore[reportMissingTypeStubs]
@@ -39,7 +39,7 @@ async def lifespan(_: Starlette):
         yield {'httpx_client': client}
 
 
-async def proxy(request: Request) -> JSONResponse:
+async def proxy(request: Request) -> Response:
     auth_header = request.headers.get('authorization', '')
     body = await request.body()
 
@@ -86,6 +86,13 @@ async def proxy(request: Request) -> JSONResponse:
             response = await client.post(url, content=body, headers=headers)
     else:
         raise HTTPException(status_code=404, detail=f'Path {request.url.path} not supported')
+    if response.headers.get('content-type').startswith('text/event-stream'):
+
+        async def generator():
+            async for chunk in response.aiter_lines():
+                yield chunk
+
+        return StreamingResponse(generator(), status_code=response.status_code)
     return JSONResponse(response.json(), status_code=response.status_code)
 
 

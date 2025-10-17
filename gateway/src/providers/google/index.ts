@@ -1,4 +1,6 @@
-import type { GoogleRequest } from '../../api/google'
+import type { ModelAPI } from '../../api'
+import { AnthropicAPI } from '../../api/anthropic'
+import { GoogleAPI, type GoogleRequest } from '../../api/google'
 import { DefaultProviderProxy } from '../default'
 import { authToken } from './auth'
 
@@ -7,15 +9,42 @@ export class GoogleVertexProvider extends DefaultProviderProxy {
 
   url() {
     if (this.providerProxy.baseUrl) {
-      const extra = this.restOfPath
-        // I think this regex is for GLA aka the google developer API
-        .replace(/^v1beta\/models\//, '')
-        // this is for requests expecting google vertex
-        .replace(/^v1beta1\/publishers\/google\/models\//, '')
-      return `${this.providerProxy.baseUrl}/${extra}`
+      const [api, _, model] = this.restOfPath.split('/').slice(-3)
+      if (!model) {
+        return { error: 'model is required' }
+      }
+
+      if (api === 'anthropic') {
+        return this.urlAnthropic(model)
+      } else {
+        return this.urlGoogleVertex()
+      }
     } else {
       return { error: 'baseUrl is required for the Google Provider' }
     }
+  }
+
+  protected modelAPI(): ModelAPI | undefined {
+    const [api, _, _model] = this.restOfPath.split('/').slice(-3)
+
+    if (api === 'anthropic') {
+      return new AnthropicAPI()
+    } else {
+      return new GoogleAPI()
+    }
+  }
+
+  urlAnthropic(model: string) {
+    return `${this.providerProxy.baseUrl}anthropic/models/${model}`
+  }
+
+  urlGoogleVertex() {
+    const extra = this.restOfPath
+      // I think this regex is for GLA aka the google developer API
+      .replace(/^v1beta\/models\//, '')
+      // this is for requests expecting google vertex
+      .replace(/^v1beta1\/publishers\/google\/models\//, '')
+    return `${this.providerProxy.baseUrl}google/models/${extra}`
   }
 
   async prepRequest() {

@@ -6,4 +6,10 @@ export class AnthropicProvider extends DefaultProviderProxy {
   protected modelAPI(): ModelAPI | undefined {
     return new AnthropicAPI()
   }
+
+  protected responseHeaders(headers: Headers): Headers {
+    const newHeaders = super.responseHeaders(headers)
+    newHeaders.delete('anthropic-organization-id')
+    return newHeaders
+  }
 }

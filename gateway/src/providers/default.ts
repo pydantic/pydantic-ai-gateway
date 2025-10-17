@@ -201,7 +201,9 @@ export class DefaultProviderProxy {
     return null
   }
 
-  protected responseHeaders(_headers: Headers): void {}
+  protected responseHeaders(headers: Headers): Headers {
+    return new Headers(headers)
+  }
 
   protected injectCost(responseBody: JsonData, cost: number) {
     if (this.usageField && this.usageField in responseBody) {
@@ -252,7 +254,7 @@ export class DefaultProviderProxy {
         requestModel,
         requestBody: requestBodyText,
         unexpectedStatus: response.status,
-        responseHeaders: response.headers,
+        responseHeaders: this.responseHeaders(response.headers),
         responseBody,
       }
     }
@@ -263,10 +265,9 @@ export class DefaultProviderProxy {
     }
     const { responseBody, usage, responseModel, cost } = processResponse
 
-    // TODO we will want to remove some response headers, e.g. openai org
-    const responseHeaders = new Headers(response.headers)
+    // Each provider should be able to modify the response headers, e.g. remove openai org
+    const responseHeaders = this.responseHeaders(response.headers)
     responseHeaders.set('pydantic-ai-gateway-price-estimate', `${cost.toFixed(4)}USD`)
-    this.responseHeaders(responseHeaders)
 
     if (this.providerProxy.injectCost) {
       this.injectCost(responseBody, cost)

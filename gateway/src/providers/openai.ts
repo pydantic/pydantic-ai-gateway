@@ -25,4 +25,11 @@ export class OpenAIProvider extends DefaultProviderProxy {
       return new ChatCompletionAPI()
     }
   }
+
+  protected responseHeaders(headers: Headers): Headers {
+    const newHeaders = super.responseHeaders(headers)
+    newHeaders.delete('openai-organization')
+    newHeaders.delete('openai-project')
+    return newHeaders
+  }
 }

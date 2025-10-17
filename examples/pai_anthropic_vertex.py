@@ -34,7 +34,7 @@ client = AnthropicVertex(
     base_url='http://localhost:8787/google-vertex', access_token=api_key, region='unknown', project_id='unknown'
 )
 provider = AnthropicProvider(anthropic_client=client)  # type: ignore[reportUnknownArgumentType]
-model = AnthropicModel('claude-sonnet-4-0', provider=provider)
+model = AnthropicModel('claude-sonnet-4', provider=provider)
 
 person_agent = Agent(
     model=model,

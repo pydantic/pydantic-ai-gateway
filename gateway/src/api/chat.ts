@@ -63,15 +63,18 @@ function mapInputParts(content: ChatCompletionMessageParam['content']): MessageP
       if (part.type === 'text') {
         parts.push({ type: 'text', content: part.text })
       } else if (part.type === 'image_url') {
-        parts.push({ type: 'file_data', file_uri: part.image_url.url })
+        parts.push({ type: 'uri', uri: part.image_url.url, modality: 'image' })
       } else if (part.type === 'input_audio') {
         const mimeType = mime.contentType(part.input_audio.format) || undefined
-        parts.push({ type: 'blob', mime_type: mimeType, data: part.input_audio.data })
+        parts.push({ type: 'blob', mime_type: mimeType, content: part.input_audio.data, modality: 'audio' })
       } else if (part.type === 'file' && part.file.file_data) {
+        const mimeType = _extractMimeTypeFromBase64(part.file.file_data)
+        parts.push({ type: 'blob', mime_type: mimeType, content: part.file.file_data, modality: 'document' })
+      } else if (part.type === 'file' && part.file.file_id) {
         const mimeType = part.file.filename ? mime.contentType(part.file.filename) || undefined : undefined
-        parts.push({ type: 'blob', mime_type: mimeType, data: part.file.file_data })
+        parts.push({ type: 'file', file_id: part.file.file_id, mime_type: mimeType, modality: 'unknown' })
       } else {
-        parts.push({ ...part })
+        parts.push({ type: 'unknown', part: { ...part } })
       }
     }
   }
@@ -100,4 +103,10 @@ function mapOutputParts(message: ChatCompletion.Choice['message']): MessagePart[
     logfire.warning('unexpected message content', { message })
   }
   return parts
+}
+
+function _extractMimeTypeFromBase64(base64: string): string | undefined {
+  // The format is always "data:image/png;base64,{base64}"
+  const match = base64.match(/^data:([^;]+);base64,/)
+  return match ? match[1] : undefined
 }

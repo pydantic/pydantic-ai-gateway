@@ -28,34 +28,6 @@ exports[`bedrock > should call bedrock via gateway > bedrock 1`] = `
 }
 `;
 
-exports[`bedrock > should call bedrock via gateway > llm 1`] = `
-{
-  "metrics": {
-    "latencyMs": 518,
-  },
-  "output": {
-    "message": {
-      "content": [
-        {
-          "text": "The capital of France is Paris. Paris is not only the capital city but also the most populous city in France, known for its cultural, historical, and economic significance. It is famous for landmarks such as the Eiffel Tower, the Louvre Museum, and the Notre-Dame Cathedral, among other attractions.",
-        },
-      ],
-      "role": "assistant",
-    },
-  },
-  "stopReason": "end_turn",
-  "usage": {
-    "inputTokens": 13,
-    "outputTokens": 60,
-    "pydantic_ai_gateway": {
-      "cost_estimate": 0.000008855,
-    },
-    "serverToolUsage": {},
-    "totalTokens": 73,
-  },
-}
-`;
-
 exports[`bedrock > should call bedrock via gateway > span 1`] = `
 [
   {

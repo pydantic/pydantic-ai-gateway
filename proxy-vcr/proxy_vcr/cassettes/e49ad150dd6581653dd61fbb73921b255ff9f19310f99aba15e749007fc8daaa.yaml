@@ -1,0 +1,79 @@
+interactions:
+- request:
+    body: "{\n  \"model\": \"gpt-5\",\n  \"instructions\": \"reply concisely\",\n
+      \ \"input\": \"what color is the sky?\"\n}"
+    headers:
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '96'
+      content-type:
+      - application/json
+      cookie:
+      - __cf_bm=VBNb65NaApSo6sWDJnIPMakLeh5H1mHDcB0Sh2mXFa4-1760709860-1.0.1.1-Kpf_EgPXWgwUozjVX_S8X_fg8S712P_E4tyGCCusSXclGJYCYoAbjHbJzsJkiM7fVFNT5Xsz6qU13.n7all8jnSv3EU86a6z7IAItqWX98Q;
+        _cfuvid=Viexea8R8pIKRO05UC9attnYS9Wl5c052PfYmjIm7e8-1760709860948-0.0.1.1-604800000
+      host:
+      - api.openai.com
+      user-agent:
+      - python-httpx/0.28.1
+    method: POST
+    uri: https://api.openai.com/v1/responses
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAAA3RU246jMAx971dEPO1K7QylUEr/Y59mR8gkhmYbEpQ43UGj/vuK0FLY6byBj318
+        OXY+V4xFUkRHFll0XRkXkKYcCyzifb7FLI73hzpJMauqfcoP2yIpQOyKCvbFDiDfZbtoPVCY6g9y
+        utMY7XC0c4tAKEoYsG2+j/NtnOyygDkC8m6I4abtFBKKMagCfm6s8XqoqwblcDRLpaRuoiP7XDHG
+        WNRBj3aIF3hBZTq00Yqxa3BGa82Aaa9UMEh9z1IKJJDKLVFH1nOSRruxi071jBvNpUPVj3W18FEa
+        T52nkswZ9YJhAMkYVXJQS+7WCFQDadPRJtskcZJt4sMmzm+jC4zRkb2FrsbeHqq47zXhKW4PgyYV
+        L7CuDkWdCYEiG8cYSKjvcOwHnNHD9CbI+bYF2w+J34Ptun5WQOua7yuo86SIQwUp5FmaZyJPkywT
+        /GsFLToHDc7yfyN/ALnRhPoxlXlhC9q7HvhBU3RwAK0NwV3Qt/cFqEzTWVM9QQLRkUW/nAelelYp
+        j+yHgJ5kiz/XrPLEJLELWInut0/ibWpRvBoLukEGxJzXVjp8dV47pDVrLPTs7wk148p40a9ZpYCf
+        B1ctmxO9RFP66+1rqiiyRoUuwTnpCDSNzoNjcIo6sKAUquXqkfXjyXQWL9J4V96vsgyiTqvZWdN2
+        VHLgJyzP2M+xx8pMB4d1bSyNagrp29vEZ6s0RE836KBG6kspUJOsJS7u0aG9SI4lyfsN1+DVKGLk
+        yFicN0LYdmiBfDBvX+KbNYh1q642toXH/2xJgt98x6ML2so4Sf2smanucZYnI/k4fE8mmoDHzkRk
+        unK2SfFk7OY1Wq952MPQpXRQqftD58NFTA1IvXhaknj91T57vKY2g3ziERgvWv3/xUqS9BnyjHha
+        gUf0tkgW7GQI1Iw8TacxerdUvEUCAQRDhuvq+g8AAP//AwCboy5pewYAAA==
+    headers:
+      CF-RAY:
+      - 9900615cccb6d209-MAD
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json
+      Date:
+      - Fri, 17 Oct 2025 14:10:39 GMT
+      Server:
+      - cloudflare
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains; preload
+      Transfer-Encoding:
+      - chunked
+      X-Content-Type-Options:
+      - nosniff
+      alt-svc:
+      - h3=":443"; ma=86400
+      cf-cache-status:
+      - DYNAMIC
+      openai-organization:
+      - pydantic-28gund
+      openai-processing-ms:
+      - '4210'
+      openai-project:
+      - proj_dKobscVY9YJxeEaDJen54e3d
+      openai-version:
+      - '2020-10-01'
+      x-envoy-upstream-service-time:
+      - '4213'
+      x-request-id:
+      - req_c6372ff09bad415c8a054e46a4b04386
+    status:
+      code: 200
+      message: OK
+version: 1

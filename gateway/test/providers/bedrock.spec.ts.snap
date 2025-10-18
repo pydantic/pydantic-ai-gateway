@@ -3,13 +3,13 @@
 exports[`bedrock > should call bedrock via gateway > bedrock 1`] = `
 {
   "metrics": {
-    "latencyMs": 518,
+    "latencyMs": 541,
   },
   "output": {
     "message": {
       "content": [
         {
-          "text": "The capital of France is Paris. Paris is not only the capital city but also the most populous city in France, known for its cultural, historical, and economic significance. It is famous for landmarks such as the Eiffel Tower, the Louvre Museum, and the Notre-Dame Cathedral, among other attractions.",
+          "text": "The capital of France is Paris. Paris is not only the capital city but also the most populous city in France, known for its significant cultural, political, and economic influence. It is famous for landmarks such as the Eiffel Tower, the Louvre Museum, and the Notre-Dame Cathedral, among other historical and architectural sites.",
         },
       ],
       "role": "assistant",
@@ -18,12 +18,12 @@ exports[`bedrock > should call bedrock via gateway > bedrock 1`] = `
   "stopReason": "end_turn",
   "usage": {
     "inputTokens": 13,
-    "outputTokens": 60,
+    "outputTokens": 64,
     "pydantic_ai_gateway": {
-      "cost_estimate": 0.000008855,
+      "cost_estimate": 0.000009415,
     },
     "serverToolUsage": {},
-    "totalTokens": 73,
+    "totalTokens": 77,
   },
 }
 `;
@@ -125,7 +125,7 @@ exports[`bedrock > should call bedrock via gateway > span 1`] = `
   {
     "key": "http.response.body.text",
     "value": {
-      "stringValue": "{"metrics":{"latencyMs":518},"output":{"message":{"content":[{"text":"The capital of France is Paris. Paris is not only the capital city but also the most populous city in France, known for its cultural, historical, and economic significance. It is famous for landmarks such as the Eiffel Tower, the Louvre Museum, and the Notre-Dame Cathedral, among other attractions."}],"role":"assistant"}},"stopReason":"end_turn","usage":{"inputTokens":13,"outputTokens":60,"serverToolUsage":{},"totalTokens":73,"pydantic_ai_gateway":{"cost_estimate":0.000008855}}}",
+      "stringValue": "{"metrics":{"latencyMs":541},"output":{"message":{"content":[{"text":"The capital of France is Paris. Paris is not only the capital city but also the most populous city in France, known for its significant cultural, political, and economic influence. It is famous for landmarks such as the Eiffel Tower, the Louvre Museum, and the Notre-Dame Cathedral, among other historical and architectural sites."}],"role":"assistant"}},"stopReason":"end_turn","usage":{"inputTokens":13,"outputTokens":64,"serverToolUsage":{},"totalTokens":77,"pydantic_ai_gateway":{"cost_estimate":0.000009415}}}",
     },
   },
   {
@@ -151,7 +151,7 @@ exports[`bedrock > should call bedrock via gateway > span 1`] = `
   {
     "key": "gen_ai.usage.output_tokens",
     "value": {
-      "intValue": 60,
+      "intValue": 64,
     },
   },
   {

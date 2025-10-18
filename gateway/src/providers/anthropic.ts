@@ -13,4 +13,10 @@ export class AnthropicProvider extends DefaultProviderProxy {
       headers.set('anthropic-version', '2023-06-01')
     }
   }
+
+  protected responseHeaders(headers: Headers): Headers {
+    const newHeaders = super.responseHeaders(headers)
+    newHeaders.delete('anthropic-organization-id')
+    return newHeaders
+  }
 }

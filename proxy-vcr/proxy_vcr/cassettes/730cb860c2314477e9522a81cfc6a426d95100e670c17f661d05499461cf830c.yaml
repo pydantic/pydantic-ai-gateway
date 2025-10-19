@@ -18,28 +18,27 @@ interactions:
       - bedrock-runtime.us-east-1.amazonaws.com
       user-agent:
       - python-httpx/0.28.1
-      x-amz-security-token:
-      - ABSKQmVkcm9ja0FQSUtleS1ydHN3LWF0LTIxMTEyNTY3Nzg0NTo1NVd1UFJUZlMvbEh5YlBRVUxXbzQ5cDROVit5MXJtcnFLUUUvVFNRa0JGajdKK2FlenBQOGRHYXBabz0=
     method: POST
     uri: https://bedrock-runtime.us-east-1.amazonaws.com/model/amazon.nova-micro-v1:0/converse
   response:
     body:
-      string: '{"metrics":{"latencyMs":518},"output":{"message":{"content":[{"text":"The
+      string: '{"metrics":{"latencyMs":541},"output":{"message":{"content":[{"text":"The
         capital of France is Paris. Paris is not only the capital city but also the
-        most populous city in France, known for its cultural, historical, and economic
-        significance. It is famous for landmarks such as the Eiffel Tower, the Louvre
-        Museum, and the Notre-Dame Cathedral, among other attractions."}],"role":"assistant"}},"stopReason":"end_turn","usage":{"inputTokens":13,"outputTokens":60,"serverToolUsage":{},"totalTokens":73}}'
+        most populous city in France, known for its significant cultural, political,
+        and economic influence. It is famous for landmarks such as the Eiffel Tower,
+        the Louvre Museum, and the Notre-Dame Cathedral, among other historical and
+        architectural sites."}],"role":"assistant"}},"stopReason":"end_turn","usage":{"inputTokens":13,"outputTokens":64,"serverToolUsage":{},"totalTokens":77}}'
     headers:
       Connection:
       - keep-alive
       Content-Length:
-      - '501'
+      - '532'
       Content-Type:
       - application/json
       Date:
-      - Thu, 16 Oct 2025 15:08:57 GMT
+      - Sat, 18 Oct 2025 16:47:15 GMT
       x-amzn-RequestId:
-      - 12bffcca-3952-4701-9a6a-1ed95916bbb3
+      - d37ed755-c683-4362-8fdb-1c5034ddac0a
     status:
       code: 200
       message: OK

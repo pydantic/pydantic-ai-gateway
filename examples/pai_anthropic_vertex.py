@@ -1,8 +1,9 @@
+import asyncio
 import os
 from datetime import date
 
 import logfire
-from anthropic import AnthropicVertex
+from anthropic import AsyncAnthropicVertex
 from pydantic import BaseModel, field_validator
 from pydantic_ai import Agent
 from pydantic_ai.models.anthropic import AnthropicModel, AnthropicModelSettings
@@ -30,7 +31,7 @@ class Person(BaseModel, use_attribute_docstrings=True):
 
 api_key = os.environ['PYDANTIC_AI_GATEWAY_API_KEY']
 
-client = AnthropicVertex(
+client = AsyncAnthropicVertex(
     base_url='http://localhost:8787/google-vertex', access_token=api_key, region='unknown', project_id='unknown'
 )
 provider = AnthropicProvider(anthropic_client=client)  # type: ignore[reportUnknownArgumentType]
@@ -42,5 +43,12 @@ person_agent = Agent(
     instructions='Extract information about the person',
     model_settings=AnthropicModelSettings(max_tokens=1024),
 )
-result = person_agent.run_sync("Samuel lived in London and was born on Jan 28th '87")
-print(repr(result.output))
+
+
+async def main():
+    result = await person_agent.run("Samuel lived in London and was born on Jan 28th '87")
+    print(repr(result.output))
+
+
+if __name__ == '__main__':
+    asyncio.run(main())

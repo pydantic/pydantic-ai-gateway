@@ -62,7 +62,8 @@ function testGateway(): TestGateway {
       url,
       init as RequestInit<IncomingRequestCfProperties>,
     )
-    const response = await gatewayFetch(request, ctx, buildGatewayEnv(env, disableEvents, subFetch))
+    const url_ = new URL(url instanceof Request ? url.url : url)
+    const response = await gatewayFetch(request, url_, ctx, buildGatewayEnv(env, disableEvents, subFetch))
     await waitOnExecutionContext(ctx)
     return response
   }

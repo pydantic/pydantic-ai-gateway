@@ -11,7 +11,8 @@ import type { Middleware } from '../src/providers/default'
 
 export default {
   async fetch(request, env, ctx): Promise<Response> {
-    return await gatewayFetch(request, ctx, buildGatewayEnv(env, [], fetch))
+    const url = new URL(request.url)
+    return await gatewayFetch(request, url, ctx, buildGatewayEnv(env, [], fetch))
   },
 } satisfies ExportedHandler<Env>
 
@@ -26,7 +27,7 @@ export function buildGatewayEnv(
   env: Env,
   disableEvents: DisableEvent[],
   subFetch: SubFetch,
-  proxyRegex?: RegExp,
+  proxyPrefixLength?: number,
   proxyMiddlewares?: Middleware[],
 ): GatewayEnv {
   return {
@@ -36,7 +37,7 @@ export function buildGatewayEnv(
     kv: env.KV,
     kvVersion: 'test',
     subFetch,
-    proxyRegex,
+    proxyPrefixLength,
     proxyMiddlewares,
   }
 }

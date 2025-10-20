@@ -71,7 +71,7 @@ async def proxy(request: Request) -> Response:
     elif request.url.path.startswith('/anthropic'):
         client = cast(httpx.AsyncClient, request.scope['state']['httpx_client'])
         url = ANTHROPIC_BASE_URL + request.url.path[len('/anthropic') :]
-        api_key = auth_header.replace('Bearer ', '')
+        api_key = request.headers.get('x-api-key', '')
         with vcr.use_cassette(f'{body_hash}.yaml'):  # type: ignore[reportUnknownReturnType]
             anthropic_beta_headers = {}
             if anthropic_beta := request.headers.get('anthropic-beta'):

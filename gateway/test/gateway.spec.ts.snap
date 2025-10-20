@@ -1,6 +1,6 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`custom proxyRegex > proxyRegex > proxyRegex 1`] = `
+exports[`custom proxyPrefixLength > inference > proxyPrefixLength 1`] = `
 {
   "choices": [
     {
@@ -43,10 +43,11 @@ exports[`custom proxyRegex > proxyRegex > proxyRegex 1`] = `
 
 exports[`key status > should change key status if limit is exceeded > kv-value 1`] = `
 {
-  "id": 5,
+  "id": 6,
   "key": "tiny-limit",
   "keySpendingLimitDaily": 0.01,
-  "project": 1,
+  "org": 1,
+  "project": 2,
   "projectSpendingLimitMonthly": 4,
   "providers": [
     {
@@ -63,28 +64,28 @@ exports[`key status > should change key status if limit is exceeded > kv-value 1
 exports[`key status > should not change key status if limit is not exceeded > spend-table 1`] = `
 [
   {
-    "entityId": 3,
+    "entityId": 4,
     "entityType": 3,
     "scope": 1,
     "spend": 0.018,
     "spendingLimit": 1,
   },
   {
-    "entityId": 3,
+    "entityId": 4,
     "entityType": 3,
     "scope": 4,
     "spend": 0.018,
     "spendingLimit": 2,
   },
   {
-    "entityId": 2,
+    "entityId": 3,
     "entityType": 2,
     "scope": 2,
     "spend": 0.018,
     "spendingLimit": 3,
   },
   {
-    "entityId": 1,
+    "entityId": 2,
     "entityType": 1,
     "scope": 3,
     "spend": 0.018,

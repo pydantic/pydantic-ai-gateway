@@ -16,7 +16,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 import { env } from 'cloudflare:workers'
-import { type GatewayEnv, gatewayFetch, LimitDbD1 } from '@pydantic/ai-gateway'
+import { type GatewayOptions, gatewayFetch, LimitDbD1 } from '@pydantic/ai-gateway'
 import * as logfire from '@pydantic/logfire-api'
 import { instrument } from '@pydantic/logfire-cf-workers'
 import { config } from './config'
@@ -25,14 +25,15 @@ import { status } from './status'
 
 const handler = {
   async fetch(request, env, ctx): Promise<Response> {
-    const { pathname } = new URL(request.url)
+    const url = new URL(request.url)
     const limitDb = new LimitDbD1(env.limitsDB)
+    const { pathname } = url
 
     if (pathname === '/status' || pathname === '/status/') {
       return await status(request, env, limitDb)
     }
 
-    const gatewayEnv: GatewayEnv = {
+    const gatewayEnv: GatewayOptions = {
       githubSha: env.GITHUB_SHA,
       keysDb: new ConfigDB(env.limitsDB),
       limitDb,
@@ -41,7 +42,7 @@ const handler = {
       subFetch: fetch,
     }
     try {
-      return await gatewayFetch(request, ctx, gatewayEnv)
+      return await gatewayFetch(request, url, ctx, gatewayEnv)
     } catch (error) {
       console.error('Internal Server Error:', error)
       logfire.reportError('Internal Server Error', error as Error)

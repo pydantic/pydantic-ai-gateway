@@ -1,11 +1,11 @@
-import type { GatewayEnv } from '.'
+import type { GatewayOptions } from '.'
 import type { ApiKeyInfo } from './types'
 import { ResponseError } from './utils'
 
 const CACHE_VERSION = 1
 const CACHE_TTL = 86400
 
-export async function apiKeyAuth(request: Request, env: GatewayEnv): Promise<ApiKeyInfo> {
+export async function apiKeyAuth(request: Request, options: GatewayOptions): Promise<ApiKeyInfo> {
   const authHeader = request.headers.get('authorization')
 
   let key: string
@@ -23,26 +23,26 @@ export async function apiKeyAuth(request: Request, env: GatewayEnv): Promise<Api
     throw new ResponseError(401, 'Unauthorized - Key too long')
   }
 
-  const cacheKey = apiKeyCacheKey(key, env)
-  const cacheResult = await env.kv.getWithMetadata<ApiKeyInfo, number>(cacheKey, { type: 'json' })
+  const cacheKey = apiKeyCacheKey(key, options)
+  const cacheResult = await options.kv.getWithMetadata<ApiKeyInfo, number>(cacheKey, { type: 'json' })
 
   let apiKey: ApiKeyInfo | null
   if (cacheResult && cacheResult.metadata === CACHE_VERSION && cacheResult.value) {
     apiKey = cacheResult.value
   } else {
-    apiKey = await env.keysDb.getApiKey(key)
+    apiKey = await options.keysDb.getApiKey(key)
     if (!apiKey) {
       throw new ResponseError(401, 'Unauthorized - Key not found')
     }
-    await env.kv.put(cacheKey, JSON.stringify(apiKey), { metadata: CACHE_VERSION, expirationTtl: CACHE_TTL })
+    await options.kv.put(cacheKey, JSON.stringify(apiKey), { metadata: CACHE_VERSION, expirationTtl: CACHE_TTL })
   }
   // check all key validity in gateway.ts
   return apiKey
 }
 
-export async function disableApiKeyAuth(apiKey: ApiKeyInfo, env: GatewayEnv, expirationTtl?: number) {
-  const cacheKey = apiKeyCacheKey(apiKey.key, env)
-  await env.kv.put(cacheKey, JSON.stringify(apiKey), { metadata: CACHE_VERSION, expirationTtl })
+export async function disableApiKeyAuth(apiKey: ApiKeyInfo, options: GatewayOptions, expirationTtl?: number) {
+  const cacheKey = apiKeyCacheKey(apiKey.key, options)
+  await options.kv.put(cacheKey, JSON.stringify(apiKey), { metadata: CACHE_VERSION, expirationTtl })
 }
 
-const apiKeyCacheKey = (key: string, env: GatewayEnv) => `apiKeyAuth:${env.kvVersion}:${key}`
+const apiKeyCacheKey = (key: string, options: GatewayOptions) => `apiKeyAuth:${options.kvVersion}:${key}`

@@ -1,7 +1,7 @@
 import { calcPrice, extractUsage, findProvider, type Usage } from '@pydantic/genai-prices'
 import * as logfire from '@pydantic/logfire-api'
 
-import type { GatewayEnv } from '..'
+import type { GatewayOptions } from '..'
 import type { ModelAPI } from '../api'
 import type { GenAIAttributes } from '../otel/attributes'
 import type { ApiKeyInfo, ProviderProxy } from '../types'
@@ -59,7 +59,7 @@ export interface Middleware {
 
 export interface ProviderOptions {
   request: Request
-  env: GatewayEnv
+  gatewayOptions: GatewayOptions
   apiKeyInfo: ApiKeyInfo
   providerProxy: ProviderProxy
   restOfPath: string
@@ -68,24 +68,24 @@ export interface ProviderOptions {
 }
 
 export class DefaultProviderProxy {
-  protected request: Request
-  protected env: GatewayEnv
+  readonly request: Request
+  readonly options: GatewayOptions
+  readonly ctx: ExecutionContext
   protected providerProxy: ProviderProxy
   protected restOfPath: string
   protected defaultBaseUrl: string | null = null
   protected usageField: string | null = 'usage'
   protected middlewares: Middleware[]
-  protected ctx: ExecutionContext
 
   readonly apiKeyInfo: ApiKeyInfo
 
   constructor(options: ProviderOptions) {
     this.request = options.request
-    this.env = options.env
+    this.options = options.gatewayOptions
+    this.ctx = options.ctx
     this.apiKeyInfo = options.apiKeyInfo
     this.providerProxy = options.providerProxy
     this.restOfPath = options.restOfPath
-    this.ctx = options.ctx
     this.middlewares = options.middlewares ?? []
   }
 
@@ -137,7 +137,7 @@ export class DefaultProviderProxy {
 
   protected userAgent(): string {
     const userAgent = this.request.headers.get('user-agent')
-    return `${String(userAgent)} via Pydantic AI Gateway ${this.env.githubSha.substring(0, 7)}, contact engineering@pydantic.dev`
+    return `${String(userAgent)} via Pydantic AI Gateway ${this.options.githubSha.substring(0, 7)}, contact engineering@pydantic.dev`
   }
 
   protected requestHeaders(headers: Headers): void {
@@ -164,7 +164,7 @@ export class DefaultProviderProxy {
   }
 
   protected fetch(url: string, init: RequestInit): Promise<Response> {
-    const { subFetch } = this.env
+    const { subFetch } = this.options
     return subFetch(url, init)
   }
 
@@ -216,12 +216,12 @@ export class DefaultProviderProxy {
   async dispatch(): Promise<ProxySuccess | ProxyInvalidRequest | ProxyUnexpectedResponse> {
     const layers = this.middlewares.reduceRight(
       (next, middleware) => middleware.dispatch(next),
-      (proxy: DefaultProviderProxy) => proxy._dispatch(),
+      (proxy: DefaultProviderProxy) => proxy.dispatchInner(),
     )
     return await layers(this)
   }
 
-  async _dispatch(): Promise<ProxySuccess | ProxyInvalidRequest | ProxyUnexpectedResponse> {
+  protected async dispatchInner(): Promise<ProxySuccess | ProxyInvalidRequest | ProxyUnexpectedResponse> {
     const checkResult = this.check()
     if (checkResult) {
       return checkResult

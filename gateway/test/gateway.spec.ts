@@ -103,14 +103,14 @@ describe('key status', () => {
     expect(allSpends1.results).toMatchInlineSnapshot(`
           [
             {
-              "entityId": 5,
+              "entityId": 6,
               "entityType": 3,
               "scope": 1,
               "spend": 0.018,
               "spendingLimit": 0.01,
             },
             {
-              "entityId": 1,
+              "entityId": 2,
               "entityType": 1,
               "scope": 3,
               "spend": 0.018,
@@ -168,7 +168,7 @@ describe('LimitDbD1', () => {
       const state = await env.limitsDB.prepare('SELECT * FROM spend').first()
       expect(state).toMatchInlineSnapshot(`
       {
-        "entityId": 2,
+        "entityId": 3,
         "entityType": 2,
         "scope": 1,
         "scopeInterval": 123,
@@ -184,7 +184,7 @@ describe('LimitDbD1', () => {
       const state = await env.limitsDB.prepare('SELECT * FROM spend').first()
       expect(state).toMatchInlineSnapshot(`
       {
-        "entityId": 2,
+        "entityId": 3,
         "entityType": 2,
         "scope": 1,
         "scopeInterval": 123,
@@ -196,21 +196,31 @@ describe('LimitDbD1', () => {
   })
 })
 
-describe('custom proxyRegex', () => {
-  it('proxyRegex', async () => {
-    const ctx = createExecutionContext()
-    const disableEvents: DisableEvent[] = []
+function mockFetchFactory(
+  disableEvents: DisableEvent[],
+): (url: RequestInfo | URL, init?: RequestInit) => Promise<Response> {
+  const ctx = createExecutionContext()
 
-    async function mockFetch(url: RequestInfo | URL, init?: RequestInit): Promise<Response> {
-      const request = new Request(url, init as RequestInit<IncomingRequestCfProperties>)
-      const response = await gatewayFetch(
-        request,
-        ctx,
-        buildGatewayEnv(env, disableEvents, fetch, /^\/proxy\/([^/]+)\/(.*)$/),
-      )
-      await waitOnExecutionContext(ctx)
-      return response
-    }
+  async function mockFetch(url: RequestInfo | URL, init?: RequestInit): Promise<Response> {
+    const request = new Request(url, init as RequestInit<IncomingRequestCfProperties>)
+    const url_ = new URL(url instanceof Request ? url.url : url)
+    const response = await gatewayFetch(
+      request,
+      url_,
+      ctx,
+      buildGatewayEnv(env, disableEvents, fetch, '/proxy'.length),
+    )
+    await waitOnExecutionContext(ctx)
+    return response
+  }
+
+  return mockFetch
+}
+
+describe('custom proxyPrefixLength', () => {
+  it('inference', async () => {
+    const disableEvents: DisableEvent[] = []
+    const mockFetch = mockFetchFactory(disableEvents)
 
     const client = new OpenAI({ apiKey: 'healthy', baseURL: 'https://example.com/proxy/openai', fetch: mockFetch })
 
@@ -222,7 +232,16 @@ describe('custom proxyRegex', () => {
       ],
       max_completion_tokens: 1024,
     })
-    expect(completion).toMatchSnapshot('proxyRegex')
+    expect(completion).toMatchSnapshot('proxyPrefixLength')
+  })
+
+  it('index', async () => {
+    const disableEvents: DisableEvent[] = []
+    const mockFetch = mockFetchFactory(disableEvents)
+
+    const response = await mockFetch('https://example.com/proxy/')
+    expect(response.status).toBe(200)
+    expect(response.headers.get('content-type')).toBe('text/plain; charset=utf-8')
   })
 })
 
@@ -245,7 +264,8 @@ describe('custom middleware', () => {
       }
     }
 
-    await gatewayFetch(request, ctx, buildGatewayEnv(env, [], fetch, undefined, [new CollectMiddleware()]))
+    const gatewayEnv = buildGatewayEnv(env, [], fetch, undefined, [new CollectMiddleware()])
+    await gatewayFetch(request, new URL(request.url), ctx, gatewayEnv)
     expect(responses).lengthOf(1)
   })
 })

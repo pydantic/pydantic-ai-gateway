@@ -1,6 +1,6 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`custom proxyRegex > proxyRegex > proxyRegex 1`] = `
+exports[`custom proxyPrefixLength > inference > proxyPrefixLength 1`] = `
 {
   "choices": [
     {

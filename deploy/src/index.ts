@@ -25,8 +25,9 @@ import { status } from './status'
 
 const handler = {
   async fetch(request, env, ctx): Promise<Response> {
-    const { pathname } = new URL(request.url)
+    const url = new URL(request.url)
     const limitDb = new LimitDbD1(env.limitsDB)
+    const { pathname } = url
 
     if (pathname === '/status' || pathname === '/status/') {
       return await status(request, env, limitDb)
@@ -41,7 +42,7 @@ const handler = {
       subFetch: fetch,
     }
     try {
-      return await gatewayFetch(request, ctx, gatewayEnv)
+      return await gatewayFetch(request, url, ctx, gatewayEnv)
     } catch (error) {
       console.error('Internal Server Error:', error)
       logfire.reportError('Internal Server Error', error as Error)

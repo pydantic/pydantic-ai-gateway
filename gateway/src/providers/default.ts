@@ -68,24 +68,24 @@ export interface ProviderOptions {
 }
 
 export class DefaultProviderProxy {
-  protected request: Request
-  protected env: GatewayEnv
+  request: Request
+  env: GatewayEnv
+  ctx: ExecutionContext
   protected providerProxy: ProviderProxy
   protected restOfPath: string
   protected defaultBaseUrl: string | null = null
   protected usageField: string | null = 'usage'
   protected middlewares: Middleware[]
-  protected ctx: ExecutionContext
 
   readonly apiKeyInfo: ApiKeyInfo
 
   constructor(options: ProviderOptions) {
     this.request = options.request
     this.env = options.env
+    this.ctx = options.ctx
     this.apiKeyInfo = options.apiKeyInfo
     this.providerProxy = options.providerProxy
     this.restOfPath = options.restOfPath
-    this.ctx = options.ctx
     this.middlewares = options.middlewares ?? []
   }
 

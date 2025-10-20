@@ -43,12 +43,12 @@ export function buildGatewayEnv(
 }
 
 export namespace IDS {
-  export const projectOrg = 1
+  export const orgDefault = 1
   export const projectDefault = 2
   export const userDefault = 3
   export const keyHealthy = 4
   export const keyDisabled = 5
-  export const keyTinyLimit = 5
+  export const keyTinyLimit = 6
 }
 
 class TestKeysDB extends KeysDbD1 {
@@ -93,7 +93,7 @@ class TestKeysDB extends KeysDbD1 {
           id: IDS.keyHealthy,
           user: IDS.userDefault,
           project: IDS.projectDefault,
-          org: IDS.projectOrg,
+          org: IDS.orgDefault,
           key,
           status: (await this.getDbKeyStatus(IDS.keyHealthy)) ?? 'active',
           // key limits
@@ -114,7 +114,7 @@ class TestKeysDB extends KeysDbD1 {
         return {
           id: IDS.keyDisabled,
           project: IDS.projectDefault,
-          org: IDS.projectOrg,
+          org: IDS.orgDefault,
           key,
           status: 'disabled',
           providers: this.allProviders,
@@ -123,7 +123,7 @@ class TestKeysDB extends KeysDbD1 {
         return {
           id: IDS.keyTinyLimit,
           project: IDS.projectDefault,
-          org: IDS.projectOrg,
+          org: IDS.orgDefault,
           key,
           status: (await this.getDbKeyStatus(IDS.keyTinyLimit)) ?? 'active',
           keySpendingLimitDaily: 0.01,

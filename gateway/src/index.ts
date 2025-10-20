@@ -25,7 +25,7 @@ export type { DefaultProviderProxy, Middleware, Next }
 export * from './db'
 export * from './types'
 
-export interface GatewayEnv {
+export interface GatewayOptions {
   githubSha: string
   keysDb: KeysDb
   limitDb: LimitDb
@@ -42,17 +42,17 @@ export async function gatewayFetch(
   request: Request,
   url: URL,
   ctx: ExecutionContext,
-  env: GatewayEnv,
+  options: GatewayOptions,
 ): Promise<Response> {
   let { pathname: proxyPath } = url
-  if (env.proxyPrefixLength) {
-    proxyPath = proxyPath.slice(env.proxyPrefixLength)
+  if (options.proxyPrefixLength) {
+    proxyPath = proxyPath.slice(options.proxyPrefixLength)
   }
   try {
     if (proxyPath === '/') {
-      return index(request, env)
+      return index(request, options)
     } else {
-      return await gateway(request, proxyPath, ctx, env)
+      return await gateway(request, proxyPath, ctx, options)
     }
   } catch (error) {
     if (error instanceof ResponseError) {
@@ -64,7 +64,7 @@ export async function gatewayFetch(
   }
 }
 
-function index(request: Request, env: GatewayEnv): Response {
+function index(request: Request, options: GatewayOptions): Response {
   const url = request.url.replace(/\/$/, '')
   if (request.method === 'GET') {
     return new Response(
@@ -76,7 +76,7 @@ function index(request: Request, env: GatewayEnv): Response {
 
 Pydantic AI Gateway
 
-git SHA: ${env.githubSha}
+git SHA: ${options.githubSha}
 GitHub: https://github.com/pydantic/pydantic-ai-gateway
 To connect, point your application at ${url}/<provider-id>
 `,

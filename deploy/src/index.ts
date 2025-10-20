@@ -16,7 +16,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 import { env } from 'cloudflare:workers'
-import { type GatewayEnv, gatewayFetch, LimitDbD1 } from '@pydantic/ai-gateway'
+import { type GatewayOptions, gatewayFetch, LimitDbD1 } from '@pydantic/ai-gateway'
 import * as logfire from '@pydantic/logfire-api'
 import { instrument } from '@pydantic/logfire-cf-workers'
 import { config } from './config'
@@ -33,7 +33,7 @@ const handler = {
       return await status(request, env, limitDb)
     }
 
-    const gatewayEnv: GatewayEnv = {
+    const gatewayEnv: GatewayOptions = {
       githubSha: env.GITHUB_SHA,
       keysDb: new ConfigDB(env.limitsDB),
       limitDb,

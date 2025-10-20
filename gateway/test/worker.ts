@@ -1,6 +1,6 @@
 import {
   type ApiKeyInfo,
-  type GatewayEnv,
+  type GatewayOptions,
   gatewayFetch,
   KeysDbD1,
   LimitDbD1,
@@ -29,7 +29,7 @@ export function buildGatewayEnv(
   subFetch: SubFetch,
   proxyPrefixLength?: number,
   proxyMiddlewares?: Middleware[],
-): GatewayEnv {
+): GatewayOptions {
   return {
     githubSha: 'test',
     keysDb: new TestKeysDB(env, disableEvents),

@@ -18,7 +18,7 @@ import { resourceFromAttributes } from '@opentelemetry/resources'
 import type { ReadableSpan } from '@opentelemetry/sdk-trace-base/build/src/export/ReadableSpan'
 import * as logfire from '@pydantic/logfire-api'
 
-import type { GatewayEnv } from '../index'
+import type { GatewayOptions } from '../index'
 import type { OtelSettings, SubFetch } from '../types'
 
 export type Attributes = Record<string, string | number | boolean | object | undefined>
@@ -32,10 +32,10 @@ export class OtelTrace {
   private spans: ReadableSpan[] = []
   private subFetch: SubFetch
 
-  constructor(request: Request, otelSettings: OtelSettings | undefined, env: GatewayEnv) {
+  constructor(request: Request, otelSettings: OtelSettings | undefined, options: GatewayOptions) {
     this.otelSettings = otelSettings
-    this.version = env.githubSha
-    this.subFetch = env.subFetch
+    this.version = options.githubSha
+    this.subFetch = options.subFetch
     this.remoteParent = extractSpanContext(request.headers)
     if (this.remoteParent) {
       this.traceId = this.remoteParent.traceId

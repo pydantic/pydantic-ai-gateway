@@ -103,14 +103,14 @@ describe('key status', () => {
     expect(allSpends1.results).toMatchInlineSnapshot(`
           [
             {
-              "entityId": 5,
+              "entityId": 6,
               "entityType": 3,
               "scope": 1,
               "spend": 0.018,
               "spendingLimit": 0.01,
             },
             {
-              "entityId": 1,
+              "entityId": 2,
               "entityType": 1,
               "scope": 3,
               "spend": 0.018,
@@ -168,7 +168,7 @@ describe('LimitDbD1', () => {
       const state = await env.limitsDB.prepare('SELECT * FROM spend').first()
       expect(state).toMatchInlineSnapshot(`
       {
-        "entityId": 2,
+        "entityId": 3,
         "entityType": 2,
         "scope": 1,
         "scopeInterval": 123,
@@ -184,7 +184,7 @@ describe('LimitDbD1', () => {
       const state = await env.limitsDB.prepare('SELECT * FROM spend').first()
       expect(state).toMatchInlineSnapshot(`
       {
-        "entityId": 2,
+        "entityId": 3,
         "entityType": 2,
         "scope": 1,
         "scopeInterval": 123,

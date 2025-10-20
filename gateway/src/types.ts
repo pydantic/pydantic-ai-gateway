@@ -12,6 +12,7 @@ export interface ApiKeyInfo {
   id: number
   user?: number
   project: number
+  org: number
   key: string
   status: KeyStatus
   // limits per apiKey - note the extra field since keys can have a total limit

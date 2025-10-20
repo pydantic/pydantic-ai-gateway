@@ -1,4 +1,4 @@
-import type { GatewayEnv } from '.'
+import type { GatewayOptions } from '.'
 import { apiKeyAuth, disableApiKeyAuth } from './auth'
 import { type ExceededScope, endOfMonth, endOfWeek, type SpendScope, scopeIntervals } from './db'
 import { OtelTrace } from './otel'
@@ -11,7 +11,7 @@ export async function gateway(
   request: Request,
   proxyPath: string,
   ctx: ExecutionContext,
-  env: GatewayEnv,
+  options: GatewayOptions,
 ): Promise<Response> {
   const providerMatch = /^\/([^/]+)\/(.*)$/.exec(proxyPath)
   if (!providerMatch) {
@@ -23,7 +23,7 @@ export async function gateway(
     return textResponse(400, `Invalid provider '${provider}', should be one of ${providerIdArray.join(', ')}`)
   }
 
-  const apiKeyInfo = await apiKeyAuth(request, env)
+  const apiKeyInfo = await apiKeyAuth(request, options)
 
   if (apiKeyInfo.status !== 'active') {
     return textResponse(403, `Unauthorized - Key ${apiKeyInfo.status}`)
@@ -44,18 +44,18 @@ export async function gateway(
     return textResponse(403, 'Forbidden - Provider not supported by this API Key')
   }
 
-  const otel = new OtelTrace(request, apiKeyInfo.otelSettings, env)
+  const otel = new OtelTrace(request, apiKeyInfo.otelSettings, options)
 
   const ProxyCls = getProvider(providerProxy.providerId)
 
   const proxy = new ProxyCls({
     request,
-    env,
+    gatewayOptions: options,
     apiKeyInfo,
     providerProxy,
     restOfPath,
     ctx,
-    middlewares: env.proxyMiddlewares,
+    middlewares: options.proxyMiddlewares,
   })
 
   const dispatchSpan = otel.startSpan()
@@ -67,12 +67,12 @@ export async function gateway(
   let response: Response
   if ('successStatus' in result) {
     const { successStatus, responseHeaders, responseBody, cost } = result
-    runAfter(ctx, 'recordSpend', recordSpend(apiKeyInfo, cost, env))
+    runAfter(ctx, 'recordSpend', recordSpend(apiKeyInfo, cost, options))
     response = new Response(responseBody, { status: successStatus, headers: responseHeaders })
   } else if ('error' in result) {
     const { error, disableKey } = result
     if (disableKey) {
-      runAfter(ctx, 'disableApiKey', blockApiKey(apiKeyInfo, env, 'Invalid request'))
+      runAfter(ctx, 'disableApiKey', blockApiKey(apiKeyInfo, options, 'Invalid request'))
       response = textResponse(400, `${error}, API key disabled`)
     } else {
       response = textResponse(400, error)
@@ -85,23 +85,23 @@ export async function gateway(
   return response
 }
 
-async function blockApiKey(apiKey: ApiKeyInfo, env: GatewayEnv, reason: string): Promise<void> {
-  await disableApiKey(apiKey, env, reason, 'blocked')
+async function blockApiKey(apiKey: ApiKeyInfo, options: GatewayOptions, reason: string): Promise<void> {
+  await disableApiKey(apiKey, options, reason, 'blocked')
 }
 
 export async function disableApiKey(
   apiKey: ApiKeyInfo,
-  env: GatewayEnv,
+  options: GatewayOptions,
   reason: string,
   newStatus: 'blocked' | 'limit-exceeded',
   expirationTtl?: number,
 ): Promise<void> {
   apiKey.status = newStatus
-  await disableApiKeyAuth(apiKey, env, expirationTtl)
-  await env.keysDb.disableKey(apiKey.id, reason, newStatus, expirationTtl)
+  await disableApiKeyAuth(apiKey, options, expirationTtl)
+  await options.keysDb.disableKey(apiKey.id, reason, newStatus, expirationTtl)
 }
 
-async function recordSpend(apiKey: ApiKeyInfo, spend: number, env: GatewayEnv): Promise<void> {
+async function recordSpend(apiKey: ApiKeyInfo, spend: number, options: GatewayOptions): Promise<void> {
   const { id, project, user } = apiKey
 
   const { day, endOfWeek, endOfMonth } = scopeIntervals()
@@ -195,12 +195,12 @@ async function recordSpend(apiKey: ApiKeyInfo, spend: number, env: GatewayEnv): 
       limit: apiKey.projectSpendingLimitMonthly,
     })
   }
-  const scopesExceeded = await env.limitDb.incrementSpend(intervalSpends, spend)
+  const scopesExceeded = await options.limitDb.incrementSpend(intervalSpends, spend)
 
   if (scopesExceeded.length) {
     await disableApiKey(
       apiKey,
-      env,
+      options,
       'limits exceeded: ' + scopesExceeded.map(({ entityType, scope }) => `${entityType}-${scope}`).join(', '),
       'limit-exceeded',
       calculateExpirationTtl(scopesExceeded),

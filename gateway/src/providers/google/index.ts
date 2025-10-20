@@ -68,7 +68,7 @@ export class GoogleVertexProvider extends DefaultProviderProxy {
   }
 
   async requestHeaders(headers: Headers): Promise<void> {
-    const token = await authToken(this.providerProxy.credentials, this.env.kv)
+    const token = await authToken(this.providerProxy.credentials, this.options.kv)
     headers.set('Authorization', `Bearer ${token}`)
   }
 }

@@ -26,39 +26,38 @@ interactions:
   response:
     body:
       string: !!binary |
-        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
+        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
+        /AcAAP//AwDS3Of5XBEAAA==
     headers:
       CF-RAY:
-      - 9810c7eb3dee66ec-AMS
+      - 99199d6dcaa11c64-AMS
       Connection:
       - keep-alive
       Content-Encoding:
@@ -66,7 +65,7 @@ interactions:
       Content-Type:
       - application/json
       Date:
-      - Thu, 18 Sep 2025 12:18:12 GMT
+      - Mon, 20 Oct 2025 15:41:17 GMT
       Server:
       - cloudflare
       Transfer-Encoding:
@@ -80,35 +79,35 @@ interactions:
       anthropic-ratelimit-input-tokens-remaining:
       - '1997000'
       anthropic-ratelimit-input-tokens-reset:
-      - '2025-09-18T12:18:07Z'
+      - '2025-10-20T15:41:10Z'
       anthropic-ratelimit-output-tokens-limit:
       - '400000'
       anthropic-ratelimit-output-tokens-remaining:
       - '400000'
       anthropic-ratelimit-output-tokens-reset:
-      - '2025-09-18T12:18:12Z'
+      - '2025-10-20T15:41:17Z'
       anthropic-ratelimit-requests-limit:
       - '4000'
       anthropic-ratelimit-requests-remaining:
       - '3999'
       anthropic-ratelimit-requests-reset:
-      - '2025-09-18T12:17:34Z'
+      - '2025-10-20T15:40:40Z'
       anthropic-ratelimit-tokens-limit:
       - '2400000'
       anthropic-ratelimit-tokens-remaining:
       - '2397000'
       anthropic-ratelimit-tokens-reset:
-      - '2025-09-18T12:18:07Z'
+      - '2025-10-20T15:41:10Z'
       cf-cache-status:
       - DYNAMIC
       request-id:
-      - req_011CTFrN9uMfKoraQecPSkFj
+      - req_011CUJhjjqJRJVpPN1e3cced
       strict-transport-security:
       - max-age=31536000; includeSubDomains; preload
       via:
       - 1.1 google
       x-envoy-upstream-service-time:
-      - '38386'
+      - '37066'
     status:
       code: 200
       message: OK

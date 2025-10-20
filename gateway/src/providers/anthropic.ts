@@ -7,6 +7,10 @@ export class AnthropicProvider extends DefaultProviderProxy {
     return new AnthropicAPI()
   }
 
+  protected requestHeaders(headers: Headers): void {
+    headers.set('x-api-key', this.providerProxy.credentials)
+  }
+
   protected responseHeaders(headers: Headers): Headers {
     const newHeaders = super.responseHeaders(headers)
     newHeaders.delete('anthropic-organization-id')

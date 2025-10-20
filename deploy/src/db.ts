@@ -32,6 +32,8 @@ export class ConfigDB extends KeysDbD1 {
       id: keyId,
       user: keyInfo.user,
       project: keyInfo.project,
+      // org doesn't really make sense for self-hosted deployments, so we just set it to 1
+      org: 1,
       key,
       status,
       // key limits

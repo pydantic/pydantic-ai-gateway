@@ -68,9 +68,9 @@ export interface ProviderOptions {
 }
 
 export class DefaultProviderProxy {
-  request: Request
-  env: GatewayEnv
-  ctx: ExecutionContext
+  readonly request: Request
+  readonly env: GatewayEnv
+  readonly ctx: ExecutionContext
   protected providerProxy: ProviderProxy
   protected restOfPath: string
   protected defaultBaseUrl: string | null = null
@@ -217,12 +217,12 @@ export class DefaultProviderProxy {
   async dispatch(): Promise<ProxySuccess | ProxyInvalidRequest | ProxyUnexpectedResponse> {
     const layers = this.middlewares.reduceRight(
       (next, middleware) => middleware.dispatch(next),
-      (proxy: DefaultProviderProxy) => proxy._dispatch(),
+      (proxy: DefaultProviderProxy) => proxy.dispatchInner(),
     )
     return await layers(this)
   }
 
-  async _dispatch(): Promise<ProxySuccess | ProxyInvalidRequest | ProxyUnexpectedResponse> {
+  protected async dispatchInner(): Promise<ProxySuccess | ProxyInvalidRequest | ProxyUnexpectedResponse> {
     const checkResult = this.check()
     if (checkResult) {
       return checkResult

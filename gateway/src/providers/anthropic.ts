@@ -7,7 +7,8 @@ export class AnthropicProvider extends DefaultProviderProxy {
     return new AnthropicAPI()
   }
 
-  protected requestHeaders(headers: Headers): void {
+  // biome-ignore lint/suspicious/useAwait: required by google auth
+  protected async requestHeaders(headers: Headers): Promise<void> {
     headers.set('x-api-key', this.providerProxy.credentials)
   }
 

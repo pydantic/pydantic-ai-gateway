@@ -15,7 +15,11 @@ export class GoogleVertexProvider extends DefaultProviderProxy {
       if (!region) {
         return { error: 'Unable to extract region from URL' }
       }
-      return `${this.providerProxy.baseUrl}${this.replacePath(projectId, region)}`
+      const path = this.replacePath(projectId, region)
+      if (!path) {
+        return { error: 'Unable to parse path' }
+      }
+      return `${this.providerProxy.baseUrl}${path}`
     } else {
       return { error: 'baseUrl is required for the Google Provider' }
     }
@@ -49,7 +53,7 @@ export class GoogleVertexProvider extends DefaultProviderProxy {
    * @param projectId - The projectId to replace in the path.
    * @param region - The region to replace in the path.
    */
-  private replacePath(projectId: string, region: string): string {
+  private replacePath(projectId: string, region: string): null | string {
     // Regex with capture groups: version (optional), publisher (optional), model
     // Path may or may not start with / and may or may not have version
     const regex =
@@ -57,7 +61,7 @@ export class GoogleVertexProvider extends DefaultProviderProxy {
     const match = regex.exec(this.restOfPath)
 
     if (!match) {
-      return this.restOfPath
+      return null
     }
 
     const version = match[1] || 'v1'

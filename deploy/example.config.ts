@@ -51,7 +51,6 @@ export const config: Config<ProviderKeys> = {
     b: { providerId: 'groq', baseUrl: 'https://api.groq.com', injectCost: true, credentials: env.GROQ_API_KEY },
     c: {
       providerId: 'google-vertex',
-      // NOTE: you'll need to replace `{gcp-project-name}` to set your GCP project here
       baseUrl: 'https://us-central1-aiplatform.googleapis.com',
       injectCost: true,
       credentials: env.GOOGLE_SERVICE_ACCOUNT_KEY,

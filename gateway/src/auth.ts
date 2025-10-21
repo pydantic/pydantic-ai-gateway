@@ -1,11 +1,14 @@
 import type { GatewayOptions } from '.'
 import type { ApiKeyInfo } from './types'
-import { ResponseError } from './utils'
+import { ResponseError, runAfter } from './utils'
 
-const CACHE_VERSION = 1
-const CACHE_TTL = 86400
+const CACHE_TTL = 86400 * 30
 
-export async function apiKeyAuth(request: Request, options: GatewayOptions): Promise<ApiKeyInfo> {
+export async function apiKeyAuth(
+  request: Request,
+  ctx: ExecutionContext,
+  options: GatewayOptions,
+): Promise<ApiKeyInfo> {
   const authHeader = request.headers.get('authorization')
 
   let key: string
@@ -23,26 +26,47 @@ export async function apiKeyAuth(request: Request, options: GatewayOptions): Pro
     throw new ResponseError(401, 'Unauthorized - Key too long')
   }
 
-  const cacheKey = apiKeyCacheKey(key, options)
-  const cacheResult = await options.kv.getWithMetadata<ApiKeyInfo, number>(cacheKey, { type: 'json' })
+  const cacheKey = apiKeyCacheKey(key, options.kvVersion)
+  const cacheResult = await options.kv.getWithMetadata<ApiKeyInfo, string>(cacheKey, { type: 'json' })
 
-  let apiKey: ApiKeyInfo | null
-  if (cacheResult && cacheResult.metadata === CACHE_VERSION && cacheResult.value) {
-    apiKey = cacheResult.value
-  } else {
-    apiKey = await options.keysDb.getApiKey(key)
-    if (!apiKey) {
-      throw new ResponseError(401, 'Unauthorized - Key not found')
+  if (cacheResult?.value) {
+    const apiKey = cacheResult.value
+    const projectState = await options.kv.get(projectStateCacheKey(apiKey.project, options.kvVersion))
+    // we only return a cache match if the org state is the same, so updating the org state invalidates the cache
+    if (projectState === null && projectState === cacheResult.metadata) {
+      return apiKey
     }
-    await options.kv.put(cacheKey, JSON.stringify(apiKey), { metadata: CACHE_VERSION, expirationTtl: CACHE_TTL })
   }
-  // check all key validity in gateway.ts
-  return apiKey
+
+  const apiKey = await options.keysDb.getApiKey(key)
+  if (apiKey) {
+    runAfter(ctx, 'setApiKeyCache', setApiKeyCache(apiKey, options))
+    return apiKey
+  }
+  throw new ResponseError(401, 'Unauthorized - Key not found')
 }
 
-export async function disableApiKeyAuth(apiKey: ApiKeyInfo, options: GatewayOptions, expirationTtl?: number) {
-  const cacheKey = apiKeyCacheKey(apiKey.key, options)
-  await options.kv.put(cacheKey, JSON.stringify(apiKey), { metadata: CACHE_VERSION, expirationTtl })
+export async function setApiKeyCache(
+  apiKey: ApiKeyInfo,
+  options: Pick<GatewayOptions, 'kv' | 'kvVersion'>,
+  expirationTtl?: number,
+) {
+  const projectState = await options.kv.get(projectStateCacheKey(apiKey.org, options.kvVersion))
+
+  await options.kv.put(apiKeyCacheKey(apiKey.key, options.kvVersion), JSON.stringify(apiKey), {
+    metadata: projectState,
+    expirationTtl: expirationTtl || CACHE_TTL,
+  })
 }
 
-const apiKeyCacheKey = (key: string, options: GatewayOptions) => `apiKeyAuth:${options.kvVersion}:${key}`
+export async function deleteApiKeyCache(apiKey: ApiKeyInfo, options: Pick<GatewayOptions, 'kv' | 'kvVersion'>) {
+  await options.kv.delete(apiKeyCacheKey(apiKey.key, options.kvVersion))
+}
+
+export async function changeProjectState(project: number, options: Pick<GatewayOptions, 'kv' | 'kvVersion'>) {
+  const cacheKey = projectStateCacheKey(project, options.kvVersion)
+  await options.kv.put(cacheKey, crypto.randomUUID(), { expirationTtl: CACHE_TTL })
+}
+
+const apiKeyCacheKey = (key: string, kvVersion: string) => `apiKeyAuth:${kvVersion}:${key}`
+const projectStateCacheKey = (project: number, kvVersion: string) => `projectState:${kvVersion}:${project}`

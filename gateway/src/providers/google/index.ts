@@ -2,7 +2,7 @@ import type { ModelAPI } from '../../api'
 import { AnthropicAPI } from '../../api/anthropic'
 import { GoogleAPI, type GoogleRequest } from '../../api/google'
 import { DefaultProviderProxy } from '../default'
-import { authToken } from './auth'
+import { authToken, getProjectId } from './auth'
 
 export class GoogleVertexProvider extends DefaultProviderProxy {
   protected usageField = 'usageMetadata'
@@ -10,17 +10,12 @@ export class GoogleVertexProvider extends DefaultProviderProxy {
 
   url() {
     if (this.providerProxy.baseUrl) {
-      const [api, _, model] = this.restOfPath.split('/').slice(-3)
-      if (!model) {
-        return { error: 'model is required' }
+      const projectId = getProjectId(this.providerProxy.credentials)
+      const region = regionFromUrl(this.providerProxy.baseUrl)
+      if (!region) {
+        return { error: 'Unable to extract region from URL' }
       }
-
-      if (api === 'anthropic') {
-        this.flavor = 'anthropic'
-        return this.urlAnthropic(model)
-      } else {
-        return this.urlGoogleVertex()
-      }
+      return `${this.providerProxy.baseUrl}${this.replacePath(projectId, region)}`
     } else {
       return { error: 'baseUrl is required for the Google Provider' }
     }
@@ -38,17 +33,42 @@ export class GoogleVertexProvider extends DefaultProviderProxy {
     }
   }
 
-  urlAnthropic(model: string) {
-    return `${this.providerProxy.baseUrl}anthropic/models/${model}`
-  }
+  /**
+   * Replace the projectId and region in the path.
+   *
+   * The path can be in multiple formats:
+   * - /{version}/projects/{projectId}/locations/{region}/publishers/{publisher}/models/{model}:{api}
+   * - /{version}/projects/{projectId}/locations/{region}/models/{model}:{api}
+   * - /{version}/publishers/{publisher}/models/{model}:{api}
+   * - /{version}/models/{model}:{api}
+   *
+   * The known values of `version` are `v1beta` and `v1`.
+   *
+   * This function will replace the projectId and region in the path.
+   * @param path - The path to replace the projectId and region in.
+   * @param projectId - The projectId to replace in the path.
+   * @param region - The region to replace in the path.
+   */
+  private replacePath(projectId: string, region: string): string {
+    // Regex with capture groups: version (optional), publisher (optional), model
+    // Path may or may not start with / and may or may not have version
+    const regex =
+      /^\/?(?:(v\d+(?:beta\d*)?)\/)?(?:projects\/[^/]+\/locations\/[^/]+\/)?(?:publishers\/([^/]+)\/)?models\/(.+)$/
+    const match = regex.exec(this.restOfPath)
 
-  urlGoogleVertex() {
-    const extra = this.restOfPath
-      // I think this regex is for GLA aka the google developer API
-      .replace(/^v1beta\/models\//, '')
-      // this is for requests expecting google vertex
-      .replace(/^v1beta1\/publishers\/google\/models\//, '')
-    return `${this.providerProxy.baseUrl}google/models/${extra}`
+    if (!match) {
+      return this.restOfPath
+    }
+
+    const version = match[1] || 'v1'
+    const publisher = match[2] || 'google'
+    const modelAndApi = match[3]
+
+    if (publisher === 'anthropic') {
+      this.flavor = 'anthropic'
+    }
+
+    return `/${version}/projects/${projectId}/locations/${region}/publishers/${publisher}/models/${modelAndApi}`
   }
 
   async prepRequest() {
@@ -71,4 +91,19 @@ export class GoogleVertexProvider extends DefaultProviderProxy {
     const token = await authToken(this.providerProxy.credentials, this.options.kv)
     headers.set('Authorization', `Bearer ${token}`)
   }
+}
+
+/**
+ * Extracts the region from the URL.
+ * In case the URL is https://aiplatform.googleapis.com, the region is "global".
+ * In case the URL is https://europe-west4-aiplatform.googleapis.com, the region is "europe-west4".
+ * @param url - The URL to extract the region from e.g. https://europe-west4-aiplatform.googleapis.com or https://aiplatform.googleapis.com.
+ */
+function regionFromUrl(url: string): null | string {
+  if (url.includes('https://aiplatform.googleapis.com')) {
+    return 'global'
+  }
+  // The group includes regions with hyphen like "europe-west4"
+  const match = url.match(/^https:\/\/([^-]+)-aiplatform\.googleapis\.com$/)
+  return match?.[1] ?? null
 }

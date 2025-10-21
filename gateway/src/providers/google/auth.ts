@@ -27,12 +27,21 @@ function getServiceAccount(credentials: string): ServiceAccount {
   if (typeof sa.private_key !== 'string') {
     throw new ResponseError(400, `"private_key" should be a string, not ${typeof sa.private_key}`)
   }
-  return { client_email: sa.client_email, private_key: sa.private_key }
+  if (typeof sa.project_id !== 'string') {
+    throw new ResponseError(400, `"project_id" should be a string, not ${typeof sa.project_id}`)
+  }
+  return { client_email: sa.client_email, private_key: sa.private_key, project_id: sa.project_id }
+}
+
+export function getProjectId(credentials: string): string {
+  const sa = getServiceAccount(credentials)
+  return sa.project_id
 }
 
 interface ServiceAccount {
   client_email: string
   private_key: string
+  project_id: string
 }
 
 const encoder = new TextEncoder()

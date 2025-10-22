@@ -3,9 +3,7 @@ import type { ApiKeyInfo, KeyStatus } from './types'
 export abstract class KeysDb {
   abstract getApiKey(key: string): Promise<ApiKeyInfo | null>
 
-  disableKey(_id: number, _reason: string, _newStatus: string, _expirationTtl?: number): Promise<void> {
-    return Promise.resolve()
-  }
+  abstract disableKey(id: number, reason: string, newStatus: KeyStatus, expirationTtl?: number): Promise<void>
 }
 
 export abstract class KeysDbD1 extends KeysDb {
@@ -24,7 +22,7 @@ export abstract class KeysDbD1 extends KeysDb {
     return result?.status
   }
 
-  async disableKey(id: number, _reason: string, newStatus: string, expirationTtl?: number): Promise<void> {
+  async disableKey(id: number, _reason: string, newStatus: KeyStatus, expirationTtl?: number): Promise<void> {
     if (typeof expirationTtl === 'number') {
       await this.db
         .prepare(

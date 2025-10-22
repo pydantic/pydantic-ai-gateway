@@ -2,6 +2,7 @@ import {
   type ApiKeyInfo,
   type GatewayOptions,
   gatewayFetch,
+  type KeyStatus,
   KeysDbD1,
   LimitDbD1,
   type ProviderProxy,
@@ -135,7 +136,7 @@ class TestKeysDB extends KeysDbD1 {
     }
   }
 
-  async disableKey(id: number, reason: string, newStatus: string, expirationTtl?: number): Promise<void> {
+  async disableKey(id: number, reason: string, newStatus: KeyStatus, expirationTtl?: number): Promise<void> {
     await super.disableKey(id, reason, newStatus, expirationTtl)
     this.disableEvents.push({ id, reason, newStatus, expirationTtl })
   }

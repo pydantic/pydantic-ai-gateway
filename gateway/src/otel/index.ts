@@ -318,7 +318,8 @@ function getBaseUrl({ baseUrl, writeToken }: OtelSettings): string | undefined {
   }
   const regionMatch = /pylf_v\d_(us|eu)/.exec(writeToken)
   if (regionMatch) {
-    return `https://logfire-${regionMatch[1]}.pydantic.dev`
+    const region = regionMatch[1]
+    return region === 'us' ? 'https://api.logfire.dev' : 'https://api-eu.logfire.dev'
   }
   logfire.warning('unable to infer OTel base URL', { writeToken: writeToken.substring(0, 7) })
 }

@@ -63,7 +63,10 @@ export async function setApiKeyCache(
   })
 }
 
-export async function deleteApiKeyCache(apiKey: ApiKeyInfo, options: Pick<GatewayOptions, 'kv' | 'kvVersion'>) {
+export async function deleteApiKeyCache(
+  apiKey: Pick<ApiKeyInfo, 'key'>,
+  options: Pick<GatewayOptions, 'kv' | 'kvVersion'>,
+) {
   await options.kv.delete(apiKeyCacheKey(apiKey.key, options.kvVersion))
 }
 

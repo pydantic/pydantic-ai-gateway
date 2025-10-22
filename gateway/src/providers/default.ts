@@ -140,7 +140,8 @@ export class DefaultProviderProxy {
     return `${String(userAgent)} via Pydantic AI Gateway ${this.options.githubSha.substring(0, 7)}, contact engineering@pydantic.dev`
   }
 
-  protected requestHeaders(headers: Headers): void {
+  // biome-ignore lint/suspicious/useAwait: required by google auth
+  protected async requestHeaders(headers: Headers): Promise<void> {
     headers.set('Authorization', `Bearer ${this.providerProxy.credentials}`)
   }
 
@@ -237,7 +238,7 @@ export class DefaultProviderProxy {
     requestHeaders.set('user-agent', this.userAgent())
     // authorization header was used by the gateway auth, it definitely should not be forwarded to the target api
     requestHeaders.delete('authorization')
-    this.requestHeaders(requestHeaders)
+    await this.requestHeaders(requestHeaders)
 
     const prepResult = await this.prepRequest()
     if ('error' in prepResult) {

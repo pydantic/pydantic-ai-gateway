@@ -32,8 +32,9 @@ export async function apiKeyAuth(
   if (cacheResult?.value) {
     const apiKey = cacheResult.value
     const projectState = await options.kv.get(projectStateCacheKey(apiKey.project, options.kvVersion))
-    // we only return a cache match if the org state is the same, so updating the org state invalidates the cache
-    if (projectState === null && projectState === cacheResult.metadata) {
+    // we only return a cache match if the project state is the same, so updating the project state invalidates the cache
+    // projectState is null if we have never invalidated the cache which will only be true for the first request after a deployment
+    if (projectState === null || projectState === cacheResult.metadata) {
       return apiKey
     }
   }
@@ -51,7 +52,7 @@ export async function setApiKeyCache(
   options: Pick<GatewayOptions, 'kv' | 'kvVersion'>,
   expirationTtl?: number,
 ) {
-  const projectState = await options.kv.get(projectStateCacheKey(apiKey.org, options.kvVersion))
+  const projectState = await options.kv.get(projectStateCacheKey(apiKey.project, options.kvVersion))
 
   await options.kv.put(apiKeyCacheKey(apiKey.key, options.kvVersion), JSON.stringify(apiKey), {
     metadata: projectState,

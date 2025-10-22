@@ -1,3 +1,4 @@
+import * as logfire from '@pydantic/logfire-api'
 import type { GatewayOptions } from '.'
 import { apiKeyAuth, setApiKeyCache } from './auth'
 import { type ExceededScope, endOfMonth, endOfWeek, type SpendScope, scopeIntervals } from './db'
@@ -72,6 +73,9 @@ export async function gateway(
   } else if ('error' in result) {
     const { error, disableKey } = result
     if (disableKey) {
+      // We need to pass `context` instead of `apiKeyInfo` because "apiKey" triggers the scrubbing.
+      const { key: _key, ...context } = apiKeyInfo
+      logfire.error('api key blocked', { context, error })
       runAfter(ctx, 'blockApiKey', blockApiKey(apiKeyInfo, options, 'Invalid request'))
       response = textResponse(400, `${error}, API key disabled`)
     } else {

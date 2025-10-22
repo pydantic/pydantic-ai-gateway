@@ -3,7 +3,7 @@ import { createExecutionContext, env, waitOnExecutionContext } from 'cloudflare:
 import type { KeysDb } from '@pydantic/ai-gateway'
 import { describe, expect } from 'vitest'
 import { apiKeyAuth, changeProjectState } from '../src/auth'
-import type { ApiKeyInfo } from '../src/types'
+import type { ApiKeyInfo, KeyStatus } from '../src/types'
 import { test } from './setup'
 import { buildGatewayEnv, IDS } from './worker'
 
@@ -20,7 +20,7 @@ class CountingKeysDb implements KeysDb {
     return this.wrapped.getApiKey(key)
   }
 
-  async disableKey(id: number, reason: string, newStatus: string, expirationTtl?: number): Promise<void> {
+  async disableKey(id: number, reason: string, newStatus: KeyStatus, expirationTtl?: number): Promise<void> {
     return this.wrapped.disableKey(id, reason, newStatus, expirationTtl)
   }
 }

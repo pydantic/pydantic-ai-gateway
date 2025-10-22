@@ -1,5 +1,5 @@
 import type { GatewayOptions } from '.'
-import { apiKeyAuth, disableApiKeyAuth } from './auth'
+import { apiKeyAuth, setApiKeyCache } from './auth'
 import { type ExceededScope, endOfMonth, endOfWeek, type SpendScope, scopeIntervals } from './db'
 import { OtelTrace } from './otel'
 import { genAiOtelAttributes } from './otel/attributes'
@@ -23,7 +23,7 @@ export async function gateway(
     return textResponse(400, `Invalid provider '${provider}', should be one of ${providerIdArray.join(', ')}`)
   }
 
-  const apiKeyInfo = await apiKeyAuth(request, options)
+  const apiKeyInfo = await apiKeyAuth(request, ctx, options)
 
   if (apiKeyInfo.status !== 'active') {
     return textResponse(403, `Unauthorized - Key ${apiKeyInfo.status}`)
@@ -72,7 +72,7 @@ export async function gateway(
   } else if ('error' in result) {
     const { error, disableKey } = result
     if (disableKey) {
-      runAfter(ctx, 'disableApiKey', blockApiKey(apiKeyInfo, options, 'Invalid request'))
+      runAfter(ctx, 'blockApiKey', blockApiKey(apiKeyInfo, options, 'Invalid request'))
       response = textResponse(400, `${error}, API key disabled`)
     } else {
       response = textResponse(400, error)
@@ -97,7 +97,7 @@ export async function disableApiKey(
   expirationTtl?: number,
 ): Promise<void> {
   apiKey.status = newStatus
-  await disableApiKeyAuth(apiKey, options, expirationTtl)
+  await setApiKeyCache(apiKey, options, expirationTtl)
   await options.keysDb.disableKey(apiKey.id, reason, newStatus, expirationTtl)
 }
 

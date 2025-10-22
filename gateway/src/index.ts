@@ -21,6 +21,7 @@ import type { DefaultProviderProxy, Middleware, Next } from './providers/default
 import type { SubFetch } from './types'
 import { ctHeader, ResponseError, response405, textResponse } from './utils'
 
+export { changeProjectState as setProjectState, deleteApiKeyCache, setApiKeyCache } from './auth'
 export type { DefaultProviderProxy, Middleware, Next }
 export * from './db'
 export * from './types'

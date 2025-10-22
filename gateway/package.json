@@ -21,6 +21,6 @@
     "@google/genai": "^1.15.0",
     "@types/mime-types": "^3.0.1",
     "groq-sdk": "^0.30.0",
-    "openai": "^4.104.0"
+    "openai": "^6.6.0"
   }
 }

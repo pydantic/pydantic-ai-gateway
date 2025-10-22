@@ -19,7 +19,7 @@
     "@pydantic/logfire-cf-workers": "^0.9.0"
   },
   "devDependencies": {
-    "openai": "^4.70.3",
+    "openai": "^6.6.0",
     "wrangler": "^4.27.0"
   }
 }

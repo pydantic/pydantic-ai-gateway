@@ -89,12 +89,22 @@ function mapOutputParts(message: ChatCompletion.Choice['message']): MessagePart[
     parts.push({ type: 'text', content: message.content })
   } else if (message.tool_calls) {
     for (const toolCall of message.tool_calls) {
-      parts.push({
-        type: 'tool_call',
-        id: toolCall.id,
-        name: toolCall.function.name,
-        arguments: toolCall.function.arguments,
-      })
+      if (toolCall.type === 'function') {
+        parts.push({
+          type: 'tool_call',
+          id: toolCall.id,
+          name: toolCall.function.name,
+          arguments: toolCall.function.arguments,
+        })
+      } else {
+        // https://platform.openai.com/docs/guides/function-calling#custom-tools
+        parts.push({
+          type: 'tool_call',
+          id: toolCall.id,
+          name: toolCall.custom.name,
+          arguments: toolCall.custom.input,
+        })
+      }
     }
   } else {
     logfire.warning('unexpected message content', { message })

@@ -56,7 +56,10 @@ export async function setApiKeyCache(
 
   await options.kv.put(apiKeyCacheKey(apiKey.key, options.kvVersion), JSON.stringify(apiKey), {
     metadata: projectState,
-    expirationTtl: expirationTtl || CACHE_TTL,
+    // Note: 0 is a valid expirationTtl (for immediate cache expiry if, e.g., the user hits a limit at the end of an interval).
+    // Do not use logical OR (||) for a fallback, as it would treat 0 as false and incorrectly default to CACHE_TTL,
+    // potentially locking out the user much longer than intended.
+    expirationTtl: expirationTtl ?? CACHE_TTL,
   })
 }
 

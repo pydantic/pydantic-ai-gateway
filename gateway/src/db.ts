@@ -132,7 +132,9 @@ export class LimitDbD1 extends LimitDb {
         `\
 INSERT INTO spend (entityType, entityId, scope, scopeInterval, spendingLimit, spend)
 VALUES ${sqlValues.join(', ')}
-ON CONFLICT DO UPDATE SET spend = spend + EXCLUDED.spend
+ON CONFLICT DO UPDATE SET
+  spend = spend + EXCLUDED.spend,
+  spendingLimit = EXCLUDED.spendingLimit
 RETURNING entityType, scope, spend > spendingLimit as ex;`,
       )
       .bind(...values)
@@ -148,47 +150,54 @@ RETURNING entityType, scope, spend > spendingLimit as ex;`,
 
   async updateProjectLimits(projectId: number, { daily, weekly, monthly }: LimitUpdate) {
     const stmts = []
-    if (daily) {
-      stmts.push(this.updateSpend(daily, 'project', projectId, 'daily'))
+    if (daily !== undefined) {
+      // Check undefined, not truthiness
+      stmts.push(this.updateSpend(daily ?? null, 'project', projectId, 'daily'))
     }
-    if (weekly) {
-      stmts.push(this.updateSpend(weekly, 'project', projectId, 'weekly'))
+    if (weekly !== undefined) {
+      stmts.push(this.updateSpend(weekly ?? null, 'project', projectId, 'weekly'))
     }
-    if (monthly) {
-      stmts.push(this.updateSpend(monthly, 'project', projectId, 'monthly'))
+    if (monthly !== undefined) {
+      stmts.push(this.updateSpend(monthly ?? null, 'project', projectId, 'monthly'))
     }
-    await this.db.batch(stmts)
+    if (stmts.length > 0) {
+      await this.db.batch(stmts)
+    }
   }
 
   async updateUserLimits(userId: number, { daily, weekly, monthly }: LimitUpdate) {
     const stmts = []
-    if (daily) {
-      stmts.push(this.updateSpend(daily, 'user', userId, 'daily'))
+    if (daily !== undefined) {
+      stmts.push(this.updateSpend(daily ?? null, 'user', userId, 'daily'))
     }
-    if (weekly) {
-      stmts.push(this.updateSpend(weekly, 'user', userId, 'weekly'))
+    if (weekly !== undefined) {
+      stmts.push(this.updateSpend(weekly ?? null, 'user', userId, 'weekly'))
     }
-    if (monthly) {
-      stmts.push(this.updateSpend(monthly, 'user', userId, 'monthly'))
+    if (monthly !== undefined) {
+      stmts.push(this.updateSpend(monthly ?? null, 'user', userId, 'monthly'))
     }
-    await this.db.batch(stmts)
+    if (stmts.length > 0) {
+      await this.db.batch(stmts)
+    }
   }
 
   async updateKeyLimits(keyId: number, { daily, weekly, monthly, total }: KeyLimitUpdate) {
     const stmts = []
-    if (daily) {
-      stmts.push(this.updateSpend(daily, 'key', keyId, 'daily'))
+    if (daily !== undefined) {
+      stmts.push(this.updateSpend(daily ?? null, 'key', keyId, 'daily'))
     }
-    if (weekly) {
-      stmts.push(this.updateSpend(weekly, 'key', keyId, 'weekly'))
+    if (weekly !== undefined) {
+      stmts.push(this.updateSpend(weekly ?? null, 'key', keyId, 'weekly'))
     }
-    if (monthly) {
-      stmts.push(this.updateSpend(monthly, 'key', keyId, 'monthly'))
+    if (monthly !== undefined) {
+      stmts.push(this.updateSpend(monthly ?? null, 'key', keyId, 'monthly'))
     }
-    if (total) {
-      stmts.push(this.updateSpend(total, 'key', keyId, 'total'))
+    if (total !== undefined) {
+      stmts.push(this.updateSpend(total ?? null, 'key', keyId, 'total'))
     }
-    await this.db.batch(stmts)
+    if (stmts.length > 0) {
+      await this.db.batch(stmts)
+    }
   }
 
   async spendStatus(entityType: EntityType, entityId?: number): Promise<SpendStatus[]> {
@@ -224,7 +233,12 @@ WHERE entityType = ? ${entityIdClause}
     }))
   }
 
-  protected updateSpend(limit: number, entityType: EntityType, entityId: number, scope: Scope): D1PreparedStatement {
+  protected updateSpend(
+    limit: number | null,
+    entityType: EntityType,
+    entityId: number,
+    scope: Scope,
+  ): D1PreparedStatement {
     return this.db
       .prepare(`UPDATE spend SET spendingLimit = ? WHERE entityType = ? AND entityId = ? and scope = ?`)
       .bind(limit, entityTypeLookup[entityType], entityId, scopeLookup[scope])

@@ -1,7 +1,8 @@
+import { extractUsage } from '@pydantic/genai-prices'
 import type { ModelAPI } from '../api'
 import { ChatCompletionAPI } from '../api/chat'
 import { ResponsesAPI } from '../api/responses'
-import { DefaultProviderProxy } from './default'
+import { DefaultProviderProxy, type JsonData } from './default'
 
 export class OpenAIProvider extends DefaultProviderProxy {
   flavor: 'chat' | 'responses' = 'chat'
@@ -23,6 +24,16 @@ export class OpenAIProvider extends DefaultProviderProxy {
       return new ResponsesAPI()
     } else {
       return new ChatCompletionAPI()
+    }
+  }
+
+  protected handleData(data: JsonData): void {
+    if ('model' in data && typeof data.model === 'string') {
+      this.responseModel = data.model
+    }
+    if ('usage' in data) {
+      const { usage } = extractUsage(this.usageProvider()!, data, this.apiFlavor())
+      this.usage = usage
     }
   }
 

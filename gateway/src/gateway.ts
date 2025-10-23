@@ -62,14 +62,52 @@ export async function gateway(
   const dispatchSpan = otel.startSpan()
   const result = await proxy.dispatch()
 
+  // TODO(Marcelo): The `genAiOtelAttributes` populates the attributes with the assumption that the response is always non-streaming.
   const [spanName, attributes, level] = genAiOtelAttributes(result, proxy)
-  dispatchSpan.end(spanName, attributes, { level })
+
+  // This doesn't work on streaming because the `result` object is returned as soon as we create the streaming response.
+  if (!('responseStream' in result)) {
+    dispatchSpan.end(spanName, attributes, { level })
+  }
 
   let response: Response
-  if ('successStatus' in result) {
-    const { successStatus, responseHeaders, responseBody, cost } = result
+  if ('httpStatusCode' in result) {
+    const { httpStatusCode, responseHeaders, responseBody } = result
+    response = new Response(responseBody, { status: httpStatusCode, headers: responseHeaders })
+  } else if ('responseStream' in result) {
+    const { successStatus: status, responseHeaders: headers, responseStream, disableKey, waitCompletion } = result
+    runAfter(
+      ctx,
+      'endSpan',
+      (async () => {
+        dispatchSpan.end(spanName, attributes, { level })
+        await otel.send()
+      })(),
+    )
+    runAfter(
+      ctx,
+      'recordSpend',
+      (async () => {
+        await waitCompletion
+        const cost = proxy.cost()
+        if (cost) {
+          await recordSpend(apiKeyInfo, cost, options)
+        } else {
+          const { key: _key, ...context } = apiKeyInfo
+          if (disableKey) {
+            logfire.error('api key blocked', { context, error: 'Unable to calculate cost' })
+            await blockApiKey(apiKeyInfo, options, 'Unable to calculate cost')
+          }
+          logfire.error('Unable to calculate cost', { context, error: 'Unable to calculate cost' })
+        }
+      })(),
+    )
+
+    response = new Response(responseStream, { status, headers })
+  } else if ('successStatus' in result) {
+    const { successStatus: status, responseHeaders: headers, responseBody, cost } = result
     runAfter(ctx, 'recordSpend', recordSpend(apiKeyInfo, cost, options))
-    response = new Response(responseBody, { status: successStatus, headers: responseHeaders })
+    response = new Response(responseBody, { status, headers })
   } else if ('error' in result) {
     const { error, disableKey } = result
     if (disableKey) {
@@ -85,7 +123,11 @@ export async function gateway(
     const { unexpectedStatus, responseHeaders, responseBody } = result
     response = new Response(responseBody, { status: unexpectedStatus, headers: responseHeaders })
   }
-  runAfter(ctx, 'otel.send', otel.send())
+
+  // TODO(Marcelo): This needs a bit of refactoring. We need the `dispatchSpan` to be closed before we send the spans.
+  if (!('responseStream' in result)) {
+    runAfter(ctx, 'otel.send', otel.send())
+  }
   return response
 }
 

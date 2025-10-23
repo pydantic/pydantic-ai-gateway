@@ -5,8 +5,10 @@ import { describe, expect, it } from 'vitest'
 import type {
   DefaultProviderProxy,
   ProxyInvalidRequest,
+  ProxyStreamingSuccess,
   ProxySuccess,
   ProxyUnexpectedResponse,
+  ProxyWhitelistedEndpoint,
 } from '../src/providers/default'
 import { test } from './setup'
 import { buildGatewayEnv, type DisableEvent, IDS } from './worker'
@@ -247,7 +249,13 @@ describe('custom proxyPrefixLength', () => {
 
 describe('custom middleware', () => {
   it('middleware', async () => {
-    const responses: (ProxySuccess | ProxyInvalidRequest | ProxyUnexpectedResponse)[] = []
+    const responses: (
+      | ProxySuccess
+      | ProxyInvalidRequest
+      | ProxyUnexpectedResponse
+      | ProxyStreamingSuccess
+      | ProxyWhitelistedEndpoint
+    )[] = []
 
     const ctx = createExecutionContext()
     const request = new Request<unknown, IncomingRequestCfProperties>('https://example.com/openai/gpt-5', {

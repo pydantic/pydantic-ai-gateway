@@ -42,4 +42,24 @@ describe('anthropic', () => {
     expect(otelBatch, 'otelBatch length not 1').toHaveLength(1)
     expect(JSON.parse(otelBatch[0]!).resourceSpans?.[0].scopeSpans?.[0].spans?.[0]?.attributes).toMatchSnapshot('span')
   })
+
+  test('should call anthropic via gateway with stream', async ({ gateway }) => {
+    const { fetch, otelBatch } = gateway
+
+    const client = new Anthropic({ authToken: 'healthy', baseURL: 'https://example.com/anthropic', fetch })
+
+    const stream = await client.beta.messages.create({
+      model: 'claude-opus-4-1-20250805',
+      stream: true,
+      max_tokens: 1024,
+      messages: [{ role: 'user', content: 'What is the capital of France?' }],
+    })
+    const chunks: object[] = []
+    for await (const chunk of stream) {
+      chunks.push(chunk)
+    }
+    expect(chunks).toMatchSnapshot('chunks')
+    expect(otelBatch, 'otelBatch length not 1').toHaveLength(1)
+    expect(JSON.parse(otelBatch[0]!).resourceSpans?.[0].scopeSpans?.[0].spans?.[0]?.attributes).toMatchSnapshot('span')
+  })
 })

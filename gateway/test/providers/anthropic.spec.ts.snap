@@ -1061,3 +1061,58 @@ The difference between population and sample standard deviation is in the denomi
   },
 ]
 `;
+
+exports[`anthropic > should call anthropic via gateway with stream > chunks 1`] = `[]`;
+
+exports[`anthropic > should call anthropic via gateway with stream > span 1`] = `
+[
+  {
+    "key": "logfire.msg",
+    "value": {
+      "stringValue": "chat claude-opus-4-1-20250805",
+    },
+  },
+  {
+    "key": "logfire.json_schema",
+    "value": {
+      "stringValue": "{"type":"object","properties":{"gen_ai.operation.name":{"type":"string"},"gen_ai.request.model":{"type":"string"},"gen_ai.system":{"type":"string"},"http.response.status_code":{"type":"number"},"http.request.body.text":{"type":"string"}}}",
+    },
+  },
+  {
+    "key": "logfire.level_num",
+    "value": {
+      "intValue": 9,
+    },
+  },
+  {
+    "key": "gen_ai.operation.name",
+    "value": {
+      "stringValue": "chat",
+    },
+  },
+  {
+    "key": "gen_ai.request.model",
+    "value": {
+      "stringValue": "claude-opus-4-1-20250805",
+    },
+  },
+  {
+    "key": "gen_ai.system",
+    "value": {
+      "stringValue": "anthropic",
+    },
+  },
+  {
+    "key": "http.response.status_code",
+    "value": {
+      "intValue": 200,
+    },
+  },
+  {
+    "key": "http.request.body.text",
+    "value": {
+      "stringValue": "{"model":"claude-opus-4-1-20250805","stream":true,"max_tokens":1024,"messages":[{"role":"user","content":"What is the capital of France?"}]}",
+    },
+  },
+]
+`;

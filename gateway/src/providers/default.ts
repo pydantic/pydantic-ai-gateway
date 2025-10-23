@@ -1,5 +1,12 @@
-import { calcPrice, extractUsage, findProvider, type Usage } from '@pydantic/genai-prices'
+import {
+  calcPrice,
+  extractUsage,
+  findProvider,
+  type Usage,
+  type Provider as UsageProvider,
+} from '@pydantic/genai-prices'
 import * as logfire from '@pydantic/logfire-api'
+import { createParser, type EventSourceMessage } from 'eventsource-parser'
 
 import type { GatewayOptions } from '..'
 import type { ModelAPI } from '../api'
@@ -17,6 +24,25 @@ export interface ProxySuccess {
   otelAttributes?: GenAIAttributes
   usage: Usage
   cost: number
+}
+
+export interface ProxyWhitelistedEndpoint {
+  requestBody: string
+  httpStatusCode: number
+  responseHeaders: Headers
+  responseBody: string
+}
+
+export interface ProxyStreamingSuccess {
+  requestModel?: string
+  requestBody: string
+  successStatus: number
+  responseHeaders: Headers
+  responseStream: ReadableStream
+  otelAttributes?: GenAIAttributes
+  waitCompletion: Promise<void>
+  // In case we get to the end of the response, and we are unable to calculate the cost, we need to know if we can disable the key.
+  disableKey?: boolean
 }
 
 export interface ProxyInvalidRequest {
@@ -51,7 +77,9 @@ interface ProcessResponse {
 
 export type Next = (
   proxy: DefaultProviderProxy,
-) => Promise<ProxySuccess | ProxyInvalidRequest | ProxyUnexpectedResponse>
+) => Promise<
+  ProxyStreamingSuccess | ProxySuccess | ProxyInvalidRequest | ProxyUnexpectedResponse | ProxyWhitelistedEndpoint
+>
 
 export interface Middleware {
   dispatch(next: Next): Next
@@ -77,6 +105,10 @@ export class DefaultProviderProxy {
   protected usageField: string | null = 'usage'
   protected middlewares: Middleware[]
 
+  // NOTE: Those fields are used only for streaming responses for the time being.
+  protected usage: Usage | null = null
+  protected responseModel: string | null = null
+
   readonly apiKeyInfo: ApiKeyInfo
 
   constructor(options: ProviderOptions) {
@@ -97,6 +129,24 @@ export class DefaultProviderProxy {
    */
   runAfter(name: string, promise: Promise<unknown>) {
     runAfter(this.ctx, name, promise)
+  }
+
+  cost(): number | undefined {
+    const provider = this.usageProvider()
+    const usage = this.usage
+    const responseModel = this.responseModel
+
+    if (!provider || !usage || !responseModel) {
+      logfire.warning('Unable to calculate cost', { provider, usage, responseModel })
+      return undefined
+    }
+
+    const price = calcPrice(usage, responseModel, { provider })
+    if (price) {
+      return price.total_price
+    } else {
+      return undefined
+    }
   }
 
   providerId(): string {
@@ -120,6 +170,10 @@ export class DefaultProviderProxy {
    */
   protected check(): ProxyInvalidRequest | undefined {
     return undefined
+  }
+
+  protected usageProvider(): UsageProvider | undefined {
+    return findProvider({ providerId: this.providerId() })
   }
 
   protected method(): string {
@@ -173,7 +227,8 @@ export class DefaultProviderProxy {
     const bodyText = await response.text()
     try {
       const responseBody = JSON.parse(bodyText) as unknown as JsonData
-      const provider = findProvider({ providerId: this.providerId() })
+      const provider = this.usageProvider()
+      // TODO(Marcelo): Check if the next line is ever reached. I think `usageProvider` is always a valid provider at this point.
       if (!provider) {
         return { error: 'invalid response JSON, provider not found' }
       }
@@ -214,7 +269,9 @@ export class DefaultProviderProxy {
     }
   }
 
-  async dispatch(): Promise<ProxySuccess | ProxyInvalidRequest | ProxyUnexpectedResponse> {
+  async dispatch(): Promise<
+    ProxyStreamingSuccess | ProxySuccess | ProxyInvalidRequest | ProxyUnexpectedResponse | ProxyWhitelistedEndpoint
+  > {
     const layers = this.middlewares.reduceRight(
       (next, middleware) => middleware.dispatch(next),
       (proxy: DefaultProviderProxy) => proxy.dispatchInner(),
@@ -222,7 +279,9 @@ export class DefaultProviderProxy {
     return await layers(this)
   }
 
-  protected async dispatchInner(): Promise<ProxySuccess | ProxyInvalidRequest | ProxyUnexpectedResponse> {
+  protected async dispatchInner(): Promise<
+    ProxyStreamingSuccess | ProxySuccess | ProxyInvalidRequest | ProxyUnexpectedResponse | ProxyWhitelistedEndpoint
+  > {
     const checkResult = this.check()
     if (checkResult) {
       return checkResult
@@ -247,6 +306,15 @@ export class DefaultProviderProxy {
     const { requestBodyText, requestBodyData, requestModel } = prepResult
     const response = await this.fetch(url, { method, headers: requestHeaders, body: requestBodyText })
 
+    if (this.isWhitelistedEndpoint()) {
+      return {
+        requestBody: requestBodyText,
+        httpStatusCode: response.status,
+        responseHeaders: response.headers,
+        responseBody: await response.text(),
+      }
+    }
+
     // Each provider should be able to modify the response headers, e.g. remove openai org
     const responseHeaders = this.responseHeaders(response.headers)
 
@@ -260,6 +328,13 @@ export class DefaultProviderProxy {
         responseHeaders,
         responseBody,
       }
+    }
+
+    const isStreaming =
+      responseHeaders.get('content-type')?.startsWith('text/event-stream') ||
+      ('stream' in requestBodyData && requestBodyData.stream === true)
+    if (isStreaming) {
+      return this.dispatchStreaming(prepResult, response, responseHeaders)
     }
 
     const processResponse = await this.extractUsage(response)
@@ -287,6 +362,68 @@ export class DefaultProviderProxy {
       usage,
       cost,
     }
+  }
+
+  protected dispatchStreaming(
+    { requestBodyText, requestModel }: Prepare,
+    response: Response,
+    responseHeaders: Headers,
+  ): ProxyStreamingSuccess | ProxyInvalidRequest | ProxyUnexpectedResponse {
+    const textEncoder = new TextDecoder()
+    const sse_parser = createParser({ onEvent: this.onEvent.bind(this) })
+
+    if (!response.body) {
+      return { requestModel, error: 'No response body' }
+    }
+
+    const provider = this.usageProvider()
+    if (!provider) {
+      return { error: 'No usage provider found' }
+    }
+
+    // Tee the source stream so we can both pipe it through the transform and track completion
+    const [streamForTransform, streamForTracking] = response.body.tee()
+
+    const { readable: responseStream, writable } = new TransformStream({
+      transform(chunk, controller) {
+        sse_parser.feed(textEncoder.decode(chunk))
+        controller.enqueue(chunk)
+      },
+    })
+
+    // Pipe the first tee through the transform (this is what gets sent to the client)
+    streamForTransform.pipeTo(writable)
+
+    // Track when the second tee is fully consumed (which happens when the transform completes)
+    const waitCompletion = streamForTracking.pipeTo(new WritableStream())
+
+    return {
+      requestModel,
+      requestBody: requestBodyText,
+      successStatus: response.status,
+      responseHeaders,
+      responseStream,
+      waitCompletion,
+    }
+  }
+
+  protected onEvent(event: EventSourceMessage) {
+    try {
+      const data = JSON.parse(event.data)
+      try {
+        this.handleData(data)
+      } catch (error) {
+        logfire.reportError('Error handling data', error as Error)
+      }
+    } catch (error) {
+      logfire.reportError('Error parsing data', error as Error)
+    }
+  }
+
+  protected handleData(_data: JsonData): void {}
+
+  protected isWhitelistedEndpoint(): boolean {
+    return false
   }
 
   protected otelAttributes(requestBody: JsonData, responseBody: JsonData): GenAIAttributes {

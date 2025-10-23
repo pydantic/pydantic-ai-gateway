@@ -97,29 +97,10 @@ describe('key status', () => {
     expect(apiValue).toBeTypeOf('string')
     expect(JSON.parse(apiValue!)).toMatchSnapshot('kv-value')
 
-    const allSpends1 = await env.limitsDB
-      .prepare(
-        `SELECT entityId, entityType, scope, round(spend, 3) spend, spendingLimit FROM spend order by spendingLimit`,
-      )
-      .run<{ entityId: number; entityType: number; scope: number; spend: string; spendingLimit: number }>()
-    expect(allSpends1.results).toMatchInlineSnapshot(`
-          [
-            {
-              "entityId": 6,
-              "entityType": 3,
-              "scope": 1,
-              "spend": 0.018,
-              "spendingLimit": 0.01,
-            },
-            {
-              "entityId": 2,
-              "entityType": 1,
-              "scope": 3,
-              "spend": 0.018,
-              "spendingLimit": 4,
-            },
-          ]
-        `)
+    const limitDb = new LimitDbD1(env.limitsDB)
+    expect(await limitDb.spendStatus('key')).toMatchSnapshot('key-spends')
+    expect(await limitDb.spendStatus('user')).toMatchSnapshot('user-spends')
+    expect(await limitDb.spendStatus('project')).toMatchSnapshot('project-spends')
 
     expect(disableEvents).toEqual([
       {

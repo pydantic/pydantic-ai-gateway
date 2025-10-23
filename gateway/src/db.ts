@@ -61,7 +61,8 @@ export interface SpendScope {
   scope: Scope
   // scopeInterval is null for total scope
   scopeInterval?: number
-  limit: number
+  // we still set the spend even if there is not limit set
+  limit?: number
 }
 
 export interface ExceededScope {
@@ -76,14 +77,14 @@ export interface LimitUpdate {
 }
 
 export type KeyLimitUpdate = LimitUpdate & { total?: number }
-
-const DISTANCE_FUTURE = 65536
+// 65536 equates to 2149-06-07
+const DISTANT_FUTURE = 65536
 
 export interface SpendStatus {
   entityId: number
   scope: Scope
   scopeInterval: Date | null
-  limit: number
+  limit: number | null
   spend: number
 }
 
@@ -114,15 +115,15 @@ export class LimitDbD1 extends LimitDb {
     }
 
     const sqlValues: '(?, ?, ?, ?, ?, ?)'[] = []
-    const values: (string | number)[] = []
+    const values: (string | number | null)[] = []
     for (const { entityType, entityId, scope, scopeInterval, limit } of intervalSpends) {
       sqlValues.push('(?, ?, ?, ?, ?, ?)')
       values.push(
         entityTypeLookup[entityType],
         entityId,
         scopeLookup[scope],
-        scopeInterval ?? DISTANCE_FUTURE,
-        limit,
+        scopeInterval ?? DISTANT_FUTURE,
+        limit ?? null,
         spend,
       )
     }
@@ -200,12 +201,18 @@ WHERE entityType = ? ${entityIdClause}
 `,
       )
       .bind(...params)
-      .run<{ entityId: number; scope: 1 | 2 | 3 | 4; scopeInterval: number; spendingLimit: number; spend: number }>()
+      .run<{
+        entityId: number
+        scope: 1 | 2 | 3 | 4
+        scopeInterval: number
+        spendingLimit: number | null
+        spend: number
+      }>()
 
     return results.map(({ entityId, scope, scopeInterval, spendingLimit, spend }) => ({
       entityId,
       scope: reverseScopeLookup[scope],
-      scopeInterval: scopeInterval === DISTANCE_FUTURE ? null : intAsDate(scopeInterval),
+      scopeInterval: scopeInterval === DISTANT_FUTURE ? null : intAsDate(scopeInterval),
       limit: spendingLimit,
       spend,
     }))
@@ -221,15 +228,15 @@ WHERE entityType = ? ${entityIdClause}
 
 interface ScopeIntervals {
   day: number
-  endOfWeek: number
-  endOfMonth: number
+  eow: number
+  eom: number
 }
 
 export function scopeIntervals(): ScopeIntervals {
   const now = new Date()
   const day = new Date(now)
   day.setHours(0, 0, 0, 0)
-  return { day: dateAsInt(day), endOfWeek: dateAsInt(endOfWeek(now)), endOfMonth: dateAsInt(endOfMonth(now)) }
+  return { day: dateAsInt(day), eow: dateAsInt(endOfWeek(now)), eom: dateAsInt(endOfMonth(now)) }
 }
 
 const MS_PER_DAY = 24 * 60 * 60 * 1000

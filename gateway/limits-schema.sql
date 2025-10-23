@@ -5,10 +5,10 @@ CREATE TABLE IF NOT EXISTS spend (
   entityId INTEGER NOT NULL,
   -- scope (1=daily, 2=weekly, 3=monthly, 4=total)
   scope INTEGER CHECK(scope IN (1, 2, 3, 4)) NOT NULL,
-  -- days since 1970-01-01, use `65536` (equates to 2149-6-7) for scope=total since we can't use null
+  -- days since 1970-01-01, use `65536` (equates to 2149-06-07) for scope=total since we can't use null
   scopeInterval INTEGER NOT NULL,
-  -- the limit for this entity in this scope and interval
-  spendingLimit REAL NOT NULL,
+  -- the limit for this entity in this scope and interval, null if no limit is set
+  spendingLimit REAL,
   -- the total spend by this entity in this scope and interval
   spend REAL NOT NULL,
   PRIMARY KEY (entityType, entityId, scope, scopeInterval)

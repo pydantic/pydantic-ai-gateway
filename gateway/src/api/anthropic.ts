@@ -43,6 +43,10 @@ export class AnthropicAPI extends BaseAPI<MessageCreateParams, BetaMessage> {
   }
 
   outputMessages = (responseBody: BetaMessage): OutputMessages | undefined => {
+    // During streaming, responseBody might be empty
+    if (!responseBody || !('role' in responseBody) || !('content' in responseBody)) {
+      return undefined
+    }
     return [
       {
         role: responseBody.role,

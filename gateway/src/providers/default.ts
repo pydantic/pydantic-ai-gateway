@@ -4,7 +4,8 @@ import * as logfire from '@pydantic/logfire-api'
 import type { GatewayOptions } from '..'
 import type { ModelAPI } from '../api'
 import type { GenAIAttributes } from '../otel/attributes'
-import type { ApiKeyInfo, ProviderProxy } from '../types'
+import { SSEStreamAccumulator } from '../streaming/sse-accumulator'
+import type { ApiKeyInfo, ProviderID, ProviderProxy } from '../types'
 import { runAfter } from '../utils'
 
 export interface ProxySuccess {
@@ -34,10 +35,21 @@ export interface ProxyUnexpectedResponse {
   responseBody: string
 }
 
+export interface ProxyStreamingSuccess {
+  requestModel?: string
+  requestBody: string
+  successStatus: number
+  responseHeaders: Headers
+  responseStream: ReadableStream<Uint8Array>
+  onStreamComplete: Promise<{ cost: number; usage: Usage; responseModel: string }>
+  otelAttributes?: GenAIAttributes
+}
+
 interface Prepare {
   requestBodyText: string
   requestBodyData: JsonData
   requestModel?: string
+  isStreaming?: boolean
 }
 
 export type JsonData = object
@@ -51,7 +63,7 @@ interface ProcessResponse {
 
 export type Next = (
   proxy: DefaultProviderProxy,
-) => Promise<ProxySuccess | ProxyInvalidRequest | ProxyUnexpectedResponse>
+) => Promise<ProxySuccess | ProxyStreamingSuccess | ProxyInvalidRequest | ProxyUnexpectedResponse>
 
 export interface Middleware {
   dispatch(next: Next): Next
@@ -149,16 +161,21 @@ export class DefaultProviderProxy {
     const requestBodyText = await this.request.text()
     let requestBodyData: JsonData
     let requestModel: string | undefined
+    let isStreaming = false
+
     try {
       requestBodyData = JSON.parse(requestBodyText) as JsonData
       if ('model' in requestBodyData) {
         requestModel = requestBodyData.model as string
       }
+      if ('stream' in requestBodyData) {
+        isStreaming = requestBodyData.stream === true
+      }
     } catch {
       return { error: 'invalid request JSON' }
     }
     if (!requestModel || typeof requestModel === 'string') {
-      return { requestBodyText, requestBodyData, requestModel }
+      return { requestBodyText, requestBodyData, requestModel, isStreaming }
     } else {
       return { error: 'invalid request, "model" should be a string' }
     }
@@ -214,7 +231,7 @@ export class DefaultProviderProxy {
     }
   }
 
-  async dispatch(): Promise<ProxySuccess | ProxyInvalidRequest | ProxyUnexpectedResponse> {
+  async dispatch(): Promise<ProxySuccess | ProxyStreamingSuccess | ProxyInvalidRequest | ProxyUnexpectedResponse> {
     const layers = this.middlewares.reduceRight(
       (next, middleware) => middleware.dispatch(next),
       (proxy: DefaultProviderProxy) => proxy.dispatchInner(),
@@ -222,7 +239,9 @@ export class DefaultProviderProxy {
     return await layers(this)
   }
 
-  protected async dispatchInner(): Promise<ProxySuccess | ProxyInvalidRequest | ProxyUnexpectedResponse> {
+  protected async dispatchInner(): Promise<
+    ProxySuccess | ProxyStreamingSuccess | ProxyInvalidRequest | ProxyUnexpectedResponse
+  > {
     const checkResult = this.check()
     if (checkResult) {
       return checkResult
@@ -244,7 +263,11 @@ export class DefaultProviderProxy {
     if ('error' in prepResult) {
       return prepResult
     }
-    const { requestBodyText, requestBodyData, requestModel } = prepResult
+    const { requestBodyText, requestBodyData, requestModel, isStreaming } = prepResult
+    if (isStreaming) {
+      return await this.dispatchStreaming(requestBodyText, requestBodyData, requestModel, url, requestHeaders)
+    }
+
     const response = await this.fetch(url, { method, headers: requestHeaders, body: requestBodyText })
 
     // Each provider should be able to modify the response headers, e.g. remove openai org
@@ -286,6 +309,81 @@ export class DefaultProviderProxy {
       otelAttributes,
       usage,
       cost,
+    }
+  }
+
+  protected async dispatchStreaming(
+    requestBodyText: string,
+    requestBodyData: JsonData,
+    requestModel: string | undefined,
+    url: string,
+    requestHeaders: Headers,
+  ): Promise<ProxyStreamingSuccess | ProxyInvalidRequest | ProxyUnexpectedResponse> {
+    const response = await this.fetch(url, { method: this.method(), headers: requestHeaders, body: requestBodyText })
+
+    const responseHeaders = this.responseHeaders(response.headers)
+
+    if (!response.ok) {
+      const responseBody = await response.text()
+      return {
+        requestModel,
+        requestBody: requestBodyText,
+        unexpectedStatus: response.status,
+        responseHeaders,
+        responseBody,
+      }
+    }
+
+    if (!response.body) {
+      return {
+        requestModel,
+        requestBody: requestBodyText,
+        unexpectedStatus: 500,
+        responseHeaders,
+        responseBody: 'Response body is null',
+      }
+    }
+
+    const [streamToClient, streamForAccumulation] = response.body.tee()
+    const accumulator = new SSEStreamAccumulator(this.providerId() as ProviderID)
+
+    const costPromise = this.accumulateStreamAndCalculateCost(streamForAccumulation, accumulator, requestModel)
+
+    const otelAttributes = safe(this.otelAttributes.bind(this))(requestBodyData, {})
+
+    return {
+      requestModel,
+      requestBody: requestBodyText,
+      successStatus: response.status,
+      responseHeaders,
+      responseStream: streamToClient,
+      onStreamComplete: costPromise,
+      otelAttributes,
+    }
+  }
+
+  private async accumulateStreamAndCalculateCost(
+    stream: ReadableStream<Uint8Array>,
+    accumulator: SSEStreamAccumulator,
+    requestModel: string | undefined,
+  ): Promise<{ cost: number; usage: Usage; responseModel: string }> {
+    const decoder = new TextDecoder()
+    const reader = stream.getReader()
+
+    try {
+      while (true) {
+        const { done, value } = await reader.read()
+        if (done) break
+
+        const text = decoder.decode(value, { stream: true })
+        accumulator.feed(text)
+      }
+
+      accumulator.feed(decoder.decode())
+
+      return await accumulator.calculateCost(requestModel)
+    } finally {
+      reader.releaseLock()
     }
   }
 

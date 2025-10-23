@@ -346,6 +346,207 @@ exports[`openai > openai chat > span 1`] = `
 ]
 `;
 
+exports[`openai > openai chat stream > chunks 1`] = `[]`;
+
+exports[`openai > openai chat stream > span 1`] = `
+[
+  {
+    "key": "logfire.msg",
+    "value": {
+      "stringValue": "chat gpt-5",
+    },
+  },
+  {
+    "key": "logfire.json_schema",
+    "value": {
+      "stringValue": "{"type":"object","properties":{"gen_ai.operation.name":{"type":"string"},"gen_ai.request.model":{"type":"string"},"gen_ai.system":{"type":"string"},"gen_ai.request.max_tokens":{"type":"number"},"gen_ai.request.top_k":{},"gen_ai.request.top_p":{},"gen_ai.request.temperature":{},"gen_ai.request.stop_sequences":{},"gen_ai.request.seed":{},"gen_ai.response.finish_reasons":{},"gen_ai.response.id":{},"gen_ai.input.messages":{},"gen_ai.output.messages":{},"gen_ai.system_instructions":{},"http.response.status_code":{"type":"number"},"http.request.body.text":{"type":"string"}}}",
+    },
+  },
+  {
+    "key": "logfire.level_num",
+    "value": {
+      "intValue": 9,
+    },
+  },
+  {
+    "key": "gen_ai.operation.name",
+    "value": {
+      "stringValue": "chat",
+    },
+  },
+  {
+    "key": "gen_ai.request.model",
+    "value": {
+      "stringValue": "gpt-5",
+    },
+  },
+  {
+    "key": "gen_ai.system",
+    "value": {
+      "stringValue": "openai",
+    },
+  },
+  {
+    "key": "gen_ai.request.max_tokens",
+    "value": {
+      "intValue": 1024,
+    },
+  },
+  {
+    "key": "gen_ai.request.top_k",
+    "value": {},
+  },
+  {
+    "key": "gen_ai.request.top_p",
+    "value": {},
+  },
+  {
+    "key": "gen_ai.request.temperature",
+    "value": {},
+  },
+  {
+    "key": "gen_ai.request.stop_sequences",
+    "value": {},
+  },
+  {
+    "key": "gen_ai.request.seed",
+    "value": {},
+  },
+  {
+    "key": "gen_ai.response.finish_reasons",
+    "value": {},
+  },
+  {
+    "key": "gen_ai.response.id",
+    "value": {},
+  },
+  {
+    "key": "gen_ai.input.messages",
+    "value": {
+      "arrayValue": {
+        "values": [
+          {
+            "kvlistValue": {
+              "values": [
+                {
+                  "key": "role",
+                  "value": {
+                    "stringValue": "system",
+                  },
+                },
+                {
+                  "key": "parts",
+                  "value": {
+                    "arrayValue": {
+                      "values": [
+                        {
+                          "kvlistValue": {
+                            "values": [
+                              {
+                                "key": "type",
+                                "value": {
+                                  "stringValue": "text",
+                                },
+                              },
+                              {
+                                "key": "content",
+                                "value": {
+                                  "stringValue": "You are a helpful assistant.",
+                                },
+                              },
+                            ],
+                          },
+                        },
+                      ],
+                    },
+                  },
+                },
+              ],
+            },
+          },
+          {
+            "kvlistValue": {
+              "values": [
+                {
+                  "key": "role",
+                  "value": {
+                    "stringValue": "user",
+                  },
+                },
+                {
+                  "key": "parts",
+                  "value": {
+                    "arrayValue": {
+                      "values": [
+                        {
+                          "kvlistValue": {
+                            "values": [
+                              {
+                                "key": "type",
+                                "value": {
+                                  "stringValue": "text",
+                                },
+                              },
+                              {
+                                "key": "content",
+                                "value": {
+                                  "stringValue": "What is the capital of France?",
+                                },
+                              },
+                            ],
+                          },
+                        },
+                      ],
+                    },
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  },
+  {
+    "key": "gen_ai.output.messages",
+    "value": {},
+  },
+  {
+    "key": "gen_ai.system_instructions",
+    "value": {},
+  },
+  {
+    "key": "http.response.status_code",
+    "value": {
+      "intValue": 200,
+    },
+  },
+  {
+    "key": "http.request.body.text",
+    "value": {
+      "stringValue": "{
+  "stream": true,
+  "model": "gpt-5",
+  "messages": [
+    {
+      "role": "developer",
+      "content": "You are a helpful assistant."
+    },
+    {
+      "role": "user",
+      "content": "What is the capital of France?"
+    }
+  ],
+  "max_completion_tokens": 1024,
+  "stream_options": {
+    "include_usage": true
+  }
+}",
+    },
+  },
+]
+`;
+
 exports[`openai > openai responses > llm 1`] = `
 {
   "background": false,

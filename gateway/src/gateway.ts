@@ -66,7 +66,27 @@ export async function gateway(
   dispatchSpan.end(spanName, attributes, { level })
 
   let response: Response
-  if ('successStatus' in result) {
+  if ('responseStream' in result) {
+    // Handle streaming responses
+    const { successStatus, responseHeaders, responseStream, onStreamComplete } = result
+
+    runAfter(
+      ctx,
+      'recordStreamSpend',
+      (async () => {
+        try {
+          const { cost } = await onStreamComplete
+          await recordSpend(apiKeyInfo, cost, options)
+        } catch (error) {
+          logfire.reportError('Error calculating streaming cost', error as Error)
+          await blockApiKey(apiKeyInfo, options, 'Unable to calculate streaming cost')
+        }
+      })(),
+    )
+
+    response = new Response(responseStream, { status: successStatus, headers: responseHeaders })
+  } else if ('successStatus' in result) {
+    // Handle non-streaming responses
     const { successStatus, responseHeaders, responseBody, cost } = result
     runAfter(ctx, 'recordSpend', recordSpend(apiKeyInfo, cost, options))
     response = new Response(responseBody, { status: successStatus, headers: responseHeaders })

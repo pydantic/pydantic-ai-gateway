@@ -14,18 +14,18 @@ exports[`custom proxyPrefixLength > inference > proxyPrefixLength 1`] = `
       },
     },
   ],
-  "created": 1758119097,
-  "id": "chatcmpl-CGnNZyR6FU8Xsw5X4N2YdTtaYBuWV",
+  "created": 1761137036,
+  "id": "chatcmpl-CTSU0dW3oVCau0NVeg6fCWcUUQj2a",
   "model": "gpt-5-2025-08-07",
   "object": "chat.completion",
   "service_tier": "default",
   "system_fingerprint": null,
   "usage": {
-    "completion_tokens": 11,
+    "completion_tokens": 75,
     "completion_tokens_details": {
       "accepted_prediction_tokens": 0,
       "audio_tokens": 0,
-      "reasoning_tokens": 0,
+      "reasoning_tokens": 64,
       "rejected_prediction_tokens": 0,
     },
     "prompt_tokens": 23,
@@ -34,9 +34,9 @@ exports[`custom proxyPrefixLength > inference > proxyPrefixLength 1`] = `
       "cached_tokens": 0,
     },
     "pydantic_ai_gateway": {
-      "cost_estimate": 0.00013875,
+      "cost_estimate": 0.00077875,
     },
-    "total_tokens": 34,
+    "total_tokens": 98,
   },
 }
 `;

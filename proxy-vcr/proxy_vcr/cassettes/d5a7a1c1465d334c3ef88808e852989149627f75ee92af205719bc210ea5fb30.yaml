@@ -1,0 +1,92 @@
+interactions:
+- request:
+    body: '{"model":"gpt-5","messages":[{"role":"developer","content":"You are a helpful
+      assistant."},{"role":"user","content":"What is the capital of France?"}],"max_completion_tokens":1024}'
+    headers:
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '180'
+      content-type:
+      - application/json
+      host:
+      - api.openai.com
+      user-agent:
+      - python-httpx/0.28.1
+    method: POST
+    uri: https://api.openai.com/v1/chat/completions
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAAA3SSQU8CMRCF7/srmp5Zs4CAcuVuNAocjNmM7exS7LZNO2s0hv9uWpCuES89zDfz
+        8t50vgrGuJJ8ybjYAYnO6XL19Liu5HZqNyvoq7sNtvNmtRXr9cN+AnwUJ+zrHgX9TF0J2zmNpKw5
+        YuERCKPqeDEfj6eLajpPoLMSdRxrHZWzclJNZmV1U1aL09zOKoGBL9lzwRhjX+mNDo3ED75k1ein
+        0mEI0CJfnpsY497qWOEQggoEhvgoQ2ENoUmm78GrcDWEHps+QLRmeq0HAIyxBDFasvVyIoezkUYZ
+        FXa1RwjWRPFA1vFEDwVjLylY/8srd952jmqyb5hkJ9OjHM+LzHAxO0GyBDrXb29GF9RqiQRKh8Fi
+        uACxQ5kn8xahl8oOQDHI9tfMJe1jbmXarDK//lc/AyHQEcraeZRK/E6c2zzGO/uv7bzk5JgH9O9K
+        YE0KffwIiQ30+ngDPHwGwq5ulGnRO6/SIcS/Lg7FNwAAAP//AwBOVuRvBQMAAA==
+    headers:
+      CF-RAY:
+      - 99291547bd10d835-AMS
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json
+      Date:
+      - Wed, 22 Oct 2025 12:43:58 GMT
+      Server:
+      - cloudflare
+      Set-Cookie:
+      - __cf_bm=DozbN_6AAZtvldTilT428le5P6DA6rHj8axy_69vofw-1761137038-1.0.1.1-oUzkRpDtiHEYFcJOVkdfXC9xAV4WP1fyLzkOL6iCxbgyFHnSYAh2T5WNguROOMXUZzoqKQmRpVoIaJnQbiz11DR_TclvP2OtQzDOnfUHFOQ;
+        path=/; expires=Wed, 22-Oct-25 13:13:58 GMT; domain=.api.openai.com; HttpOnly;
+        Secure; SameSite=None
+      - _cfuvid=7haqTFLWfvR4AO3Dz3AASsArjOvy3j3DtCjeU5ZokkY-1761137038344-0.0.1.1-604800000;
+        path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains; preload
+      Transfer-Encoding:
+      - chunked
+      X-Content-Type-Options:
+      - nosniff
+      access-control-expose-headers:
+      - X-Request-ID
+      alt-svc:
+      - h3=":443"; ma=86400
+      cf-cache-status:
+      - DYNAMIC
+      openai-organization:
+      - pydantic-28gund
+      openai-processing-ms:
+      - '2202'
+      openai-project:
+      - proj_dKobscVY9YJxeEaDJen54e3d
+      openai-version:
+      - '2020-10-01'
+      x-envoy-upstream-service-time:
+      - '2386'
+      x-openai-proxy-wasm:
+      - v0.1
+      x-ratelimit-limit-requests:
+      - '10000'
+      x-ratelimit-limit-tokens:
+      - '4000000'
+      x-ratelimit-remaining-requests:
+      - '9999'
+      x-ratelimit-remaining-tokens:
+      - '3999982'
+      x-ratelimit-reset-requests:
+      - 6ms
+      x-ratelimit-reset-tokens:
+      - 0s
+      x-request-id:
+      - req_d7693e7f40a741249a88e71fc1a04359
+    status:
+      code: 200
+      message: OK
+version: 1

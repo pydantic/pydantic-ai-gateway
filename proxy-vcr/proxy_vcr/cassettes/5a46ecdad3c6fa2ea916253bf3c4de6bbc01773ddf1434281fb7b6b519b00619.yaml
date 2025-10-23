@@ -1,0 +1,99 @@
+interactions:
+- request:
+    body: '{"stream":true,"model":"gpt-5","messages":[{"role":"developer","content":"You
+      are a helpful assistant."},{"role":"user","content":"What is the capital of
+      France?"}],"max_completion_tokens":1024,"stream_options":{"include_usage":true}}'
+    headers:
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '234'
+      content-type:
+      - application/json
+      cookie:
+      - __cf_bm=DozbN_6AAZtvldTilT428le5P6DA6rHj8axy_69vofw-1761137038-1.0.1.1-oUzkRpDtiHEYFcJOVkdfXC9xAV4WP1fyLzkOL6iCxbgyFHnSYAh2T5WNguROOMXUZzoqKQmRpVoIaJnQbiz11DR_TclvP2OtQzDOnfUHFOQ;
+        _cfuvid=7haqTFLWfvR4AO3Dz3AASsArjOvy3j3DtCjeU5ZokkY-1761137038344-0.0.1.1-604800000
+      host:
+      - api.openai.com
+      user-agent:
+      - python-httpx/0.28.1
+    method: POST
+    uri: https://api.openai.com/v1/chat/completions
+  response:
+    body:
+      string: 'data: {"id":"chatcmpl-CTSUYz43ywMLIFYgQY6YtWyFbry8G","object":"chat.completion.chunk","created":1761137070,"model":"gpt-5-2025-08-07","service_tier":"default","system_fingerprint":null,"choices":[{"index":0,"delta":{"role":"assistant","content":"","refusal":null},"finish_reason":null}],"usage":null,"obfuscation":"x1esqmAGF6"}
+
+
+        data: {"id":"chatcmpl-CTSUYz43ywMLIFYgQY6YtWyFbry8G","object":"chat.completion.chunk","created":1761137070,"model":"gpt-5-2025-08-07","service_tier":"default","system_fingerprint":null,"choices":[{"index":0,"delta":{"content":"Paris"},"finish_reason":null}],"usage":null,"obfuscation":"ZODDDz4"}
+
+
+        data: {"id":"chatcmpl-CTSUYz43ywMLIFYgQY6YtWyFbry8G","object":"chat.completion.chunk","created":1761137070,"model":"gpt-5-2025-08-07","service_tier":"default","system_fingerprint":null,"choices":[{"index":0,"delta":{"content":"."},"finish_reason":null}],"usage":null,"obfuscation":"6wuevQZVFGT"}
+
+
+        data: {"id":"chatcmpl-CTSUYz43ywMLIFYgQY6YtWyFbry8G","object":"chat.completion.chunk","created":1761137070,"model":"gpt-5-2025-08-07","service_tier":"default","system_fingerprint":null,"choices":[{"index":0,"delta":{},"finish_reason":"stop"}],"usage":null,"obfuscation":"WNuOkE"}
+
+
+        data: {"id":"chatcmpl-CTSUYz43ywMLIFYgQY6YtWyFbry8G","object":"chat.completion.chunk","created":1761137070,"model":"gpt-5-2025-08-07","service_tier":"default","system_fingerprint":null,"choices":[],"usage":{"prompt_tokens":23,"completion_tokens":11,"total_tokens":34,"prompt_tokens_details":{"cached_tokens":0,"audio_tokens":0},"completion_tokens_details":{"reasoning_tokens":0,"audio_tokens":0,"accepted_prediction_tokens":0,"rejected_prediction_tokens":0}},"obfuscation":"fHT239cMJq5"}
+
+
+        data: [DONE]
+
+
+        '
+    headers:
+      CF-RAY:
+      - 9929161ede09d835-AMS
+      Connection:
+      - keep-alive
+      Content-Type:
+      - text/event-stream; charset=utf-8
+      Date:
+      - Wed, 22 Oct 2025 12:44:32 GMT
+      Server:
+      - cloudflare
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains; preload
+      Transfer-Encoding:
+      - chunked
+      X-Content-Type-Options:
+      - nosniff
+      access-control-expose-headers:
+      - X-Request-ID
+      alt-svc:
+      - h3=":443"; ma=86400
+      cf-cache-status:
+      - DYNAMIC
+      openai-organization:
+      - pydantic-28gund
+      openai-processing-ms:
+      - '1368'
+      openai-project:
+      - proj_dKobscVY9YJxeEaDJen54e3d
+      openai-version:
+      - '2020-10-01'
+      x-envoy-upstream-service-time:
+      - '1554'
+      x-openai-proxy-wasm:
+      - v0.1
+      x-ratelimit-limit-requests:
+      - '10000'
+      x-ratelimit-limit-tokens:
+      - '4000000'
+      x-ratelimit-remaining-requests:
+      - '9999'
+      x-ratelimit-remaining-tokens:
+      - '3999982'
+      x-ratelimit-reset-requests:
+      - 6ms
+      x-ratelimit-reset-tokens:
+      - 0s
+      x-request-id:
+      - req_1eed493c4504496ca7b64c2298699f93
+    status:
+      code: 200
+      message: OK
+version: 1

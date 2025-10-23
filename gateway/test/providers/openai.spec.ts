@@ -27,16 +27,16 @@ describe('openai', () => {
     const limitDb = new LimitDbD1(env.limitsDB)
     const projectStatus = await limitDb.spendStatus('project')
     expect(projectStatus).toEqual([
-      { entityId: IDS.projectDefault, limit: 4, scope: 'monthly', scopeInterval: expect.any(Date), spend: 0.00013875 },
+      { entityId: IDS.projectDefault, limit: 4, scope: 'monthly', scopeInterval: expect.any(Date), spend: 0.00077875 },
     ])
     const userStatus = await limitDb.spendStatus('user')
     expect(userStatus).toEqual([
-      { entityId: IDS.userDefault, limit: 3, scope: 'weekly', scopeInterval: expect.any(Date), spend: 0.00013875 },
+      { entityId: IDS.userDefault, limit: 3, scope: 'weekly', scopeInterval: expect.any(Date), spend: 0.00077875 },
     ])
     const keyStatus = await limitDb.spendStatus('key')
     expect(keyStatus.sort((a, b) => a.limit - b.limit)).toEqual([
-      { entityId: IDS.keyHealthy, limit: 1, scope: 'daily', scopeInterval: expect.any(Date), spend: 0.00013875 },
-      { entityId: IDS.keyHealthy, limit: 2, scope: 'total', scopeInterval: null, spend: 0.00013875 },
+      { entityId: IDS.keyHealthy, limit: 1, scope: 'daily', scopeInterval: expect.any(Date), spend: 0.00077875 },
+      { entityId: IDS.keyHealthy, limit: 2, scope: 'total', scopeInterval: null, spend: 0.00077875 },
     ])
   })
 
@@ -69,18 +69,18 @@ describe('openai', () => {
     expect(completion).toMatchSnapshot('llm')
     expect(completion.usage).toMatchInlineSnapshot(`
       {
-        "input_tokens": 1315,
+        "input_tokens": 2003,
         "input_tokens_details": {
           "cached_tokens": 0,
         },
-        "output_tokens": 799,
+        "output_tokens": 1436,
         "output_tokens_details": {
-          "reasoning_tokens": 768,
+          "reasoning_tokens": 1408,
         },
         "pydantic_ai_gateway": {
-          "cost_estimate": 0.00963375,
+          "cost_estimate": 0.01686375,
         },
-        "total_tokens": 2114,
+        "total_tokens": 3439,
       }
     `)
     expect(otelBatch, 'otelBatch length not 1').toHaveLength(1)

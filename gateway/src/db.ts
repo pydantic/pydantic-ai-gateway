@@ -71,9 +71,9 @@ export interface ExceededScope {
 }
 
 export interface LimitUpdate {
-  daily?: number
-  weekly?: number
-  monthly?: number
+  daily?: number | null
+  weekly?: number | null
+  monthly?: number | null
 }
 
 export type KeyLimitUpdate = LimitUpdate & { total?: number }

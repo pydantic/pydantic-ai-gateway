@@ -5,6 +5,7 @@ import { describe, expect, it } from 'vitest'
 import type {
   DefaultProviderProxy,
   ProxyInvalidRequest,
+  ProxyStreamingSuccess,
   ProxySuccess,
   ProxyUnexpectedResponse,
 } from '../src/providers/default'
@@ -247,7 +248,7 @@ describe('custom proxyPrefixLength', () => {
 
 describe('custom middleware', () => {
   it('middleware', async () => {
-    const responses: (ProxySuccess | ProxyInvalidRequest | ProxyUnexpectedResponse)[] = []
+    const responses: (ProxySuccess | ProxyStreamingSuccess | ProxyInvalidRequest | ProxyUnexpectedResponse)[] = []
 
     const ctx = createExecutionContext()
     const request = new Request<unknown, IncomingRequestCfProperties>('https://example.com/openai/gpt-5', {

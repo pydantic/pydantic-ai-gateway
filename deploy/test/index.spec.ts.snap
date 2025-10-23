@@ -357,6 +357,20 @@ exports[`deploy > should call openai via gateway > status-after-requests 1`] = `
           "scopeInterval": "YYYY-MM-DDT00:00:00.000Z",
           "limit": 1,
           "spend": 0.00077875
+        },
+        {
+          "entityId": 1,
+          "scope": "weekly",
+          "scopeInterval": "YYYY-MM-DDT00:00:00.000Z",
+          "limit": null,
+          "spend": 0.00077875
+        },
+        {
+          "entityId": 1,
+          "scope": "monthly",
+          "scopeInterval": "YYYY-MM-DDT00:00:00.000Z",
+          "limit": null,
+          "spend": 0.00077875
         }
       ],
       "users": [
@@ -366,9 +380,23 @@ exports[`deploy > should call openai via gateway > status-after-requests 1`] = `
           "spend": [
             {
               "entityId": 2,
+              "scope": "daily",
+              "scopeInterval": "YYYY-MM-DDT00:00:00.000Z",
+              "limit": null,
+              "spend": 0.00077875
+            },
+            {
+              "entityId": 2,
               "scope": "weekly",
               "scopeInterval": "YYYY-MM-DDT00:00:00.000Z",
               "limit": 2,
+              "spend": 0.00077875
+            },
+            {
+              "entityId": 2,
+              "scope": "monthly",
+              "scopeInterval": "YYYY-MM-DDT00:00:00.000Z",
+              "limit": null,
               "spend": 0.00077875
             }
           ],
@@ -382,6 +410,20 @@ exports[`deploy > should call openai via gateway > status-after-requests 1`] = `
       "id": 3,
       "name": "healt...",
       "spend": [
+        {
+          "entityId": 3,
+          "scope": "daily",
+          "scopeInterval": "YYYY-MM-DDT00:00:00.000Z",
+          "limit": null,
+          "spend": 0.00077875
+        },
+        {
+          "entityId": 3,
+          "scope": "weekly",
+          "scopeInterval": "YYYY-MM-DDT00:00:00.000Z",
+          "limit": null,
+          "spend": 0.00077875
+        },
         {
           "entityId": 3,
           "scope": "monthly",

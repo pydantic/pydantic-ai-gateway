@@ -41,6 +41,39 @@ exports[`custom proxyPrefixLength > inference > proxyPrefixLength 1`] = `
 }
 `;
 
+exports[`key status > should change key status if limit is exceeded > key-spends 1`] = `
+[
+  {
+    "entityId": 6,
+    "limit": 0.01,
+    "scope": "daily",
+    "scopeInterval": 2025-10-23T00:00:00.000Z,
+    "spend": 0.018000000000000002,
+  },
+  {
+    "entityId": 6,
+    "limit": null,
+    "scope": "weekly",
+    "scopeInterval": 2025-10-26T00:00:00.000Z,
+    "spend": 0.018000000000000002,
+  },
+  {
+    "entityId": 6,
+    "limit": null,
+    "scope": "monthly",
+    "scopeInterval": 2025-10-31T00:00:00.000Z,
+    "spend": 0.018000000000000002,
+  },
+  {
+    "entityId": 6,
+    "limit": null,
+    "scope": "total",
+    "scopeInterval": null,
+    "spend": 0.018000000000000002,
+  },
+]
+`;
+
 exports[`key status > should change key status if limit is exceeded > kv-value 1`] = `
 {
   "id": 6,
@@ -61,8 +94,78 @@ exports[`key status > should change key status if limit is exceeded > kv-value 1
 }
 `;
 
+exports[`key status > should change key status if limit is exceeded > project-spends 1`] = `
+[
+  {
+    "entityId": 2,
+    "limit": null,
+    "scope": "daily",
+    "scopeInterval": 2025-10-23T00:00:00.000Z,
+    "spend": 0.018000000000000002,
+  },
+  {
+    "entityId": 2,
+    "limit": null,
+    "scope": "weekly",
+    "scopeInterval": 2025-10-26T00:00:00.000Z,
+    "spend": 0.018000000000000002,
+  },
+  {
+    "entityId": 2,
+    "limit": 4,
+    "scope": "monthly",
+    "scopeInterval": 2025-10-31T00:00:00.000Z,
+    "spend": 0.018000000000000002,
+  },
+]
+`;
+
+exports[`key status > should change key status if limit is exceeded > user-spends 1`] = `[]`;
+
 exports[`key status > should not change key status if limit is not exceeded > spend-table 1`] = `
 [
+  {
+    "entityId": 4,
+    "entityType": 3,
+    "scope": 2,
+    "spend": 0.018,
+    "spendingLimit": null,
+  },
+  {
+    "entityId": 4,
+    "entityType": 3,
+    "scope": 3,
+    "spend": 0.018,
+    "spendingLimit": null,
+  },
+  {
+    "entityId": 2,
+    "entityType": 1,
+    "scope": 1,
+    "spend": 0.018,
+    "spendingLimit": null,
+  },
+  {
+    "entityId": 2,
+    "entityType": 1,
+    "scope": 2,
+    "spend": 0.018,
+    "spendingLimit": null,
+  },
+  {
+    "entityId": 3,
+    "entityType": 2,
+    "scope": 1,
+    "spend": 0.018,
+    "spendingLimit": null,
+  },
+  {
+    "entityId": 3,
+    "entityType": 2,
+    "scope": 3,
+    "spend": 0.018,
+    "spendingLimit": null,
+  },
   {
     "entityId": 4,
     "entityType": 3,

@@ -148,99 +148,42 @@ export async function disableApiKey(
 }
 
 async function recordSpend(apiKey: ApiKeyInfo, spend: number, options: GatewayOptions): Promise<void> {
-  const { id, project, user } = apiKey
+  const { day, eow, eom } = scopeIntervals()
 
-  const { day, endOfWeek, endOfMonth } = scopeIntervals()
+  const {
+    id: keyId,
+    project,
+    user,
+    keySpendingLimitDaily: keyDaily,
+    keySpendingLimitWeekly: keyWeekly,
+    keySpendingLimitMonthly: keyMonthly,
+    keySpendingLimitTotal: keyTotal,
+    projectSpendingLimitDaily: projectDaily,
+    projectSpendingLimitWeekly: projectWeekly,
+    projectSpendingLimitMonthly: projectMonthly,
+    userSpendingLimitDaily: userDaily,
+    userSpendingLimitWeekly: userWeekly,
+    userSpendingLimitMonthly: userMonthly,
+  } = apiKey
 
-  const intervalSpends: SpendScope[] = []
-  if (isSet(apiKey.keySpendingLimitDaily)) {
-    intervalSpends.push({
-      entityId: id,
-      entityType: 'key',
-      scope: 'daily',
-      scopeInterval: day,
-      limit: apiKey.keySpendingLimitDaily,
-    })
-  }
-  if (isSet(apiKey.keySpendingLimitWeekly)) {
-    intervalSpends.push({
-      entityId: id,
-      entityType: 'key',
-      scope: 'weekly',
-      scopeInterval: endOfWeek,
-      limit: apiKey.keySpendingLimitWeekly,
-    })
-  }
-  if (isSet(apiKey.keySpendingLimitMonthly)) {
-    intervalSpends.push({
-      entityId: id,
-      entityType: 'key',
-      scope: 'monthly',
-      scopeInterval: endOfMonth,
-      limit: apiKey.keySpendingLimitMonthly,
-    })
-  }
-  if (isSet(apiKey.keySpendingLimitTotal)) {
-    intervalSpends.push({ entityId: id, entityType: 'key', scope: 'total', limit: apiKey.keySpendingLimitTotal })
-  }
+  const intervalSpends: SpendScope[] = [
+    { entityId: keyId, entityType: 'key', scope: 'daily', scopeInterval: day, limit: keyDaily },
+    { entityId: keyId, entityType: 'key', scope: 'weekly', scopeInterval: eow, limit: keyWeekly },
+    { entityId: keyId, entityType: 'key', scope: 'monthly', scopeInterval: eom, limit: keyMonthly },
+    { entityId: keyId, entityType: 'key', scope: 'total', limit: keyTotal },
+    { entityId: project, entityType: 'project', scope: 'daily', scopeInterval: day, limit: projectDaily },
+    { entityId: project, entityType: 'project', scope: 'weekly', scopeInterval: eow, limit: projectWeekly },
+    { entityId: project, entityType: 'project', scope: 'monthly', scopeInterval: eom, limit: projectMonthly },
+  ]
 
   if (user != null) {
-    if (isSet(apiKey.userSpendingLimitDaily)) {
-      intervalSpends.push({
-        entityId: user,
-        entityType: 'user',
-        scope: 'daily',
-        scopeInterval: day,
-        limit: apiKey.userSpendingLimitDaily,
-      })
-    }
-    if (isSet(apiKey.userSpendingLimitWeekly)) {
-      intervalSpends.push({
-        entityId: user,
-        entityType: 'user',
-        scope: 'weekly',
-        scopeInterval: endOfWeek,
-        limit: apiKey.userSpendingLimitWeekly,
-      })
-    }
-    if (isSet(apiKey.userSpendingLimitMonthly)) {
-      intervalSpends.push({
-        entityId: user,
-        entityType: 'user',
-        scope: 'monthly',
-        scopeInterval: endOfMonth,
-        limit: apiKey.userSpendingLimitMonthly,
-      })
-    }
+    intervalSpends.push(
+      { entityId: user, entityType: 'user', scope: 'daily', scopeInterval: day, limit: userDaily },
+      { entityId: user, entityType: 'user', scope: 'weekly', scopeInterval: eow, limit: userWeekly },
+      { entityId: user, entityType: 'user', scope: 'monthly', scopeInterval: eom, limit: userMonthly },
+    )
   }
 
-  if (isSet(apiKey.projectSpendingLimitDaily)) {
-    intervalSpends.push({
-      entityId: project,
-      entityType: 'project',
-      scope: 'daily',
-      scopeInterval: day,
-      limit: apiKey.projectSpendingLimitDaily,
-    })
-  }
-  if (isSet(apiKey.projectSpendingLimitWeekly)) {
-    intervalSpends.push({
-      entityId: project,
-      entityType: 'project',
-      scope: 'weekly',
-      scopeInterval: endOfWeek,
-      limit: apiKey.projectSpendingLimitWeekly,
-    })
-  }
-  if (isSet(apiKey.projectSpendingLimitMonthly)) {
-    intervalSpends.push({
-      entityId: project,
-      entityType: 'project',
-      scope: 'monthly',
-      scopeInterval: endOfMonth,
-      limit: apiKey.projectSpendingLimitMonthly,
-    })
-  }
   const scopesExceeded = await options.limitDb.incrementSpend(intervalSpends, spend)
 
   if (scopesExceeded.length) {
@@ -282,8 +225,4 @@ function calculateExpirationTtl(ex: ExceededScope[]): number | undefined {
   }
   d.setHours(23, 59, 59)
   return Math.floor((d.getTime() - now.getTime()) / 1000)
-}
-
-function isSet(value: number | null | undefined): value is number {
-  return value !== null && value !== undefined
 }

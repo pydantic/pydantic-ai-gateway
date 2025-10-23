@@ -27,16 +27,34 @@ describe('openai', () => {
     const limitDb = new LimitDbD1(env.limitsDB)
     const projectStatus = await limitDb.spendStatus('project')
     expect(projectStatus).toEqual([
+      {
+        entityId: IDS.projectDefault,
+        limit: null,
+        scope: 'daily',
+        scopeInterval: expect.any(Date),
+        spend: 0.00013875,
+      },
+      {
+        entityId: IDS.projectDefault,
+        limit: null,
+        scope: 'weekly',
+        scopeInterval: expect.any(Date),
+        spend: 0.00013875,
+      },
       { entityId: IDS.projectDefault, limit: 4, scope: 'monthly', scopeInterval: expect.any(Date), spend: 0.00013875 },
     ])
     const userStatus = await limitDb.spendStatus('user')
     expect(userStatus).toEqual([
+      { entityId: IDS.userDefault, limit: null, scope: 'daily', scopeInterval: expect.any(Date), spend: 0.00013875 },
       { entityId: IDS.userDefault, limit: 3, scope: 'weekly', scopeInterval: expect.any(Date), spend: 0.00013875 },
+      { entityId: IDS.userDefault, limit: null, scope: 'monthly', scopeInterval: expect.any(Date), spend: 0.00013875 },
     ])
     const keyStatus = await limitDb.spendStatus('key')
-    expect(keyStatus.sort((a, b) => a.limit - b.limit)).toEqual([
-      { entityId: IDS.keyHealthy, limit: 1, scope: 'daily', scopeInterval: expect.any(Date), spend: 0.00013875 },
-      { entityId: IDS.keyHealthy, limit: 2, scope: 'total', scopeInterval: null, spend: 0.00013875 },
+    expect(keyStatus.sort((a, b) => (a.limit ?? 0) - (b.limit ?? 0))).toEqual([
+      { entityId: 4, scope: 'weekly', limit: null, scopeInterval: expect.any(Date), spend: 0.00013875 },
+      { entityId: 4, scope: 'monthly', limit: null, scopeInterval: expect.any(Date), spend: 0.00013875 },
+      { entityId: 4, scope: 'daily', limit: 1, scopeInterval: expect.any(Date), spend: 0.00013875 },
+      { entityId: 4, scope: 'total', limit: 2, scopeInterval: null, spend: 0.00013875 },
     ])
   })
 

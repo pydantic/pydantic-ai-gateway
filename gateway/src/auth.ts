@@ -9,7 +9,14 @@ export async function apiKeyAuth(
   ctx: ExecutionContext,
   options: GatewayOptions,
 ): Promise<ApiKeyInfo> {
-  const authHeader = request.headers.get('authorization')
+  const authorization = request.headers.get('authorization')
+  const xApiKey = request.headers.get('x-api-key')
+
+  if (authorization && xApiKey) {
+    throw new ResponseError(401, 'Unauthorized - Both Authorization and X-API-Key headers are present, use only one')
+  }
+
+  const authHeader = authorization || xApiKey
 
   let key: string
   if (authHeader) {

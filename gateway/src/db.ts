@@ -147,42 +147,48 @@ RETURNING entityType, scope, spend > spendingLimit as ex;`,
   }
 
   async updateProjectLimits(projectId: number, { daily, weekly, monthly }: LimitUpdate) {
+    const stmts = []
     if (daily) {
-      await this.updateSpend(daily, 'project', projectId, 'daily')
+      stmts.push(this.updateSpend(daily, 'project', projectId, 'daily'))
     }
     if (weekly) {
-      await this.updateSpend(weekly, 'project', projectId, 'weekly')
+      stmts.push(this.updateSpend(weekly, 'project', projectId, 'weekly'))
     }
     if (monthly) {
-      await this.updateSpend(monthly, 'project', projectId, 'monthly')
+      stmts.push(this.updateSpend(monthly, 'project', projectId, 'monthly'))
     }
+    await this.db.batch(stmts)
   }
 
   async updateUserLimits(userId: number, { daily, weekly, monthly }: LimitUpdate) {
+    const stmts = []
     if (daily) {
-      await this.updateSpend(daily, 'user', userId, 'daily')
+      stmts.push(this.updateSpend(daily, 'user', userId, 'daily'))
     }
     if (weekly) {
-      await this.updateSpend(weekly, 'user', userId, 'weekly')
+      stmts.push(this.updateSpend(weekly, 'user', userId, 'weekly'))
     }
     if (monthly) {
-      await this.updateSpend(monthly, 'user', userId, 'monthly')
+      stmts.push(this.updateSpend(monthly, 'user', userId, 'monthly'))
     }
+    await this.db.batch(stmts)
   }
 
   async updateKeyLimits(keyId: number, { daily, weekly, monthly, total }: KeyLimitUpdate) {
+    const stmts = []
     if (daily) {
-      await this.updateSpend(daily, 'key', keyId, 'daily')
+      stmts.push(this.updateSpend(daily, 'key', keyId, 'daily'))
     }
     if (weekly) {
-      await this.updateSpend(weekly, 'key', keyId, 'weekly')
+      stmts.push(this.updateSpend(weekly, 'key', keyId, 'weekly'))
     }
     if (monthly) {
-      await this.updateSpend(monthly, 'key', keyId, 'monthly')
+      stmts.push(this.updateSpend(monthly, 'key', keyId, 'monthly'))
     }
     if (total) {
-      await this.updateSpend(total, 'key', keyId, 'total')
+      stmts.push(this.updateSpend(total, 'key', keyId, 'total'))
     }
+    await this.db.batch(stmts)
   }
 
   async spendStatus(entityType: EntityType, entityId?: number): Promise<SpendStatus[]> {
@@ -218,11 +224,10 @@ WHERE entityType = ? ${entityIdClause}
     }))
   }
 
-  protected async updateSpend(limit: number, entityType: EntityType, entityId: number, scope: Scope) {
-    await this.db
+  protected updateSpend(limit: number, entityType: EntityType, entityId: number, scope: Scope): D1PreparedStatement {
+    return this.db
       .prepare(`UPDATE spend SET spendingLimit = ? WHERE entityType = ? AND entityId = ? and scope = ?`)
       .bind(limit, entityTypeLookup[entityType], entityId, scopeLookup[scope])
-      .run()
   }
 }
 

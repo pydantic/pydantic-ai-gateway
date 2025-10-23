@@ -317,9 +317,5 @@ function getBaseUrl({ baseUrl, writeToken }: OtelSettings): string | undefined {
     return baseUrl
   }
   const regionMatch = /pylf_v\d_(us|eu)/.exec(writeToken)
-  if (regionMatch) {
-    const region = regionMatch[1]
-    return region === 'us' ? 'https://api.logfire.dev' : 'https://api-eu.logfire.dev'
-  }
-  logfire.warning('unable to infer OTel base URL', { writeToken: writeToken.substring(0, 7) })
+  return regionMatch?.[1] === 'eu' ? 'https://api-eu.logfire.dev' : 'https://api.logfire.dev'
 }

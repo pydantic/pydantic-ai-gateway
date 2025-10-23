@@ -346,6 +346,78 @@ exports[`openai > openai chat > span 1`] = `
 ]
 `;
 
+exports[`openai > openai chat stream > chunks 1`] = `[]`;
+
+exports[`openai > openai chat stream > span 1`] = `
+[
+  {
+    "key": "logfire.msg",
+    "value": {
+      "stringValue": "chat gpt-5",
+    },
+  },
+  {
+    "key": "logfire.json_schema",
+    "value": {
+      "stringValue": "{"type":"object","properties":{"gen_ai.operation.name":{"type":"string"},"gen_ai.request.model":{"type":"string"},"gen_ai.system":{"type":"string"},"http.response.status_code":{"type":"number"},"http.request.body.text":{"type":"string"}}}",
+    },
+  },
+  {
+    "key": "logfire.level_num",
+    "value": {
+      "intValue": 9,
+    },
+  },
+  {
+    "key": "gen_ai.operation.name",
+    "value": {
+      "stringValue": "chat",
+    },
+  },
+  {
+    "key": "gen_ai.request.model",
+    "value": {
+      "stringValue": "gpt-5",
+    },
+  },
+  {
+    "key": "gen_ai.system",
+    "value": {
+      "stringValue": "openai",
+    },
+  },
+  {
+    "key": "http.response.status_code",
+    "value": {
+      "intValue": 200,
+    },
+  },
+  {
+    "key": "http.request.body.text",
+    "value": {
+      "stringValue": "{
+  "stream": true,
+  "model": "gpt-5",
+  "messages": [
+    {
+      "role": "developer",
+      "content": "You are a helpful assistant."
+    },
+    {
+      "role": "user",
+      "content": "What is the capital of France?"
+    }
+  ],
+  "max_completion_tokens": 1024,
+  "stream_options": {
+    "include_usage": true
+  }
+}",
+    },
+  },
+]
+`;
+
 exports[`openai > openai responses > llm 1`] = `
 {
   "background": false,

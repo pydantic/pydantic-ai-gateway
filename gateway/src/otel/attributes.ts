@@ -1,16 +1,36 @@
 import type {
   DefaultProviderProxy,
   ProxyInvalidRequest,
+  ProxyStreamingSuccess,
   ProxySuccess,
   ProxyUnexpectedResponse,
+  ProxyWhitelistedEndpoint,
 } from '../providers/default'
 import type { Attributes, Level } from '.'
 import type { InputMessages, OutputMessages, TextPart } from './genai'
 
 export function genAiOtelAttributes(
-  result: ProxySuccess | ProxyInvalidRequest | ProxyUnexpectedResponse,
+  result:
+    | ProxySuccess
+    | ProxyInvalidRequest
+    | ProxyUnexpectedResponse
+    | ProxyStreamingSuccess
+    | ProxyWhitelistedEndpoint,
   provider: DefaultProviderProxy,
 ): [string, Attributes, Level] {
+  // TODO(Marcelo): This needs to be refactored.
+  if ('httpStatusCode' in result) {
+    const { requestBody, httpStatusCode, responseBody } = result
+    return [
+      'whitelisted endpoint',
+      {
+        'http.response.status_code': httpStatusCode,
+        'http.request.body.text': requestBody,
+        'http.response.body.text': responseBody,
+      },
+      'info',
+    ]
+  }
   const { requestModel } = result
   let spanName: string
   let attributes: Attributes = {
@@ -22,22 +42,34 @@ export function genAiOtelAttributes(
   let level: Level = 'info'
 
   if ('successStatus' in result) {
-    const { requestBody, successStatus, responseModel, usage, responseBody, otelAttributes } = result
-    spanName = `chat ${responseModel}`
-    attributes = {
-      ...attributes,
-      ...otelAttributes,
-      'http.response.status_code': successStatus,
-      'http.request.body.text': requestBody,
-      'http.response.body.text': responseBody,
-      'gen_ai.response.model': responseModel,
-      'gen_ai.usage.input_tokens': usage.input_tokens,
-      'gen_ai.usage.cache_read_tokens': usage.cache_read_tokens,
-      'gen_ai.usage.cache_write_tokens': usage.cache_write_tokens,
-      'gen_ai.usage.output_tokens': usage.output_tokens,
-      'gen_ai.usage.input_audio_tokens': usage.input_audio_tokens,
-      'gen_ai.usage.cache_audio_read_tokens': usage.cache_audio_read_tokens,
-      'gen_ai.usage.output_audio_tokens': usage.output_audio_tokens,
+    if ('responseStream' in result) {
+      // Streaming response - we don't have usage/model yet
+      const { requestBody, successStatus, otelAttributes } = result
+      spanName = `chat ${requestModel ?? 'streaming'}`
+      attributes = {
+        ...attributes,
+        ...otelAttributes,
+        'http.response.status_code': successStatus,
+        'http.request.body.text': requestBody,
+      }
+    } else {
+      const { requestBody, successStatus, responseModel, usage, responseBody, otelAttributes } = result
+      spanName = `chat ${responseModel}`
+      attributes = {
+        ...attributes,
+        ...otelAttributes,
+        'http.response.status_code': successStatus,
+        'http.request.body.text': requestBody,
+        'http.response.body.text': responseBody,
+        'gen_ai.response.model': responseModel,
+        'gen_ai.usage.input_tokens': usage.input_tokens,
+        'gen_ai.usage.cache_read_tokens': usage.cache_read_tokens,
+        'gen_ai.usage.cache_write_tokens': usage.cache_write_tokens,
+        'gen_ai.usage.output_tokens': usage.output_tokens,
+        'gen_ai.usage.input_audio_tokens': usage.input_audio_tokens,
+        'gen_ai.usage.cache_audio_read_tokens': usage.cache_audio_read_tokens,
+        'gen_ai.usage.output_audio_tokens': usage.output_audio_tokens,
+      }
     }
   } else if ('error' in result) {
     const { error } = result

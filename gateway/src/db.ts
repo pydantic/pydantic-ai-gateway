@@ -201,7 +201,13 @@ WHERE entityType = ? ${entityIdClause}
 `,
       )
       .bind(...params)
-      .run<{ entityId: number; scope: 1 | 2 | 3 | 4; scopeInterval: number; spendingLimit: number; spend: number }>()
+      .run<{
+        entityId: number
+        scope: 1 | 2 | 3 | 4
+        scopeInterval: number
+        spendingLimit: number | null
+        spend: number
+      }>()
 
     return results.map(({ entityId, scope, scopeInterval, spendingLimit, spend }) => ({
       entityId,

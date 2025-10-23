@@ -23,7 +23,6 @@ export class AnthropicProvider extends DefaultProviderProxy {
     // Special handling for count_tokens endpoint
     // Ref: https://docs.claude.com/en/docs/build-with-claude/token-counting
     // Response format: { "input_tokens": number }
-    console.log('DEBUG extractUsage - restOfPath:', this.restOfPath)
     if (this.restOfPath === 'v1/messages/count_tokens') {
       const bodyText = await response.text()
       try {
@@ -48,14 +47,10 @@ export class AnthropicProvider extends DefaultProviderProxy {
   protected otelAttributes(requestBody: JsonData, responseBody: JsonData): GenAIAttributes {
     // count_tokens responses don't have the same structure as messages,
     // so we return empty attributes for this endpoint
-    console.log('DEBUG otelAttributes - restOfPath:', this.restOfPath)
-    console.log('DEBUG otelAttributes - check result:', this.restOfPath === 'v1/messages/count_tokens')
     if (this.restOfPath === 'v1/messages/count_tokens') {
-      console.log('DEBUG: Returning empty attributes for count_tokens')
       return {}
     }
 
-    console.log('DEBUG: Calling super.otelAttributes')
     return super.otelAttributes(requestBody, responseBody)
   }
 }

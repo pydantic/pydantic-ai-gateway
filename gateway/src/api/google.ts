@@ -9,7 +9,15 @@ import type {
   ToolConfig,
 } from '@google/genai'
 import * as logfire from '@pydantic/logfire-api'
-import type { ChatMessage, InputMessages, MessagePart, OutputMessage, OutputMessages, TextPart } from '../otel/genai'
+import type {
+  ChatMessage,
+  InputMessages,
+  JsonValue,
+  MessagePart,
+  OutputMessage,
+  OutputMessages,
+  TextPart,
+} from '../otel/genai'
 import { isMapping, type JsonData } from '../providers/default'
 import { BaseAPI } from './base'
 
@@ -73,23 +81,25 @@ function mapContent(content: Content): ChatMessage {
         type: 'tool_call',
         id: part.functionCall.id,
         name: part.functionCall.name,
-        arguments: part.functionCall.args,
+        arguments: part.functionCall.args as JsonValue | undefined,
       })
     } else if (part.functionResponse) {
       parts.push({
         type: 'tool_call_response',
         id: part.functionResponse.id,
         name: part.functionResponse.name,
-        result: part.functionResponse.response,
+        result: part.functionResponse.response as JsonValue | undefined,
       })
     } else if (part.fileData) {
-      parts.push({ type: 'file_data', file_uri: part.fileData.fileUri, mime_type: part.fileData.mimeType })
+      parts.push({
+        type: 'file_data',
+        file_uri: part.fileData.fileUri,
+        mime_type: part.fileData.mimeType ?? undefined,
+      })
     } else if (part.inlineData) {
       parts.push({ type: 'blob', mime_type: part.inlineData.mimeType, data: part.inlineData.data })
-    } else if (part.thought) {
-      parts.push({ type: 'thinking', content: part.thought })
     } else if (part.thoughtSignature) {
-      parts.push({ type: 'thought_signature', signature: part.thoughtSignature })
+      parts.push({ type: 'thinking', content: part.thoughtSignature })
     }
 
     // Any other part present should logfire.warning.

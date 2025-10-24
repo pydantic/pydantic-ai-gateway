@@ -98,9 +98,17 @@ describe('key status', () => {
     expect(JSON.parse(apiValue!)).toMatchSnapshot('kv-value')
 
     const limitDb = new LimitDbD1(env.limitsDB)
-    expect(await limitDb.spendStatus('key')).toMatchSnapshot('key-spends')
-    expect(await limitDb.spendStatus('user')).toMatchSnapshot('user-spends')
-    expect(await limitDb.spendStatus('project')).toMatchSnapshot('project-spends')
+
+    // The scopeInterval changes every day, so we've set it to undefined for the snapshot.
+    expect((await limitDb.spendStatus('key')).map((s) => ({ ...s, scopeInterval: undefined }))).toMatchSnapshot(
+      'key-spends',
+    )
+    expect((await limitDb.spendStatus('user')).map((s) => ({ ...s, scopeInterval: undefined }))).toMatchSnapshot(
+      'user-spends',
+    )
+    expect((await limitDb.spendStatus('project')).map((s) => ({ ...s, scopeInterval: undefined }))).toMatchSnapshot(
+      'project-spends',
+    )
 
     expect(disableEvents).toEqual([
       {

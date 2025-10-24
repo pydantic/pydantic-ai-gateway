@@ -13,15 +13,15 @@ export interface TextPart {
 
 export interface ToolCallPart {
   type: 'tool_call'
-  id: string
-  name: string
+  id?: string
+  name?: string
   arguments?: JsonValue
   builtin?: boolean
 }
 
 export interface ToolCallResponsePart {
   type: 'tool_call_response'
-  id: string
+  id?: string
   name?: string
   result?: JsonValue
   builtin?: boolean
@@ -30,14 +30,14 @@ export interface ToolCallResponsePart {
 // https://github.com/open-telemetry/semantic-conventions/pull/2754/
 export interface BlobPart {
   type: 'blob'
-  mime_type: string
-  data: string
+  mime_type?: string
+  data?: string
 }
 
 export interface FileDataPart {
   type: 'file_data'
   mime_type?: string
-  file_uri: string
+  file_uri?: string
 }
 
 export interface ThinkingPart {
@@ -45,9 +45,9 @@ export interface ThinkingPart {
   content?: string
 }
 
-export interface GenericPart {
-  type: string
-  [key: string]: unknown
+export interface UnknownPart {
+  type: 'unknown'
+  part: { [key: string]: unknown }
 }
 
 export type MessagePart =
@@ -57,7 +57,7 @@ export type MessagePart =
   | BlobPart
   | FileDataPart
   | ThinkingPart
-  | GenericPart
+  | UnknownPart
 
 export type Role = 'system' | 'user' | 'assistant' | 'tool'
 

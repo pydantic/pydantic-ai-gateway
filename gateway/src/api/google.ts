@@ -83,9 +83,9 @@ function mapContent(content: Content): ChatMessage {
         result: part.functionResponse.response,
       })
     } else if (part.fileData) {
-      parts.push({ type: 'file_data', file_uri: part.fileData.fileUri, mime_type: part.fileData.mimeType })
+      parts.push({ type: 'file', file_uri: part.fileData.fileUri, mime_type: part.fileData.mimeType })
     } else if (part.inlineData) {
-      parts.push({ type: 'blob', mime_type: part.inlineData.mimeType, data: part.inlineData.data })
+      parts.push({ type: 'blob', mime_type: part.inlineData.mimeType, content: part.inlineData.data })
     } else if (part.thought) {
       parts.push({ type: 'thinking', content: part.thought })
     } else if (part.thoughtSignature) {

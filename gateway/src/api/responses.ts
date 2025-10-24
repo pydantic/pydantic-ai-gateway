@@ -116,7 +116,7 @@ function mapInputMessage(input: ResponseInputItem): ChatMessage {
         }
       })
       .with({ type: 'function_call_output' }, (_input) => {
-        return { role: 'tool', parts: [{ type: 'tool_call_response', id: _input.call_id, result: _input.output }] }
+        return { role: 'user', parts: [{ type: 'tool_call_response', id: _input.call_id, result: _input.output }] }
       })
       .with({ type: 'reasoning' }, (_input) => {
         return {
@@ -144,7 +144,7 @@ function mapInputMessage(input: ResponseInputItem): ChatMessage {
           { type: 'item_reference' },
         ),
         (_input) => {
-          return { role: 'tool', parts: [{ type: 'unknown', part: { ..._input } }] }
+          return { role: 'assistant', parts: [{ type: 'unknown', part: { ..._input } }] }
         },
       )
       .with({ content: P.string }, (_input) => {

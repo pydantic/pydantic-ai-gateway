@@ -44,7 +44,8 @@ export class ChatCompletionAPI extends BaseAPI<ChatCompletionCreateParams, ChatC
 }
 
 export function mapInputMessage(message: ChatCompletionMessageParam): ChatMessage {
-  const role = message.role === 'function' ? 'tool' : message.role === 'developer' ? 'system' : message.role
+  let role = message.role === 'function' || message.role === 'tool' ? 'assistant' : message.role
+  role = role === 'developer' ? 'system' : role
   return { role, parts: mapInputParts(message.content) }
 }
 

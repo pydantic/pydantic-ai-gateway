@@ -59,7 +59,7 @@ export type MessagePart =
   | ThinkingPart
   | UnknownPart
 
-export type Role = 'system' | 'user' | 'assistant' | 'tool'
+export type Role = 'system' | 'user' | 'assistant'
 
 export interface ChatMessage {
   role: Role

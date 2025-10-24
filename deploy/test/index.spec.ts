@@ -91,7 +91,10 @@ describe('deploy', () => {
     const response = await SELF.fetch('https://example.com/status/', { headers: { authorization: 'testing' } })
     expect(response.status).toBe(200)
     let data = await response.text()
-    data = data.replace(/\d{4}-\d{2}-\d{2}/g, 'YYYY-MM-DD').trim()
+    data = data
+      .replace(/\d{4}-\d{2}-\d{2}/g, 'YYYY-MM-DD')
+      .replace(/"raw": ?\d+/g, '"raw": 123456')
+      .trim()
     expect(data).toMatchSnapshot('status-after-requests')
   })
 })

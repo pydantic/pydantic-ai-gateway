@@ -354,21 +354,30 @@ exports[`deploy > should call openai via gateway > status-after-requests 1`] = `
         {
           "entityId": 1,
           "scope": "daily",
-          "scopeInterval": "YYYY-MM-DDT00:00:00.000Z",
+          "scopeInterval": {
+            "date": "YYYY-MM-DDT00:00:00.000Z",
+            "raw": 123456
+          },
           "limit": 1,
           "spend": 0.00077875
         },
         {
           "entityId": 1,
           "scope": "weekly",
-          "scopeInterval": "YYYY-MM-DDT00:00:00.000Z",
+          "scopeInterval": {
+            "date": "YYYY-MM-DDT00:00:00.000Z",
+            "raw": 123456
+          },
           "limit": null,
           "spend": 0.00077875
         },
         {
           "entityId": 1,
           "scope": "monthly",
-          "scopeInterval": "YYYY-MM-DDT00:00:00.000Z",
+          "scopeInterval": {
+            "date": "YYYY-MM-DDT00:00:00.000Z",
+            "raw": 123456
+          },
           "limit": null,
           "spend": 0.00077875
         }
@@ -381,21 +390,30 @@ exports[`deploy > should call openai via gateway > status-after-requests 1`] = `
             {
               "entityId": 2,
               "scope": "daily",
-              "scopeInterval": "YYYY-MM-DDT00:00:00.000Z",
+              "scopeInterval": {
+                "date": "YYYY-MM-DDT00:00:00.000Z",
+                "raw": 123456
+              },
               "limit": null,
               "spend": 0.00077875
             },
             {
               "entityId": 2,
               "scope": "weekly",
-              "scopeInterval": "YYYY-MM-DDT00:00:00.000Z",
+              "scopeInterval": {
+                "date": "YYYY-MM-DDT00:00:00.000Z",
+                "raw": 123456
+              },
               "limit": 2,
               "spend": 0.00077875
             },
             {
               "entityId": 2,
               "scope": "monthly",
-              "scopeInterval": "YYYY-MM-DDT00:00:00.000Z",
+              "scopeInterval": {
+                "date": "YYYY-MM-DDT00:00:00.000Z",
+                "raw": 123456
+              },
               "limit": null,
               "spend": 0.00077875
             }
@@ -413,21 +431,30 @@ exports[`deploy > should call openai via gateway > status-after-requests 1`] = `
         {
           "entityId": 3,
           "scope": "daily",
-          "scopeInterval": "YYYY-MM-DDT00:00:00.000Z",
+          "scopeInterval": {
+            "date": "YYYY-MM-DDT00:00:00.000Z",
+            "raw": 123456
+          },
           "limit": null,
           "spend": 0.00077875
         },
         {
           "entityId": 3,
           "scope": "weekly",
-          "scopeInterval": "YYYY-MM-DDT00:00:00.000Z",
+          "scopeInterval": {
+            "date": "YYYY-MM-DDT00:00:00.000Z",
+            "raw": 123456
+          },
           "limit": null,
           "spend": 0.00077875
         },
         {
           "entityId": 3,
           "scope": "monthly",
-          "scopeInterval": "YYYY-MM-DDT00:00:00.000Z",
+          "scopeInterval": {
+            "date": "YYYY-MM-DDT00:00:00.000Z",
+            "raw": 123456
+          },
           "limit": 3,
           "spend": 0.00077875
         },

@@ -84,7 +84,7 @@ const DISTANT_FUTURE = 65536
 export interface SpendStatus {
   entityId: number
   scope: Scope
-  scopeInterval: Date | null
+  scopeInterval: { date: Date; raw: number } | null
   limit: number | null
   spend: number
 }
@@ -226,7 +226,7 @@ WHERE entityType = ? ${entityIdClause}
     return results.map(({ entityId, scope, scopeInterval, spendingLimit, spend }) => ({
       entityId,
       scope: reverseScopeLookup[scope],
-      scopeInterval: scopeInterval === DISTANT_FUTURE ? null : intAsDate(scopeInterval),
+      scopeInterval: scopeInterval === DISTANT_FUTURE ? null : { date: intAsDate(scopeInterval), raw: scopeInterval },
       limit: spendingLimit,
       spend,
     }))
@@ -250,7 +250,8 @@ interface ScopeIntervals {
   eom: number
 }
 
-export function scopeIntervals(): ScopeIntervals {
+// get the current scope intervals for day, end of week, and end of month
+export function currentScopeIntervals(): ScopeIntervals {
   const now = new Date()
   const day = new Date(now)
   day.setUTCHours(0, 0, 0, 0)

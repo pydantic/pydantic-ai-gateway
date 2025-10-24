@@ -1,5 +1,5 @@
 import { createExecutionContext, env, waitOnExecutionContext } from 'cloudflare:test'
-import { gatewayFetch, LimitDbD1, type Middleware, type Next } from '@pydantic/ai-gateway'
+import { gatewayFetch, LimitDbD1, type Middleware, type Next, type SpendStatus } from '@pydantic/ai-gateway'
 import OpenAI from 'openai'
 import { describe, expect, it } from 'vitest'
 import type {
@@ -99,16 +99,18 @@ describe('key status', () => {
 
     const limitDb = new LimitDbD1(env.limitsDB)
 
-    // The scopeInterval changes every day, so we've set it to undefined for the snapshot.
-    expect((await limitDb.spendStatus('key')).map((s) => ({ ...s, scopeInterval: undefined }))).toMatchSnapshot(
-      'key-spends',
-    )
-    expect((await limitDb.spendStatus('user')).map((s) => ({ ...s, scopeInterval: undefined }))).toMatchSnapshot(
-      'user-spends',
-    )
-    expect((await limitDb.spendStatus('project')).map((s) => ({ ...s, scopeInterval: undefined }))).toMatchSnapshot(
-      'project-spends',
-    )
+    // The scopeInterval changes every day, hence this hack
+    function patchSpends(spends: SpendStatus[]): SpendStatus[] {
+      return JSON.parse(
+        JSON.stringify(spends)
+          .replace(/\d{4}-\d{2}-\d{2}/g, 'YYYY-MM-DD')
+          .replace(/"raw":\d+/g, '"raw":123456'),
+      )
+    }
+
+    expect(patchSpends(await limitDb.spendStatus('key'))).toMatchSnapshot('key-spends')
+    expect(patchSpends(await limitDb.spendStatus('user'))).toMatchSnapshot('user-spends')
+    expect(patchSpends(await limitDb.spendStatus('project'))).toMatchSnapshot('project-spends')
 
     expect(disableEvents).toEqual([
       {

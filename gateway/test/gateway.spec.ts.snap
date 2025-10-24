@@ -47,28 +47,37 @@ exports[`key status > should change key status if limit is exceeded > key-spends
     "entityId": 6,
     "limit": 0.01,
     "scope": "daily",
-    "scopeInterval": undefined,
+    "scopeInterval": {
+      "date": "YYYY-MM-DDT00:00:00.000Z",
+      "raw": 123456,
+    },
     "spend": 0.018000000000000002,
   },
   {
     "entityId": 6,
     "limit": null,
     "scope": "weekly",
-    "scopeInterval": undefined,
+    "scopeInterval": {
+      "date": "YYYY-MM-DDT00:00:00.000Z",
+      "raw": 123456,
+    },
     "spend": 0.018000000000000002,
   },
   {
     "entityId": 6,
     "limit": null,
     "scope": "monthly",
-    "scopeInterval": undefined,
+    "scopeInterval": {
+      "date": "YYYY-MM-DDT00:00:00.000Z",
+      "raw": 123456,
+    },
     "spend": 0.018000000000000002,
   },
   {
     "entityId": 6,
     "limit": null,
     "scope": "total",
-    "scopeInterval": undefined,
+    "scopeInterval": null,
     "spend": 0.018000000000000002,
   },
 ]
@@ -100,21 +109,30 @@ exports[`key status > should change key status if limit is exceeded > project-sp
     "entityId": 2,
     "limit": null,
     "scope": "daily",
-    "scopeInterval": undefined,
+    "scopeInterval": {
+      "date": "YYYY-MM-DDT00:00:00.000Z",
+      "raw": 123456,
+    },
     "spend": 0.018000000000000002,
   },
   {
     "entityId": 2,
     "limit": null,
     "scope": "weekly",
-    "scopeInterval": undefined,
+    "scopeInterval": {
+      "date": "YYYY-MM-DDT00:00:00.000Z",
+      "raw": 123456,
+    },
     "spend": 0.018000000000000002,
   },
   {
     "entityId": 2,
     "limit": 4,
     "scope": "monthly",
-    "scopeInterval": undefined,
+    "scopeInterval": {
+      "date": "YYYY-MM-DDT00:00:00.000Z",
+      "raw": 123456,
+    },
     "spend": 0.018000000000000002,
   },
 ]

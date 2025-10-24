@@ -1,7 +1,7 @@
 import * as logfire from '@pydantic/logfire-api'
 import type { GatewayOptions } from '.'
 import { apiKeyAuth, setApiKeyCache } from './auth'
-import { type ExceededScope, endOfMonth, endOfWeek, type SpendScope, scopeIntervals } from './db'
+import { currentScopeIntervals, type ExceededScope, endOfMonth, endOfWeek, type SpendScope } from './db'
 import { OtelTrace } from './otel'
 import { genAiOtelAttributes } from './otel/attributes'
 import { getProvider } from './providers'
@@ -148,7 +148,7 @@ export async function disableApiKey(
 }
 
 async function recordSpend(apiKey: ApiKeyInfo, spend: number, options: GatewayOptions): Promise<void> {
-  const { day, eow, eom } = scopeIntervals()
+  const { day, eow, eom } = currentScopeIntervals()
 
   const {
     id: keyId,

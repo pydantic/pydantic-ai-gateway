@@ -20,3 +20,4 @@ deploy/worker-configuration.d.ts
 *.egg-info/
 
 .DS_Store
+*.py[cod]

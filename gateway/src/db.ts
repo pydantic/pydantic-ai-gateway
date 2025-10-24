@@ -71,6 +71,7 @@ export interface ExceededScope {
 }
 
 export interface LimitUpdate {
+  // null means remove the limit, undefined means don't change the limit
   daily?: number | null
   weekly?: number | null
   monthly?: number | null

@@ -95,7 +95,7 @@ function mapParts(content: string | BetaContentBlockParam[] | BetaContentBlock[]
           builtin: !(part.type === 'tool_result'),
         })
       } else {
-        parts.push({ ...part })
+        parts.push({ type: 'unknown', part: { ...part } })
       }
     }
   }

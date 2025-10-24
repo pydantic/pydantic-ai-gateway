@@ -508,7 +508,7 @@ exports[`openai > openai responses > span 1`] = `
   {
     "key": "logfire.json_schema",
     "value": {
-      "stringValue": "{"type":"object","properties":{"gen_ai.operation.name":{"type":"string"},"gen_ai.request.model":{"type":"string"},"gen_ai.system":{"type":"string"},"gen_ai.request.max_tokens":{},"gen_ai.request.top_k":{},"gen_ai.request.top_p":{},"gen_ai.request.temperature":{},"gen_ai.request.stop_sequences":{},"gen_ai.request.seed":{},"gen_ai.response.finish_reasons":{},"gen_ai.response.id":{},"gen_ai.input.messages":{},"gen_ai.output.messages":{},"gen_ai.system_instructions":{},"http.response.status_code":{"type":"number"},"http.request.body.text":{"type":"string"},"http.response.body.text":{"type":"string"},"gen_ai.response.model":{"type":"string"},"gen_ai.usage.input_tokens":{"type":"number"},"gen_ai.usage.cache_read_tokens":{"type":"number"},"gen_ai.usage.cache_write_tokens":{},"gen_ai.usage.output_tokens":{"type":"number"},"gen_ai.usage.input_audio_tokens":{},"gen_ai.usage.cache_audio_read_tokens":{},"gen_ai.usage.output_audio_tokens":{}}}",
+      "stringValue": "{"type":"object","properties":{"gen_ai.operation.name":{"type":"string"},"gen_ai.request.model":{"type":"string"},"gen_ai.system":{"type":"string"},"gen_ai.request.max_tokens":{},"gen_ai.request.top_k":{},"gen_ai.request.top_p":{},"gen_ai.request.temperature":{},"gen_ai.request.stop_sequences":{},"gen_ai.request.seed":{},"gen_ai.response.finish_reasons":{},"gen_ai.response.id":{"type":"string"},"gen_ai.input.messages":{},"gen_ai.output.messages":{},"gen_ai.system_instructions":{},"http.response.status_code":{"type":"number"},"http.request.body.text":{"type":"string"},"http.response.body.text":{"type":"string"},"gen_ai.response.model":{"type":"string"},"gen_ai.usage.input_tokens":{"type":"number"},"gen_ai.usage.cache_read_tokens":{"type":"number"},"gen_ai.usage.cache_write_tokens":{},"gen_ai.usage.output_tokens":{"type":"number"},"gen_ai.usage.input_audio_tokens":{},"gen_ai.usage.cache_audio_read_tokens":{},"gen_ai.usage.output_audio_tokens":{}}}",
     },
   },
   {
@@ -565,15 +565,125 @@ exports[`openai > openai responses > span 1`] = `
   },
   {
     "key": "gen_ai.response.id",
-    "value": {},
+    "value": {
+      "stringValue": "resp_09a44ce9e90671e50068f24e5bb64c81929ad39ba693aa7353",
+    },
   },
   {
     "key": "gen_ai.input.messages",
-    "value": {},
+    "value": {
+      "arrayValue": {
+        "values": [
+          {
+            "kvlistValue": {
+              "values": [
+                {
+                  "key": "role",
+                  "value": {
+                    "stringValue": "user",
+                  },
+                },
+                {
+                  "key": "parts",
+                  "value": {
+                    "arrayValue": {
+                      "values": [
+                        {
+                          "kvlistValue": {
+                            "values": [
+                              {
+                                "key": "type",
+                                "value": {
+                                  "stringValue": "text",
+                                },
+                              },
+                              {
+                                "key": "content",
+                                "value": {
+                                  "stringValue": "what color is the sky?",
+                                },
+                              },
+                            ],
+                          },
+                        },
+                      ],
+                    },
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
   },
   {
     "key": "gen_ai.output.messages",
-    "value": {},
+    "value": {
+      "arrayValue": {
+        "values": [
+          {
+            "kvlistValue": {
+              "values": [
+                {
+                  "key": "role",
+                  "value": {
+                    "stringValue": "assistant",
+                  },
+                },
+                {
+                  "key": "parts",
+                  "value": {
+                    "arrayValue": {
+                      "values": [],
+                    },
+                  },
+                },
+              ],
+            },
+          },
+          {
+            "kvlistValue": {
+              "values": [
+                {
+                  "key": "role",
+                  "value": {
+                    "stringValue": "assistant",
+                  },
+                },
+                {
+                  "key": "parts",
+                  "value": {
+                    "arrayValue": {
+                      "values": [
+                        {
+                          "kvlistValue": {
+                            "values": [
+                              {
+                                "key": "type",
+                                "value": {
+                                  "stringValue": "text",
+                                },
+                              },
+                              {
+                                "key": "content",
+                                "value": {
+                                  "stringValue": "Usually blue (daytime), but it varies—red/orange at sunrise/sunset, gray when cloudy, black at night.",
+                                },
+                              },
+                            ],
+                          },
+                        },
+                      ],
+                    },
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
   },
   {
     "key": "gen_ai.system_instructions",
@@ -787,7 +897,7 @@ exports[`openai > openai responses with builtin tools > span 1`] = `
   {
     "key": "logfire.json_schema",
     "value": {
-      "stringValue": "{"type":"object","properties":{"gen_ai.operation.name":{"type":"string"},"gen_ai.request.model":{"type":"string"},"gen_ai.system":{"type":"string"},"gen_ai.request.max_tokens":{},"gen_ai.request.top_k":{},"gen_ai.request.top_p":{},"gen_ai.request.temperature":{},"gen_ai.request.stop_sequences":{},"gen_ai.request.seed":{},"gen_ai.response.finish_reasons":{},"gen_ai.response.id":{},"gen_ai.input.messages":{},"gen_ai.output.messages":{},"gen_ai.system_instructions":{},"http.response.status_code":{"type":"number"},"http.request.body.text":{"type":"string"},"http.response.body.text":{"type":"string"},"gen_ai.response.model":{"type":"string"},"gen_ai.usage.input_tokens":{"type":"number"},"gen_ai.usage.cache_read_tokens":{"type":"number"},"gen_ai.usage.cache_write_tokens":{},"gen_ai.usage.output_tokens":{"type":"number"},"gen_ai.usage.input_audio_tokens":{},"gen_ai.usage.cache_audio_read_tokens":{},"gen_ai.usage.output_audio_tokens":{}}}",
+      "stringValue": "{"type":"object","properties":{"gen_ai.operation.name":{"type":"string"},"gen_ai.request.model":{"type":"string"},"gen_ai.system":{"type":"string"},"gen_ai.request.max_tokens":{},"gen_ai.request.top_k":{},"gen_ai.request.top_p":{},"gen_ai.request.temperature":{},"gen_ai.request.stop_sequences":{},"gen_ai.request.seed":{},"gen_ai.response.finish_reasons":{},"gen_ai.response.id":{"type":"string"},"gen_ai.input.messages":{},"gen_ai.output.messages":{},"gen_ai.system_instructions":{},"http.response.status_code":{"type":"number"},"http.request.body.text":{"type":"string"},"http.response.body.text":{"type":"string"},"gen_ai.response.model":{"type":"string"},"gen_ai.usage.input_tokens":{"type":"number"},"gen_ai.usage.cache_read_tokens":{"type":"number"},"gen_ai.usage.cache_write_tokens":{},"gen_ai.usage.output_tokens":{"type":"number"},"gen_ai.usage.input_audio_tokens":{},"gen_ai.usage.cache_audio_read_tokens":{},"gen_ai.usage.output_audio_tokens":{}}}",
     },
   },
   {
@@ -844,15 +954,420 @@ exports[`openai > openai responses with builtin tools > span 1`] = `
   },
   {
     "key": "gen_ai.response.id",
-    "value": {},
+    "value": {
+      "stringValue": "resp_0f2450162f078cbb0068f24e8955748191affcd350ce641443",
+    },
   },
   {
     "key": "gen_ai.input.messages",
-    "value": {},
+    "value": {
+      "arrayValue": {
+        "values": [
+          {
+            "kvlistValue": {
+              "values": [
+                {
+                  "key": "role",
+                  "value": {
+                    "stringValue": "user",
+                  },
+                },
+                {
+                  "key": "parts",
+                  "value": {
+                    "arrayValue": {
+                      "values": [
+                        {
+                          "kvlistValue": {
+                            "values": [
+                              {
+                                "key": "type",
+                                "value": {
+                                  "stringValue": "text",
+                                },
+                              },
+                              {
+                                "key": "content",
+                                "value": {
+                                  "stringValue": "what's the root square of 123902139123?",
+                                },
+                              },
+                            ],
+                          },
+                        },
+                      ],
+                    },
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
   },
   {
     "key": "gen_ai.output.messages",
-    "value": {},
+    "value": {
+      "arrayValue": {
+        "values": [
+          {
+            "kvlistValue": {
+              "values": [
+                {
+                  "key": "role",
+                  "value": {
+                    "stringValue": "assistant",
+                  },
+                },
+                {
+                  "key": "parts",
+                  "value": {
+                    "arrayValue": {
+                      "values": [],
+                    },
+                  },
+                },
+              ],
+            },
+          },
+          {
+            "kvlistValue": {
+              "values": [
+                {
+                  "key": "role",
+                  "value": {
+                    "stringValue": "assistant",
+                  },
+                },
+                {
+                  "key": "parts",
+                  "value": {
+                    "arrayValue": {
+                      "values": [
+                        {
+                          "kvlistValue": {
+                            "values": [
+                              {
+                                "key": "type",
+                                "value": {
+                                  "stringValue": "unknown",
+                                },
+                              },
+                              {
+                                "key": "part",
+                                "value": {
+                                  "kvlistValue": {
+                                    "values": [
+                                      {
+                                        "key": "id",
+                                        "value": {
+                                          "stringValue": "ci_0f2450162f078cbb0068f24e8fb0b48191989caf7138433a8c",
+                                        },
+                                      },
+                                      {
+                                        "key": "type",
+                                        "value": {
+                                          "stringValue": "code_interpreter_call",
+                                        },
+                                      },
+                                      {
+                                        "key": "status",
+                                        "value": {
+                                          "stringValue": "completed",
+                                        },
+                                      },
+                                      {
+                                        "key": "code",
+                                        "value": {
+                                          "stringValue": "import math, decimal
+n = 123_902_139_123
+sqrt_double = math.sqrt(n)
+sqrt_double",
+                                        },
+                                      },
+                                      {
+                                        "key": "container_id",
+                                        "value": {
+                                          "stringValue": "cntr_68f24e8ca224819197e2720a847ba8680321606c6212ad11",
+                                        },
+                                      },
+                                      {
+                                        "key": "outputs",
+                                        "value": {},
+                                      },
+                                    ],
+                                  },
+                                },
+                              },
+                            ],
+                          },
+                        },
+                      ],
+                    },
+                  },
+                },
+              ],
+            },
+          },
+          {
+            "kvlistValue": {
+              "values": [
+                {
+                  "key": "role",
+                  "value": {
+                    "stringValue": "assistant",
+                  },
+                },
+                {
+                  "key": "parts",
+                  "value": {
+                    "arrayValue": {
+                      "values": [],
+                    },
+                  },
+                },
+              ],
+            },
+          },
+          {
+            "kvlistValue": {
+              "values": [
+                {
+                  "key": "role",
+                  "value": {
+                    "stringValue": "assistant",
+                  },
+                },
+                {
+                  "key": "parts",
+                  "value": {
+                    "arrayValue": {
+                      "values": [
+                        {
+                          "kvlistValue": {
+                            "values": [
+                              {
+                                "key": "type",
+                                "value": {
+                                  "stringValue": "unknown",
+                                },
+                              },
+                              {
+                                "key": "part",
+                                "value": {
+                                  "kvlistValue": {
+                                    "values": [
+                                      {
+                                        "key": "id",
+                                        "value": {
+                                          "stringValue": "ci_0f2450162f078cbb0068f24e9681e88191b6cacce605376df4",
+                                        },
+                                      },
+                                      {
+                                        "key": "type",
+                                        "value": {
+                                          "stringValue": "code_interpreter_call",
+                                        },
+                                      },
+                                      {
+                                        "key": "status",
+                                        "value": {
+                                          "stringValue": "completed",
+                                        },
+                                      },
+                                      {
+                                        "key": "code",
+                                        "value": {
+                                          "stringValue": "351997**2, 351998**2, n",
+                                        },
+                                      },
+                                      {
+                                        "key": "container_id",
+                                        "value": {
+                                          "stringValue": "cntr_68f24e8ca224819197e2720a847ba8680321606c6212ad11",
+                                        },
+                                      },
+                                      {
+                                        "key": "outputs",
+                                        "value": {},
+                                      },
+                                    ],
+                                  },
+                                },
+                              },
+                            ],
+                          },
+                        },
+                      ],
+                    },
+                  },
+                },
+              ],
+            },
+          },
+          {
+            "kvlistValue": {
+              "values": [
+                {
+                  "key": "role",
+                  "value": {
+                    "stringValue": "assistant",
+                  },
+                },
+                {
+                  "key": "parts",
+                  "value": {
+                    "arrayValue": {
+                      "values": [],
+                    },
+                  },
+                },
+              ],
+            },
+          },
+          {
+            "kvlistValue": {
+              "values": [
+                {
+                  "key": "role",
+                  "value": {
+                    "stringValue": "assistant",
+                  },
+                },
+                {
+                  "key": "parts",
+                  "value": {
+                    "arrayValue": {
+                      "values": [
+                        {
+                          "kvlistValue": {
+                            "values": [
+                              {
+                                "key": "type",
+                                "value": {
+                                  "stringValue": "unknown",
+                                },
+                              },
+                              {
+                                "key": "part",
+                                "value": {
+                                  "kvlistValue": {
+                                    "values": [
+                                      {
+                                        "key": "id",
+                                        "value": {
+                                          "stringValue": "ci_0f2450162f078cbb0068f24e9de0048191809cdecc84494a8d",
+                                        },
+                                      },
+                                      {
+                                        "key": "type",
+                                        "value": {
+                                          "stringValue": "code_interpreter_call",
+                                        },
+                                      },
+                                      {
+                                        "key": "status",
+                                        "value": {
+                                          "stringValue": "completed",
+                                        },
+                                      },
+                                      {
+                                        "key": "code",
+                                        "value": {
+                                          "stringValue": "from decimal import Decimal, getcontext
+getcontext().prec = 50
+n = Decimal(123902139123)
+sqrt_dec = n.sqrt()
+sqrt_dec",
+                                        },
+                                      },
+                                      {
+                                        "key": "container_id",
+                                        "value": {
+                                          "stringValue": "cntr_68f24e8ca224819197e2720a847ba8680321606c6212ad11",
+                                        },
+                                      },
+                                      {
+                                        "key": "outputs",
+                                        "value": {},
+                                      },
+                                    ],
+                                  },
+                                },
+                              },
+                            ],
+                          },
+                        },
+                      ],
+                    },
+                  },
+                },
+              ],
+            },
+          },
+          {
+            "kvlistValue": {
+              "values": [
+                {
+                  "key": "role",
+                  "value": {
+                    "stringValue": "assistant",
+                  },
+                },
+                {
+                  "key": "parts",
+                  "value": {
+                    "arrayValue": {
+                      "values": [],
+                    },
+                  },
+                },
+              ],
+            },
+          },
+          {
+            "kvlistValue": {
+              "values": [
+                {
+                  "key": "role",
+                  "value": {
+                    "stringValue": "assistant",
+                  },
+                },
+                {
+                  "key": "parts",
+                  "value": {
+                    "arrayValue": {
+                      "values": [
+                        {
+                          "kvlistValue": {
+                            "values": [
+                              {
+                                "key": "type",
+                                "value": {
+                                  "stringValue": "text",
+                                },
+                              },
+                              {
+                                "key": "content",
+                                "value": {
+                                  "stringValue": "The square root of 123902139123 is approximately 351,997.3566988820443179179564.",
+                                },
+                              },
+                            ],
+                          },
+                        },
+                      ],
+                    },
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
   },
   {
     "key": "gen_ai.system_instructions",

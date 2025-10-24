@@ -34,18 +34,18 @@ export class ChatCompletionAPI extends BaseAPI<ChatCompletionCreateParams, ChatC
     return responseBody.choices.map((choice) => choice.finish_reason)
   }
 
-  inputMessages = (_requestBody: ChatCompletionCreateParams): InputMessages | undefined => {
-    return _requestBody.messages.map(mapInputMessage)
+  inputMessages = (requestBody: ChatCompletionCreateParams): InputMessages | undefined => {
+    return requestBody.messages.map(mapInputMessage)
   }
 
-  outputMessages = (_responseBody: ChatCompletion): OutputMessages | undefined => {
-    return _responseBody.choices.map(mapOutputMessage)
+  outputMessages = (responseBody: ChatCompletion): OutputMessages | undefined => {
+    return responseBody.choices.map(mapOutputMessage)
   }
 }
 
 export function mapInputMessage(message: ChatCompletionMessageParam): ChatMessage {
-  // TODO(Marcelo): There's probably a cuter way to do this.
-  const role = message.role === 'function' ? 'tool' : message.role === 'developer' ? 'system' : message.role
+  let role = message.role === 'function' || message.role === 'tool' ? 'assistant' : message.role
+  role = role === 'developer' ? 'system' : role
   return { role, parts: mapInputParts(message.content) }
 }
 
@@ -71,7 +71,7 @@ function mapInputParts(content: ChatCompletionMessageParam['content']): MessageP
         const mimeType = part.file.filename ? mime.contentType(part.file.filename) || undefined : undefined
         parts.push({ type: 'blob', mime_type: mimeType, data: part.file.file_data })
       } else {
-        parts.push({ ...part })
+        parts.push({ type: 'unknown', part: { ...part } })
       }
     }
   }

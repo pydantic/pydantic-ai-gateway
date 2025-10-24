@@ -14,7 +14,8 @@
     "@pydantic/genai-prices": "^0.0.35",
     "@pydantic/logfire-api": "^0.9.0",
     "eventsource-parser": "^3.0.6",
-    "mime-types": "^3.0.1"
+    "mime-types": "^3.0.1",
+    "ts-pattern": "^5.8.0"
   },
   "devDependencies": {
     "@anthropic-ai/sdk": "^0.62.0",

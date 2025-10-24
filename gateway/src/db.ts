@@ -254,7 +254,7 @@ interface ScopeIntervals {
 export function scopeIntervals(): ScopeIntervals {
   const now = new Date()
   const day = new Date(now)
-  day.setHours(0, 0, 0, 0)
+  day.setUTCHours(0, 0, 0, 0)
   return { day: dateAsInt(day), eow: dateAsInt(endOfWeek(now)), eom: dateAsInt(endOfMonth(now)) }
 }
 
@@ -269,15 +269,15 @@ function intAsDate(days: number): Date {
 
 /** get the last day of the week, e.g. "this Sunday" */
 export function endOfWeek(date: Date): Date {
-  const dayOfWeek = date.getDay()
+  const dayOfWeek = date.getUTCDay()
   const d = new Date(date)
-  d.setHours(0, 0, 0, 0)
+  d.setUTCHours(0, 0, 0, 0)
   if (dayOfWeek === 0) {
     // Sunday -  return this date as it's the end of the week
     return d
   } else {
     // else if not Sunday, add enough days to get to the next Sunday
-    d.setDate(d.getDate() + (7 - dayOfWeek))
+    d.setUTCDate(d.getUTCDate() + (7 - dayOfWeek))
     return d
   }
 }
@@ -285,7 +285,7 @@ export function endOfWeek(date: Date): Date {
 /** get the last day of the month */
 export function endOfMonth(date: Date): Date {
   const d = new Date(date)
-  d.setHours(0, 0, 0, 0)
-  d.setMonth(d.getMonth() + 1, 0)
+  d.setUTCHours(0, 0, 0, 0)
+  d.setUTCMonth(d.getUTCMonth() + 1, 0)
   return d
 }

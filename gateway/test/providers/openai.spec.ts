@@ -31,29 +31,71 @@ describe('openai', () => {
         entityId: IDS.projectDefault,
         limit: null,
         scope: 'daily',
-        scopeInterval: expect.any(Date),
+        scopeInterval: { date: expect.any(Date), raw: expect.any(Number) },
         spend: 0.00013875,
       },
       {
         entityId: IDS.projectDefault,
         limit: null,
         scope: 'weekly',
-        scopeInterval: expect.any(Date),
+        scopeInterval: { date: expect.any(Date), raw: expect.any(Number) },
         spend: 0.00013875,
       },
-      { entityId: IDS.projectDefault, limit: 4, scope: 'monthly', scopeInterval: expect.any(Date), spend: 0.00013875 },
+      {
+        entityId: IDS.projectDefault,
+        limit: 4,
+        scope: 'monthly',
+        scopeInterval: { date: expect.any(Date), raw: expect.any(Number) },
+        spend: 0.00013875,
+      },
     ])
     const userStatus = await limitDb.spendStatus('user')
     expect(userStatus).toEqual([
-      { entityId: IDS.userDefault, limit: null, scope: 'daily', scopeInterval: expect.any(Date), spend: 0.00013875 },
-      { entityId: IDS.userDefault, limit: 3, scope: 'weekly', scopeInterval: expect.any(Date), spend: 0.00013875 },
-      { entityId: IDS.userDefault, limit: null, scope: 'monthly', scopeInterval: expect.any(Date), spend: 0.00013875 },
+      {
+        entityId: IDS.userDefault,
+        limit: null,
+        scope: 'daily',
+        scopeInterval: { date: expect.any(Date), raw: expect.any(Number) },
+        spend: 0.00013875,
+      },
+      {
+        entityId: IDS.userDefault,
+        limit: 3,
+        scope: 'weekly',
+        scopeInterval: { date: expect.any(Date), raw: expect.any(Number) },
+        spend: 0.00013875,
+      },
+      {
+        entityId: IDS.userDefault,
+        limit: null,
+        scope: 'monthly',
+        scopeInterval: { date: expect.any(Date), raw: expect.any(Number) },
+        spend: 0.00013875,
+      },
     ])
     const keyStatus = await limitDb.spendStatus('key')
     expect(keyStatus.sort((a, b) => (a.limit ?? 0) - (b.limit ?? 0))).toEqual([
-      { entityId: 4, scope: 'weekly', limit: null, scopeInterval: expect.any(Date), spend: 0.00013875 },
-      { entityId: 4, scope: 'monthly', limit: null, scopeInterval: expect.any(Date), spend: 0.00013875 },
-      { entityId: 4, scope: 'daily', limit: 1, scopeInterval: expect.any(Date), spend: 0.00013875 },
+      {
+        entityId: 4,
+        scope: 'weekly',
+        limit: null,
+        scopeInterval: { date: expect.any(Date), raw: expect.any(Number) },
+        spend: 0.00013875,
+      },
+      {
+        entityId: 4,
+        scope: 'monthly',
+        limit: null,
+        scopeInterval: { date: expect.any(Date), raw: expect.any(Number) },
+        spend: 0.00013875,
+      },
+      {
+        entityId: 4,
+        scope: 'daily',
+        limit: 1,
+        scopeInterval: { date: expect.any(Date), raw: expect.any(Number) },
+        spend: 0.00013875,
+      },
       { entityId: 4, scope: 'total', limit: 2, scopeInterval: null, spend: 0.00013875 },
     ])
   })

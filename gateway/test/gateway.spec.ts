@@ -99,10 +99,16 @@ describe('key status', () => {
 
     const limitDb = new LimitDbD1(env.limitsDB)
 
+    const keySpends = await limitDb.spendStatus('key')
+    expect(keySpends.map(({ scope, scopeInterval }) => ({ scope, scopeInterval }))).toEqual([
+      { scope: 'daily', scopeInterval: { date: expect.any(Date), raw: expect.any(Number) } },
+      { scope: 'weekly', scopeInterval: { date: expect.any(Date), raw: expect.any(Number) } },
+      { scope: 'monthly', scopeInterval: { date: expect.any(Date), raw: expect.any(Number) } },
+      { scope: 'total', scopeInterval: null },
+    ])
+
     // The scopeInterval changes every day, so we've set it to undefined for the snapshot.
-    expect((await limitDb.spendStatus('key')).map((s) => ({ ...s, scopeInterval: undefined }))).toMatchSnapshot(
-      'key-spends',
-    )
+    expect(keySpends.map((s) => ({ ...s, scopeInterval: undefined }))).toMatchSnapshot('key-spends')
     expect((await limitDb.spendStatus('user')).map((s) => ({ ...s, scopeInterval: undefined }))).toMatchSnapshot(
       'user-spends',
     )

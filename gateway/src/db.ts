@@ -71,12 +71,13 @@ export interface ExceededScope {
 }
 
 export interface LimitUpdate {
-  daily?: number
-  weekly?: number
-  monthly?: number
+  // null means remove the limit, undefined means don't change the limit
+  daily?: number | null
+  weekly?: number | null
+  monthly?: number | null
 }
 
-export type KeyLimitUpdate = LimitUpdate & { total?: number }
+export type KeyLimitUpdate = LimitUpdate & { total?: number | null }
 // 65536 equates to 2149-06-07
 const DISTANT_FUTURE = 65536
 
@@ -148,47 +149,54 @@ RETURNING entityType, scope, spend > spendingLimit as ex;`,
 
   async updateProjectLimits(projectId: number, { daily, weekly, monthly }: LimitUpdate) {
     const stmts = []
-    if (daily) {
+    if (daily !== undefined) {
+      // Check undefined, not truthiness
       stmts.push(this.updateSpend(daily, 'project', projectId, 'daily'))
     }
-    if (weekly) {
+    if (weekly !== undefined) {
       stmts.push(this.updateSpend(weekly, 'project', projectId, 'weekly'))
     }
-    if (monthly) {
+    if (monthly !== undefined) {
       stmts.push(this.updateSpend(monthly, 'project', projectId, 'monthly'))
     }
-    await this.db.batch(stmts)
+    if (stmts.length > 0) {
+      await this.db.batch(stmts)
+    }
   }
 
   async updateUserLimits(userId: number, { daily, weekly, monthly }: LimitUpdate) {
     const stmts = []
-    if (daily) {
+    if (daily !== undefined) {
       stmts.push(this.updateSpend(daily, 'user', userId, 'daily'))
     }
-    if (weekly) {
+    if (weekly !== undefined) {
       stmts.push(this.updateSpend(weekly, 'user', userId, 'weekly'))
     }
-    if (monthly) {
+    if (monthly !== undefined) {
       stmts.push(this.updateSpend(monthly, 'user', userId, 'monthly'))
     }
-    await this.db.batch(stmts)
+    if (stmts.length > 0) {
+      await this.db.batch(stmts)
+    }
   }
 
   async updateKeyLimits(keyId: number, { daily, weekly, monthly, total }: KeyLimitUpdate) {
     const stmts = []
-    if (daily) {
+    if (daily !== undefined) {
       stmts.push(this.updateSpend(daily, 'key', keyId, 'daily'))
     }
-    if (weekly) {
+    if (weekly !== undefined) {
       stmts.push(this.updateSpend(weekly, 'key', keyId, 'weekly'))
     }
-    if (monthly) {
+    if (monthly !== undefined) {
       stmts.push(this.updateSpend(monthly, 'key', keyId, 'monthly'))
     }
-    if (total) {
+    if (total !== undefined) {
       stmts.push(this.updateSpend(total, 'key', keyId, 'total'))
     }
-    await this.db.batch(stmts)
+    if (stmts.length > 0) {
+      await this.db.batch(stmts)
+    }
   }
 
   async spendStatus(entityType: EntityType, entityId?: number): Promise<SpendStatus[]> {
@@ -224,7 +232,12 @@ WHERE entityType = ? ${entityIdClause}
     }))
   }
 
-  protected updateSpend(limit: number, entityType: EntityType, entityId: number, scope: Scope): D1PreparedStatement {
+  protected updateSpend(
+    limit: number | null,
+    entityType: EntityType,
+    entityId: number,
+    scope: Scope,
+  ): D1PreparedStatement {
     return this.db
       .prepare(`UPDATE spend SET spendingLimit = ? WHERE entityType = ? AND entityId = ? and scope = ?`)
       .bind(limit, entityTypeLookup[entityType], entityId, scopeLookup[scope])
@@ -240,7 +253,7 @@ interface ScopeIntervals {
 export function scopeIntervals(): ScopeIntervals {
   const now = new Date()
   const day = new Date(now)
-  day.setHours(0, 0, 0, 0)
+  day.setUTCHours(0, 0, 0, 0)
   return { day: dateAsInt(day), eow: dateAsInt(endOfWeek(now)), eom: dateAsInt(endOfMonth(now)) }
 }
 
@@ -255,15 +268,15 @@ function intAsDate(days: number): Date {
 
 /** get the last day of the week, e.g. "this Sunday" */
 export function endOfWeek(date: Date): Date {
-  const dayOfWeek = date.getDay()
+  const dayOfWeek = date.getUTCDay()
   const d = new Date(date)
-  d.setHours(0, 0, 0, 0)
+  d.setUTCHours(0, 0, 0, 0)
   if (dayOfWeek === 0) {
     // Sunday -  return this date as it's the end of the week
     return d
   } else {
     // else if not Sunday, add enough days to get to the next Sunday
-    d.setDate(d.getDate() + (7 - dayOfWeek))
+    d.setUTCDate(d.getUTCDate() + (7 - dayOfWeek))
     return d
   }
 }
@@ -271,7 +284,7 @@ export function endOfWeek(date: Date): Date {
 /** get the last day of the month */
 export function endOfMonth(date: Date): Date {
   const d = new Date(date)
-  d.setHours(0, 0, 0, 0)
-  d.setMonth(d.getMonth() + 1, 0)
+  d.setUTCHours(0, 0, 0, 0)
+  d.setUTCMonth(d.getUTCMonth() + 1, 0)
   return d
 }

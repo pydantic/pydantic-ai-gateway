@@ -316,9 +316,6 @@ function getBaseUrl({ baseUrl, writeToken }: OtelSettings): string | undefined {
   if (baseUrl) {
     return baseUrl
   }
-  const regionMatch = /pylf_v\d_(us|eu|stagingeu)/.exec(writeToken)
-  if (regionMatch?.[1] === 'stagingeu') {
-    return 'https://logfire-eu.pydantic.info'
-  }
+  const regionMatch = /pylf_v\d_(us|eu)/.exec(writeToken)
   return regionMatch?.[1] === 'eu' ? 'https://api-eu.logfire.dev' : 'https://api.logfire.dev'
 }

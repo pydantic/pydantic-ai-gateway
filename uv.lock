@@ -362,6 +362,7 @@ dependencies = [
     { name = "boto3" },
     { name = "devtools" },
     { name = "logfire", extra = ["httpx"] },
+    { name = "mypy-boto3-bedrock-runtime" },
     { name = "opentelemetry-instrumentation-botocore" },
     { name = "pydantic-ai" },
     { name = "types-boto3", extra = ["bedrock-runtime"] },
@@ -372,9 +373,10 @@ requires-dist = [
     { name = "boto3", specifier = ">=1.40.28" },
     { name = "devtools", specifier = ">=0.12.2" },
     { name = "logfire", extras = ["httpx"], specifier = ">=4.3.3" },
+    { name = "mypy-boto3-bedrock-runtime" },
     { name = "opentelemetry-instrumentation-botocore", specifier = ">=0.57b0" },
     { name = "pydantic-ai", git = "https://github.com/pydantic/pydantic-ai.git?branch=main" },
-    { name = "types-boto3", extras = ["bedrock-runtime"], specifier = ">=1.40.60" },
+    { name = "types-boto3", extras = ["bedrock-runtime"] },
 ]
 
 [[package]]
@@ -951,6 +953,15 @@ wheels = [
     { url = "https://files.pythonhosted.org/packages/b2/0a/2436550b1520091af0600dff547913cb2d66fbac27a8c33bc1b1bccd8d98/multidict-6.6.4-cp313-cp313t-win_amd64.whl", hash = "sha256:6d46a180acdf6e87cc41dc15d8f5c2986e1e8739dc25dbb7dac826731ef381a4", size = 53100, upload-time = "2025-08-11T12:08:13.823Z" },
     { url = "https://files.pythonhosted.org/packages/97/ea/43ac51faff934086db9c072a94d327d71b7d8b40cd5dcb47311330929ef0/multidict-6.6.4-cp313-cp313t-win_arm64.whl", hash = "sha256:756989334015e3335d087a27331659820d53ba432befdef6a718398b0a8493ad", size = 45501, upload-time = "2025-08-11T12:08:15.173Z" },
     { url = "https://files.pythonhosted.org/packages/fd/69/b547032297c7e63ba2af494edba695d781af8a0c6e89e4d06cf848b21d80/multidict-6.6.4-py3-none-any.whl", hash = "sha256:27d8f8e125c07cb954e54d75d04905a9bba8a439c1d84aca94949d4d03d8601c", size = 12313, upload-time = "2025-08-11T12:08:46.891Z" },
+]
+
+[[package]]
+name = "mypy-boto3-bedrock-runtime"
+version = "1.40.41"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/c7/38/79989f7bce998776ed1a01c17f3f58e7bc6f5fc2bcbdff929701526fa2f1/mypy_boto3_bedrock_runtime-1.40.41.tar.gz", hash = "sha256:ee9bda6d6d478c8d0995e84e884bdf1798e150d437974ae27c175774a58ffaa5", size = 28333, upload-time = "2025-09-29T19:26:04.804Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/3d/6c/d3431dadf473bb76aa590b1ed8cc91726a48b029b542eff9d3024f2d70b9/mypy_boto3_bedrock_runtime-1.40.41-py3-none-any.whl", hash = "sha256:d65dff200986ff06c6b3579ddcea102555f2067c8987fca379bf4f9ed8ba3121", size = 34181, upload-time = "2025-09-29T19:26:01.898Z" },
 ]
 
 [[package]]

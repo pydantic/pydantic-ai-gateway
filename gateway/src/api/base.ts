@@ -18,6 +18,7 @@ export abstract class BaseAPI<RequestBody, ResponseBody>
     this.requestModel = requestModel
   }
 
+  // TODO(Marcelo): This is not used anywhere yet! We should remove this note when we use it.
   extractUsage(responseBody: ResponseBody): Usage | undefined {
     const provider = findProvider({ providerId: this.providerId })
     if (!provider) {

@@ -2,6 +2,9 @@
 name = "pydantic-ai-gateway"
 version = "0.0.0"
 requires-python = ">=3.12"
+dependencies = [
+    "mypy-boto3-bedrock-runtime>=1.40.41",
+]
 
 [dependency-groups]
 dev = ["pyright>=1.1.341", "ruff>=0.12.8"]

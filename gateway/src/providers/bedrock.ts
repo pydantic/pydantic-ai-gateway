@@ -5,6 +5,11 @@ import { ConverseAPI } from '../api/bedrock'
 import { DefaultProviderProxy } from './default'
 
 export class BedrockProvider extends DefaultProviderProxy {
+  // We are calling it 'default', but we could also call it 'converse'.
+  // The most correct would be 'invoke' instead of 'anthropic', but then we wouldn't be able to differentiate
+  // between others like Chat Completions API.
+  flavor: 'default' | 'anthropic' = 'default'
+
   // TODO(Marcelo): Add Anthropic handler here.
   protected modelAPI(): ModelAPI | undefined {
     return new ConverseAPI('bedrock')
@@ -26,9 +31,22 @@ export class BedrockProvider extends DefaultProviderProxy {
     }
   }
 
+  /**
+   * Infer the model from the URL.
+   * It can either be the Converse API or the Invoke API.
+   * @param url - The URL to infer the model from.
+   * @returns The model or null if it cannot be inferred.
+   */
   protected inferModel(url: string): string | null {
-    const m = url.match(/model\/(.+?)\/converse/)
-    return m?.[1] ?? null
+    const m = url.match(/model\/(.+?)\/(converse|invoke)/)
+    const model = m?.[1]
+    const api = m?.[2]
+
+    if (api === 'invoke' && model?.startsWith('anthropic.')) {
+      this.flavor = 'anthropic'
+    }
+
+    return model ?? null
   }
 
   inferResponseModel(): string | null {

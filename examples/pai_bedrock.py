@@ -1,6 +1,6 @@
 import os
 
-import boto3  # type: ignore[reportUnknownReturnType]
+import boto3
 import logfire
 from opentelemetry.instrumentation.botocore import BotocoreInstrumentor  # type: ignore[reportUnknownReturnType]
 from pydantic_ai import Agent
@@ -19,7 +19,7 @@ os.environ['AWS_BEARER_TOKEN_BEDROCK'] = api_key
 
 
 client = boto3.client('bedrock-runtime', endpoint_url='http://localhost:8787/bedrock')  # type: ignore[reportUnknownReturnType]
-provider = BedrockProvider(bedrock_client=client)  # type: ignore[reportUnknownArgumentType]
+provider = BedrockProvider(bedrock_client=client)
 model = BedrockConverseModel('amazon.nova-micro-v1:0', provider=provider)
 
 

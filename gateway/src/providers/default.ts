@@ -370,7 +370,18 @@ export class DefaultProviderProxy {
     responseHeaders: Headers,
   ): ProxyStreamingSuccess | ProxyInvalidRequest | ProxyUnexpectedResponse {
     const textEncoder = new TextDecoder()
-    const sse_parser = createParser({ onEvent: this.onEvent.bind(this) })
+    const sse_parser = createParser({
+      onEvent: (event: EventSourceMessage) => {
+        // This is how chat completions streaming responses end.
+        if (event.data === '[DONE]') return
+        try {
+          const data = JSON.parse(event.data)
+          this.handleData(data)
+        } catch (error) {
+          logfire.reportError('Error handling data', error as Error)
+        }
+      },
+    })
 
     if (!response.body) {
       return { requestModel, error: 'No response body' }
@@ -404,19 +415,6 @@ export class DefaultProviderProxy {
       responseHeaders,
       responseStream,
       waitCompletion,
-    }
-  }
-
-  protected onEvent(event: EventSourceMessage) {
-    try {
-      const data = JSON.parse(event.data)
-      try {
-        this.handleData(data)
-      } catch (error) {
-        logfire.reportError('Error handling data', error as Error)
-      }
-    } catch (error) {
-      logfire.reportError('Error parsing data', error as Error)
     }
   }
 

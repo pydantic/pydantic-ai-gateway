@@ -1,8 +1,9 @@
+
 import * as logfire from '@pydantic/logfire-api'
 import type { ModelAPI } from '../api'
 import { AnthropicAPI } from '../api/anthropic'
 import { ConverseAPI } from '../api/bedrock'
-import { DefaultProviderProxy } from './default'
+import { DefaultProviderProxy, type JsonData } from './default'
 
 export class BedrockProvider extends DefaultProviderProxy {
   // We are calling it 'default', but we could also call it 'converse'.
@@ -17,6 +18,21 @@ export class BedrockProvider extends DefaultProviderProxy {
     } else {
       return new ConverseAPI('bedrock')
     }
+  }
+
+  async prepRequest() {
+    const requestBodyText = await this.request.text()
+    let requestBodyData: JsonData
+    try {
+      requestBodyData = JSON.parse(requestBodyText)
+    } catch (_error) {
+      return { error: 'invalid request JSON' }
+    }
+    const m = this.inferModel(this.restOfPath)
+    if (m) {
+      return { requestBodyText, requestBodyData, requestModel: m[1] }
+    }
+    return { error: 'unable to find model in path' }
   }
 
   /**

@@ -5,7 +5,7 @@
 import type { ConverseRequest, ConverseResponse } from '@aws-sdk/client-bedrock-runtime'
 import { BaseAPI } from './base'
 
-export class BedrockAPI extends BaseAPI<ConverseRequest, ConverseResponse> {
+export class ConverseAPI extends BaseAPI<ConverseRequest, ConverseResponse> {
   defaultBaseUrl = 'https://bedrock-runtime.us-east-1.amazonaws.com'
 
   requestStopSequences = (requestBody: ConverseRequest): string[] | undefined => {

@@ -8,6 +8,6 @@ export class GroqProvider extends DefaultProviderProxy {
   defaultBaseUrl = 'https://api.groq.com'
 
   protected modelAPI(): ModelAPI | undefined {
-    return new ChatCompletionAPI()
+    return new ChatCompletionAPI('groq')
   }
 }

@@ -1,4 +1,3 @@
-
 import * as logfire from '@pydantic/logfire-api'
 import type { ModelAPI } from '../api'
 import { AnthropicAPI } from '../api/anthropic'

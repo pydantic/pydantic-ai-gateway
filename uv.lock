@@ -954,15 +954,6 @@ wheels = [
 ]
 
 [[package]]
-name = "mypy-boto3-bedrock-runtime"
-version = "1.40.41"
-source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/c7/38/79989f7bce998776ed1a01c17f3f58e7bc6f5fc2bcbdff929701526fa2f1/mypy_boto3_bedrock_runtime-1.40.41.tar.gz", hash = "sha256:ee9bda6d6d478c8d0995e84e884bdf1798e150d437974ae27c175774a58ffaa5", size = 28333, upload-time = "2025-09-29T19:26:04.804Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/3d/6c/d3431dadf473bb76aa590b1ed8cc91726a48b029b542eff9d3024f2d70b9/mypy_boto3_bedrock_runtime-1.40.41-py3-none-any.whl", hash = "sha256:d65dff200986ff06c6b3579ddcea102555f2067c8987fca379bf4f9ed8ba3121", size = 34181, upload-time = "2025-09-29T19:26:01.898Z" },
-]
-
-[[package]]
 name = "nexus-rpc"
 version = "1.1.0"
 source = { registry = "https://pypi.org/simple" }
@@ -1322,9 +1313,6 @@ dependencies = [
 name = "pydantic-ai-gateway"
 version = "0.0.0"
 source = { virtual = "." }
-dependencies = [
-    { name = "mypy-boto3-bedrock-runtime" },
-]
 
 [package.dev-dependencies]
 dev = [
@@ -1333,7 +1321,6 @@ dev = [
 ]
 
 [package.metadata]
-requires-dist = [{ name = "mypy-boto3-bedrock-runtime", specifier = ">=1.40.41" }]
 
 [package.metadata.requires-dev]
 dev = [

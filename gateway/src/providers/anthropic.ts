@@ -10,7 +10,7 @@ export class AnthropicProvider extends DefaultProviderProxy {
   }
 
   protected modelAPI(): ModelAPI | undefined {
-    return new AnthropicAPI()
+    return new AnthropicAPI('anthropic')
   }
 
   // biome-ignore lint/suspicious/useAwait: required by google auth

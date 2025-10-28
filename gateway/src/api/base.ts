@@ -1,12 +1,34 @@
+import { extractUsage, findProvider, type Usage } from '@pydantic/genai-prices'
 import type { GenAIAttributes, GenAIAttributesExtractor } from '../otel/attributes'
 import type { InputMessages, OutputMessages, TextPart } from '../otel/genai'
 import { type JsonData, safe } from '../providers/default'
+import type { ProviderID } from '../types'
 
 export abstract class BaseAPI<RequestBody, ResponseBody>
   implements GenAIAttributesExtractor<RequestBody, ResponseBody>
 {
   /** @apiFlavor: the flavor of the API, used to determine the response model and usage */
   apiFlavor: string | undefined = undefined
+
+  readonly providerId: ProviderID
+  readonly requestModel?: string
+
+  constructor(providerId: ProviderID, requestModel?: string) {
+    this.providerId = providerId
+    this.requestModel = requestModel
+  }
+
+  extractUsage(responseBody: ResponseBody): Usage | undefined {
+    const provider = findProvider({ providerId: this.providerId })
+    if (!provider) {
+      // This should never happen, but we will throw an error to be safe.
+      throw new Error(`Provider not found for provider ID: ${this.providerId}`)
+    }
+    const { usage } = extractUsage(provider, responseBody, this.apiFlavor)
+    return usage
+  }
+
+  // GenAIAttributesExtractor implementation
 
   requestMaxTokens?: (requestBody: RequestBody) => number | undefined
   requestSeed?: (requestBody: RequestBody) => number | undefined

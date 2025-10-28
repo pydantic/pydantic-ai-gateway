@@ -21,9 +21,9 @@ export class OpenAIProvider extends DefaultProviderProxy {
 
   modelAPI(): ModelAPI | undefined {
     if (this.flavor === 'responses') {
-      return new ResponsesAPI()
+      return new ResponsesAPI('openai')
     } else {
-      return new ChatCompletionAPI()
+      return new ChatCompletionAPI('openai')
     }
   }
 

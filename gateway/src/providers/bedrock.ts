@@ -1,12 +1,13 @@
 import type { ConverseRequest } from '@aws-sdk/client-bedrock-runtime'
 import * as logfire from '@pydantic/logfire-api'
 import type { ModelAPI } from '../api'
-import { BedrockAPI } from '../api/bedrock'
+import { ConverseAPI } from '../api/bedrock'
 import { DefaultProviderProxy } from './default'
 
 export class BedrockProvider extends DefaultProviderProxy {
+  // TODO(Marcelo): Add Anthropic handler here.
   protected modelAPI(): ModelAPI | undefined {
-    return new BedrockAPI()
+    return new ConverseAPI('bedrock')
   }
 
   async prepRequest() {

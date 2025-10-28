@@ -244,6 +244,7 @@ export class DefaultProviderProxy {
       if (price) {
         return { responseBody, responseModel, usage, cost: price.total_price }
       } else {
+        logfire.error('Unable to calculate spend', { responseModel, usage, provider })
         return { error: 'Unable to calculate spend' }
       }
     } catch (error) {

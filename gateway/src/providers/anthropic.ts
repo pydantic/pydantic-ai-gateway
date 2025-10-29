@@ -9,7 +9,7 @@ export class AnthropicProvider extends DefaultProviderProxy {
     return this.restOfPath === 'v1/messages/count_tokens'
   }
 
-  protected modelAPI(): ModelAPI | undefined {
+  protected modelAPI(): ModelAPI {
     return new AnthropicAPI('anthropic')
   }
 

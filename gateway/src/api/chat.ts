@@ -1,17 +1,19 @@
 /** This module implements the OpenAI Chat Completion API.
  * @see https://platform.openai.com/docs/api-reference/chat
  */
+
 import * as logfire from '@pydantic/logfire-api'
 import mime from 'mime-types'
 import type {
   ChatCompletion,
+  ChatCompletionChunk,
   ChatCompletionCreateParams,
   ChatCompletionMessageParam,
 } from 'openai/resources/chat/completions'
 import type { ChatMessage, InputMessages, MessagePart, OutputMessage, OutputMessages } from '../otel/genai'
-import { BaseAPI } from './base'
+import { BaseAPI, type ExtractedResponse, type ExtractorConfig } from './base'
 
-export class ChatCompletionAPI extends BaseAPI<ChatCompletionCreateParams, ChatCompletion> {
+export class ChatCompletionAPI extends BaseAPI<ChatCompletionCreateParams, ChatCompletion, ChatCompletionChunk> {
   apiFlavor = 'chat'
 
   requestStopSequences = (requestBody: ChatCompletionCreateParams): string[] | undefined => {
@@ -40,6 +42,37 @@ export class ChatCompletionAPI extends BaseAPI<ChatCompletionCreateParams, ChatC
 
   outputMessages = (responseBody: ChatCompletion): OutputMessages | undefined => {
     return responseBody.choices.map(mapOutputMessage)
+  }
+
+  // SafeExtractor implementation
+
+  chunkExtractors: ExtractorConfig<ChatCompletionChunk, ExtractedResponse> = {
+    usage: (chunk: ChatCompletionChunk) => {
+      if ('usage' in chunk && chunk.usage) {
+        this.extractedResponse.usage = this.extractUsage(chunk)
+      }
+    },
+    responseModel: (chunk: ChatCompletionChunk) => {
+      if ('model' in chunk && chunk.model) {
+        this.extractedResponse.responseModel = chunk.model
+      }
+    },
+    responseId: (chunk: ChatCompletionChunk) => {
+      if ('id' in chunk && chunk.id) {
+        this.extractedResponse.responseId = chunk.id
+      }
+    },
+    finishReasons: (chunk: ChatCompletionChunk) => {
+      const finishReasons: string[] = []
+      for (const choice of chunk.choices) {
+        if (choice.finish_reason) {
+          finishReasons.push(choice.finish_reason)
+        }
+      }
+      this.extractedResponse.finishReasons = finishReasons.length > 0 ? finishReasons : undefined
+    },
+    // TODO(Marcelo): We should implement this one.
+    outputMessages: (_chunk: ChatCompletionChunk) => {},
   }
 }
 

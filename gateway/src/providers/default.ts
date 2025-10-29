@@ -10,6 +10,8 @@ import { createParser, type EventSourceMessage } from 'eventsource-parser'
 
 import type { GatewayOptions } from '..'
 import type { ModelAPI } from '../api'
+import type { SafeExtractor } from '../api/base'
+import type { OtelSpan } from '../otel'
 import type { GenAIAttributes } from '../otel/attributes'
 import type { ApiKeyInfo, ProviderProxy } from '../types'
 import { runAfter } from '../utils'
@@ -93,6 +95,7 @@ export interface ProviderOptions {
   restOfPath: string
   ctx: ExecutionContext
   middlewares?: Middleware[]
+  otelSpan: OtelSpan
 }
 
 export class DefaultProviderProxy {
@@ -104,10 +107,12 @@ export class DefaultProviderProxy {
   protected defaultBaseUrl: string | null = null
   protected usageField: string | null = 'usage'
   protected middlewares: Middleware[]
+  protected otelSpan: OtelSpan
 
   // NOTE: Those fields are used only for streaming responses for the time being.
   protected usage: Usage | null = null
   protected responseModel: string | null = null
+  cost: number | undefined = undefined
 
   readonly apiKeyInfo: ApiKeyInfo
 
@@ -119,6 +124,7 @@ export class DefaultProviderProxy {
     this.providerProxy = options.providerProxy
     this.restOfPath = options.restOfPath
     this.middlewares = options.middlewares ?? []
+    this.otelSpan = options.otelSpan
   }
 
   /**
@@ -129,24 +135,6 @@ export class DefaultProviderProxy {
    */
   runAfter(name: string, promise: Promise<unknown>) {
     runAfter(this.ctx, name, promise)
-  }
-
-  cost(): number | undefined {
-    const provider = this.usageProvider()
-    const usage = this.usage
-    const responseModel = this.responseModel
-
-    if (!provider || !usage || !responseModel) {
-      logfire.warning('Unable to calculate cost', { provider, usage, responseModel })
-      return undefined
-    }
-
-    const price = calcPrice(usage, responseModel, { provider })
-    if (price) {
-      return price.total_price
-    } else {
-      return undefined
-    }
   }
 
   providerId(): string {
@@ -161,9 +149,10 @@ export class DefaultProviderProxy {
     return undefined
   }
 
-  protected modelAPI(): ModelAPI | undefined {
-    return undefined
+  protected modelAPI(): ModelAPI {
+    throw new Error('modelAPI must be implemented by the subclass')
   }
+
   /**
    * Check that the model being used is supported.
    * In particular that we can accurately determine the token usage from the response.
@@ -308,12 +297,26 @@ export class DefaultProviderProxy {
     const response = await this.fetch(url, { method, headers: requestHeaders, body: requestBodyText })
 
     if (this.isWhitelistedEndpoint()) {
-      return {
-        requestBody: requestBodyText,
-        httpStatusCode: response.status,
-        responseHeaders: response.headers,
-        responseBody: await response.text(),
-      }
+      const responseBody = await response.text()
+      const { headers, status } = response
+      this.otelSpan.end(
+        `${this.request.method} ${this.restOfPath}`,
+        {
+          'http.method': this.request.method,
+          'http.url': this.restOfPath,
+          'http.response.status_code': status,
+          'http.request.body.text': requestBodyText,
+          'http.response.body.text': responseBody,
+          ...Object.fromEntries(
+            Array.from(requestHeaders.entries()).map(([name, value]) => [`http.request.header.${name}`, value]),
+          ),
+          ...Object.fromEntries(
+            Array.from(headers.entries()).map(([name, value]) => [`http.response.header.${name}`, value]),
+          ),
+        },
+        { level: 'info' },
+      )
+      return { requestBody: requestBodyText, httpStatusCode: status, responseHeaders: headers, responseBody }
     }
 
     // Each provider should be able to modify the response headers, e.g. remove openai org
@@ -370,20 +373,6 @@ export class DefaultProviderProxy {
     response: Response,
     responseHeaders: Headers,
   ): ProxyStreamingSuccess | ProxyInvalidRequest | ProxyUnexpectedResponse {
-    const textEncoder = new TextDecoder()
-    const sse_parser = createParser({
-      onEvent: (event: EventSourceMessage) => {
-        // This is how chat completions streaming responses end.
-        if (event.data === '[DONE]') return
-        try {
-          const data = JSON.parse(event.data)
-          this.handleData(data)
-        } catch (error) {
-          logfire.reportError('Error handling data', error as Error)
-        }
-      },
-    })
-
     if (!response.body) {
       return { requestModel, error: 'No response body' }
     }
@@ -393,21 +382,24 @@ export class DefaultProviderProxy {
       return { error: 'No usage provider found' }
     }
 
-    // Tee the source stream so we can both pipe it through the transform and track completion
-    const [streamForTransform, streamForTracking] = response.body.tee()
+    // Tee stream: one for client, one for processing
+    const [responseStream, processingStream] = response.body.tee()
 
-    const { readable: responseStream, writable } = new TransformStream({
-      transform(chunk, controller) {
-        sse_parser.feed(textEncoder.decode(chunk))
-        controller.enqueue(chunk)
-      },
-    })
+    // Parse SSE events from processing stream
+    const events = this.parseSSE(processingStream)
 
-    // Pipe the first tee through the transform (this is what gets sent to the client)
-    streamForTransform.pipeTo(writable)
+    // Get ModelAPI instance
+    const modelAPI = this.modelAPI()
 
-    // Track when the second tee is fully consumed (which happens when the transform completes)
-    const waitCompletion = streamForTracking.pipeTo(new WritableStream())
+    // IMPORTANT: Start consuming BOTH streams immediately to prevent tee() from buffering
+    // The tee() requires both streams to be consumed concurrently, otherwise it will buffer
+
+    // @ts-expect-error: TODO(Marcelo): Fix this type error.
+    const extractionPromise = this.processChunks(modelAPI, events)
+
+    // Track completion but don't wait for it before returning
+    this.runAfter('extract-stream', extractionPromise)
+    const waitCompletion = extractionPromise.catch(() => {}) // Swallow errors, already logged
 
     return {
       requestModel,
@@ -416,6 +408,57 @@ export class DefaultProviderProxy {
       responseHeaders,
       responseStream,
       waitCompletion,
+    }
+  }
+
+  private async processChunks<T>(
+    modelAPI: SafeExtractor<unknown, unknown, T>,
+    events: AsyncIterable<T>,
+  ): Promise<void> {
+    for await (const chunk of events) {
+      modelAPI.processChunk(chunk)
+    }
+
+    const provider = this.usageProvider()
+    const usage = modelAPI.extractedResponse.usage
+    const responseModel = modelAPI.extractedResponse.responseModel
+
+    if (!provider || !usage || !responseModel) {
+      console.log('Unable to calculate cost', { provider, usage, responseModel })
+      logfire.warning('Unable to calculate cost', { provider, usage, responseModel })
+    } else {
+      const price = calcPrice(usage, responseModel, { providerId: this.providerId() })
+      if (price) {
+        this.cost = price.total_price
+        logfire.info('cost {cost}', { cost: this.cost, usage, responseModel })
+      } else {
+        logfire.warning('Unable to calculate cost', { provider, usage, responseModel })
+      }
+    }
+  }
+
+  private async *parseSSE(stream: ReadableStream<Uint8Array>): AsyncIterable<JsonData> {
+    const decoder = new TextDecoder()
+    const events: JsonData[] = []
+
+    const parser = createParser({
+      onEvent: (event: EventSourceMessage) => {
+        if (event.data === '[DONE]') return
+        try {
+          events.push(JSON.parse(event.data))
+        } catch (error) {
+          logfire.reportError('Error parsing SSE event', error as Error)
+        }
+      },
+    })
+
+    for await (const chunk of stream) {
+      parser.feed(decoder.decode(chunk, { stream: true }))
+
+      // Yield all parsed events from this chunk
+      while (events.length > 0) {
+        yield events.shift()!
+      }
     }
   }
 

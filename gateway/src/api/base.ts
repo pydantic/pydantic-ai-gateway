@@ -4,8 +4,45 @@ import type { InputMessages, OutputMessages, TextPart } from '../otel/genai'
 import { type JsonData, safe } from '../providers/default'
 import type { ProviderID } from '../types'
 
-export abstract class BaseAPI<RequestBody, ResponseBody>
-  implements GenAIAttributesExtractor<RequestBody, ResponseBody>
+export interface ExtractedRequest {
+  requestModel?: string
+  temperature?: number
+  maxTokens?: number
+  systemInstructions?: TextPart[]
+  topP?: number
+  topK?: number
+  stopSequences?: string[]
+  seed?: number
+  inputMessages?: InputMessages
+}
+
+export interface ExtractedResponse {
+  responseModel: string
+  responseId: string
+  finishReasons: string[]
+  outputMessages: OutputMessages
+  usage: Usage
+}
+
+export type FieldExtractor<Data> = (data: Data) => void
+
+export type ExtractorConfig<Data, Target> = {
+  [K in keyof Target]?: FieldExtractor<Data>
+}
+
+export interface SafeExtractor<RequestBody, ResponseBody, StreamChunk> {
+  extractedRequest: ExtractedRequest | undefined
+  extractedResponse: Partial<ExtractedResponse>
+
+  processRequest(request: RequestBody): void
+  processResponse(response: ResponseBody): void
+
+  processChunk(chunk: StreamChunk): void
+  chunkExtractors: ExtractorConfig<StreamChunk, ExtractedResponse>
+}
+
+export abstract class BaseAPI<RequestBody, ResponseBody, StreamChunk = JsonData>
+  implements GenAIAttributesExtractor<RequestBody, ResponseBody>, SafeExtractor<RequestBody, ResponseBody, StreamChunk>
 {
   /** @apiFlavor: the flavor of the API, used to determine the response model and usage */
   apiFlavor: string | undefined = undefined
@@ -13,18 +50,38 @@ export abstract class BaseAPI<RequestBody, ResponseBody>
   readonly providerId: ProviderID
   readonly requestModel?: string
 
+  extractedRequest: ExtractedRequest | undefined = undefined
+  extractedResponse: Partial<ExtractedResponse> = {}
+
   constructor(providerId: ProviderID, requestModel?: string) {
     this.providerId = providerId
     this.requestModel = requestModel
   }
 
-  // TODO(Marcelo): This is not used anywhere yet! We should remove this note when we use it.
-  extractUsage(responseBody: ResponseBody): Usage | undefined {
-    const provider = findProvider({ providerId: this.providerId })
-    if (!provider) {
-      // This should never happen, but we will throw an error to be safe.
-      throw new Error(`Provider not found for provider ID: ${this.providerId}`)
+  chunkExtractors: ExtractorConfig<StreamChunk, ExtractedResponse> = {}
+
+  processRequest(_request: RequestBody): void {
+    throw new Error('Method not implemented.')
+  }
+  processResponse(_response: ResponseBody): void {
+    throw new Error('Method not implemented.')
+  }
+
+  // This runs O(K * N) where K is the number of chunkExtractors and N is the number of chunks.
+  // Although this seems inefficient, K is a constant and N is typically small.
+  // We do this because we want to ensure that we extract each field separately, so the logic of one of the extractors
+  // doesn't make another one to fail.
+  processChunk(_chunk: StreamChunk): void {
+    for (const [_key, extractor] of Object.entries(this.chunkExtractors)) {
+      safe(extractor)(_chunk)
     }
+  }
+
+  // TODO(Marcelo): This is not used anywhere yet! We should remove this note when we use it.
+  extractUsage(responseBody: ResponseBody | StreamChunk): Usage | undefined {
+    const provider = findProvider({ providerId: this.providerId })
+    // This should never happen because we know the provider ID is valid, but we will throw an error to be safe.
+    if (!provider) throw new Error(`Provider not found for provider ID: ${this.providerId}`)
     const { usage } = extractUsage(provider, responseBody, this.apiFlavor)
     return usage
   }

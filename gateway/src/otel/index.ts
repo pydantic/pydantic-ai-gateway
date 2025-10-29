@@ -95,7 +95,7 @@ export class OtelTrace {
   }
 }
 
-abstract class OtelSpan {
+export abstract class OtelSpan {
   abstract startSpan(): OtelSpan
   abstract end(messageTemplate: string, attributes: Attributes, details?: { level?: Level }): void
 }

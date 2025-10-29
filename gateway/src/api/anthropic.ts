@@ -2,14 +2,15 @@ import type {
   BetaContentBlock,
   BetaContentBlockParam,
   BetaMessage,
+  BetaRawMessageStreamEvent,
   MessageCreateParams,
 } from '@anthropic-ai/sdk/resources/beta'
 import type { InputMessages, JsonValue, MessagePart, OutputMessages, TextPart } from '../otel/genai'
-import { BaseAPI } from './base'
+import { BaseAPI, type ExtractedResponse, type ExtractorConfig } from './base'
 
 // TODO(Marcelo): We use the beta API in PydanticAI, but does it matter here?
 
-export class AnthropicAPI extends BaseAPI<MessageCreateParams, BetaMessage> {
+export class AnthropicAPI extends BaseAPI<MessageCreateParams, BetaMessage, BetaRawMessageStreamEvent> {
   requestStopSequences = (requestBody: MessageCreateParams): string[] | undefined => requestBody.stop_sequences
   requestTemperature = (requestBody: MessageCreateParams): number | undefined => requestBody.temperature
   requestTopK = (requestBody: MessageCreateParams): number | undefined => requestBody.top_k
@@ -50,6 +51,27 @@ export class AnthropicAPI extends BaseAPI<MessageCreateParams, BetaMessage> {
         finish_reason: responseBody.stop_reason ?? undefined,
       },
     ]
+  }
+
+  chunkExtractors: ExtractorConfig<BetaRawMessageStreamEvent, ExtractedResponse> = {
+    usage: (chunk: BetaRawMessageStreamEvent) => {
+      if ('usage' in chunk && chunk.usage) {
+        this.extractedResponse.usage = this.extractUsage(chunk)
+      }
+    },
+    responseModel: (chunk: BetaRawMessageStreamEvent) => {
+      if (chunk.type === 'message_start') {
+        this.extractedResponse.responseModel = chunk.message.model
+      }
+    },
+    responseId: (chunk: BetaRawMessageStreamEvent) => {
+      if (chunk.type === 'message_start') {
+        this.extractedResponse.responseId = chunk.message.id
+      }
+    },
+    finishReasons: (_chunk: BetaRawMessageStreamEvent) => {},
+    // TODO(Marcelo): We should implement this one.
+    outputMessages: (_chunk: BetaRawMessageStreamEvent) => {},
   }
 }
 

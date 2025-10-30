@@ -29,7 +29,7 @@ export class GoogleVertexProvider extends DefaultProviderProxy {
     return this.flavor
   }
 
-  protected modelAPI(): ModelAPI | undefined {
+  protected modelAPI(): ModelAPI {
     if (this.flavor === 'anthropic') {
       return new AnthropicAPI('google-vertex')
     } else {

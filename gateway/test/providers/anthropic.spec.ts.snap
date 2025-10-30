@@ -8,7 +8,7 @@ exports[`anthropic > should call anthropic via gateway > llm 1`] = `
       "type": "text",
     },
   ],
-  "id": "msg_01AYbWvToCY9v2yZnPNvyyXg",
+  "id": "msg_019Eoy62TSq2WGFyrVX5mRf5",
   "model": "claude-sonnet-4-20250514",
   "role": "assistant",
   "stop_reason": "end_turn",
@@ -124,7 +124,7 @@ exports[`anthropic > should call anthropic via gateway > span 1`] = `
   {
     "key": "gen_ai.response.id",
     "value": {
-      "stringValue": "msg_01AYbWvToCY9v2yZnPNvyyXg",
+      "stringValue": "msg_019Eoy62TSq2WGFyrVX5mRf5",
     },
   },
   {
@@ -271,7 +271,7 @@ exports[`anthropic > should call anthropic via gateway > span 1`] = `
   {
     "key": "http.response.body.text",
     "value": {
-      "stringValue": "{"id":"msg_01AYbWvToCY9v2yZnPNvyyXg","type":"message","role":"assistant","model":"claude-sonnet-4-20250514","content":[{"type":"text","text":"The capital of France is Paris."}],"stop_reason":"end_turn","stop_sequence":null,"usage":{"input_tokens":20,"cache_creation_input_tokens":0,"cache_read_input_tokens":0,"cache_creation":{"ephemeral_5m_input_tokens":0,"ephemeral_1h_input_tokens":0},"output_tokens":10,"service_tier":"standard","pydantic_ai_gateway":{"cost_estimate":0.00020999999999999998}}}",
+      "stringValue": "{"model":"claude-sonnet-4-20250514","id":"msg_019Eoy62TSq2WGFyrVX5mRf5","type":"message","role":"assistant","content":[{"type":"text","text":"The capital of France is Paris."}],"stop_reason":"end_turn","stop_sequence":null,"usage":{"input_tokens":20,"cache_creation_input_tokens":0,"cache_read_input_tokens":0,"cache_creation":{"ephemeral_5m_input_tokens":0,"ephemeral_1h_input_tokens":0},"output_tokens":10,"service_tier":"standard","pydantic_ai_gateway":{"cost_estimate":0.00020999999999999998}}}",
     },
   },
   {
@@ -322,8 +322,8 @@ exports[`anthropic > should call anthropic via gateway > span 1`] = `
 exports[`anthropic > should call anthropic via gateway with builtin tools > llm 1`] = `
 {
   "container": {
-    "expires_at": "2025-10-20T16:41:06.989824Z",
-    "id": "container_011CUJhjjzj2kHvukJ6EBPk1",
+    "expires_at": "2025-10-30T13:43:33.209982Z",
+    "id": "container_011CUdQHmGk52d4pDTuWk1z6",
   },
   "content": [
     {
@@ -331,7 +331,7 @@ exports[`anthropic > should call anthropic via gateway with builtin tools > llm 
       "type": "text",
     },
     {
-      "id": "srvtoolu_011nWUi3MPyexaccKVcyEEK7",
+      "id": "srvtoolu_014V88EfQbuZg6ZeyWb4G56e",
       "input": {
         "command": "create",
         "file_text": "import math
@@ -343,34 +343,35 @@ data = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 n = len(data)
 mean = sum(data) / n
 
-# Calculate standard deviation (population)
-variance_pop = sum((x - mean) ** 2 for x in data) / n
-std_dev_pop = math.sqrt(variance_pop)
+# Calculate standard deviation
+# Using population standard deviation formula
+variance = sum((x - mean) ** 2 for x in data) / n
+std_dev_population = math.sqrt(variance)
 
-# Calculate standard deviation (sample)
+# Also calculate sample standard deviation (dividing by n-1)
 variance_sample = sum((x - mean) ** 2 for x in data) / (n - 1)
 std_dev_sample = math.sqrt(variance_sample)
 
-print("Dataset:", data)
+# Display results
+print(f"Dataset: {data}")
 print(f"Number of values: {n}")
 print(f"\\nMean: {mean}")
-print(f"\\nStandard Deviation (Population): {std_dev_pop:.6f}")
-print(f"Standard Deviation (Sample): {std_dev_sample:.6f}")
+print(f"\\nPopulation Standard Deviation: {std_dev_population:.6f}")
+print(f"Sample Standard Deviation: {std_dev_sample:.6f}")
 
-# Show the calculation steps for clarity
-print("\\n--- Calculation Steps ---")
+# Show step-by-step calculation for clarity
+print("\\n--- Step-by-step calculation ---")
 print(f"Sum of values: {sum(data)}")
 print(f"Mean = {sum(data)}/{n} = {mean}")
 
 print("\\nDeviations from mean:")
-deviations = [(x - mean) for x in data]
-squared_deviations = [(x - mean) ** 2 for x in data]
-for i, x in enumerate(data):
-    print(f"  {x} - {mean} = {deviations[i]:.1f}, squared = {squared_deviations[i]:.2f}")
+deviations = [(x, x - mean, (x - mean) ** 2) for x in data]
+for x, dev, dev_squared in deviations:
+    print(f"  {x}: deviation = {dev:.1f}, squared = {dev_squared:.2f}")
 
-print(f"\\nSum of squared deviations: {sum(squared_deviations):.1f}")
-print(f"Variance (Population) = {sum(squared_deviations):.1f}/{n} = {variance_pop:.2f}")
-print(f"Variance (Sample) = {sum(squared_deviations):.1f}/{n-1} = {variance_sample:.2f}")",
+print(f"\\nSum of squared deviations: {sum(d[2] for d in deviations):.2f}")
+print(f"Population variance = {variance:.2f}")
+print(f"Sample variance = {variance_sample:.2f}")",
         "path": "/tmp/calculate_stats.py",
       },
       "name": "text_editor_code_execution",
@@ -381,11 +382,11 @@ print(f"Variance (Sample) = {sum(squared_deviations):.1f}/{n-1} = {variance_samp
         "is_file_update": false,
         "type": "text_editor_code_execution_create_result",
       },
-      "tool_use_id": "srvtoolu_011nWUi3MPyexaccKVcyEEK7",
+      "tool_use_id": "srvtoolu_014V88EfQbuZg6ZeyWb4G56e",
       "type": "text_editor_code_execution_tool_result",
     },
     {
-      "id": "srvtoolu_016tYfWniKnR6rhRWckWCsvC",
+      "id": "srvtoolu_01W3mgwqbL8MsYAcRK3gaUb3",
       "input": {
         "command": "python /tmp/calculate_stats.py",
       },
@@ -402,62 +403,54 @@ Number of values: 10
 
 Mean: 5.5
 
-Standard Deviation (Population): 2.872281
-Standard Deviation (Sample): 3.027650
+Population Standard Deviation: 2.872281
+Sample Standard Deviation: 3.027650
 
---- Calculation Steps ---
+--- Step-by-step calculation ---
 Sum of values: 55
 Mean = 55/10 = 5.5
 
 Deviations from mean:
-  1 - 5.5 = -4.5, squared = 20.25
-  2 - 5.5 = -3.5, squared = 12.25
-  3 - 5.5 = -2.5, squared = 6.25
-  4 - 5.5 = -1.5, squared = 2.25
-  5 - 5.5 = -0.5, squared = 0.25
-  6 - 5.5 = 0.5, squared = 0.25
-  7 - 5.5 = 1.5, squared = 2.25
-  8 - 5.5 = 2.5, squared = 6.25
-  9 - 5.5 = 3.5, squared = 12.25
-  10 - 5.5 = 4.5, squared = 20.25
+  1: deviation = -4.5, squared = 20.25
+  2: deviation = -3.5, squared = 12.25
+  3: deviation = -2.5, squared = 6.25
+  4: deviation = -1.5, squared = 2.25
+  5: deviation = -0.5, squared = 0.25
+  6: deviation = 0.5, squared = 0.25
+  7: deviation = 1.5, squared = 2.25
+  8: deviation = 2.5, squared = 6.25
+  9: deviation = 3.5, squared = 12.25
+  10: deviation = 4.5, squared = 20.25
 
-Sum of squared deviations: 82.5
-Variance (Population) = 82.5/10 = 8.25
-Variance (Sample) = 82.5/9 = 9.17
+Sum of squared deviations: 82.50
+Population variance = 8.25
+Sample variance = 9.17
 ",
         "type": "bash_code_execution_result",
       },
-      "tool_use_id": "srvtoolu_016tYfWniKnR6rhRWckWCsvC",
+      "tool_use_id": "srvtoolu_01W3mgwqbL8MsYAcRK3gaUb3",
       "type": "bash_code_execution_tool_result",
     },
     {
-      "text": "## Results
+      "text": "## Results:
 
-For the dataset **[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]**:
+For the dataset [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]:
 
 - **Mean: 5.5**
-- **Standard Deviation (Population): 2.872281**
-- **Standard Deviation (Sample): 3.027650**
+- **Standard Deviation:**
+  - Population Standard Deviation: **2.872281** (when treating the data as the entire population)
+  - Sample Standard Deviation: **3.027650** (when treating the data as a sample from a larger population)
 
 ### Explanation:
+- The **mean** is calculated as the sum of all values (55) divided by the number of values (10), giving us 5.5.
+- The **population standard deviation** (σ) uses N in the denominator and equals approximately 2.87.
+- The **sample standard deviation** (s) uses N-1 in the denominator (Bessel's correction) and equals approximately 3.03.
 
-1. **Mean** = Sum of all values / Number of values = 55 / 10 = **5.5**
-
-2. **Standard Deviation** measures how spread out the numbers are from the mean:
-   - **Population standard deviation** (σ) = 2.872281 - used when you have data for the entire population
-   - **Sample standard deviation** (s) = 3.027650 - used when your data is a sample from a larger population
-
-The calculation involves:
-- Finding the deviation of each value from the mean
-- Squaring each deviation
-- Finding the average of squared deviations (variance)
-- Taking the square root of the variance
-
-The difference between population and sample standard deviation is in the denominator: population uses n (10), while sample uses n-1 (9) for the variance calculation, which corrects for bias when estimating from a sample.",
+The population standard deviation is used when your data represents the entire population, while the sample standard deviation is used when your data is a sample from a larger population. In most practical applications, the sample standard deviation is more commonly used.",
       "type": "text",
     },
   ],
-  "id": "msg_01BUgFb3nX8ksaBUwernXmjh",
+  "id": "msg_01JHBJsdymq98CeYeSVkoMeQ",
   "model": "claude-opus-4-1-20250805",
   "role": "assistant",
   "stop_reason": "end_turn",
@@ -470,13 +463,12 @@ The difference between population and sample standard deviation is in the denomi
     },
     "cache_creation_input_tokens": 0,
     "cache_read_input_tokens": 0,
-    "input_tokens": 8011,
-    "output_tokens": 969,
+    "input_tokens": 7862,
+    "output_tokens": 897,
     "pydantic_ai_gateway": {
-      "cost_estimate": 0.19284,
+      "cost_estimate": 0.185205,
     },
     "server_tool_use": {
-      "web_fetch_requests": 0,
       "web_search_requests": 0,
     },
     "service_tier": "standard",
@@ -563,7 +555,7 @@ exports[`anthropic > should call anthropic via gateway with builtin tools > span
   {
     "key": "gen_ai.response.id",
     "value": {
-      "stringValue": "msg_01BUgFb3nX8ksaBUwernXmjh",
+      "stringValue": "msg_01JHBJsdymq98CeYeSVkoMeQ",
     },
   },
   {
@@ -663,7 +655,7 @@ exports[`anthropic > should call anthropic via gateway with builtin tools > span
                               {
                                 "key": "id",
                                 "value": {
-                                  "stringValue": "srvtoolu_011nWUi3MPyexaccKVcyEEK7",
+                                  "stringValue": "srvtoolu_014V88EfQbuZg6ZeyWb4G56e",
                                 },
                               },
                               {
@@ -701,34 +693,35 @@ data = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 n = len(data)
 mean = sum(data) / n
 
-# Calculate standard deviation (population)
-variance_pop = sum((x - mean) ** 2 for x in data) / n
-std_dev_pop = math.sqrt(variance_pop)
+# Calculate standard deviation
+# Using population standard deviation formula
+variance = sum((x - mean) ** 2 for x in data) / n
+std_dev_population = math.sqrt(variance)
 
-# Calculate standard deviation (sample)
+# Also calculate sample standard deviation (dividing by n-1)
 variance_sample = sum((x - mean) ** 2 for x in data) / (n - 1)
 std_dev_sample = math.sqrt(variance_sample)
 
-print("Dataset:", data)
+# Display results
+print(f"Dataset: {data}")
 print(f"Number of values: {n}")
 print(f"\\nMean: {mean}")
-print(f"\\nStandard Deviation (Population): {std_dev_pop:.6f}")
-print(f"Standard Deviation (Sample): {std_dev_sample:.6f}")
+print(f"\\nPopulation Standard Deviation: {std_dev_population:.6f}")
+print(f"Sample Standard Deviation: {std_dev_sample:.6f}")
 
-# Show the calculation steps for clarity
-print("\\n--- Calculation Steps ---")
+# Show step-by-step calculation for clarity
+print("\\n--- Step-by-step calculation ---")
 print(f"Sum of values: {sum(data)}")
 print(f"Mean = {sum(data)}/{n} = {mean}")
 
 print("\\nDeviations from mean:")
-deviations = [(x - mean) for x in data]
-squared_deviations = [(x - mean) ** 2 for x in data]
-for i, x in enumerate(data):
-    print(f"  {x} - {mean} = {deviations[i]:.1f}, squared = {squared_deviations[i]:.2f}")
+deviations = [(x, x - mean, (x - mean) ** 2) for x in data]
+for x, dev, dev_squared in deviations:
+    print(f"  {x}: deviation = {dev:.1f}, squared = {dev_squared:.2f}")
 
-print(f"\\nSum of squared deviations: {sum(squared_deviations):.1f}")
-print(f"Variance (Population) = {sum(squared_deviations):.1f}/{n} = {variance_pop:.2f}")
-print(f"Variance (Sample) = {sum(squared_deviations):.1f}/{n-1} = {variance_sample:.2f}")",
+print(f"\\nSum of squared deviations: {sum(d[2] for d in deviations):.2f}")
+print(f"Population variance = {variance:.2f}")
+print(f"Sample variance = {variance_sample:.2f}")",
                                         },
                                       },
                                     ],
@@ -756,7 +749,7 @@ print(f"Variance (Sample) = {sum(squared_deviations):.1f}/{n-1} = {variance_samp
                               {
                                 "key": "id",
                                 "value": {
-                                  "stringValue": "srvtoolu_011nWUi3MPyexaccKVcyEEK7",
+                                  "stringValue": "srvtoolu_014V88EfQbuZg6ZeyWb4G56e",
                                 },
                               },
                               {
@@ -807,7 +800,7 @@ print(f"Variance (Sample) = {sum(squared_deviations):.1f}/{n-1} = {variance_samp
                               {
                                 "key": "id",
                                 "value": {
-                                  "stringValue": "srvtoolu_016tYfWniKnR6rhRWckWCsvC",
+                                  "stringValue": "srvtoolu_01W3mgwqbL8MsYAcRK3gaUb3",
                                 },
                               },
                               {
@@ -852,7 +845,7 @@ print(f"Variance (Sample) = {sum(squared_deviations):.1f}/{n-1} = {variance_samp
                               {
                                 "key": "id",
                                 "value": {
-                                  "stringValue": "srvtoolu_016tYfWniKnR6rhRWckWCsvC",
+                                  "stringValue": "srvtoolu_01W3mgwqbL8MsYAcRK3gaUb3",
                                 },
                               },
                               {
@@ -880,28 +873,28 @@ Number of values: 10
 
 Mean: 5.5
 
-Standard Deviation (Population): 2.872281
-Standard Deviation (Sample): 3.027650
+Population Standard Deviation: 2.872281
+Sample Standard Deviation: 3.027650
 
---- Calculation Steps ---
+--- Step-by-step calculation ---
 Sum of values: 55
 Mean = 55/10 = 5.5
 
 Deviations from mean:
-  1 - 5.5 = -4.5, squared = 20.25
-  2 - 5.5 = -3.5, squared = 12.25
-  3 - 5.5 = -2.5, squared = 6.25
-  4 - 5.5 = -1.5, squared = 2.25
-  5 - 5.5 = -0.5, squared = 0.25
-  6 - 5.5 = 0.5, squared = 0.25
-  7 - 5.5 = 1.5, squared = 2.25
-  8 - 5.5 = 2.5, squared = 6.25
-  9 - 5.5 = 3.5, squared = 12.25
-  10 - 5.5 = 4.5, squared = 20.25
+  1: deviation = -4.5, squared = 20.25
+  2: deviation = -3.5, squared = 12.25
+  3: deviation = -2.5, squared = 6.25
+  4: deviation = -1.5, squared = 2.25
+  5: deviation = -0.5, squared = 0.25
+  6: deviation = 0.5, squared = 0.25
+  7: deviation = 1.5, squared = 2.25
+  8: deviation = 2.5, squared = 6.25
+  9: deviation = 3.5, squared = 12.25
+  10: deviation = 4.5, squared = 20.25
 
-Sum of squared deviations: 82.5
-Variance (Population) = 82.5/10 = 8.25
-Variance (Sample) = 82.5/9 = 9.17
+Sum of squared deviations: 82.50
+Population variance = 8.25
+Sample variance = 9.17
 ",
                                         },
                                       },
@@ -950,29 +943,21 @@ Variance (Sample) = 82.5/9 = 9.17
                               {
                                 "key": "content",
                                 "value": {
-                                  "stringValue": "## Results
+                                  "stringValue": "## Results:
 
-For the dataset **[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]**:
+For the dataset [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]:
 
 - **Mean: 5.5**
-- **Standard Deviation (Population): 2.872281**
-- **Standard Deviation (Sample): 3.027650**
+- **Standard Deviation:**
+  - Population Standard Deviation: **2.872281** (when treating the data as the entire population)
+  - Sample Standard Deviation: **3.027650** (when treating the data as a sample from a larger population)
 
 ### Explanation:
+- The **mean** is calculated as the sum of all values (55) divided by the number of values (10), giving us 5.5.
+- The **population standard deviation** (σ) uses N in the denominator and equals approximately 2.87.
+- The **sample standard deviation** (s) uses N-1 in the denominator (Bessel's correction) and equals approximately 3.03.
 
-1. **Mean** = Sum of all values / Number of values = 55 / 10 = **5.5**
-
-2. **Standard Deviation** measures how spread out the numbers are from the mean:
-   - **Population standard deviation** (σ) = 2.872281 - used when you have data for the entire population
-   - **Sample standard deviation** (s) = 3.027650 - used when your data is a sample from a larger population
-
-The calculation involves:
-- Finding the deviation of each value from the mean
-- Squaring each deviation
-- Finding the average of squared deviations (variance)
-- Taking the square root of the variance
-
-The difference between population and sample standard deviation is in the denominator: population uses n (10), while sample uses n-1 (9) for the variance calculation, which corrects for bias when estimating from a sample.",
+The population standard deviation is used when your data represents the entire population, while the sample standard deviation is used when your data is a sample from a larger population. In most practical applications, the sample standard deviation is more commonly used.",
                                 },
                               },
                             ],
@@ -1014,7 +999,7 @@ The difference between population and sample standard deviation is in the denomi
   {
     "key": "http.response.body.text",
     "value": {
-      "stringValue": "{"model":"claude-opus-4-1-20250805","id":"msg_01BUgFb3nX8ksaBUwernXmjh","type":"message","role":"assistant","content":[{"type":"text","text":"I'll calculate the mean and standard deviation of the given dataset [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]."},{"type":"server_tool_use","id":"srvtoolu_011nWUi3MPyexaccKVcyEEK7","name":"text_editor_code_execution","input":{"command":"create","path":"/tmp/calculate_stats.py","file_text":"import math\\n\\n# Dataset\\ndata = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]\\n\\n# Calculate mean\\nn = len(data)\\nmean = sum(data) / n\\n\\n# Calculate standard deviation (population)\\nvariance_pop = sum((x - mean) ** 2 for x in data) / n\\nstd_dev_pop = math.sqrt(variance_pop)\\n\\n# Calculate standard deviation (sample)\\nvariance_sample = sum((x - mean) ** 2 for x in data) / (n - 1)\\nstd_dev_sample = math.sqrt(variance_sample)\\n\\nprint(\\"Dataset:\\", data)\\nprint(f\\"Number of values: {n}\\")\\nprint(f\\"\\\\nMean: {mean}\\")\\nprint(f\\"\\\\nStandard Deviation (Population): {std_dev_pop:.6f}\\")\\nprint(f\\"Standard Deviation (Sample): {std_dev_sample:.6f}\\")\\n\\n# Show the calculation steps for clarity\\nprint(\\"\\\\n--- Calculation Steps ---\\")\\nprint(f\\"Sum of values: {sum(data)}\\")\\nprint(f\\"Mean = {sum(data)}/{n} = {mean}\\")\\n\\nprint(\\"\\\\nDeviations from mean:\\")\\ndeviations = [(x - mean) for x in data]\\nsquared_deviations = [(x - mean) ** 2 for x in data]\\nfor i, x in enumerate(data):\\n    print(f\\"  {x} - {mean} = {deviations[i]:.1f}, squared = {squared_deviations[i]:.2f}\\")\\n\\nprint(f\\"\\\\nSum of squared deviations: {sum(squared_deviations):.1f}\\")\\nprint(f\\"Variance (Population) = {sum(squared_deviations):.1f}/{n} = {variance_pop:.2f}\\")\\nprint(f\\"Variance (Sample) = {sum(squared_deviations):.1f}/{n-1} = {variance_sample:.2f}\\")"}},{"type":"text_editor_code_execution_tool_result","tool_use_id":"srvtoolu_011nWUi3MPyexaccKVcyEEK7","content":{"type":"text_editor_code_execution_create_result","is_file_update":false}},{"type":"server_tool_use","id":"srvtoolu_016tYfWniKnR6rhRWckWCsvC","name":"bash_code_execution","input":{"command":"python /tmp/calculate_stats.py"}},{"type":"bash_code_execution_tool_result","tool_use_id":"srvtoolu_016tYfWniKnR6rhRWckWCsvC","content":{"type":"bash_code_execution_result","stdout":"Dataset: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]\\nNumber of values: 10\\n\\nMean: 5.5\\n\\nStandard Deviation (Population): 2.872281\\nStandard Deviation (Sample): 3.027650\\n\\n--- Calculation Steps ---\\nSum of values: 55\\nMean = 55/10 = 5.5\\n\\nDeviations from mean:\\n  1 - 5.5 = -4.5, squared = 20.25\\n  2 - 5.5 = -3.5, squared = 12.25\\n  3 - 5.5 = -2.5, squared = 6.25\\n  4 - 5.5 = -1.5, squared = 2.25\\n  5 - 5.5 = -0.5, squared = 0.25\\n  6 - 5.5 = 0.5, squared = 0.25\\n  7 - 5.5 = 1.5, squared = 2.25\\n  8 - 5.5 = 2.5, squared = 6.25\\n  9 - 5.5 = 3.5, squared = 12.25\\n  10 - 5.5 = 4.5, squared = 20.25\\n\\nSum of squared deviations: 82.5\\nVariance (Population) = 82.5/10 = 8.25\\nVariance (Sample) = 82.5/9 = 9.17\\n","stderr":"","return_code":0,"content":[]}},{"type":"text","text":"## Results\\n\\nFor the dataset **[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]**:\\n\\n- **Mean: 5.5**\\n- **Standard Deviation (Population): 2.872281**\\n- **Standard Deviation (Sample): 3.027650**\\n\\n### Explanation:\\n\\n1. **Mean** = Sum of all values / Number of values = 55 / 10 = **5.5**\\n\\n2. **Standard Deviation** measures how spread out the numbers are from the mean:\\n   - **Population standard deviation** (σ) = 2.872281 - used when you have data for the entire population\\n   - **Sample standard deviation** (s) = 3.027650 - used when your data is a sample from a larger population\\n\\nThe calculation involves:\\n- Finding the deviation of each value from the mean\\n- Squaring each deviation\\n- Finding the average of squared deviations (variance)\\n- Taking the square root of the variance\\n\\nThe difference between population and sample standard deviation is in the denominator: population uses n (10), while sample uses n-1 (9) for the variance calculation, which corrects for bias when estimating from a sample."}],"container":{"id":"container_011CUJhjjzj2kHvukJ6EBPk1","expires_at":"2025-10-20T16:41:06.989824Z"},"stop_reason":"end_turn","stop_sequence":null,"usage":{"input_tokens":8011,"cache_creation_input_tokens":0,"cache_read_input_tokens":0,"cache_creation":{"ephemeral_5m_input_tokens":0,"ephemeral_1h_input_tokens":0},"output_tokens":969,"service_tier":"standard","server_tool_use":{"web_search_requests":0,"web_fetch_requests":0},"pydantic_ai_gateway":{"cost_estimate":0.19284}}}",
+      "stringValue": "{"model":"claude-opus-4-1-20250805","id":"msg_01JHBJsdymq98CeYeSVkoMeQ","type":"message","role":"assistant","content":[{"type":"text","text":"I'll calculate the mean and standard deviation of the given dataset [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]."},{"type":"server_tool_use","id":"srvtoolu_014V88EfQbuZg6ZeyWb4G56e","name":"text_editor_code_execution","input":{"command":"create","path":"/tmp/calculate_stats.py","file_text":"import math\\n\\n# Dataset\\ndata = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]\\n\\n# Calculate mean\\nn = len(data)\\nmean = sum(data) / n\\n\\n# Calculate standard deviation\\n# Using population standard deviation formula\\nvariance = sum((x - mean) ** 2 for x in data) / n\\nstd_dev_population = math.sqrt(variance)\\n\\n# Also calculate sample standard deviation (dividing by n-1)\\nvariance_sample = sum((x - mean) ** 2 for x in data) / (n - 1)\\nstd_dev_sample = math.sqrt(variance_sample)\\n\\n# Display results\\nprint(f\\"Dataset: {data}\\")\\nprint(f\\"Number of values: {n}\\")\\nprint(f\\"\\\\nMean: {mean}\\")\\nprint(f\\"\\\\nPopulation Standard Deviation: {std_dev_population:.6f}\\")\\nprint(f\\"Sample Standard Deviation: {std_dev_sample:.6f}\\")\\n\\n# Show step-by-step calculation for clarity\\nprint(\\"\\\\n--- Step-by-step calculation ---\\")\\nprint(f\\"Sum of values: {sum(data)}\\")\\nprint(f\\"Mean = {sum(data)}/{n} = {mean}\\")\\n\\nprint(\\"\\\\nDeviations from mean:\\")\\ndeviations = [(x, x - mean, (x - mean) ** 2) for x in data]\\nfor x, dev, dev_squared in deviations:\\n    print(f\\"  {x}: deviation = {dev:.1f}, squared = {dev_squared:.2f}\\")\\n\\nprint(f\\"\\\\nSum of squared deviations: {sum(d[2] for d in deviations):.2f}\\")\\nprint(f\\"Population variance = {variance:.2f}\\")\\nprint(f\\"Sample variance = {variance_sample:.2f}\\")"}},{"type":"text_editor_code_execution_tool_result","tool_use_id":"srvtoolu_014V88EfQbuZg6ZeyWb4G56e","content":{"type":"text_editor_code_execution_create_result","is_file_update":false}},{"type":"server_tool_use","id":"srvtoolu_01W3mgwqbL8MsYAcRK3gaUb3","name":"bash_code_execution","input":{"command":"python /tmp/calculate_stats.py"}},{"type":"bash_code_execution_tool_result","tool_use_id":"srvtoolu_01W3mgwqbL8MsYAcRK3gaUb3","content":{"type":"bash_code_execution_result","stdout":"Dataset: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]\\nNumber of values: 10\\n\\nMean: 5.5\\n\\nPopulation Standard Deviation: 2.872281\\nSample Standard Deviation: 3.027650\\n\\n--- Step-by-step calculation ---\\nSum of values: 55\\nMean = 55/10 = 5.5\\n\\nDeviations from mean:\\n  1: deviation = -4.5, squared = 20.25\\n  2: deviation = -3.5, squared = 12.25\\n  3: deviation = -2.5, squared = 6.25\\n  4: deviation = -1.5, squared = 2.25\\n  5: deviation = -0.5, squared = 0.25\\n  6: deviation = 0.5, squared = 0.25\\n  7: deviation = 1.5, squared = 2.25\\n  8: deviation = 2.5, squared = 6.25\\n  9: deviation = 3.5, squared = 12.25\\n  10: deviation = 4.5, squared = 20.25\\n\\nSum of squared deviations: 82.50\\nPopulation variance = 8.25\\nSample variance = 9.17\\n","stderr":"","return_code":0,"content":[]}},{"type":"text","text":"## Results:\\n\\nFor the dataset [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]:\\n\\n- **Mean: 5.5**\\n- **Standard Deviation:**\\n  - Population Standard Deviation: **2.872281** (when treating the data as the entire population)\\n  - Sample Standard Deviation: **3.027650** (when treating the data as a sample from a larger population)\\n\\n### Explanation:\\n- The **mean** is calculated as the sum of all values (55) divided by the number of values (10), giving us 5.5.\\n- The **population standard deviation** (σ) uses N in the denominator and equals approximately 2.87.\\n- The **sample standard deviation** (s) uses N-1 in the denominator (Bessel's correction) and equals approximately 3.03.\\n\\nThe population standard deviation is used when your data represents the entire population, while the sample standard deviation is used when your data is a sample from a larger population. In most practical applications, the sample standard deviation is more commonly used."}],"container":{"id":"container_011CUdQHmGk52d4pDTuWk1z6","expires_at":"2025-10-30T13:43:33.209982Z"},"stop_reason":"end_turn","stop_sequence":null,"usage":{"input_tokens":7862,"cache_creation_input_tokens":0,"cache_read_input_tokens":0,"cache_creation":{"ephemeral_5m_input_tokens":0,"ephemeral_1h_input_tokens":0},"output_tokens":897,"service_tier":"standard","server_tool_use":{"web_search_requests":0},"pydantic_ai_gateway":{"cost_estimate":0.185205}}}",
     },
   },
   {
@@ -1026,7 +1011,7 @@ The difference between population and sample standard deviation is in the denomi
   {
     "key": "gen_ai.usage.input_tokens",
     "value": {
-      "intValue": 8011,
+      "intValue": 7862,
     },
   },
   {
@@ -1044,7 +1029,7 @@ The difference between population and sample standard deviation is in the denomi
   {
     "key": "gen_ai.usage.output_tokens",
     "value": {
-      "intValue": 969,
+      "intValue": 897,
     },
   },
   {
@@ -1062,8 +1047,6 @@ The difference between population and sample standard deviation is in the denomi
 ]
 `;
 
-exports[`anthropic > should call anthropic via gateway with stream > chunks 1`] = `[]`;
-
 exports[`anthropic > should call anthropic via gateway with stream > span 1`] = `
 [
   {
@@ -1075,13 +1058,19 @@ exports[`anthropic > should call anthropic via gateway with stream > span 1`] = 
   {
     "key": "logfire.json_schema",
     "value": {
-      "stringValue": "{"type":"object","properties":{"gen_ai.operation.name":{"type":"string"},"gen_ai.request.model":{"type":"string"},"gen_ai.system":{"type":"string"},"http.response.status_code":{"type":"number"},"http.request.body.text":{"type":"string"}}}",
+      "stringValue": "{"type":"object","properties":{"gen_ai.system":{"type":"string"},"gen_ai.operation.name":{"type":"string"},"gen_ai.request.model":{"type":"string"},"gen_ai.request.max_tokens":{"type":"number"}}}",
     },
   },
   {
     "key": "logfire.level_num",
     "value": {
       "intValue": 9,
+    },
+  },
+  {
+    "key": "gen_ai.system",
+    "value": {
+      "stringValue": "anthropic",
     },
   },
   {
@@ -1097,21 +1086,9 @@ exports[`anthropic > should call anthropic via gateway with stream > span 1`] = 
     },
   },
   {
-    "key": "gen_ai.system",
+    "key": "gen_ai.request.max_tokens",
     "value": {
-      "stringValue": "anthropic",
-    },
-  },
-  {
-    "key": "http.response.status_code",
-    "value": {
-      "intValue": 200,
-    },
-  },
-  {
-    "key": "http.request.body.text",
-    "value": {
-      "stringValue": "{"model":"claude-opus-4-1-20250805","stream":true,"max_tokens":1024,"messages":[{"role":"user","content":"What is the capital of France?"}]}",
+      "intValue": 1024,
     },
   },
 ]

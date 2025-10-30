@@ -14,8 +14,8 @@ exports[`deploy > should call openai via gateway > llm 1`] = `
       },
     },
   ],
-  "created": 1758119078,
-  "id": "chatcmpl-CGnNGUOMdokZ0Ph0QUfUsK19MdByR",
+  "created": 1761828474,
+  "id": "chatcmpl-CWMMElxV7Z5jV4zs2g2cRQjZTsY8M",
   "model": "gpt-5-2025-08-07",
   "object": "chat.completion",
   "service_tier": "default",
@@ -118,7 +118,7 @@ exports[`deploy > should call openai via gateway > span 1`] = `
   {
     "key": "gen_ai.response.id",
     "value": {
-      "stringValue": "chatcmpl-CGnNGUOMdokZ0Ph0QUfUsK19MdByR",
+      "stringValue": "chatcmpl-CWMMElxV7Z5jV4zs2g2cRQjZTsY8M",
     },
   },
   {
@@ -293,7 +293,7 @@ exports[`deploy > should call openai via gateway > span 1`] = `
   {
     "key": "http.response.body.text",
     "value": {
-      "stringValue": "{"id":"chatcmpl-CGnNGUOMdokZ0Ph0QUfUsK19MdByR","object":"chat.completion","created":1758119078,"model":"gpt-5-2025-08-07","choices":[{"index":0,"message":{"role":"assistant","content":"Paris.","refusal":null,"annotations":[]},"finish_reason":"stop"}],"usage":{"prompt_tokens":23,"completion_tokens":75,"total_tokens":98,"prompt_tokens_details":{"cached_tokens":0,"audio_tokens":0},"completion_tokens_details":{"reasoning_tokens":64,"audio_tokens":0,"accepted_prediction_tokens":0,"rejected_prediction_tokens":0},"pydantic_ai_gateway":{"cost_estimate":0.00077875}},"service_tier":"default","system_fingerprint":null}",
+      "stringValue": "{"id":"chatcmpl-CWMMElxV7Z5jV4zs2g2cRQjZTsY8M","object":"chat.completion","created":1761828474,"model":"gpt-5-2025-08-07","choices":[{"index":0,"message":{"role":"assistant","content":"Paris.","refusal":null,"annotations":[]},"finish_reason":"stop"}],"usage":{"prompt_tokens":23,"completion_tokens":75,"total_tokens":98,"prompt_tokens_details":{"cached_tokens":0,"audio_tokens":0},"completion_tokens_details":{"reasoning_tokens":64,"audio_tokens":0,"accepted_prediction_tokens":0,"rejected_prediction_tokens":0},"pydantic_ai_gateway":{"cost_estimate":0.00077875}},"service_tier":"default","system_fingerprint":null}",
     },
   },
   {

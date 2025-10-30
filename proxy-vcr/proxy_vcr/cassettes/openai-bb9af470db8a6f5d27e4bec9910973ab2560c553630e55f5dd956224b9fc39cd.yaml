@@ -1,0 +1,101 @@
+interactions:
+- request:
+    body: "{\n  \"stream\": true,\n  \"model\": \"gpt-5\",\n  \"messages\": [\n    {\n
+      \     \"role\": \"developer\",\n      \"content\": \"You are a helpful assistant.\"\n
+      \   },\n    {\n      \"role\": \"user\",\n      \"content\": \"What is the capital
+      of France?\"\n    }\n  ],\n  \"max_completion_tokens\": 1024,\n  \"stream_options\":
+      {\n    \"include_usage\": true\n  }\n}"
+    headers:
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '319'
+      content-type:
+      - application/json
+      cookie:
+      - __cf_bm=MVOz_vf1d.29xNg5eAq9hZGUpEToHZ9rpFhKtO12GDM-1761823181-1.0.1.1-f_gaGN5YtX1DvFTkOFoMkGEiQh3rNh89AjWKvmjk0_.XbDAuRV_tnz21YzeMVcacrAa5yTXsqWXN_9hwojHD6iRS.NTgTTLPQd8AGlqn.vM;
+        _cfuvid=sZHytwxgk7vJY7ep7PlpK5yip7G55QSHyqVz43MKEw4-1761823181130-0.0.1.1-604800000
+      host:
+      - api.openai.com
+      user-agent:
+      - python-httpx/0.28.1
+    method: POST
+    uri: https://api.openai.com/v1/chat/completions
+  response:
+    body:
+      string: 'data: {"id":"chatcmpl-CWKzQzo2QLXPzzjG5ZhftNDkOKT2q","object":"chat.completion.chunk","created":1761823216,"model":"gpt-5-2025-08-07","service_tier":"default","system_fingerprint":null,"choices":[{"index":0,"delta":{"role":"assistant","content":"","refusal":null},"finish_reason":null}],"usage":null,"obfuscation":"znk17e1VnU"}
+
+
+        data: {"id":"chatcmpl-CWKzQzo2QLXPzzjG5ZhftNDkOKT2q","object":"chat.completion.chunk","created":1761823216,"model":"gpt-5-2025-08-07","service_tier":"default","system_fingerprint":null,"choices":[{"index":0,"delta":{"content":"Paris"},"finish_reason":null}],"usage":null,"obfuscation":"9uyCALM"}
+
+
+        data: {"id":"chatcmpl-CWKzQzo2QLXPzzjG5ZhftNDkOKT2q","object":"chat.completion.chunk","created":1761823216,"model":"gpt-5-2025-08-07","service_tier":"default","system_fingerprint":null,"choices":[{"index":0,"delta":{"content":"."},"finish_reason":null}],"usage":null,"obfuscation":"DxMvC33A2iV"}
+
+
+        data: {"id":"chatcmpl-CWKzQzo2QLXPzzjG5ZhftNDkOKT2q","object":"chat.completion.chunk","created":1761823216,"model":"gpt-5-2025-08-07","service_tier":"default","system_fingerprint":null,"choices":[{"index":0,"delta":{},"finish_reason":"stop"}],"usage":null,"obfuscation":"6BmmA2"}
+
+
+        data: {"id":"chatcmpl-CWKzQzo2QLXPzzjG5ZhftNDkOKT2q","object":"chat.completion.chunk","created":1761823216,"model":"gpt-5-2025-08-07","service_tier":"default","system_fingerprint":null,"choices":[],"usage":{"prompt_tokens":23,"completion_tokens":11,"total_tokens":34,"prompt_tokens_details":{"cached_tokens":0,"audio_tokens":0},"completion_tokens_details":{"reasoning_tokens":0,"audio_tokens":0,"accepted_prediction_tokens":0,"rejected_prediction_tokens":0}},"obfuscation":"8u6q1bA9GJu"}
+
+
+        data: [DONE]
+
+
+        '
+    headers:
+      CF-RAY:
+      - 996a85bbf9c58e65-AMS
+      Connection:
+      - keep-alive
+      Content-Type:
+      - text/event-stream; charset=utf-8
+      Date:
+      - Thu, 30 Oct 2025 11:20:18 GMT
+      Server:
+      - cloudflare
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains; preload
+      Transfer-Encoding:
+      - chunked
+      X-Content-Type-Options:
+      - nosniff
+      access-control-expose-headers:
+      - X-Request-ID
+      alt-svc:
+      - h3=":443"; ma=86400
+      cf-cache-status:
+      - DYNAMIC
+      openai-organization:
+      - pydantic-28gund
+      openai-processing-ms:
+      - '2257'
+      openai-project:
+      - proj_dKobscVY9YJxeEaDJen54e3d
+      openai-version:
+      - '2020-10-01'
+      x-envoy-upstream-service-time:
+      - '2271'
+      x-openai-proxy-wasm:
+      - v0.1
+      x-ratelimit-limit-requests:
+      - '10000'
+      x-ratelimit-limit-tokens:
+      - '4000000'
+      x-ratelimit-remaining-requests:
+      - '9999'
+      x-ratelimit-remaining-tokens:
+      - '3999982'
+      x-ratelimit-reset-requests:
+      - 6ms
+      x-ratelimit-reset-tokens:
+      - 0s
+      x-request-id:
+      - req_51fcc2d0ded04c69b8c9381d841084c1
+    status:
+      code: 200
+      message: OK
+version: 1

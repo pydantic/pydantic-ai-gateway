@@ -1,8 +1,14 @@
+import type { ModelAPI } from '../api'
+import { ChatCompletionAPI } from '../api/chat'
 import { DefaultProviderProxy } from './default'
 
 export class TestProvider extends DefaultProviderProxy {
   providerId(): string {
     return 'openai'
+  }
+
+  protected modelAPI(): ModelAPI {
+    return new ChatCompletionAPI('test')
   }
 
   apiFlavor(): string | undefined {

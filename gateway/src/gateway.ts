@@ -49,6 +49,7 @@ export async function gateway(
 
   const ProxyCls = getProvider(providerProxy.providerId)
 
+  const dispatchSpan = otel.startSpan()
   const proxy = new ProxyCls({
     request,
     gatewayOptions: options,
@@ -57,16 +58,14 @@ export async function gateway(
     restOfPath,
     ctx,
     middlewares: options.proxyMiddlewares,
+    otelSpan: dispatchSpan,
   })
 
-  const dispatchSpan = otel.startSpan()
   const result = await proxy.dispatch()
 
-  // TODO(Marcelo): The `genAiOtelAttributes` populates the attributes with the assumption that the response is always non-streaming.
-  const [spanName, attributes, level] = genAiOtelAttributes(result, proxy)
-
   // This doesn't work on streaming because the `result` object is returned as soon as we create the streaming response.
-  if (!('responseStream' in result)) {
+  if (!('responseStream' in result) && !('httpStatusCode' in result)) {
+    const [spanName, attributes, level] = genAiOtelAttributes(result, proxy)
     dispatchSpan.end(spanName, attributes, { level })
   }
 
@@ -78,18 +77,10 @@ export async function gateway(
     const { successStatus: status, responseHeaders: headers, responseStream, disableKey, waitCompletion } = result
     runAfter(
       ctx,
-      'endSpan',
-      (async () => {
-        dispatchSpan.end(spanName, attributes, { level })
-        await otel.send()
-      })(),
-    )
-    runAfter(
-      ctx,
       'recordSpend',
       (async () => {
         await waitCompletion
-        const cost = proxy.cost()
+        const cost = proxy.cost
         if (cost) {
           await recordSpend(apiKeyInfo, cost, options)
         } else {
@@ -100,6 +91,7 @@ export async function gateway(
           }
           logfire.error('Unable to calculate cost', { context, error: 'Unable to calculate cost' })
         }
+        await otel.send()
       })(),
     )
 

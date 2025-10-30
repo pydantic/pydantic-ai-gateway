@@ -14,8 +14,8 @@ exports[`openai > openai chat > llm 1`] = `
       },
     },
   ],
-  "created": 1758119097,
-  "id": "chatcmpl-CGnNZyR6FU8Xsw5X4N2YdTtaYBuWV",
+  "created": 1761823178,
+  "id": "chatcmpl-CWKyoLFrrxfDdUZO6hAaDA7rYn3Fo",
   "model": "gpt-5-2025-08-07",
   "object": "chat.completion",
   "service_tier": "default",
@@ -120,7 +120,7 @@ exports[`openai > openai chat > span 1`] = `
   {
     "key": "gen_ai.response.id",
     "value": {
-      "stringValue": "chatcmpl-CGnNZyR6FU8Xsw5X4N2YdTtaYBuWV",
+      "stringValue": "chatcmpl-CWKyoLFrrxfDdUZO6hAaDA7rYn3Fo",
     },
   },
   {
@@ -296,7 +296,7 @@ exports[`openai > openai chat > span 1`] = `
   {
     "key": "http.response.body.text",
     "value": {
-      "stringValue": "{"id":"chatcmpl-CGnNZyR6FU8Xsw5X4N2YdTtaYBuWV","object":"chat.completion","created":1758119097,"model":"gpt-5-2025-08-07","choices":[{"index":0,"message":{"role":"assistant","content":"Paris.","refusal":null,"annotations":[]},"finish_reason":"stop"}],"usage":{"prompt_tokens":23,"completion_tokens":11,"total_tokens":34,"prompt_tokens_details":{"cached_tokens":0,"audio_tokens":0},"completion_tokens_details":{"reasoning_tokens":0,"audio_tokens":0,"accepted_prediction_tokens":0,"rejected_prediction_tokens":0},"pydantic_ai_gateway":{"cost_estimate":0.00013875}},"service_tier":"default","system_fingerprint":null}",
+      "stringValue": "{"id":"chatcmpl-CWKyoLFrrxfDdUZO6hAaDA7rYn3Fo","object":"chat.completion","created":1761823178,"model":"gpt-5-2025-08-07","choices":[{"index":0,"message":{"role":"assistant","content":"Paris.","refusal":null,"annotations":[]},"finish_reason":"stop"}],"usage":{"prompt_tokens":23,"completion_tokens":11,"total_tokens":34,"prompt_tokens_details":{"cached_tokens":0,"audio_tokens":0},"completion_tokens_details":{"reasoning_tokens":0,"audio_tokens":0,"accepted_prediction_tokens":0,"rejected_prediction_tokens":0},"pydantic_ai_gateway":{"cost_estimate":0.00013875}},"service_tier":"default","system_fingerprint":null}",
     },
   },
   {
@@ -359,13 +359,19 @@ exports[`openai > openai chat stream > span 1`] = `
   {
     "key": "logfire.json_schema",
     "value": {
-      "stringValue": "{"type":"object","properties":{"gen_ai.operation.name":{"type":"string"},"gen_ai.request.model":{"type":"string"},"gen_ai.system":{"type":"string"},"http.response.status_code":{"type":"number"},"http.request.body.text":{"type":"string"}}}",
+      "stringValue": "{"type":"object","properties":{"gen_ai.system":{"type":"string"},"gen_ai.operation.name":{"type":"string"},"gen_ai.request.model":{"type":"string"},"gen_ai.request.max_tokens":{"type":"number"}}}",
     },
   },
   {
     "key": "logfire.level_num",
     "value": {
       "intValue": 9,
+    },
+  },
+  {
+    "key": "gen_ai.system",
+    "value": {
+      "stringValue": "openai",
     },
   },
   {
@@ -381,38 +387,9 @@ exports[`openai > openai chat stream > span 1`] = `
     },
   },
   {
-    "key": "gen_ai.system",
+    "key": "gen_ai.request.max_tokens",
     "value": {
-      "stringValue": "openai",
-    },
-  },
-  {
-    "key": "http.response.status_code",
-    "value": {
-      "intValue": 200,
-    },
-  },
-  {
-    "key": "http.request.body.text",
-    "value": {
-      "stringValue": "{
-  "stream": true,
-  "model": "gpt-5",
-  "messages": [
-    {
-      "role": "developer",
-      "content": "You are a helpful assistant."
-    },
-    {
-      "role": "user",
-      "content": "What is the capital of France?"
-    }
-  ],
-  "max_completion_tokens": 1024,
-  "stream_options": {
-    "include_usage": true
-  }
-}",
+      "intValue": 1024,
     },
   },
 ]
@@ -424,9 +401,9 @@ exports[`openai > openai responses > llm 1`] = `
   "billing": {
     "payer": "developer",
   },
-  "created_at": 1760710235,
+  "created_at": 1761823182,
   "error": null,
-  "id": "resp_09a44ce9e90671e50068f24e5bb64c81929ad39ba693aa7353",
+  "id": "resp_09393ae2ee2c946a00690349ce17e081a1a43492a969b778ed",
   "incomplete_details": null,
   "instructions": "reply concisely",
   "max_output_tokens": null,
@@ -436,7 +413,7 @@ exports[`openai > openai responses > llm 1`] = `
   "object": "response",
   "output": [
     {
-      "id": "rs_09a44ce9e90671e50068f24e5c4e188192bc9efb89f5dded5d",
+      "id": "rs_09393ae2ee2c946a00690349cea39481a199b6fa1ff1db1ccc",
       "summary": [],
       "type": "reasoning",
     },
@@ -445,17 +422,17 @@ exports[`openai > openai responses > llm 1`] = `
         {
           "annotations": [],
           "logprobs": [],
-          "text": "Usually blue (daytime), but it varies—red/orange at sunrise/sunset, gray when cloudy, black at night.",
+          "text": "Usually blue in daylight. It can appear red/orange at sunrise/sunset, gray when overcast, and dark at night.",
           "type": "output_text",
         },
       ],
-      "id": "msg_09a44ce9e90671e50068f24e5f72908192b4a75475d74255dc",
+      "id": "msg_09393ae2ee2c946a00690349d1570081a1844badf7835697d5",
       "role": "assistant",
       "status": "completed",
       "type": "message",
     },
   ],
-  "output_text": "Usually blue (daytime), but it varies—red/orange at sunrise/sunset, gray when cloudy, black at night.",
+  "output_text": "Usually blue in daylight. It can appear red/orange at sunrise/sunset, gray when overcast, and dark at night.",
   "parallel_tool_calls": true,
   "previous_response_id": null,
   "prompt_cache_key": null,
@@ -484,14 +461,14 @@ exports[`openai > openai responses > llm 1`] = `
     "input_tokens_details": {
       "cached_tokens": 0,
     },
-    "output_tokens": 224,
+    "output_tokens": 96,
     "output_tokens_details": {
-      "reasoning_tokens": 192,
+      "reasoning_tokens": 64,
     },
     "pydantic_ai_gateway": {
-      "cost_estimate": 0.0022649999999999997,
+      "cost_estimate": 0.000985,
     },
-    "total_tokens": 244,
+    "total_tokens": 116,
   },
   "user": null,
 }
@@ -566,7 +543,7 @@ exports[`openai > openai responses > span 1`] = `
   {
     "key": "gen_ai.response.id",
     "value": {
-      "stringValue": "resp_09a44ce9e90671e50068f24e5bb64c81929ad39ba693aa7353",
+      "stringValue": "resp_09393ae2ee2c946a00690349ce17e081a1a43492a969b778ed",
     },
   },
   {
@@ -668,7 +645,7 @@ exports[`openai > openai responses > span 1`] = `
                               {
                                 "key": "content",
                                 "value": {
-                                  "stringValue": "Usually blue (daytime), but it varies—red/orange at sunrise/sunset, gray when cloudy, black at night.",
+                                  "stringValue": "Usually blue in daylight. It can appear red/orange at sunrise/sunset, gray when overcast, and dark at night.",
                                 },
                               },
                             ],
@@ -708,7 +685,7 @@ exports[`openai > openai responses > span 1`] = `
   {
     "key": "http.response.body.text",
     "value": {
-      "stringValue": "{"id":"resp_09a44ce9e90671e50068f24e5bb64c81929ad39ba693aa7353","object":"response","created_at":1760710235,"status":"completed","background":false,"billing":{"payer":"developer"},"error":null,"incomplete_details":null,"instructions":"reply concisely","max_output_tokens":null,"max_tool_calls":null,"model":"gpt-5-2025-08-07","output":[{"id":"rs_09a44ce9e90671e50068f24e5c4e188192bc9efb89f5dded5d","type":"reasoning","summary":[]},{"id":"msg_09a44ce9e90671e50068f24e5f72908192b4a75475d74255dc","type":"message","status":"completed","content":[{"type":"output_text","annotations":[],"logprobs":[],"text":"Usually blue (daytime), but it varies—red/orange at sunrise/sunset, gray when cloudy, black at night."}],"role":"assistant"}],"parallel_tool_calls":true,"previous_response_id":null,"prompt_cache_key":null,"reasoning":{"effort":"medium","summary":null},"safety_identifier":null,"service_tier":"default","store":true,"temperature":1,"text":{"format":{"type":"text"},"verbosity":"medium"},"tool_choice":"auto","tools":[],"top_logprobs":0,"top_p":1,"truncation":"disabled","usage":{"input_tokens":20,"input_tokens_details":{"cached_tokens":0},"output_tokens":224,"output_tokens_details":{"reasoning_tokens":192},"total_tokens":244,"pydantic_ai_gateway":{"cost_estimate":0.0022649999999999997}},"user":null,"metadata":{}}",
+      "stringValue": "{"id":"resp_09393ae2ee2c946a00690349ce17e081a1a43492a969b778ed","object":"response","created_at":1761823182,"status":"completed","background":false,"billing":{"payer":"developer"},"error":null,"incomplete_details":null,"instructions":"reply concisely","max_output_tokens":null,"max_tool_calls":null,"model":"gpt-5-2025-08-07","output":[{"id":"rs_09393ae2ee2c946a00690349cea39481a199b6fa1ff1db1ccc","type":"reasoning","summary":[]},{"id":"msg_09393ae2ee2c946a00690349d1570081a1844badf7835697d5","type":"message","status":"completed","content":[{"type":"output_text","annotations":[],"logprobs":[],"text":"Usually blue in daylight. It can appear red/orange at sunrise/sunset, gray when overcast, and dark at night."}],"role":"assistant"}],"parallel_tool_calls":true,"previous_response_id":null,"prompt_cache_key":null,"reasoning":{"effort":"medium","summary":null},"safety_identifier":null,"service_tier":"default","store":true,"temperature":1,"text":{"format":{"type":"text"},"verbosity":"medium"},"tool_choice":"auto","tools":[],"top_logprobs":0,"top_p":1,"truncation":"disabled","usage":{"input_tokens":20,"input_tokens_details":{"cached_tokens":0},"output_tokens":96,"output_tokens_details":{"reasoning_tokens":64},"total_tokens":116,"pydantic_ai_gateway":{"cost_estimate":0.000985}},"user":null,"metadata":{}}",
     },
   },
   {
@@ -736,7 +713,7 @@ exports[`openai > openai responses > span 1`] = `
   {
     "key": "gen_ai.usage.output_tokens",
     "value": {
-      "intValue": 224,
+      "intValue": 96,
     },
   },
   {
@@ -760,9 +737,9 @@ exports[`openai > openai responses with builtin tools > llm 1`] = `
   "billing": {
     "payer": "developer",
   },
-  "created_at": 1760710281,
+  "created_at": 1761823186,
   "error": null,
-  "id": "resp_0f2450162f078cbb0068f24e8955748191affcd350ce641443",
+  "id": "resp_032eeb0f1946b3fc00690349d295108195a02e83631653e35f",
   "incomplete_details": null,
   "instructions": "be precise",
   "max_output_tokens": null,
@@ -772,53 +749,39 @@ exports[`openai > openai responses with builtin tools > llm 1`] = `
   "object": "response",
   "output": [
     {
-      "id": "rs_0f2450162f078cbb0068f24e8d85f4819197c895fdf516a1d2",
+      "id": "rs_032eeb0f1946b3fc00690349d5b7b88195bce44ca9ceab4941",
       "summary": [],
       "type": "reasoning",
     },
     {
-      "code": "import math, decimal
-n = 123_902_139_123
-sqrt_double = math.sqrt(n)
-sqrt_double",
-      "container_id": "cntr_68f24e8ca224819197e2720a847ba8680321606c6212ad11",
-      "id": "ci_0f2450162f078cbb0068f24e8fb0b48191989caf7138433a8c",
+      "code": "import decimal, math
+n=123902139123
+math.isqrt(n), math.isqrt(n)**2 == n, math.sqrt(n)",
+      "container_id": "cntr_690349d4fe9c8190a698334dee208a580180e82f7f5ef49c",
+      "id": "ci_032eeb0f1946b3fc00690349dd01688195a33f5e06b171c4fe",
       "outputs": null,
       "status": "completed",
       "type": "code_interpreter_call",
     },
     {
-      "id": "rs_0f2450162f078cbb0068f24e962850819188fd28b996082c40",
-      "summary": [],
-      "type": "reasoning",
-    },
-    {
-      "code": "351997**2, 351998**2, n",
-      "container_id": "cntr_68f24e8ca224819197e2720a847ba8680321606c6212ad11",
-      "id": "ci_0f2450162f078cbb0068f24e9681e88191b6cacce605376df4",
-      "outputs": null,
-      "status": "completed",
-      "type": "code_interpreter_call",
-    },
-    {
-      "id": "rs_0f2450162f078cbb0068f24e9837d88191a7aaa5be02696451",
+      "id": "rs_032eeb0f1946b3fc00690349dffc9481958d20478e41cd0e6d",
       "summary": [],
       "type": "reasoning",
     },
     {
       "code": "from decimal import Decimal, getcontext
 getcontext().prec = 50
-n = Decimal(123902139123)
-sqrt_dec = n.sqrt()
-sqrt_dec",
-      "container_id": "cntr_68f24e8ca224819197e2720a847ba8680321606c6212ad11",
-      "id": "ci_0f2450162f078cbb0068f24e9de0048191809cdecc84494a8d",
+n=Decimal(123902139123)
+s = n.sqrt()
+s",
+      "container_id": "cntr_690349d4fe9c8190a698334dee208a580180e82f7f5ef49c",
+      "id": "ci_032eeb0f1946b3fc00690349e486f081958929018fa377592f",
       "outputs": null,
       "status": "completed",
       "type": "code_interpreter_call",
     },
     {
-      "id": "rs_0f2450162f078cbb0068f24ea105f0819187396c82412a9fdb",
+      "id": "rs_032eeb0f1946b3fc00690349e8e29c81958735b9417d916d13",
       "summary": [],
       "type": "reasoning",
     },
@@ -827,17 +790,17 @@ sqrt_dec",
         {
           "annotations": [],
           "logprobs": [],
-          "text": "The square root of 123902139123 is approximately 351,997.3566988820443179179564.",
+          "text": "√123902139123 ≈ 351997.35669888204",
           "type": "output_text",
         },
       ],
-      "id": "msg_0f2450162f078cbb0068f24ea8817081918421bee81a7f93bb",
+      "id": "msg_032eeb0f1946b3fc00690349edec7c819599bc5f0620f08cb7",
       "role": "assistant",
       "status": "completed",
       "type": "message",
     },
   ],
-  "output_text": "The square root of 123902139123 is approximately 351,997.3566988820443179179564.",
+  "output_text": "√123902139123 ≈ 351997.35669888204",
   "parallel_tool_calls": true,
   "previous_response_id": null,
   "prompt_cache_key": null,
@@ -869,18 +832,18 @@ sqrt_dec",
   "top_p": 1,
   "truncation": "disabled",
   "usage": {
-    "input_tokens": 1315,
+    "input_tokens": 1139,
     "input_tokens_details": {
       "cached_tokens": 0,
     },
-    "output_tokens": 799,
+    "output_tokens": 469,
     "output_tokens_details": {
-      "reasoning_tokens": 768,
+      "reasoning_tokens": 448,
     },
     "pydantic_ai_gateway": {
-      "cost_estimate": 0.00963375,
+      "cost_estimate": 0.006113749999999999,
     },
-    "total_tokens": 2114,
+    "total_tokens": 1608,
   },
   "user": null,
 }
@@ -955,7 +918,7 @@ exports[`openai > openai responses with builtin tools > span 1`] = `
   {
     "key": "gen_ai.response.id",
     "value": {
-      "stringValue": "resp_0f2450162f078cbb0068f24e8955748191affcd350ce641443",
+      "stringValue": "resp_032eeb0f1946b3fc00690349d295108195a02e83631653e35f",
     },
   },
   {
@@ -1062,7 +1025,7 @@ exports[`openai > openai responses with builtin tools > span 1`] = `
                                       {
                                         "key": "id",
                                         "value": {
-                                          "stringValue": "ci_0f2450162f078cbb0068f24e8fb0b48191989caf7138433a8c",
+                                          "stringValue": "ci_032eeb0f1946b3fc00690349dd01688195a33f5e06b171c4fe",
                                         },
                                       },
                                       {
@@ -1080,16 +1043,15 @@ exports[`openai > openai responses with builtin tools > span 1`] = `
                                       {
                                         "key": "code",
                                         "value": {
-                                          "stringValue": "import math, decimal
-n = 123_902_139_123
-sqrt_double = math.sqrt(n)
-sqrt_double",
+                                          "stringValue": "import decimal, math
+n=123902139123
+math.isqrt(n), math.isqrt(n)**2 == n, math.sqrt(n)",
                                         },
                                       },
                                       {
                                         "key": "container_id",
                                         "value": {
-                                          "stringValue": "cntr_68f24e8ca224819197e2720a847ba8680321606c6212ad11",
+                                          "stringValue": "cntr_690349d4fe9c8190a698334dee208a580180e82f7f5ef49c",
                                         },
                                       },
                                       {
@@ -1161,103 +1123,7 @@ sqrt_double",
                                       {
                                         "key": "id",
                                         "value": {
-                                          "stringValue": "ci_0f2450162f078cbb0068f24e9681e88191b6cacce605376df4",
-                                        },
-                                      },
-                                      {
-                                        "key": "type",
-                                        "value": {
-                                          "stringValue": "code_interpreter_call",
-                                        },
-                                      },
-                                      {
-                                        "key": "status",
-                                        "value": {
-                                          "stringValue": "completed",
-                                        },
-                                      },
-                                      {
-                                        "key": "code",
-                                        "value": {
-                                          "stringValue": "351997**2, 351998**2, n",
-                                        },
-                                      },
-                                      {
-                                        "key": "container_id",
-                                        "value": {
-                                          "stringValue": "cntr_68f24e8ca224819197e2720a847ba8680321606c6212ad11",
-                                        },
-                                      },
-                                      {
-                                        "key": "outputs",
-                                        "value": {},
-                                      },
-                                    ],
-                                  },
-                                },
-                              },
-                            ],
-                          },
-                        },
-                      ],
-                    },
-                  },
-                },
-              ],
-            },
-          },
-          {
-            "kvlistValue": {
-              "values": [
-                {
-                  "key": "role",
-                  "value": {
-                    "stringValue": "assistant",
-                  },
-                },
-                {
-                  "key": "parts",
-                  "value": {
-                    "arrayValue": {
-                      "values": [],
-                    },
-                  },
-                },
-              ],
-            },
-          },
-          {
-            "kvlistValue": {
-              "values": [
-                {
-                  "key": "role",
-                  "value": {
-                    "stringValue": "assistant",
-                  },
-                },
-                {
-                  "key": "parts",
-                  "value": {
-                    "arrayValue": {
-                      "values": [
-                        {
-                          "kvlistValue": {
-                            "values": [
-                              {
-                                "key": "type",
-                                "value": {
-                                  "stringValue": "unknown",
-                                },
-                              },
-                              {
-                                "key": "part",
-                                "value": {
-                                  "kvlistValue": {
-                                    "values": [
-                                      {
-                                        "key": "id",
-                                        "value": {
-                                          "stringValue": "ci_0f2450162f078cbb0068f24e9de0048191809cdecc84494a8d",
+                                          "stringValue": "ci_032eeb0f1946b3fc00690349e486f081958929018fa377592f",
                                         },
                                       },
                                       {
@@ -1277,15 +1143,15 @@ sqrt_double",
                                         "value": {
                                           "stringValue": "from decimal import Decimal, getcontext
 getcontext().prec = 50
-n = Decimal(123902139123)
-sqrt_dec = n.sqrt()
-sqrt_dec",
+n=Decimal(123902139123)
+s = n.sqrt()
+s",
                                         },
                                       },
                                       {
                                         "key": "container_id",
                                         "value": {
-                                          "stringValue": "cntr_68f24e8ca224819197e2720a847ba8680321606c6212ad11",
+                                          "stringValue": "cntr_690349d4fe9c8190a698334dee208a580180e82f7f5ef49c",
                                         },
                                       },
                                       {
@@ -1352,7 +1218,7 @@ sqrt_dec",
                               {
                                 "key": "content",
                                 "value": {
-                                  "stringValue": "The square root of 123902139123 is approximately 351,997.3566988820443179179564.",
+                                  "stringValue": "√123902139123 ≈ 351997.35669888204",
                                 },
                               },
                             ],
@@ -1400,7 +1266,7 @@ sqrt_dec",
   {
     "key": "http.response.body.text",
     "value": {
-      "stringValue": "{"id":"resp_0f2450162f078cbb0068f24e8955748191affcd350ce641443","object":"response","created_at":1760710281,"status":"completed","background":false,"billing":{"payer":"developer"},"error":null,"incomplete_details":null,"instructions":"be precise","max_output_tokens":null,"max_tool_calls":null,"model":"gpt-5-2025-08-07","output":[{"id":"rs_0f2450162f078cbb0068f24e8d85f4819197c895fdf516a1d2","type":"reasoning","summary":[]},{"id":"ci_0f2450162f078cbb0068f24e8fb0b48191989caf7138433a8c","type":"code_interpreter_call","status":"completed","code":"import math, decimal\\r\\nn = 123_902_139_123\\r\\nsqrt_double = math.sqrt(n)\\r\\nsqrt_double","container_id":"cntr_68f24e8ca224819197e2720a847ba8680321606c6212ad11","outputs":null},{"id":"rs_0f2450162f078cbb0068f24e962850819188fd28b996082c40","type":"reasoning","summary":[]},{"id":"ci_0f2450162f078cbb0068f24e9681e88191b6cacce605376df4","type":"code_interpreter_call","status":"completed","code":"351997**2, 351998**2, n","container_id":"cntr_68f24e8ca224819197e2720a847ba8680321606c6212ad11","outputs":null},{"id":"rs_0f2450162f078cbb0068f24e9837d88191a7aaa5be02696451","type":"reasoning","summary":[]},{"id":"ci_0f2450162f078cbb0068f24e9de0048191809cdecc84494a8d","type":"code_interpreter_call","status":"completed","code":"from decimal import Decimal, getcontext\\r\\ngetcontext().prec = 50\\r\\nn = Decimal(123902139123)\\r\\nsqrt_dec = n.sqrt()\\r\\nsqrt_dec","container_id":"cntr_68f24e8ca224819197e2720a847ba8680321606c6212ad11","outputs":null},{"id":"rs_0f2450162f078cbb0068f24ea105f0819187396c82412a9fdb","type":"reasoning","summary":[]},{"id":"msg_0f2450162f078cbb0068f24ea8817081918421bee81a7f93bb","type":"message","status":"completed","content":[{"type":"output_text","annotations":[],"logprobs":[],"text":"The square root of 123902139123 is approximately 351,997.3566988820443179179564."}],"role":"assistant"}],"parallel_tool_calls":true,"previous_response_id":null,"prompt_cache_key":null,"reasoning":{"effort":"medium","summary":null},"safety_identifier":null,"service_tier":"default","store":true,"temperature":1,"text":{"format":{"type":"text"},"verbosity":"medium"},"tool_choice":"auto","tools":[{"type":"code_interpreter","container":{"type":"auto"}}],"top_logprobs":0,"top_p":1,"truncation":"disabled","usage":{"input_tokens":1315,"input_tokens_details":{"cached_tokens":0},"output_tokens":799,"output_tokens_details":{"reasoning_tokens":768},"total_tokens":2114,"pydantic_ai_gateway":{"cost_estimate":0.00963375}},"user":null,"metadata":{}}",
+      "stringValue": "{"id":"resp_032eeb0f1946b3fc00690349d295108195a02e83631653e35f","object":"response","created_at":1761823186,"status":"completed","background":false,"billing":{"payer":"developer"},"error":null,"incomplete_details":null,"instructions":"be precise","max_output_tokens":null,"max_tool_calls":null,"model":"gpt-5-2025-08-07","output":[{"id":"rs_032eeb0f1946b3fc00690349d5b7b88195bce44ca9ceab4941","type":"reasoning","summary":[]},{"id":"ci_032eeb0f1946b3fc00690349dd01688195a33f5e06b171c4fe","type":"code_interpreter_call","status":"completed","code":"import decimal, math\\r\\nn=123902139123\\r\\nmath.isqrt(n), math.isqrt(n)**2 == n, math.sqrt(n)","container_id":"cntr_690349d4fe9c8190a698334dee208a580180e82f7f5ef49c","outputs":null},{"id":"rs_032eeb0f1946b3fc00690349dffc9481958d20478e41cd0e6d","type":"reasoning","summary":[]},{"id":"ci_032eeb0f1946b3fc00690349e486f081958929018fa377592f","type":"code_interpreter_call","status":"completed","code":"from decimal import Decimal, getcontext\\r\\ngetcontext().prec = 50\\r\\nn=Decimal(123902139123)\\r\\ns = n.sqrt()\\r\\ns","container_id":"cntr_690349d4fe9c8190a698334dee208a580180e82f7f5ef49c","outputs":null},{"id":"rs_032eeb0f1946b3fc00690349e8e29c81958735b9417d916d13","type":"reasoning","summary":[]},{"id":"msg_032eeb0f1946b3fc00690349edec7c819599bc5f0620f08cb7","type":"message","status":"completed","content":[{"type":"output_text","annotations":[],"logprobs":[],"text":"√123902139123 ≈ 351997.35669888204"}],"role":"assistant"}],"parallel_tool_calls":true,"previous_response_id":null,"prompt_cache_key":null,"reasoning":{"effort":"medium","summary":null},"safety_identifier":null,"service_tier":"default","store":true,"temperature":1,"text":{"format":{"type":"text"},"verbosity":"medium"},"tool_choice":"auto","tools":[{"type":"code_interpreter","container":{"type":"auto"}}],"top_logprobs":0,"top_p":1,"truncation":"disabled","usage":{"input_tokens":1139,"input_tokens_details":{"cached_tokens":0},"output_tokens":469,"output_tokens_details":{"reasoning_tokens":448},"total_tokens":1608,"pydantic_ai_gateway":{"cost_estimate":0.006113749999999999}},"user":null,"metadata":{}}",
     },
   },
   {
@@ -1412,7 +1278,7 @@ sqrt_dec",
   {
     "key": "gen_ai.usage.input_tokens",
     "value": {
-      "intValue": 1315,
+      "intValue": 1139,
     },
   },
   {
@@ -1428,7 +1294,7 @@ sqrt_dec",
   {
     "key": "gen_ai.usage.output_tokens",
     "value": {
-      "intValue": 799,
+      "intValue": 469,
     },
   },
   {

@@ -10,13 +10,12 @@ export class BedrockProvider extends DefaultProviderProxy {
   // between others like Chat Completions API.
   flavor: 'default' | 'anthropic' = 'default'
 
-  protected modelAPI(): ModelAPI | undefined {
+  protected modelAPI(): ModelAPI {
     // TODO(Marcelo): We need to add test for this when `genai-prices` supports Anthropic through Bedrock.
     if (this.flavor === 'anthropic') {
       return new AnthropicAPI('bedrock')
-    } else {
-      return new ConverseAPI('bedrock')
     }
+    return new ConverseAPI('bedrock')
   }
 
   async prepRequest() {

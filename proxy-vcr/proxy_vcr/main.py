@@ -49,19 +49,19 @@ async def proxy(request: Request) -> Response:
     if request.url.path.startswith('/openai'):
         client = cast(httpx.AsyncClient, request.scope['state']['httpx_client'])
         url = OPENAI_BASE_URL + request.url.path.strip('/openai')
-        with vcr.use_cassette(f'{body_hash}.yaml'):  # type: ignore[reportUnknownReturnType]
+        with vcr.use_cassette(cassette_name('openai', body_hash)):  # type: ignore[reportUnknownReturnType]
             headers = {'Authorization': auth_header, 'content-type': 'application/json'}
             response = await client.post(url, content=body, headers=headers)
     elif request.url.path.startswith('/groq'):
         client = cast(httpx.AsyncClient, request.scope['state']['httpx_client'])
         url = GROQ_BASE_URL + request.url.path[len('/groq') :]
-        with vcr.use_cassette(f'{body_hash}.yaml'):  # type: ignore[reportUnknownReturnType]
+        with vcr.use_cassette(cassette_name('groq', body_hash)):  # type: ignore[reportUnknownReturnType]
             headers = {'Authorization': auth_header, 'content-type': 'application/json'}
             response = await client.post(url, content=body, headers=headers)
     elif request.url.path.startswith('/bedrock'):
         client = cast(httpx.AsyncClient, request.scope['state']['httpx_client'])
         url = BEDROCK_BASE_URL + request.url.path[len('/bedrock') :]
-        with vcr.use_cassette(f'{body_hash}.yaml'):  # type: ignore[reportUnknownReturnType]
+        with vcr.use_cassette(cassette_name('bedrock', body_hash)):  # type: ignore[reportUnknownReturnType]
             headers = {
                 'Authorization': auth_header,
                 'content-type': 'application/json',
@@ -72,7 +72,7 @@ async def proxy(request: Request) -> Response:
         client = cast(httpx.AsyncClient, request.scope['state']['httpx_client'])
         url = ANTHROPIC_BASE_URL + request.url.path[len('/anthropic') :]
         api_key = request.headers.get('x-api-key', '')
-        with vcr.use_cassette(f'{body_hash}.yaml'):  # type: ignore[reportUnknownReturnType]
+        with vcr.use_cassette(cassette_name('anthropic', body_hash)):  # type: ignore[reportUnknownReturnType]
             anthropic_beta_headers = {}
             if anthropic_beta := request.headers.get('anthropic-beta'):
                 anthropic_beta_headers = {'anthropic-beta': anthropic_beta}
@@ -111,3 +111,7 @@ app = Starlette(
 if __name__ == '__main__':
     this_dir = pathlib.Path(__file__).parent
     uvicorn.run('proxy_vcr.main:app', host='0.0.0.0', port=8005, reload=True, reload_dirs=[str(this_dir)])
+
+
+def cassette_name(provider: str, hash: str) -> str:
+    return f'{provider}-{hash}.yaml'

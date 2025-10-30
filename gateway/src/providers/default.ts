@@ -10,7 +10,7 @@ import { createParser, type EventSourceMessage } from 'eventsource-parser'
 
 import type { GatewayOptions } from '..'
 import type { ModelAPI } from '../api'
-import type { SafeExtractor } from '../api/base'
+import type { BaseAPI } from '../api/base'
 import type { OtelSpan } from '../otel'
 import type { GenAIAttributes } from '../otel/attributes'
 import type { ApiKeyInfo, ProviderProxy } from '../types'
@@ -297,6 +297,7 @@ export class DefaultProviderProxy {
     const response = await this.fetch(url, { method, headers: requestHeaders, body: requestBodyText })
 
     if (this.isWhitelistedEndpoint()) {
+      // TODO(Marcelo): We can't read the body if it's a streaming response.
       const responseBody = await response.text()
       const { headers, status } = response
       this.otelSpan.end(
@@ -369,7 +370,7 @@ export class DefaultProviderProxy {
   }
 
   protected dispatchStreaming(
-    { requestBodyText, requestModel }: Prepare,
+    { requestBodyText, requestBodyData, requestModel }: Prepare,
     response: Response,
     responseHeaders: Headers,
   ): ProxyStreamingSuccess | ProxyInvalidRequest | ProxyUnexpectedResponse {
@@ -382,17 +383,19 @@ export class DefaultProviderProxy {
       return { error: 'No usage provider found' }
     }
 
+    // Get ModelAPI instance
+    const modelAPI = this.modelAPI()
+    // @ts-expect-error: requestBodyData is a JsonData, but the `processRequest` receives the proper type.
+    modelAPI.processRequest(requestBodyData)
+
+    // IMPORTANT: Start consuming BOTH streams immediately to prevent tee() from buffering
+    // The tee() requires both streams to be consumed concurrently, otherwise it will buffer
+
     // Tee stream: one for client, one for processing
     const [responseStream, processingStream] = response.body.tee()
 
     // Parse SSE events from processing stream
     const events = this.parseSSE(processingStream)
-
-    // Get ModelAPI instance
-    const modelAPI = this.modelAPI()
-
-    // IMPORTANT: Start consuming BOTH streams immediately to prevent tee() from buffering
-    // The tee() requires both streams to be consumed concurrently, otherwise it will buffer
 
     // @ts-expect-error: TODO(Marcelo): Fix this type error.
     const extractionPromise = this.processChunks(modelAPI, events)
@@ -411,20 +414,23 @@ export class DefaultProviderProxy {
     }
   }
 
-  private async processChunks<T>(
-    modelAPI: SafeExtractor<unknown, unknown, T>,
-    events: AsyncIterable<T>,
-  ): Promise<void> {
+  private async processChunks<T>(modelAPI: BaseAPI<unknown, unknown, T>, events: AsyncIterable<T>): Promise<void> {
     for await (const chunk of events) {
       modelAPI.processChunk(chunk)
     }
+
+    this.otelSpan.end(
+      `chat ${modelAPI.extractedRequest?.requestModel ?? 'streaming'}`,
+      // TODO(Marcelo): Missing the HTTP attributes - Should we pass them around or store in ModelAPI?
+      { ...modelAPI.toGenAiOtelAttributes() },
+      { level: 'info' },
+    )
 
     const provider = this.usageProvider()
     const usage = modelAPI.extractedResponse.usage
     const responseModel = modelAPI.extractedResponse.responseModel
 
     if (!provider || !usage || !responseModel) {
-      console.log('Unable to calculate cost', { provider, usage, responseModel })
       logfire.warning('Unable to calculate cost', { provider, usage, responseModel })
     } else {
       const price = calcPrice(usage, responseModel, { providerId: this.providerId() })
@@ -470,9 +476,6 @@ export class DefaultProviderProxy {
 
   protected otelAttributes(requestBody: JsonData, responseBody: JsonData): GenAIAttributes {
     const modelAPI = this.modelAPI()
-    if (!modelAPI) {
-      return {}
-    }
     return modelAPI.extractOtelAttributes(requestBody, responseBody)
   }
 }

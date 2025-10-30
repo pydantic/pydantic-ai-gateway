@@ -11,7 +11,7 @@ import type {
   ChatCompletionMessageParam,
 } from 'openai/resources/chat/completions'
 import type { ChatMessage, InputMessages, MessagePart, OutputMessage, OutputMessages } from '../otel/genai'
-import { BaseAPI, type ExtractedResponse, type ExtractorConfig } from './base'
+import { BaseAPI, type ExtractedRequest, type ExtractedResponse, type ExtractorConfig } from './base'
 
 export class ChatCompletionAPI extends BaseAPI<ChatCompletionCreateParams, ChatCompletion, ChatCompletionChunk> {
   apiFlavor = 'chat'
@@ -45,6 +45,25 @@ export class ChatCompletionAPI extends BaseAPI<ChatCompletionCreateParams, ChatC
   }
 
   // SafeExtractor implementation
+
+  requestExtractors: ExtractorConfig<ChatCompletionCreateParams, ExtractedRequest> = {
+    requestModel: (requestBody: ChatCompletionCreateParams) => {
+      this.extractedRequest.requestModel = requestBody.model ?? undefined
+    },
+    maxTokens: (requestBody: ChatCompletionCreateParams) => {
+      this.extractedRequest.maxTokens = requestBody.max_completion_tokens ?? undefined
+    },
+    temperature: (requestBody: ChatCompletionCreateParams) => {
+      this.extractedRequest.temperature = requestBody.temperature ?? undefined
+    },
+    topP: (requestBody: ChatCompletionCreateParams) => {
+      this.extractedRequest.topP = requestBody.top_p ?? undefined
+    },
+    stopSequences: (requestBody: ChatCompletionCreateParams) => {
+      this.extractedRequest.stopSequences =
+        typeof requestBody.stop === 'string' ? [requestBody.stop] : (requestBody.stop ?? undefined)
+    },
+  }
 
   chunkExtractors: ExtractorConfig<ChatCompletionChunk, ExtractedResponse> = {
     usage: (chunk: ChatCompletionChunk) => {

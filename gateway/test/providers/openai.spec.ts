@@ -129,18 +129,18 @@ describe('openai', () => {
     expect(completion).toMatchSnapshot('llm')
     expect(completion.usage).toMatchInlineSnapshot(`
       {
-        "input_tokens": 1315,
+        "input_tokens": 1139,
         "input_tokens_details": {
           "cached_tokens": 0,
         },
-        "output_tokens": 799,
+        "output_tokens": 469,
         "output_tokens_details": {
-          "reasoning_tokens": 768,
+          "reasoning_tokens": 448,
         },
         "pydantic_ai_gateway": {
-          "cost_estimate": 0.00963375,
+          "cost_estimate": 0.006113749999999999,
         },
-        "total_tokens": 2114,
+        "total_tokens": 1608,
       }
     `)
     expect(otelBatch, 'otelBatch length not 1').toHaveLength(1)

@@ -18,7 +18,7 @@ export class OpenAIProvider extends DefaultProviderProxy {
     return this.flavor
   }
 
-  modelAPI(): ModelAPI {
+  protected modelAPI(): ModelAPI {
     if (this.flavor === 'responses') {
       return new ResponsesAPI('openai')
     } else {

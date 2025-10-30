@@ -6,9 +6,7 @@ import type {
   MessageCreateParams,
 } from '@anthropic-ai/sdk/resources/beta'
 import type { InputMessages, JsonValue, MessagePart, OutputMessages, TextPart } from '../otel/genai'
-import { BaseAPI, type ExtractedResponse, type ExtractorConfig } from './base'
-
-// TODO(Marcelo): We use the beta API in PydanticAI, but does it matter here?
+import { BaseAPI, type ExtractedRequest, type ExtractedResponse, type ExtractorConfig } from './base'
 
 export class AnthropicAPI extends BaseAPI<MessageCreateParams, BetaMessage, BetaRawMessageStreamEvent> {
   requestStopSequences = (requestBody: MessageCreateParams): string[] | undefined => requestBody.stop_sequences
@@ -51,6 +49,32 @@ export class AnthropicAPI extends BaseAPI<MessageCreateParams, BetaMessage, Beta
         finish_reason: responseBody.stop_reason ?? undefined,
       },
     ]
+  }
+
+  // SafeExtractor implementation
+
+  requestExtractors: ExtractorConfig<MessageCreateParams, ExtractedRequest> = {
+    requestModel: (requestBody: MessageCreateParams) => {
+      this.extractedRequest.requestModel = requestBody.model ?? undefined
+    },
+    maxTokens: (requestBody: MessageCreateParams) => {
+      this.extractedRequest.maxTokens = requestBody.max_tokens ?? undefined
+    },
+    temperature: (requestBody: MessageCreateParams) => {
+      this.extractedRequest.temperature = requestBody.temperature ?? undefined
+    },
+    topK: (requestBody: MessageCreateParams) => {
+      this.extractedRequest.topK = requestBody.top_k ?? undefined
+    },
+    topP: (requestBody: MessageCreateParams) => {
+      this.extractedRequest.topP = requestBody.top_p ?? undefined
+    },
+    stopSequences: (requestBody: MessageCreateParams) => {
+      this.extractedRequest.stopSequences = requestBody.stop_sequences ?? undefined
+    },
+    systemInstructions: (requestBody: MessageCreateParams) => {
+      this.extractedRequest.systemInstructions = this.systemInstructions(requestBody)
+    },
   }
 
   chunkExtractors: ExtractorConfig<BetaRawMessageStreamEvent, ExtractedResponse> = {

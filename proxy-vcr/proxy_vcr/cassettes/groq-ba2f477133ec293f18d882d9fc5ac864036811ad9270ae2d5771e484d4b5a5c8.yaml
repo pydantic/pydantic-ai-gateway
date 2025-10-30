@@ -16,8 +16,6 @@ interactions:
       - '335'
       content-type:
       - application/json
-      cookie:
-      - __cf_bm=IAQRdA4i1_kA79P108mmEJ0r729PwB.58DYHAVd3c_A-1758117757-1.0.1.1-j95fUNhFDatIXft0lDO7dMl6gSPi9uu2jDbaqSQTbioMK5mrWwSY2aXLnbLdva0DJjI6C5HOTmoHBVcklFRmkfZZyp_gmzD4VkI1xd8jHgA
       host:
       - api.groq.com
       user-agent:
@@ -27,17 +25,16 @@ interactions:
   response:
     body:
       string: !!binary |
-        H4sIAAAAAAAAA1SSS47bMBBE9zmF0GvK4EcSJR4g6yxmNwgEimpZtPmRSdqZgeG7BxqMHWRbqNdd
-        Xeg72BkUmFUX4zdXT0szU0m7euglq5uBd/VktKkpa/teNmxoZw4E4nRCU77Bg4l+c1hsDEDAJNQF
-        Z1BMtj1jAx06Aj7O6ECBc9rrWhxELelU3zBlXazDHVujNZhBvd/Bhhk/QFECHnPWRwR1hxQdggKd
-        s81Fh7IzMRQMe4y3FSujN1u0q+JS/Uw6GKxsrn7pZPMBHgRcPG4pThlUuDpHYLHB5nVMqHMMoCCX
-        uMHjN4Hrc+Plilcci/UIih5o33WUikEQ2FL0WxlLPGPIoBr+T3qaGesaSXm7h3yW8wL6/9UnQzmT
-        shskgRKLdi97S1/Ka7zoeSM5f3zHHaeE+jzHP+F5Xv7MBf242HDEtCX7VdOyjWIRUzsIFAIIfIzH
-        FC/7rV9fkPAyUnZuDaM33y0CpxOXeqV8PV0+xV5ixnSzZi8FEyiIYZzR6zDD48dfAAAA//8DAPjR
-        Bh1KAgAA
+        H4sIAAAAAAAA/1VSu47bMBDs8xXC1pLBh2g9PiB1inRBIFDiymJMkTJJXy4w/O9ZHWwfruRyZnZm
+        yBtYAz1Mi87TurnKdFwchdQVN7Ws6rrDqhMzVqY1rWKjUEoZKCGMf3DKD+JhCkTFbIOnqymizkii
+        vDnyVkghWAlrMOgI7pxedSUPsmrYWL1hTDpbhzttCXbCBP2vG1hv8B36nYcp6RNCf4MYCNeDTsmm
+        rH3eOcFn9LuNnwsWk95s1q4Ic/E9aj9hYVPxQ0ebDnAvwYXTFsNIG/zVuRJm621aBnKbyHcPKYcN
+        7r9LuD43Xq54xSHblU7swBXjvONSlkA665aHHM7oSa8Wn6MHmDEhmloKtZt8lvMitF+nTw4XDZOk
+        lQPFeIEVe01ewLprGiXU/WF2GCnF2YS//hku/UsZ14EynjBu0X6UNG+D4K2qjVY1o/reh1MMlz3p
+        xx+IeBkYP7fZLPF4RrXopUGF0syXTum9woTxjR6JjGAkAnk3uGpv4P7tP8FV2NpIAgAA
     headers:
       CF-RAY:
-      - 9809451d7de88459-AMS
+      - 996a85d479858a22-AMS
       Cache-Control:
       - private, max-age=0, no-store, no-cache, must-revalidate
       Connection:
@@ -47,13 +44,12 @@ interactions:
       Content-Type:
       - application/json
       Date:
-      - Wed, 17 Sep 2025 14:24:56 GMT
+      - Thu, 30 Oct 2025 11:20:20 GMT
       Server:
       - cloudflare
       Set-Cookie:
-      - __cf_bm=ayV.AhGvm7TwD4d6KBZ3XSdj5BbjAu5TRBxZ3alLZxA-1758119096-1.0.1.1-1cMMOUc.EQqVbBWO2cIcn4PdfL_wIANPJ4kaEsRODXgMxhi11CBFE6Jv04qHUbcVYSVo0lk4Pg4BbL3QJ6LcEEjFNQ88N4C3mfkdvB3uwzA;
-        path=/; expires=Wed, 17-Sep-25 14:54:56 GMT; domain=.groq.com; HttpOnly; Secure;
-        SameSite=None
+      - __cf_bm=GFK2du3fO.CI0fMRK2xBmwvuU55AZNGOm7FxbOM5wtE-1761823219.9137926-1.0.1.1-14wyjkARmwUYbImERManyuqNJvFx5HHTTKygyG8AIP.rV79z.RcLv9teMIQ2Am7dcLzW1I5cs55Jn2neW5qw8nXSwN.8RScJBXjEmPW8yf7.4mC5ILptvLLAqAp.6e6l;
+        HttpOnly; Secure; Path=/; Expires=Thu, 30 Oct 2025 11:50:20 GMT
       Transfer-Encoding:
       - chunked
       alt-svc:
@@ -73,13 +69,13 @@ interactions:
       x-ratelimit-remaining-requests:
       - '499999'
       x-ratelimit-remaining-tokens:
-      - '299975'
+      - '299957'
       x-ratelimit-reset-requests:
       - 172.799999ms
       x-ratelimit-reset-tokens:
-      - 5ms
+      - 8.6ms
       x-request-id:
-      - req_01k5c10vm6f3ebj27ah02hjqy3
+      - req_01k8tdhr6ke5hah7e5e3dfq95a
     status:
       code: 200
       message: OK

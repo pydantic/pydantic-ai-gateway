@@ -30,11 +30,15 @@ export type ExtractorConfig<Data, Target> = {
   [K in keyof Target]?: FieldExtractor<Data>
 }
 
+export type ExtractedData = ExtractedRequest & ExtractedResponse
+
 export interface SafeExtractor<RequestBody, ResponseBody, StreamChunk> {
-  extractedRequest: ExtractedRequest | undefined
+  extractedRequest: ExtractedRequest
   extractedResponse: Partial<ExtractedResponse>
 
   processRequest(request: RequestBody): void
+  requestExtractors: ExtractorConfig<RequestBody, ExtractedRequest>
+
   processResponse(response: ResponseBody): void
 
   processChunk(chunk: StreamChunk): void
@@ -50,7 +54,7 @@ export abstract class BaseAPI<RequestBody, ResponseBody, StreamChunk = JsonData>
   readonly providerId: ProviderID
   readonly requestModel?: string
 
-  extractedRequest: ExtractedRequest | undefined = undefined
+  extractedRequest: ExtractedRequest = {}
   extractedResponse: Partial<ExtractedResponse> = {}
 
   constructor(providerId: ProviderID, requestModel?: string) {
@@ -58,11 +62,15 @@ export abstract class BaseAPI<RequestBody, ResponseBody, StreamChunk = JsonData>
     this.requestModel = requestModel
   }
 
+  requestExtractors: ExtractorConfig<RequestBody, ExtractedRequest> = {}
   chunkExtractors: ExtractorConfig<StreamChunk, ExtractedResponse> = {}
 
-  processRequest(_request: RequestBody): void {
-    throw new Error('Method not implemented.')
+  processRequest(request: RequestBody): void {
+    for (const extractor of Object.values(this.requestExtractors)) {
+      safe(extractor)(request)
+    }
   }
+
   processResponse(_response: ResponseBody): void {
     throw new Error('Method not implemented.')
   }
@@ -71,19 +79,47 @@ export abstract class BaseAPI<RequestBody, ResponseBody, StreamChunk = JsonData>
   // Although this seems inefficient, K is a constant and N is typically small.
   // We do this because we want to ensure that we extract each field separately, so the logic of one of the extractors
   // doesn't make another one to fail.
-  processChunk(_chunk: StreamChunk): void {
-    for (const [_key, extractor] of Object.entries(this.chunkExtractors)) {
-      safe(extractor)(_chunk)
+  processChunk(chunk: StreamChunk): void {
+    for (const extractor of Object.values(this.chunkExtractors)) {
+      safe(extractor)(chunk)
     }
   }
 
-  // TODO(Marcelo): This is not used anywhere yet! We should remove this note when we use it.
   extractUsage(responseBody: ResponseBody | StreamChunk): Usage | undefined {
     const provider = findProvider({ providerId: this.providerId })
     // This should never happen because we know the provider ID is valid, but we will throw an error to be safe.
     if (!provider) throw new Error(`Provider not found for provider ID: ${this.providerId}`)
     const { usage } = extractUsage(provider, responseBody, this.apiFlavor)
     return usage
+  }
+
+  toGenAiOtelAttributes(): GenAIAttributes {
+    return omitUndefined({
+      'gen_ai.system': this.providerId,
+      'gen_ai.operation.name': 'chat',
+      // Request Attributes
+      'gen_ai.request.model': this.extractedRequest?.requestModel,
+      'gen_ai.request.max_tokens': this.extractedRequest?.maxTokens,
+      'gen_ai.request.temperature': this.extractedRequest?.temperature,
+      'gen_ai.request.top_p': this.extractedRequest?.topP,
+      'gen_ai.request.top_k': this.extractedRequest?.topK,
+      'gen_ai.request.stop_sequences': this.extractedRequest?.stopSequences,
+      'gen_ai.request.seed': this.extractedRequest?.seed,
+      'gen_ai.system_instructions': this.extractedRequest?.systemInstructions,
+      'gen_ai.input.messages': this.extractedRequest?.inputMessages,
+      // Response Attributes
+      'gen_ai.response.model': this.extractedResponse?.responseModel,
+      'gen_ai.response.id': this.extractedResponse?.responseId,
+      'gen_ai.response.finish_reasons': this.extractedResponse?.finishReasons,
+      'gen_ai.output.messages': this.extractedResponse?.outputMessages,
+      'gen_ai.usage.input_tokens': this.extractedResponse?.usage?.input_tokens,
+      'gen_ai.usage.cache_read_tokens': this.extractedResponse?.usage?.cache_read_tokens,
+      'gen_ai.usage.cache_write_tokens': this.extractedResponse?.usage?.cache_write_tokens,
+      'gen_ai.usage.output_tokens': this.extractedResponse?.usage?.output_tokens,
+      'gen_ai.usage.input_audio_tokens': this.extractedResponse?.usage?.input_audio_tokens,
+      'gen_ai.usage.cache_audio_read_tokens': this.extractedResponse?.usage?.cache_audio_read_tokens,
+      'gen_ai.usage.output_audio_tokens': this.extractedResponse?.usage?.output_audio_tokens,
+    })
   }
 
   // GenAIAttributesExtractor implementation
@@ -102,6 +138,8 @@ export abstract class BaseAPI<RequestBody, ResponseBody, StreamChunk = JsonData>
 
   extractOtelAttributes(requestBody: JsonData, responseBody: JsonData): GenAIAttributes {
     return {
+      'gen_ai.system': this.providerId,
+      'gen_ai.operation.name': 'chat',
       'gen_ai.request.max_tokens': this.genAIAttributes('requestMaxTokens', requestBody as RequestBody),
       'gen_ai.request.top_k': this.genAIAttributes('requestTopK', requestBody as RequestBody),
       'gen_ai.request.top_p': this.genAIAttributes('requestTopP', requestBody as RequestBody),
@@ -128,4 +166,8 @@ export abstract class BaseAPI<RequestBody, ResponseBody, StreamChunk = JsonData>
     }
     return undefined
   }
+}
+
+function omitUndefined<T extends Record<string, unknown>>(obj: T): Partial<T> {
+  return Object.fromEntries(Object.entries(obj).filter(([_, v]) => v !== undefined)) as Partial<T>
 }

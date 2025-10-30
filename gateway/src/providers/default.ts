@@ -468,8 +468,6 @@ export class DefaultProviderProxy {
     }
   }
 
-  protected handleData(_data: JsonData): void {}
-
   protected isWhitelistedEndpoint(): boolean {
     return false
   }

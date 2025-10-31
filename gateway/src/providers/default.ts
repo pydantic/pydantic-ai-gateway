@@ -12,7 +12,6 @@ import type { GatewayOptions } from '..'
 import type { ModelAPI } from '../api'
 import type { BaseAPI } from '../api/base'
 import type { OtelSpan } from '../otel'
-import type { GenAIAttributes } from '../otel/attributes'
 import type { ApiKeyInfo, ProviderProxy } from '../types'
 import { runAfter } from '../utils'
 
@@ -21,15 +20,15 @@ export interface ProxySuccess {
   requestBody: string
   successStatus: number
   responseHeaders: Headers
-  responseBody: string
+  responseBodyText: string
+  responseBodyData: JsonData
   responseModel: string
-  otelAttributes?: GenAIAttributes
   usage: Usage
   cost: number
 }
 
 export interface ProxyWhitelistedEndpoint {
-  requestBody: string
+  requestBodyText: string
   httpStatusCode: number
   responseHeaders: Headers
   responseBody: string
@@ -41,7 +40,6 @@ export interface ProxyStreamingSuccess {
   successStatus: number
   responseHeaders: Headers
   responseStream: ReadableStream
-  otelAttributes?: GenAIAttributes
   waitCompletion: Promise<void>
   // In case we get to the end of the response, and we are unable to calculate the cost, we need to know if we can disable the key.
   disableKey?: boolean
@@ -71,7 +69,8 @@ interface Prepare {
 export type JsonData = object
 
 interface ProcessResponse {
-  responseBody: JsonData
+  responseBodyText: string
+  responseBodyData: JsonData
   responseModel: string
   usage: Usage
   cost: number
@@ -231,7 +230,7 @@ export class DefaultProviderProxy {
       }
       const price = calcPrice(usage, responseModel, { provider })
       if (price) {
-        return { responseBody, responseModel, usage, cost: price.total_price }
+        return { responseBodyText, responseBodyData, responseModel, usage, cost: price.total_price }
       } else {
         logfire.error('Unable to calculate spend', { responseModel, usage, provider })
         return { error: 'Unable to calculate spend' }
@@ -294,6 +293,12 @@ export class DefaultProviderProxy {
       return prepResult
     }
     const { requestBodyText, requestBodyData, requestModel } = prepResult
+
+    // Get ModelAPI instance and process request
+    const modelAPI = this.modelAPI()
+    // @ts-expect-error: requestBodyData is a JsonData, but the `processRequest` receives the proper type.
+    modelAPI.processRequest(requestBodyData)
+
     const response = await this.fetch(url, { method, headers: requestHeaders, body: requestBodyText })
 
     if (this.isWhitelistedEndpoint()) {
@@ -317,7 +322,7 @@ export class DefaultProviderProxy {
         },
         { level: 'info' },
       )
-      return { requestBody: requestBodyText, httpStatusCode: status, responseHeaders: headers, responseBody }
+      return { requestBodyText, httpStatusCode: status, responseHeaders: headers, responseBody }
     }
 
     // Each provider should be able to modify the response headers, e.g. remove openai org
@@ -326,6 +331,16 @@ export class DefaultProviderProxy {
     if (!response.ok) {
       // CAUTION: can we be charged in any way for failed requests?
       const responseBody = await response.text()
+      this.otelSpan.end(
+        `chat ${requestModel ?? 'unknown-model'}, unexpected response: {http.response.status_code}`,
+        {
+          ...modelAPI.toGenAiOtelAttributes(),
+          'http.response.status_code': response.status,
+          'http.request.body.text': requestBodyText,
+          'http.response.body.text': responseBody,
+        },
+        { level: 'warn' },
+      )
       return {
         requestModel,
         requestBody: requestBodyText,
@@ -344,9 +359,23 @@ export class DefaultProviderProxy {
 
     const processResponse = await this.extractUsage(response)
     if ('error' in processResponse) {
+      this.otelSpan.end(
+        `chat ${requestModel ?? 'unknown-model'}, invalid request {error}`,
+        {
+          ...modelAPI.toGenAiOtelAttributes(),
+          'http.response.status_code': response.status,
+          'http.request.body.text': requestBodyText,
+          error: processResponse.error,
+        },
+        { level: 'error' },
+      )
       return { ...processResponse, disableKey: this.disableKey(), requestModel }
     }
     const { responseBody, usage, responseModel, cost } = processResponse
+
+    // Process response to extract OTEL attributes
+    // @ts-expect-error: responseBody is a JsonData, but the `processResponse` receives the proper type.
+    modelAPI.processResponse(responseBody)
 
     responseHeaders.set('pydantic-ai-gateway-price-estimate', `${cost.toFixed(4)}USD`)
 
@@ -354,7 +383,17 @@ export class DefaultProviderProxy {
       this.injectCost(responseBody, cost)
     }
 
-    const otelAttributes = safe(this.otelAttributes.bind(this))(requestBodyData, responseBody)
+    // End span with OTEL attributes from modelAPI
+    this.otelSpan.end(
+      `chat ${responseModel}`,
+      {
+        ...modelAPI.toGenAiOtelAttributes(),
+        'http.response.status_code': response.status,
+        'http.request.body.text': requestBodyText,
+        'http.response.body.text': JSON.stringify(responseBody),
+      },
+      { level: 'info' },
+    )
 
     return {
       responseModel,
@@ -363,7 +402,6 @@ export class DefaultProviderProxy {
       responseHeaders,
       responseBody: JSON.stringify(responseBody),
       requestModel,
-      otelAttributes,
       usage,
       cost,
     }
@@ -470,11 +508,6 @@ export class DefaultProviderProxy {
 
   protected isWhitelistedEndpoint(): boolean {
     return false
-  }
-
-  protected otelAttributes(requestBody: JsonData, responseBody: JsonData): GenAIAttributes {
-    const modelAPI = this.modelAPI()
-    return modelAPI.extractOtelAttributes(requestBody, responseBody)
   }
 }
 

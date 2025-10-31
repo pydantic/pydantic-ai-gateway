@@ -3,7 +3,6 @@ import type { GatewayOptions } from '.'
 import { apiKeyAuth, setApiKeyCache } from './auth'
 import { currentScopeIntervals, type ExceededScope, endOfMonth, endOfWeek, type SpendScope } from './db'
 import { OtelTrace } from './otel'
-import { genAiOtelAttributes } from './otel/attributes'
 import { getProvider } from './providers'
 import { type ApiKeyInfo, guardProviderID, providerIdArray } from './types'
 import { runAfter, textResponse } from './utils'
@@ -62,12 +61,6 @@ export async function gateway(
   })
 
   const result = await proxy.dispatch()
-
-  // This doesn't work on streaming because the `result` object is returned as soon as we create the streaming response.
-  if (!('responseStream' in result) && !('httpStatusCode' in result)) {
-    const [spanName, attributes, level] = genAiOtelAttributes(result, proxy)
-    dispatchSpan.end(spanName, attributes, { level })
-  }
 
   let response: Response
   if ('httpStatusCode' in result) {

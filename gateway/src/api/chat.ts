@@ -65,6 +65,24 @@ export class ChatCompletionAPI extends BaseAPI<ChatCompletionCreateParams, ChatC
     },
   }
 
+  responseExtractors: ExtractorConfig<ChatCompletion, ExtractedResponse> = {
+    usage: (response: ChatCompletion) => {
+      this.extractedResponse.usage = this.extractUsage(response)
+    },
+    responseModel: (response: ChatCompletion) => {
+      this.extractedResponse.responseModel = response.model
+    },
+    responseId: (response: ChatCompletion) => {
+      this.extractedResponse.responseId = response.id
+    },
+    finishReasons: (response: ChatCompletion) => {
+      this.extractedResponse.finishReasons = response.choices.map((choice) => choice.finish_reason)
+    },
+    outputMessages: (response: ChatCompletion) => {
+      this.extractedResponse.outputMessages = this.outputMessages(response)
+    },
+  }
+
   chunkExtractors: ExtractorConfig<ChatCompletionChunk, ExtractedResponse> = {
     usage: (chunk: ChatCompletionChunk) => {
       if ('usage' in chunk && chunk.usage) {

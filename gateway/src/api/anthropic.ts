@@ -77,6 +77,24 @@ export class AnthropicAPI extends BaseAPI<MessageCreateParams, BetaMessage, Beta
     },
   }
 
+  responseExtractors: ExtractorConfig<BetaMessage, ExtractedResponse> = {
+    usage: (response: BetaMessage) => {
+      this.extractedResponse.usage = this.extractUsage(response)
+    },
+    responseModel: (response: BetaMessage) => {
+      this.extractedResponse.responseModel = response.model
+    },
+    responseId: (response: BetaMessage) => {
+      this.extractedResponse.responseId = response.id
+    },
+    finishReasons: (response: BetaMessage) => {
+      this.extractedResponse.finishReasons = response.stop_reason ? [response.stop_reason] : undefined
+    },
+    outputMessages: (response: BetaMessage) => {
+      this.extractedResponse.outputMessages = this.outputMessages(response)
+    },
+  }
+
   chunkExtractors: ExtractorConfig<BetaRawMessageStreamEvent, ExtractedResponse> = {
     usage: (chunk: BetaRawMessageStreamEvent) => {
       if ('usage' in chunk && chunk.usage) {

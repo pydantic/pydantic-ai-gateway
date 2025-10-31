@@ -67,6 +67,9 @@ export class GoogleAPI extends BaseAPI<GoogleRequest, GenerateContentResponse> {
   systemInstructions = (_request: GoogleRequest): TextPart[] | undefined => {
     return systemInstructions(_request.systemInstruction)
   }
+
+  // SafeExtractor implementation - responseExtractors not yet implemented for Google
+  responseExtractors = {}
 }
 
 function mapContent(content: Content): ChatMessage {

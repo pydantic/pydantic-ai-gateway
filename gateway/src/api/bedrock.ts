@@ -28,6 +28,9 @@ export class ConverseAPI extends BaseAPI<ConverseRequest, ConverseResponse> {
   responseId = (_responseBody: ConverseResponse): string | undefined => {
     return undefined
   }
+
+  // SafeExtractor implementation
+  responseExtractors = {}
 }
 
 // TODO(Marcelo): Add input/output messages extraction.

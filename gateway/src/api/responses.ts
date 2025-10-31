@@ -47,6 +47,9 @@ export class ResponsesAPI extends BaseAPI<ResponseCreateParams, Response> {
   outputMessages = (responseBody: Response): OutputMessages | undefined => {
     return responseBody.output.map(mapOutputMessage)
   }
+
+  // SafeExtractor implementation - responseExtractors not yet implemented for Responses API
+  responseExtractors = {}
 }
 
 function mapInputMessage(input: ResponseInputItem): ChatMessage {

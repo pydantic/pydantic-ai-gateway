@@ -1,5 +1,5 @@
 import { extractUsage, findProvider, type Usage } from '@pydantic/genai-prices'
-import type { GenAIAttributes, GenAIAttributesExtractor } from '../otel/attributes'
+import type { GenAIAttributes } from '../otel/attributes'
 import type { InputMessages, OutputMessages, TextPart } from '../otel/genai'
 import { type JsonData, safe } from '../providers/default'
 import type { ProviderID } from '../types'
@@ -46,7 +46,7 @@ export interface SafeExtractor<RequestBody, ResponseBody, StreamChunk> {
 }
 
 export abstract class BaseAPI<RequestBody, ResponseBody, StreamChunk = JsonData>
-  implements GenAIAttributesExtractor<RequestBody, ResponseBody>, SafeExtractor<RequestBody, ResponseBody, StreamChunk>
+  implements SafeExtractor<RequestBody, ResponseBody, StreamChunk>
 {
   /** @apiFlavor: the flavor of the API, used to determine the response model and usage */
   apiFlavor: string | undefined = undefined
@@ -63,6 +63,7 @@ export abstract class BaseAPI<RequestBody, ResponseBody, StreamChunk = JsonData>
   }
 
   requestExtractors: ExtractorConfig<RequestBody, ExtractedRequest> = {}
+  responseExtractors: ExtractorConfig<ResponseBody, ExtractedResponse> = {}
   chunkExtractors: ExtractorConfig<StreamChunk, ExtractedResponse> = {}
 
   processRequest(request: RequestBody): void {
@@ -71,8 +72,10 @@ export abstract class BaseAPI<RequestBody, ResponseBody, StreamChunk = JsonData>
     }
   }
 
-  processResponse(_response: ResponseBody): void {
-    throw new Error('Method not implemented.')
+  processResponse(response: ResponseBody): void {
+    for (const extractor of Object.values(this.responseExtractors)) {
+      safe(extractor)(response)
+    }
   }
 
   // This runs O(K * N) where K is the number of chunkExtractors and N is the number of chunks.
@@ -98,7 +101,7 @@ export abstract class BaseAPI<RequestBody, ResponseBody, StreamChunk = JsonData>
       'gen_ai.system': this.providerId,
       'gen_ai.operation.name': 'chat',
       // Request Attributes
-      'gen_ai.request.model': this.extractedRequest?.requestModel,
+      'gen_ai.request.model': this.requestModel ?? this.extractedRequest?.requestModel,
       'gen_ai.request.max_tokens': this.extractedRequest?.maxTokens,
       'gen_ai.request.temperature': this.extractedRequest?.temperature,
       'gen_ai.request.top_p': this.extractedRequest?.topP,
@@ -120,51 +123,6 @@ export abstract class BaseAPI<RequestBody, ResponseBody, StreamChunk = JsonData>
       'gen_ai.usage.cache_audio_read_tokens': this.extractedResponse?.usage?.cache_audio_read_tokens,
       'gen_ai.usage.output_audio_tokens': this.extractedResponse?.usage?.output_audio_tokens,
     })
-  }
-
-  // GenAIAttributesExtractor implementation
-
-  requestMaxTokens?: (requestBody: RequestBody) => number | undefined
-  requestSeed?: (requestBody: RequestBody) => number | undefined
-  requestStopSequences?: (requestBody: RequestBody) => string[] | undefined
-  requestTemperature?: (requestBody: RequestBody) => number | undefined
-  requestTopK?: (requestBody: RequestBody) => number | undefined
-  requestTopP?: (requestBody: RequestBody) => number | undefined
-  responseId?: (responseBody: ResponseBody) => string | undefined
-  responseFinishReasons?: (responseBody: ResponseBody) => string[] | undefined
-  inputMessages?: (requestBody: RequestBody) => InputMessages | undefined
-  outputMessages?: (responseBody: ResponseBody) => OutputMessages | undefined
-  systemInstructions?: (requestBody: RequestBody) => TextPart[] | undefined
-
-  extractOtelAttributes(requestBody: JsonData, responseBody: JsonData): GenAIAttributes {
-    return {
-      'gen_ai.system': this.providerId,
-      'gen_ai.operation.name': 'chat',
-      'gen_ai.request.max_tokens': this.genAIAttributes('requestMaxTokens', requestBody as RequestBody),
-      'gen_ai.request.top_k': this.genAIAttributes('requestTopK', requestBody as RequestBody),
-      'gen_ai.request.top_p': this.genAIAttributes('requestTopP', requestBody as RequestBody),
-      'gen_ai.request.temperature': this.genAIAttributes('requestTemperature', requestBody as RequestBody),
-      'gen_ai.request.stop_sequences': this.genAIAttributes('requestStopSequences', requestBody as RequestBody),
-      'gen_ai.request.seed': this.genAIAttributes('requestSeed', requestBody as RequestBody),
-      'gen_ai.response.finish_reasons': this.genAIAttributes('responseFinishReasons', responseBody as ResponseBody),
-      'gen_ai.response.id': this.genAIAttributes('responseId', responseBody as ResponseBody),
-      'gen_ai.input.messages': this.genAIAttributes('inputMessages', requestBody as RequestBody),
-      'gen_ai.output.messages': this.genAIAttributes('outputMessages', responseBody as ResponseBody),
-      'gen_ai.system_instructions': this.genAIAttributes('systemInstructions', requestBody as RequestBody),
-    }
-  }
-
-  genAIAttributes<T extends keyof GenAIAttributesExtractor<RequestBody, ResponseBody>>(
-    extractorName: T,
-    ...args: Parameters<NonNullable<GenAIAttributesExtractor<RequestBody, ResponseBody>[T]>>
-  ): ReturnType<NonNullable<GenAIAttributesExtractor<RequestBody, ResponseBody>[T]>> | undefined {
-    if (extractorName in this && typeof this[extractorName] === 'function') {
-      // @ts-expect-error inherit from GenAIAttributesExtractor
-      return safe(this[extractorName])(...args) as ReturnType<
-        NonNullable<GenAIAttributesExtractor<RequestBody, ResponseBody>[T]>
-      >
-    }
-    return undefined
   }
 }
 

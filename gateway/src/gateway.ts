@@ -1,11 +1,11 @@
 import * as logfire from '@pydantic/logfire-api'
-import type { GatewayOptions } from '.'
+import type { APIType, GatewayOptions } from '.'
 import { apiKeyAuth, setApiKeyCache } from './auth'
 import { currentScopeIntervals, type ExceededScope, endOfMonth, endOfWeek, type SpendScope } from './db'
 import { OtelTrace } from './otel'
 import { genAiOtelAttributes } from './otel/attributes'
 import { getProvider } from './providers'
-import { type ApiKeyInfo, guardProviderID, providerIdArray } from './types'
+import { APITypeArray, type ApiKeyInfo, guardAPIType } from './types'
 import { runAfter, textResponse } from './utils'
 
 export async function gateway(
@@ -14,14 +14,14 @@ export async function gateway(
   ctx: ExecutionContext,
   options: GatewayOptions,
 ): Promise<Response> {
-  const providerMatch = /^\/([^/]+)\/(.*)$/.exec(proxyPath)
-  if (!providerMatch) {
+  const apiMatch = /^\/([^/]+)\/(.*)$/.exec(proxyPath)
+  if (!apiMatch) {
     return textResponse(404, 'Path not found')
   }
-  const [, provider, restOfPath] = providerMatch as unknown as [string, string, string]
+  const [, api, restOfPath] = apiMatch as unknown as [string, APIType, string]
 
-  if (!guardProviderID(provider)) {
-    return textResponse(400, `Invalid provider '${provider}', should be one of ${providerIdArray.join(', ')}`)
+  if (!guardAPIType(api)) {
+    return textResponse(400, `Invalid API '${api}', should be one of ${APITypeArray.join(', ')}`)
   }
 
   const apiKeyInfo = await apiKeyAuth(request, ctx, options)
@@ -30,7 +30,7 @@ export async function gateway(
     return textResponse(403, `Unauthorized - Key ${apiKeyInfo.status}`)
   }
 
-  let providerProxies = apiKeyInfo.providers.filter((p) => p.providerId === provider)
+  let providerProxies = apiKeyInfo.providers.filter((p) => p.api === api)
 
   const profile = request.headers.get('pydantic-ai-gateway-profile')
   if (profile !== null) {
@@ -38,7 +38,8 @@ export async function gateway(
   }
 
   // sort providers on priority, highest first
-  providerProxies.sort((a, b) => (b.priority ?? 1) - (a.priority ?? 1))
+  // TODO(Marcelo): We need to choose the provider based on the fallback config.
+  providerProxies.sort((a, b) => (b.api ?? 1) - (a.api ?? 1))
 
   const providerProxy = providerProxies[0]
   if (!providerProxy) {

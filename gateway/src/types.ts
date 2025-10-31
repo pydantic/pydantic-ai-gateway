@@ -34,25 +34,29 @@ export interface ApiKeyInfo {
 
 export type ProviderID = 'groq' | 'openai' | 'google-vertex' | 'anthropic' | 'test' | 'bedrock'
 // TODO | 'azure' | 'fireworks' | 'mistral' | 'cohere'
+export type APIType = 'chat' | 'responses' | 'converse' | 'anthropic' | 'gemini' | 'groq'
 
-const providerIds: Record<ProviderID, boolean> = {
-  groq: true,
-  openai: true,
-  'google-vertex': true,
+const apiTypes: Record<APIType, boolean> = {
+  chat: true,
+  responses: true,
+  converse: true,
   anthropic: true,
-  test: true,
-  bedrock: true,
+  gemini: true,
+  groq: true,
 }
 
-export const providerIdArray = Object.keys(providerIds).filter((id) => id !== 'test') as ProviderID[]
+export const APITypeArray = Object.keys(apiTypes).filter((api) => api !== 'test') as APIType[]
 
-export function guardProviderID(id: string): id is ProviderID {
-  return id in providerIds
+export function guardAPIType(api: string): api is APIType {
+  return api in apiTypes
 }
 
 export interface ProviderProxy {
   /** @providerId: decides on the logic used to process the request and response */
   providerId: ProviderID
+  /** @api: decides what API type the provider supports */
+  // TODO(Marcelo): But then we need 2 providers for OpenAI Chat & Responses!?
+  api: APIType
   /** @baseUrl: decides what URL the request will be forwarded to */
   baseUrl: string
   /** @injectCost: if injectCost is True, the cost of request from genai-prices is injected in the usage object in the response */
@@ -63,8 +67,6 @@ export interface ProviderProxy {
   credentials: string
   /** @profile: profile let's you select a provider when multiple providers with the same ProviderID are allowed */
   profile?: string
-  /** @priority: higher priority providers will be used first */
-  priority?: number
   /** @disableKey: weather to disable the key in case of error, if missing defaults to True. */
   disableKey?: boolean
 }

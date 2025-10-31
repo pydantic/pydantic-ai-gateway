@@ -5,7 +5,7 @@
   "main": "src/index.ts",
   "scripts": {
     "typecheck": "tsgo --noEmit && cd test && tsgo --noEmit",
-    "test": "vitest"
+    "test": "vitest --reporter=verbose"
   },
   "dependencies": {
     "@opentelemetry/api": "^1.9.0",

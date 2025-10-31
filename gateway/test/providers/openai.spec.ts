@@ -147,7 +147,7 @@ describe('openai', () => {
     expect(JSON.parse(otelBatch[0]!).resourceSpans?.[0].scopeSpans?.[0].spans?.[0]?.attributes).toMatchSnapshot('span')
   })
 
-  test('openai chat stream', async ({ gateway }) => {
+  test.only('openai chat stream', async ({ gateway }) => {
     const { fetch, otelBatch } = gateway
 
     const client = new OpenAI({ apiKey: 'healthy', baseURL: 'https://example.com/openai', fetch })

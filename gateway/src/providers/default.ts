@@ -12,7 +12,7 @@ import type { GatewayOptions } from '..'
 import type { ModelAPI } from '../api'
 import type { BaseAPI } from '../api/base'
 import type { OtelSpan } from '../otel'
-import type { GenAIAttributes } from '../otel/attributes'
+import { attributesFromRequest, attributesFromResponse, type GenAIAttributes } from '../otel/attributes'
 import type { ApiKeyInfo, ProviderProxy } from '../types'
 import { runAfter } from '../utils'
 
@@ -29,10 +29,7 @@ export interface ProxySuccess {
 }
 
 export interface ProxyWhitelistedEndpoint {
-  requestBody: string
-  httpStatusCode: number
-  responseHeaders: Headers
-  responseBody: string
+  response: Response
 }
 
 export interface ProxyStreamingSuccess {
@@ -42,7 +39,7 @@ export interface ProxyStreamingSuccess {
   responseHeaders: Headers
   responseStream: ReadableStream
   otelAttributes?: GenAIAttributes
-  waitCompletion: Promise<void>
+  onStreamComplete: Promise<{ cost?: number } | { error: Error }>
   // In case we get to the end of the response, and we are unable to calculate the cost, we need to know if we can disable the key.
   disableKey?: boolean
 }
@@ -297,27 +294,16 @@ export class DefaultProviderProxy {
     const response = await this.fetch(url, { method, headers: requestHeaders, body: requestBodyText })
 
     if (this.isWhitelistedEndpoint()) {
-      // TODO(Marcelo): We can't read the body if it's a streaming response.
-      const responseBody = await response.text()
-      const { headers, status } = response
       this.otelSpan.end(
         `${this.request.method} ${this.restOfPath}`,
         {
-          'http.method': this.request.method,
-          'http.url': this.restOfPath,
-          'http.response.status_code': status,
+          ...attributesFromRequest(this.request),
+          ...attributesFromResponse(response),
           'http.request.body.text': requestBodyText,
-          'http.response.body.text': responseBody,
-          ...Object.fromEntries(
-            Array.from(requestHeaders.entries()).map(([name, value]) => [`http.request.header.${name}`, value]),
-          ),
-          ...Object.fromEntries(
-            Array.from(headers.entries()).map(([name, value]) => [`http.response.header.${name}`, value]),
-          ),
         },
         { level: 'info' },
       )
-      return { requestBody: requestBodyText, httpStatusCode: status, responseHeaders: headers, responseBody }
+      return { response }
     }
 
     // Each provider should be able to modify the response headers, e.g. remove openai org
@@ -402,7 +388,23 @@ export class DefaultProviderProxy {
 
     // Track completion but don't wait for it before returning
     this.runAfter('extract-stream', extractionPromise)
-    const waitCompletion = extractionPromise.catch(() => {}) // Swallow errors, already logged
+
+    const onStreamComplete = extractionPromise
+      .then((result) => {
+        // TODO(Marcelo): I think we actually need to emit 2 spans: one for HTTP, and another for the LLM.
+        this.otelSpan.end(
+          `chat ${modelAPI.extractedRequest?.requestModel ?? 'streaming'}`,
+          {
+            ...modelAPI.toGenAiOtelAttributes(),
+            ...attributesFromRequest(this.request),
+            ...attributesFromResponse(response),
+          },
+          { level: 'info' },
+        )
+
+        return result
+      })
+      .catch() // Swallow errors, already logged
 
     return {
       requestModel,
@@ -410,36 +412,31 @@ export class DefaultProviderProxy {
       successStatus: response.status,
       responseHeaders,
       responseStream,
-      waitCompletion,
+      onStreamComplete,
     }
   }
 
-  private async processChunks<T>(modelAPI: BaseAPI<unknown, unknown, T>, events: AsyncIterable<T>): Promise<void> {
+  private async processChunks<T>(
+    modelAPI: BaseAPI<unknown, unknown, T>,
+    events: AsyncIterable<T>,
+  ): Promise<{ cost?: number } | { error: Error }> {
     for await (const chunk of events) {
       modelAPI.processChunk(chunk)
     }
-
-    this.otelSpan.end(
-      `chat ${modelAPI.extractedRequest?.requestModel ?? 'streaming'}`,
-      // TODO(Marcelo): Missing the HTTP attributes - Should we pass them around or store in ModelAPI?
-      { ...modelAPI.toGenAiOtelAttributes() },
-      { level: 'info' },
-    )
 
     const provider = this.usageProvider()
     const usage = modelAPI.extractedResponse.usage
     const responseModel = modelAPI.extractedResponse.responseModel
 
     if (!provider || !usage || !responseModel) {
-      logfire.warning('Unable to calculate cost', { provider, usage, responseModel })
+      return { error: new Error(`Unable to calculate cost for model ${responseModel}`) }
+    }
+
+    const price = calcPrice(usage, responseModel, { provider })
+    if (price) {
+      return { cost: price.total_price }
     } else {
-      const price = calcPrice(usage, responseModel, { providerId: this.providerId() })
-      if (price) {
-        this.cost = price.total_price
-        logfire.info('cost {cost}', { cost: this.cost, usage, responseModel })
-      } else {
-        logfire.warning('Unable to calculate cost', { provider, usage, responseModel })
-      }
+      return { error: new Error(`Unable to calculate cost for model ${responseModel} and provider ${provider.name}`) }
     }
   }
 

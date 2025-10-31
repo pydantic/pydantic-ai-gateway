@@ -72,6 +72,7 @@ export class ChatCompletionAPI extends BaseAPI<ChatCompletionCreateParams, ChatC
       }
     },
     responseModel: (chunk: ChatCompletionChunk) => {
+      console.error('responseModel', chunk)
       if ('model' in chunk && chunk.model) {
         this.extractedResponse.responseModel = chunk.model
       }

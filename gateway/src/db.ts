@@ -259,11 +259,11 @@ export function currentScopeIntervals(): ScopeIntervals {
 }
 
 const MS_PER_DAY = 24 * 60 * 60 * 1000
-function dateAsInt(date: Date): number {
+export function dateAsInt(date: Date): number {
   return Math.floor(date.getTime() / MS_PER_DAY)
 }
 
-function intAsDate(days: number): Date {
+export function intAsDate(days: number): Date {
   return new Date(days * MS_PER_DAY)
 }
 

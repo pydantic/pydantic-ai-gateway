@@ -47,19 +47,28 @@ export const config: Config<ProviderKeys> = {
       injectCost: true,
       // credentials are used by the ProviderProxy to authenticate the forwarded request
       credentials: env.OPENAI_API_KEY,
+      apiTypes: ['chat', 'responses'],
     },
-    b: { providerId: 'groq', baseUrl: 'https://api.groq.com', injectCost: true, credentials: env.GROQ_API_KEY },
+    b: {
+      providerId: 'groq',
+      baseUrl: 'https://api.groq.com',
+      injectCost: true,
+      credentials: env.GROQ_API_KEY,
+      apiTypes: ['groq'],
+    },
     c: {
       providerId: 'google-vertex',
       baseUrl: 'https://us-central1-aiplatform.googleapis.com',
       injectCost: true,
       credentials: env.GOOGLE_SERVICE_ACCOUNT_KEY,
+      apiTypes: ['gemini', 'anthropic'],
     },
     d: {
       providerId: 'anthropic',
       baseUrl: 'https://api.anthropic.com',
       injectCost: true,
       credentials: env.ANTHROPIC_API_KEY,
+      apiTypes: ['anthropic'],
     },
   },
   // individual apiKeys

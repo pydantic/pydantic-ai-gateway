@@ -9,7 +9,7 @@ describe('openai', () => {
   test('openai chat', async ({ gateway }) => {
     const { fetch, otelBatch } = gateway
 
-    const client = new OpenAI({ apiKey: 'healthy', baseURL: 'https://example.com/openai', fetch })
+    const client = new OpenAI({ apiKey: 'healthy', baseURL: 'https://example.com/chat', fetch })
 
     const completion = await client.chat.completions.create({
       model: 'gpt-5',
@@ -103,7 +103,7 @@ describe('openai', () => {
   test('openai responses', async ({ gateway }) => {
     const { fetch, otelBatch } = gateway
 
-    const client = new OpenAI({ apiKey: 'healthy', baseURL: 'https://example.com/openai', fetch })
+    const client = new OpenAI({ apiKey: 'healthy', baseURL: 'https://example.com/chat', fetch })
 
     const completion = await client.responses.create({
       model: 'gpt-5',
@@ -118,7 +118,7 @@ describe('openai', () => {
   test('openai responses with builtin tools', async ({ gateway }) => {
     const { fetch, otelBatch } = gateway
 
-    const client = new OpenAI({ apiKey: 'healthy', baseURL: 'https://example.com/openai', fetch })
+    const client = new OpenAI({ apiKey: 'healthy', baseURL: 'https://example.com/chat', fetch })
 
     const completion = await client.responses.create({
       model: 'gpt-5',
@@ -150,7 +150,7 @@ describe('openai', () => {
   test('openai chat stream', async ({ gateway }) => {
     const { fetch, otelBatch } = gateway
 
-    const client = new OpenAI({ apiKey: 'healthy', baseURL: 'https://example.com/openai', fetch })
+    const client = new OpenAI({ apiKey: 'healthy', baseURL: 'https://example.com/chat', fetch })
 
     const stream = await client.chat.completions.create({
       stream: true,

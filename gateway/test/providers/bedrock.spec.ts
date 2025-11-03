@@ -5,7 +5,7 @@ describe('bedrock', () => {
   test('should call bedrock via gateway', async ({ gateway }) => {
     const { fetch, otelBatch } = gateway
 
-    const result = await fetch('https://example.com/bedrock/model/amazon.nova-micro-v1%3A0/converse', {
+    const result = await fetch('https://example.com/converse/model/amazon.nova-micro-v1%3A0/converse', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', Authorization: 'healthy' },
       body: JSON.stringify({

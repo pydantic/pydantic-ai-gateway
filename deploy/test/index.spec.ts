@@ -72,7 +72,7 @@ describe('deploy', () => {
 
     const client = new OpenAI({
       apiKey: 'healthy-key',
-      baseURL: 'https://example.com/openai',
+      baseURL: 'https://example.com/chat',
       fetch: SELF.fetch.bind(SELF),
     })
 

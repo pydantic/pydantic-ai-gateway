@@ -47,13 +47,13 @@ ON CONFLICT (id) DO UPDATE SET status = excluded.status, expiresAt = null`,
 
 export type EntityType = 'project' | 'user' | 'key'
 
-const entityTypeLookup: Record<EntityType, number> = { project: 1, user: 2, key: 3 }
-const reverseEntityTypeLookup: Record<1 | 2 | 3, EntityType> = { 1: 'project', 2: 'user', 3: 'key' }
+export const entityTypeLookup: Record<EntityType, number> = { project: 1, user: 2, key: 3 }
+export const reverseEntityTypeLookup: Record<1 | 2 | 3, EntityType> = { 1: 'project', 2: 'user', 3: 'key' }
 
 export type Scope = 'daily' | 'weekly' | 'monthly' | 'total'
 
-const scopeLookup: Record<Scope, number> = { daily: 1, weekly: 2, monthly: 3, total: 4 }
-const reverseScopeLookup: Record<1 | 2 | 3 | 4, Scope> = { 1: 'daily', 2: 'weekly', 3: 'monthly', 4: 'total' }
+export const scopeLookup: Record<Scope, number> = { daily: 1, weekly: 2, monthly: 3, total: 4 }
+export const reverseScopeLookup: Record<1 | 2 | 3 | 4, Scope> = { 1: 'daily', 2: 'weekly', 3: 'monthly', 4: 'total' }
 
 export interface SpendScope {
   entityType: EntityType
@@ -77,9 +77,10 @@ export interface LimitUpdate {
   monthly?: number | null
 }
 
+
 export type KeyLimitUpdate = LimitUpdate & { total?: number | null }
 // 65536 equates to 2149-06-07
-const DISTANT_FUTURE = 65536
+export const DISTANT_FUTURE = 65536
 
 export interface SpendStatus {
   entityId: number
@@ -259,11 +260,11 @@ export function currentScopeIntervals(): ScopeIntervals {
 }
 
 const MS_PER_DAY = 24 * 60 * 60 * 1000
-function dateAsInt(date: Date): number {
+export function dateAsInt(date: Date): number {
   return Math.floor(date.getTime() / MS_PER_DAY)
 }
 
-function intAsDate(days: number): Date {
+export function intAsDate(days: number): Date {
   return new Date(days * MS_PER_DAY)
 }
 

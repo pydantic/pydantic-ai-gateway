@@ -1047,6 +1047,78 @@ The population standard deviation is used when your data represents the entire p
 ]
 `;
 
+exports[`anthropic > should call anthropic via gateway with stream > chunks 1`] = `
+[
+  {
+    "message": {
+      "content": [],
+      "id": "msg_01Tce1onxgEPRDM3CRhb6A4i",
+      "model": "claude-opus-4-1-20250805",
+      "role": "assistant",
+      "stop_reason": null,
+      "stop_sequence": null,
+      "type": "message",
+      "usage": {
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 0,
+          "ephemeral_5m_input_tokens": 0,
+        },
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "input_tokens": 14,
+        "output_tokens": 1,
+        "service_tier": "standard",
+      },
+    },
+    "type": "message_start",
+  },
+  {
+    "content_block": {
+      "text": "",
+      "type": "text",
+    },
+    "index": 0,
+    "type": "content_block_start",
+  },
+  {
+    "delta": {
+      "text": "The",
+      "type": "text_delta",
+    },
+    "index": 0,
+    "type": "content_block_delta",
+  },
+  {
+    "delta": {
+      "text": " capital of France is Paris.",
+      "type": "text_delta",
+    },
+    "index": 0,
+    "type": "content_block_delta",
+  },
+  {
+    "index": 0,
+    "type": "content_block_stop",
+  },
+  {
+    "delta": {
+      "stop_reason": "end_turn",
+      "stop_sequence": null,
+    },
+    "type": "message_delta",
+    "usage": {
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "input_tokens": 14,
+      "output_tokens": 10,
+    },
+  },
+  {
+    "type": "message_stop",
+  },
+]
+`;
+
 exports[`anthropic > should call anthropic via gateway with stream > span 1`] = `
 [
   {

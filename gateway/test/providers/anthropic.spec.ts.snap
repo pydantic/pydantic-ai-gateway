@@ -1047,6 +1047,78 @@ The population standard deviation is used when your data represents the entire p
 ]
 `;
 
+exports[`anthropic > should call anthropic via gateway with stream > chunks 1`] = `
+[
+  {
+    "message": {
+      "content": [],
+      "id": "msg_01Tce1onxgEPRDM3CRhb6A4i",
+      "model": "claude-opus-4-1-20250805",
+      "role": "assistant",
+      "stop_reason": null,
+      "stop_sequence": null,
+      "type": "message",
+      "usage": {
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 0,
+          "ephemeral_5m_input_tokens": 0,
+        },
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "input_tokens": 14,
+        "output_tokens": 1,
+        "service_tier": "standard",
+      },
+    },
+    "type": "message_start",
+  },
+  {
+    "content_block": {
+      "text": "",
+      "type": "text",
+    },
+    "index": 0,
+    "type": "content_block_start",
+  },
+  {
+    "delta": {
+      "text": "The",
+      "type": "text_delta",
+    },
+    "index": 0,
+    "type": "content_block_delta",
+  },
+  {
+    "delta": {
+      "text": " capital of France is Paris.",
+      "type": "text_delta",
+    },
+    "index": 0,
+    "type": "content_block_delta",
+  },
+  {
+    "index": 0,
+    "type": "content_block_stop",
+  },
+  {
+    "delta": {
+      "stop_reason": "end_turn",
+      "stop_sequence": null,
+    },
+    "type": "message_delta",
+    "usage": {
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "input_tokens": 14,
+      "output_tokens": 10,
+    },
+  },
+  {
+    "type": "message_stop",
+  },
+]
+`;
+
 exports[`anthropic > should call anthropic via gateway with stream > span 1`] = `
 [
   {
@@ -1058,7 +1130,7 @@ exports[`anthropic > should call anthropic via gateway with stream > span 1`] = 
   {
     "key": "logfire.json_schema",
     "value": {
-      "stringValue": "{"type":"object","properties":{"gen_ai.system":{"type":"string"},"gen_ai.operation.name":{"type":"string"},"gen_ai.request.model":{"type":"string"},"gen_ai.request.max_tokens":{"type":"number"},"http.request.method":{"type":"string"},"url.full":{"type":"string"},"http.request.header.accept":{"type":"string"},"http.request.header.anthropic-version":{"type":"string"},"http.request.header.authorization":{"type":"string"},"http.request.header.content-type":{"type":"string"},"http.request.header.user-agent":{"type":"string"},"http.request.header.x-stainless-arch":{"type":"string"},"http.request.header.x-stainless-lang":{"type":"string"},"http.request.header.x-stainless-os":{"type":"string"},"http.request.header.x-stainless-package-version":{"type":"string"},"http.request.header.x-stainless-retry-count":{"type":"string"},"http.request.header.x-stainless-runtime":{"type":"string"},"http.request.header.x-stainless-runtime-version":{"type":"string"},"http.request.header.x-stainless-timeout":{"type":"string"},"http.response.status_code":{"type":"number"},"http.response.header.server":{"type":"string"},"http.response.header.transfer-encoding":{"type":"string"}}}",
+      "stringValue": "{"type":"object","properties":{"gen_ai.system":{"type":"string"},"gen_ai.operation.name":{"type":"string"},"gen_ai.request.model":{"type":"string"},"gen_ai.request.max_tokens":{"type":"number"},"gen_ai.response.model":{"type":"string"},"gen_ai.response.id":{"type":"string"},"gen_ai.usage.input_tokens":{"type":"number"},"gen_ai.usage.cache_read_tokens":{"type":"number"},"gen_ai.usage.cache_write_tokens":{"type":"number"},"gen_ai.usage.output_tokens":{"type":"number"},"http.request.method":{"type":"string"},"url.full":{"type":"string"},"http.request.header.accept":{"type":"string"},"http.request.header.anthropic-version":{"type":"string"},"http.request.header.authorization":{"type":"string"},"http.request.header.content-type":{"type":"string"},"http.request.header.user-agent":{"type":"string"},"http.request.header.x-stainless-arch":{"type":"string"},"http.request.header.x-stainless-lang":{"type":"string"},"http.request.header.x-stainless-os":{"type":"string"},"http.request.header.x-stainless-package-version":{"type":"string"},"http.request.header.x-stainless-retry-count":{"type":"string"},"http.request.header.x-stainless-runtime":{"type":"string"},"http.request.header.x-stainless-runtime-version":{"type":"string"},"http.request.header.x-stainless-timeout":{"type":"string"},"http.response.status_code":{"type":"number"},"http.response.header.server":{"type":"string"},"http.response.header.transfer-encoding":{"type":"string"}}}",
     },
   },
   {
@@ -1089,6 +1161,42 @@ exports[`anthropic > should call anthropic via gateway with stream > span 1`] = 
     "key": "gen_ai.request.max_tokens",
     "value": {
       "intValue": 1024,
+    },
+  },
+  {
+    "key": "gen_ai.response.model",
+    "value": {
+      "stringValue": "claude-opus-4-1-20250805",
+    },
+  },
+  {
+    "key": "gen_ai.response.id",
+    "value": {
+      "stringValue": "msg_01Tce1onxgEPRDM3CRhb6A4i",
+    },
+  },
+  {
+    "key": "gen_ai.usage.input_tokens",
+    "value": {
+      "intValue": 14,
+    },
+  },
+  {
+    "key": "gen_ai.usage.cache_read_tokens",
+    "value": {
+      "intValue": 0,
+    },
+  },
+  {
+    "key": "gen_ai.usage.cache_write_tokens",
+    "value": {
+      "intValue": 0,
+    },
+  },
+  {
+    "key": "gen_ai.usage.output_tokens",
+    "value": {
+      "intValue": 10,
     },
   },
   {

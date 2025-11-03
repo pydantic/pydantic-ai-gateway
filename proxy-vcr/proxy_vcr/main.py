@@ -89,10 +89,10 @@ async def proxy(request: Request) -> Response:
     if response.headers.get('content-type').startswith('text/event-stream'):
 
         async def generator():
-            async for chunk in response.aiter_lines():
+            async for chunk in response.aiter_bytes():
                 yield chunk
 
-        return StreamingResponse(generator(), status_code=response.status_code)
+        return StreamingResponse(generator(), status_code=response.status_code, headers=dict(response.headers))
     return JSONResponse(response.json(), status_code=response.status_code)
 
 

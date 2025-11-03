@@ -59,8 +59,7 @@ describe('anthropic', () => {
       chunks.push(chunk)
     }
 
-    // TODO(Marcelo): This is wrong. We need to fix this!
-    expect(chunks).toMatchInlineSnapshot(`[]`)
+    expect(chunks).toMatchSnapshot('chunks')
     expect(otelBatch, 'otelBatch length not 1').toHaveLength(1)
     expect(JSON.parse(otelBatch[0]!).resourceSpans?.[0].scopeSpans?.[0].spans?.[0]?.attributes).toMatchSnapshot('span')
   })

@@ -346,7 +346,111 @@ exports[`openai > openai chat > span 1`] = `
 ]
 `;
 
-exports[`openai > openai chat stream > chunks 1`] = `[]`;
+exports[`openai > openai chat stream > chunks 1`] = `
+[
+  {
+    "choices": [
+      {
+        "delta": {
+          "content": "",
+          "refusal": null,
+          "role": "assistant",
+        },
+        "finish_reason": null,
+        "index": 0,
+      },
+    ],
+    "created": 1761823216,
+    "id": "chatcmpl-CWKzQzo2QLXPzzjG5ZhftNDkOKT2q",
+    "model": "gpt-5-2025-08-07",
+    "obfuscation": "znk17e1VnU",
+    "object": "chat.completion.chunk",
+    "service_tier": "default",
+    "system_fingerprint": null,
+    "usage": null,
+  },
+  {
+    "choices": [
+      {
+        "delta": {
+          "content": "Paris",
+        },
+        "finish_reason": null,
+        "index": 0,
+      },
+    ],
+    "created": 1761823216,
+    "id": "chatcmpl-CWKzQzo2QLXPzzjG5ZhftNDkOKT2q",
+    "model": "gpt-5-2025-08-07",
+    "obfuscation": "9uyCALM",
+    "object": "chat.completion.chunk",
+    "service_tier": "default",
+    "system_fingerprint": null,
+    "usage": null,
+  },
+  {
+    "choices": [
+      {
+        "delta": {
+          "content": ".",
+        },
+        "finish_reason": null,
+        "index": 0,
+      },
+    ],
+    "created": 1761823216,
+    "id": "chatcmpl-CWKzQzo2QLXPzzjG5ZhftNDkOKT2q",
+    "model": "gpt-5-2025-08-07",
+    "obfuscation": "DxMvC33A2iV",
+    "object": "chat.completion.chunk",
+    "service_tier": "default",
+    "system_fingerprint": null,
+    "usage": null,
+  },
+  {
+    "choices": [
+      {
+        "delta": {},
+        "finish_reason": "stop",
+        "index": 0,
+      },
+    ],
+    "created": 1761823216,
+    "id": "chatcmpl-CWKzQzo2QLXPzzjG5ZhftNDkOKT2q",
+    "model": "gpt-5-2025-08-07",
+    "obfuscation": "6BmmA2",
+    "object": "chat.completion.chunk",
+    "service_tier": "default",
+    "system_fingerprint": null,
+    "usage": null,
+  },
+  {
+    "choices": [],
+    "created": 1761823216,
+    "id": "chatcmpl-CWKzQzo2QLXPzzjG5ZhftNDkOKT2q",
+    "model": "gpt-5-2025-08-07",
+    "obfuscation": "8u6q1bA9GJu",
+    "object": "chat.completion.chunk",
+    "service_tier": "default",
+    "system_fingerprint": null,
+    "usage": {
+      "completion_tokens": 11,
+      "completion_tokens_details": {
+        "accepted_prediction_tokens": 0,
+        "audio_tokens": 0,
+        "reasoning_tokens": 0,
+        "rejected_prediction_tokens": 0,
+      },
+      "prompt_tokens": 23,
+      "prompt_tokens_details": {
+        "audio_tokens": 0,
+        "cached_tokens": 0,
+      },
+      "total_tokens": 34,
+    },
+  },
+]
+`;
 
 exports[`openai > openai chat stream > span 1`] = `
 [
@@ -359,7 +463,7 @@ exports[`openai > openai chat stream > span 1`] = `
   {
     "key": "logfire.json_schema",
     "value": {
-      "stringValue": "{"type":"object","properties":{"gen_ai.system":{"type":"string"},"gen_ai.operation.name":{"type":"string"},"gen_ai.request.model":{"type":"string"},"gen_ai.request.max_tokens":{"type":"number"}}}",
+      "stringValue": "{"type":"object","properties":{"gen_ai.system":{"type":"string"},"gen_ai.operation.name":{"type":"string"},"gen_ai.request.model":{"type":"string"},"gen_ai.request.max_tokens":{"type":"number"},"gen_ai.response.model":{"type":"string"},"gen_ai.response.id":{"type":"string"},"gen_ai.usage.input_tokens":{"type":"number"},"gen_ai.usage.cache_read_tokens":{"type":"number"},"gen_ai.usage.output_tokens":{"type":"number"},"gen_ai.usage.input_audio_tokens":{"type":"number"},"gen_ai.usage.output_audio_tokens":{"type":"number"}}}",
     },
   },
   {
@@ -390,6 +494,48 @@ exports[`openai > openai chat stream > span 1`] = `
     "key": "gen_ai.request.max_tokens",
     "value": {
       "intValue": 1024,
+    },
+  },
+  {
+    "key": "gen_ai.response.model",
+    "value": {
+      "stringValue": "gpt-5-2025-08-07",
+    },
+  },
+  {
+    "key": "gen_ai.response.id",
+    "value": {
+      "stringValue": "chatcmpl-CWKzQzo2QLXPzzjG5ZhftNDkOKT2q",
+    },
+  },
+  {
+    "key": "gen_ai.usage.input_tokens",
+    "value": {
+      "intValue": 23,
+    },
+  },
+  {
+    "key": "gen_ai.usage.cache_read_tokens",
+    "value": {
+      "intValue": 0,
+    },
+  },
+  {
+    "key": "gen_ai.usage.output_tokens",
+    "value": {
+      "intValue": 11,
+    },
+  },
+  {
+    "key": "gen_ai.usage.input_audio_tokens",
+    "value": {
+      "intValue": 0,
+    },
+  },
+  {
+    "key": "gen_ai.usage.output_audio_tokens",
+    "value": {
+      "intValue": 0,
     },
   },
 ]

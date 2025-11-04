@@ -12,11 +12,18 @@ export async function apiKeyAuth(
   const authorization = request.headers.get('authorization')
   const xApiKey = request.headers.get('x-api-key')
 
+  let authHeader: string | null = null
   if (authorization && xApiKey) {
-    throw new ResponseError(401, 'Unauthorized - Both Authorization and X-API-Key headers are present, use only one')
+    if (startsWithPaig(authorization) && !startsWithPaig(xApiKey)) {
+      authHeader = authorization
+    } else if (!startsWithPaig(authorization) && startsWithPaig(xApiKey)) {
+      authHeader = xApiKey
+    } else {
+      throw new ResponseError(401, 'Unauthorized - Both Authorization and X-API-Key headers are present, use only one')
+    }
+  } else {
+    authHeader = authorization || xApiKey
   }
-
-  const authHeader = authorization || xApiKey
 
   let key: string
   if (authHeader) {
@@ -84,3 +91,6 @@ export async function changeProjectState(project: number, options: Pick<GatewayO
 
 const apiKeyCacheKey = (key: string, kvVersion: string) => `apiKeyAuth:${kvVersion}:${key}`
 const projectStateCacheKey = (project: number, kvVersion: string) => `projectState:${kvVersion}:${project}`
+
+const startsWithPaig = (headerValue: string | null): headerValue is 'Bearer paig' | 'paig' =>
+  headerValue?.startsWith('Bearer paig') || headerValue?.startsWith('paig') || false

@@ -13,9 +13,6 @@ interactions:
       - '96'
       content-type:
       - application/json
-      cookie:
-      - _cfuvid=sZHytwxgk7vJY7ep7PlpK5yip7G55QSHyqVz43MKEw4-1761823181130-0.0.1.1-604800000;
-        __cf_bm=EemaSMEgvKKqVG.O5AeulwhHEh5WXvpwh3IykhcSnx4-1762271643-1.0.1.1-Csg7QIhFaWrjU_CeOR3a_fcnJi66AifjPCiBkcKHemruFIfepEJhDXFZVCw7no_eUguFrpt2kzpFTH3iC3uzwLIxO6UWv1aknuTXrVNLqtQ
       host:
       - api.openai.com
       user-agent:

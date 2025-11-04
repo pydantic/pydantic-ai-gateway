@@ -30,7 +30,7 @@ vcr = VCR(
     cassette_library_dir=(current_file_dir / 'cassettes').as_posix(),
     record_mode=RecordMode.ONCE,
     match_on=['uri', 'method', 'query'],
-    filter_headers=['Authorization', 'x-api-key', 'x-amz-security-token'],
+    filter_headers=['Authorization', 'x-api-key', 'x-amz-security-token', 'cookie'],
 )
 
 

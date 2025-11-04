@@ -15,8 +15,6 @@ interactions:
       - '248'
       content-type:
       - application/json
-      cookie:
-      - _cfuvid=sZHytwxgk7vJY7ep7PlpK5yip7G55QSHyqVz43MKEw4-1761823181130-0.0.1.1-604800000
       host:
       - api.openai.com
       user-agent:

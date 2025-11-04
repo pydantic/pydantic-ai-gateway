@@ -69,32 +69,31 @@ export async function gateway(
   const result = await proxy.dispatch()
 
   // This doesn't work on streaming because the `result` object is returned as soon as we create the streaming response.
-  if (!('responseStream' in result) && !('httpStatusCode' in result)) {
+  if (!('responseStream' in result) && !('response' in result)) {
     const [spanName, attributes, level] = genAiOtelAttributes(result, proxy)
     dispatchSpan.end(spanName, attributes, { level })
   }
 
   let response: Response
-  if ('httpStatusCode' in result) {
-    const { httpStatusCode, responseHeaders, responseBody } = result
-    response = new Response(responseBody, { status: httpStatusCode, headers: responseHeaders })
+  if ('response' in result) {
+    response = result.response
   } else if ('responseStream' in result) {
-    const { successStatus: status, responseHeaders: headers, responseStream, disableKey, waitCompletion } = result
+    const { successStatus: status, responseHeaders: headers, responseStream, disableKey, onStreamComplete } = result
     runAfter(
       ctx,
       'recordSpend',
       (async () => {
-        await waitCompletion
-        const cost = proxy.cost
-        if (cost) {
-          await recordSpend(apiKeyInfo, cost, options)
-        } else {
+        const complete = await onStreamComplete
+        if ('cost' in complete && complete.cost) {
+          await recordSpend(apiKeyInfo, complete.cost, options)
+        } else if ('error' in complete) {
           const { key: _key, ...context } = apiKeyInfo
           if (disableKey) {
-            logfire.error('api key blocked', { context, error: 'Unable to calculate cost' })
-            await blockApiKey(apiKeyInfo, options, 'Unable to calculate cost')
+            logfire.reportError('api key blocked', complete.error, { context })
+            await blockApiKey(apiKeyInfo, options, JSON.stringify(complete.error))
+          } else {
+            logfire.reportError('Unable to calculate cost', complete.error, { context })
           }
-          logfire.error('Unable to calculate cost', { context, error: 'Unable to calculate cost' })
         }
         await otel.send()
       })(),

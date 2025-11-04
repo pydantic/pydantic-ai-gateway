@@ -1130,7 +1130,7 @@ exports[`anthropic > should call anthropic via gateway with stream > span 1`] = 
   {
     "key": "logfire.json_schema",
     "value": {
-      "stringValue": "{"type":"object","properties":{"gen_ai.system":{"type":"string"},"gen_ai.operation.name":{"type":"string"},"gen_ai.request.model":{"type":"string"},"gen_ai.request.max_tokens":{"type":"number"},"gen_ai.response.model":{"type":"string"},"gen_ai.response.id":{"type":"string"},"gen_ai.usage.input_tokens":{"type":"number"},"gen_ai.usage.cache_read_tokens":{"type":"number"},"gen_ai.usage.cache_write_tokens":{"type":"number"},"gen_ai.usage.output_tokens":{"type":"number"}}}",
+      "stringValue": "{"type":"object","properties":{"gen_ai.system":{"type":"string"},"gen_ai.operation.name":{"type":"string"},"gen_ai.request.model":{"type":"string"},"gen_ai.request.max_tokens":{"type":"number"},"gen_ai.response.model":{"type":"string"},"gen_ai.response.id":{"type":"string"},"gen_ai.usage.input_tokens":{"type":"number"},"gen_ai.usage.cache_read_tokens":{"type":"number"},"gen_ai.usage.cache_write_tokens":{"type":"number"},"gen_ai.usage.output_tokens":{"type":"number"},"http.request.method":{"type":"string"},"url.full":{"type":"string"},"http.request.header.accept":{"type":"string"},"http.request.header.anthropic-version":{"type":"string"},"http.request.header.authorization":{"type":"string"},"http.request.header.content-type":{"type":"string"},"http.request.header.user-agent":{"type":"string"},"http.request.header.x-stainless-arch":{"type":"string"},"http.request.header.x-stainless-lang":{"type":"string"},"http.request.header.x-stainless-os":{"type":"string"},"http.request.header.x-stainless-package-version":{"type":"string"},"http.request.header.x-stainless-retry-count":{"type":"string"},"http.request.header.x-stainless-runtime":{"type":"string"},"http.request.header.x-stainless-runtime-version":{"type":"string"},"http.request.header.x-stainless-timeout":{"type":"string"},"http.response.status_code":{"type":"number"},"http.response.header.server":{"type":"string"},"http.response.header.transfer-encoding":{"type":"string"}}}",
     },
   },
   {
@@ -1197,6 +1197,114 @@ exports[`anthropic > should call anthropic via gateway with stream > span 1`] = 
     "key": "gen_ai.usage.output_tokens",
     "value": {
       "intValue": 10,
+    },
+  },
+  {
+    "key": "http.request.method",
+    "value": {
+      "stringValue": "POST",
+    },
+  },
+  {
+    "key": "url.full",
+    "value": {
+      "stringValue": "https://example.com/anthropic/v1/messages?beta=true",
+    },
+  },
+  {
+    "key": "http.request.header.accept",
+    "value": {
+      "stringValue": "application/json",
+    },
+  },
+  {
+    "key": "http.request.header.anthropic-version",
+    "value": {
+      "stringValue": "2023-06-01",
+    },
+  },
+  {
+    "key": "http.request.header.authorization",
+    "value": {
+      "stringValue": "Bearer healthy",
+    },
+  },
+  {
+    "key": "http.request.header.content-type",
+    "value": {
+      "stringValue": "application/json",
+    },
+  },
+  {
+    "key": "http.request.header.user-agent",
+    "value": {
+      "stringValue": "Anthropic/JS 0.62.0",
+    },
+  },
+  {
+    "key": "http.request.header.x-stainless-arch",
+    "value": {
+      "stringValue": "unknown",
+    },
+  },
+  {
+    "key": "http.request.header.x-stainless-lang",
+    "value": {
+      "stringValue": "js",
+    },
+  },
+  {
+    "key": "http.request.header.x-stainless-os",
+    "value": {
+      "stringValue": "Unknown",
+    },
+  },
+  {
+    "key": "http.request.header.x-stainless-package-version",
+    "value": {
+      "stringValue": "0.62.0",
+    },
+  },
+  {
+    "key": "http.request.header.x-stainless-retry-count",
+    "value": {
+      "stringValue": "0",
+    },
+  },
+  {
+    "key": "http.request.header.x-stainless-runtime",
+    "value": {
+      "stringValue": "unknown",
+    },
+  },
+  {
+    "key": "http.request.header.x-stainless-runtime-version",
+    "value": {
+      "stringValue": "unknown",
+    },
+  },
+  {
+    "key": "http.request.header.x-stainless-timeout",
+    "value": {
+      "stringValue": "600",
+    },
+  },
+  {
+    "key": "http.response.status_code",
+    "value": {
+      "intValue": 200,
+    },
+  },
+  {
+    "key": "http.response.header.server",
+    "value": {
+      "stringValue": "uvicorn",
+    },
+  },
+  {
+    "key": "http.response.header.transfer-encoding",
+    "value": {
+      "stringValue": "chunked",
     },
   },
 ]

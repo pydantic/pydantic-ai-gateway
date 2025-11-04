@@ -74,8 +74,8 @@ export interface ProviderProxy {
   /** @apiTypes: the APIs that the provider supports. Example: ['chat', 'responses'] */
   apiTypes: APIType[]
   /** @routingGroups: a grouping of APIs that serve the same models.
-   * @example: ['anthropic'] would route the requests to Anthropic, Bedrock and Vertex AI. */
-  routingGroups?: string[]
+   * @example: 'anthropic' would route the requests to Anthropic, Bedrock and Vertex AI. */
+  routingGroup?: string
 }
 
 export interface OtelSettings {

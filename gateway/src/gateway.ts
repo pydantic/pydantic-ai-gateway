@@ -34,7 +34,7 @@ export async function gateway(
 
   const routingGroup = request.headers.get('pydantic-ai-gateway-routing-group')
   if (routingGroup !== null) {
-    providerProxies = providerProxies.filter((p) => p.routingGroups?.includes(routingGroup))
+    providerProxies = providerProxies.filter((p) => p.routingGroup === routingGroup)
   }
 
   const profile = request.headers.get('pydantic-ai-gateway-profile')

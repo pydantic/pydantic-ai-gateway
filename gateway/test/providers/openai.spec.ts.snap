@@ -547,7 +547,7 @@ exports[`openai > openai chat stream > span 1`] = `
   {
     "key": "url.full",
     "value": {
-      "stringValue": "https://example.com/openai/chat/completions",
+      "stringValue": "https://example.com/chat/chat/completions",
     },
   },
   {

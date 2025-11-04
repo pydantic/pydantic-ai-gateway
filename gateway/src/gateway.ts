@@ -5,7 +5,7 @@ import { currentScopeIntervals, type ExceededScope, endOfMonth, endOfWeek, type 
 import { OtelTrace } from './otel'
 import { genAiOtelAttributes } from './otel/attributes'
 import { getProvider } from './providers'
-import { type ApiKeyInfo, guardProviderID, providerIdArray } from './types'
+import { type ApiKeyInfo, apiTypesArray, guardAPIType } from './types'
 import { runAfter, textResponse } from './utils'
 
 export async function gateway(
@@ -14,14 +14,14 @@ export async function gateway(
   ctx: ExecutionContext,
   options: GatewayOptions,
 ): Promise<Response> {
-  const providerMatch = /^\/([^/]+)\/(.*)$/.exec(proxyPath)
-  if (!providerMatch) {
+  const apiTypeMatch = /^\/([^/]+)\/(.*)$/.exec(proxyPath)
+  if (!apiTypeMatch) {
     return textResponse(404, 'Path not found')
   }
-  const [, provider, restOfPath] = providerMatch as unknown as [string, string, string]
+  const [, apiType, restOfPath] = apiTypeMatch as unknown as [string, string, string]
 
-  if (!guardProviderID(provider)) {
-    return textResponse(400, `Invalid provider '${provider}', should be one of ${providerIdArray.join(', ')}`)
+  if (!guardAPIType(apiType)) {
+    return textResponse(400, `Invalid API type '${apiType}', should be one of ${apiTypesArray.join(', ')}`)
   }
 
   const apiKeyInfo = await apiKeyAuth(request, ctx, options)
@@ -30,7 +30,12 @@ export async function gateway(
     return textResponse(403, `Unauthorized - Key ${apiKeyInfo.status}`)
   }
 
-  let providerProxies = apiKeyInfo.providers.filter((p) => p.providerId === provider)
+  let providerProxies = apiKeyInfo.providers.filter((p) => p.apiTypes.includes(apiType))
+
+  const routingGroup = request.headers.get('pydantic-ai-gateway-routing-group')
+  if (routingGroup !== null) {
+    providerProxies = providerProxies.filter((p) => p.routingGroup === routingGroup)
+  }
 
   const profile = request.headers.get('pydantic-ai-gateway-profile')
   if (profile !== null) {

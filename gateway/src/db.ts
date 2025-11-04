@@ -77,7 +77,6 @@ export interface LimitUpdate {
   monthly?: number | null
 }
 
-
 export type KeyLimitUpdate = LimitUpdate & { total?: number | null }
 // 65536 equates to 2149-06-07
 export const DISTANT_FUTURE = 65536

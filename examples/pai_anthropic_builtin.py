@@ -8,7 +8,7 @@ logfire.instrument_httpx(capture_all=True)
 
 
 person_agent = Agent(
-    'gateway:anthropic/claude-sonnet-4-0',
+    'gateway/anthropic:claude-sonnet-4-0',
     instructions='Use the code execution tool to execute the code',
     model_settings=AnthropicModelSettings(max_tokens=1024),
     builtin_tools=[CodeExecutionTool()],

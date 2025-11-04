@@ -37,7 +37,7 @@ export const config: Config<ProviderKeys> = {
   },
   // providers
   providers: {
-    // you would use this provider by using the model id `gateway:openai-chat/gpt-5` in Pydantic AI
+    // you would use this provider by using the model id `gateway/openai-chat:gpt-5` in Pydantic AI
     a: {
       // providerId decides on the logic used to process the request and response
       providerId: 'openai',

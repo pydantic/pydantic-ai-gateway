@@ -26,7 +26,7 @@ class Person(BaseModel, use_attribute_docstrings=True):
 
 
 person_agent = Agent(
-    'gateway:groq/openai/gpt-oss-120b',
+    'gateway/groq:openai/gpt-oss-120b',
     output_type=Person,
     instructions='Extract information about the person',
     model_settings=GroqModelSettings(stop_sequences=['potato'], temperature=0.5, top_p=0.9),

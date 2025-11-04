@@ -2,11 +2,12 @@ from datetime import date
 
 import logfire
 from pydantic import BaseModel, field_validator
-from pydantic_ai import Agent
+from pydantic_ai import Agent, __version__
 
 logfire.configure(service_name='testing')
 logfire.instrument_pydantic_ai()
 logfire.instrument_httpx(capture_all=True)
+print('pydantic-ai version:', __version__)
 
 
 class Person(BaseModel, use_attribute_docstrings=True):
@@ -25,7 +26,7 @@ class Person(BaseModel, use_attribute_docstrings=True):
 
 
 person_agent = Agent(
-    'gateway:openai/gpt-4.1-mini',
+    'gateway/openai-chat:gpt-4.1-mini',
     output_type=Person,
     instructions='Extract information about the person',
 )

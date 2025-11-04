@@ -108,6 +108,6 @@ function regionFromUrl(url: string): null | string {
     return 'global'
   }
   // The group includes regions with hyphen like "europe-west4"
-  const match = url.match(/^https:\/\/([^-]+)-aiplatform\.googleapis\.com$/)
+  const match = url.match(/^https:\/\/(.+?)-aiplatform\.googleapis\.com$/)
   return match?.[1] ?? null
 }

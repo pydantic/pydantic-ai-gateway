@@ -45,7 +45,7 @@ export async function gatewayFetch(
   ctx: ExecutionContext,
   options: GatewayOptions,
 ): Promise<Response> {
-  let { pathname: proxyPath } = url
+  let { pathname: proxyPath, search: queryString } = url
   if (options.proxyPrefixLength) {
     proxyPath = proxyPath.slice(options.proxyPrefixLength)
   }
@@ -53,7 +53,7 @@ export async function gatewayFetch(
     if (proxyPath === '/') {
       return index(request, options)
     } else {
-      return await gateway(request, proxyPath, ctx, options)
+      return await gateway(request, `${proxyPath}${queryString}`, ctx, options)
     }
   } catch (error) {
     if (error instanceof ResponseError) {

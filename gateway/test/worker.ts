@@ -84,6 +84,12 @@ class TestKeysDB extends KeysDbD1 {
         injectCost: true,
         credentials: env.AWS_BEARER_TOKEN_BEDROCK,
       },
+      {
+        baseUrl: 'http://localhost:8005/google-vertex',
+        providerId: 'google-vertex',
+        injectCost: true,
+        credentials: env.GOOGLE_SERVICE_ACCOUNT_KEY,
+      },
     ]
   }
 

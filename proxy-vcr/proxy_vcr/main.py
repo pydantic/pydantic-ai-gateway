@@ -19,6 +19,7 @@ OPENAI_BASE_URL = 'https://api.openai.com/v1/'
 GROQ_BASE_URL = 'https://api.groq.com'
 ANTHROPIC_BASE_URL = 'https://api.anthropic.com'
 BEDROCK_BASE_URL = 'https://bedrock-runtime.us-east-1.amazonaws.com'
+GOOGLE_BASE_URL = 'https://aiplatform.googleapis.com'
 
 current_file_dir = pathlib.Path(__file__).parent
 
@@ -28,7 +29,7 @@ vcr = VCR(
     serializer='yaml',
     cassette_library_dir=(current_file_dir / 'cassettes').as_posix(),
     record_mode=RecordMode.ONCE,
-    match_on=['uri', 'method'],
+    match_on=['uri', 'method', 'query'],
     filter_headers=['Authorization', 'x-api-key', 'x-amz-security-token'],
 )
 
@@ -44,24 +45,24 @@ async def proxy(request: Request) -> Response:
     body = await request.body()
 
     # We should cache based on request body content, so we should make a hash of the request body.
-    body_hash = hashlib.sha256(body).hexdigest()
+    vcr_suffix = request.headers.get('x-vcr-filename', hashlib.sha256(body).hexdigest())
 
     if request.url.path.startswith('/openai'):
         client = cast(httpx.AsyncClient, request.scope['state']['httpx_client'])
         url = OPENAI_BASE_URL + request.url.path.strip('/openai')
-        with vcr.use_cassette(cassette_name('openai', body_hash)):  # type: ignore[reportUnknownReturnType]
+        with vcr.use_cassette(cassette_name('openai', vcr_suffix)):  # type: ignore[reportUnknownReturnType]
             headers = {'Authorization': auth_header, 'content-type': 'application/json'}
             response = await client.post(url, content=body, headers=headers)
     elif request.url.path.startswith('/groq'):
         client = cast(httpx.AsyncClient, request.scope['state']['httpx_client'])
         url = GROQ_BASE_URL + request.url.path[len('/groq') :]
-        with vcr.use_cassette(cassette_name('groq', body_hash)):  # type: ignore[reportUnknownReturnType]
+        with vcr.use_cassette(cassette_name('groq', vcr_suffix)):  # type: ignore[reportUnknownReturnType]
             headers = {'Authorization': auth_header, 'content-type': 'application/json'}
             response = await client.post(url, content=body, headers=headers)
     elif request.url.path.startswith('/bedrock'):
         client = cast(httpx.AsyncClient, request.scope['state']['httpx_client'])
         url = BEDROCK_BASE_URL + request.url.path[len('/bedrock') :]
-        with vcr.use_cassette(cassette_name('bedrock', body_hash)):  # type: ignore[reportUnknownReturnType]
+        with vcr.use_cassette(cassette_name('bedrock', vcr_suffix)):  # type: ignore[reportUnknownReturnType]
             headers = {
                 'Authorization': auth_header,
                 'content-type': 'application/json',
@@ -72,7 +73,7 @@ async def proxy(request: Request) -> Response:
         client = cast(httpx.AsyncClient, request.scope['state']['httpx_client'])
         url = ANTHROPIC_BASE_URL + request.url.path[len('/anthropic') :]
         api_key = request.headers.get('x-api-key', '')
-        with vcr.use_cassette(cassette_name('anthropic', body_hash)):  # type: ignore[reportUnknownReturnType]
+        with vcr.use_cassette(cassette_name('anthropic', vcr_suffix)):  # type: ignore[reportUnknownReturnType]
             anthropic_beta_headers = {}
             if anthropic_beta := request.headers.get('anthropic-beta'):
                 anthropic_beta_headers = {'anthropic-beta': anthropic_beta}
@@ -84,15 +85,23 @@ async def proxy(request: Request) -> Response:
                 **anthropic_beta_headers,
             }
             response = await client.post(url, content=body, headers=headers)
+    elif request.url.path.startswith('/google-vertex'):
+        client = cast(httpx.AsyncClient, request.scope['state']['httpx_client'])
+        url = GOOGLE_BASE_URL + request.url.path[len('/google-vertex') :] + '?' + request.url.query
+        headers = {'Authorization': auth_header, 'host': 'aiplatform.googleapis.com'}
+        # It's a bit weird, but if we don't set the host header, it will fail. This seems very weird from Google's side.
+        with vcr.use_cassette(cassette_name('google-vertex', vcr_suffix)):  # type: ignore[reportUnknownReturnType]
+            response = await client.post(url, content=body, headers=headers)
     else:
         raise HTTPException(status_code=404, detail=f'Path {request.url.path} not supported')
-    if response.headers.get('content-type').startswith('text/event-stream'):
+    content_type = cast(str | None, response.headers.get('content-type'))
+    if content_type and content_type.startswith('text/event-stream'):
 
         async def generator():
             async for chunk in response.aiter_bytes():
                 yield chunk
 
-        return StreamingResponse(generator(), status_code=response.status_code)
+        return StreamingResponse(generator(), status_code=response.status_code, headers={'content-type': content_type})
     return JSONResponse(response.json(), status_code=response.status_code)
 
 
@@ -120,5 +129,5 @@ if __name__ == '__main__':
     )
 
 
-def cassette_name(provider: str, hash: str) -> str:
-    return f'{provider}-{hash}.yaml'
+def cassette_name(provider: str, vcr_suffix: str) -> str:
+    return f'{provider}-{vcr_suffix}.yaml'

@@ -19,11 +19,11 @@ import type {
   TextPart,
 } from '../otel/genai'
 import { isMapping, type JsonData } from '../providers/default'
-import { BaseAPI } from './base'
+import { BaseAPI, type ExtractedRequest, type ExtractedResponse, type ExtractorConfig } from './base'
 
 export { GenerateContentResponse } from '@google/genai'
 
-export class GoogleAPI extends BaseAPI<GoogleRequest, GenerateContentResponse> {
+export class GoogleAPI extends BaseAPI<GoogleRequest, GenerateContentResponse, GenerateContentResponse> {
   requestStopSequences = (_request: GoogleRequest): string[] | undefined => {
     return _request.generationConfig?.stopSequences ?? undefined
   }
@@ -66,6 +66,28 @@ export class GoogleAPI extends BaseAPI<GoogleRequest, GenerateContentResponse> {
 
   systemInstructions = (_request: GoogleRequest): TextPart[] | undefined => {
     return systemInstructions(_request.systemInstruction)
+  }
+
+  // SafeExtractor implementation
+
+  requestExtractors: ExtractorConfig<GoogleRequest, ExtractedRequest> = {
+    requestModel: (_request: GoogleRequest) => {
+      this.extractedRequest.requestModel = this.requestModel
+    },
+  }
+
+  chunkExtractors: ExtractorConfig<GenerateContentResponse, ExtractedResponse> = {
+    usage: (chunk: GenerateContentResponse) => {
+      if (chunk.usageMetadata) {
+        // TODO(Marcelo): This is likely to be wrong, since we are not summing the usage.
+        this.extractedResponse.usage = this.extractUsage(chunk)
+      }
+    },
+    responseModel: (chunk: GenerateContentResponse) => {
+      if (chunk.modelVersion) {
+        this.extractedResponse.responseModel = chunk.modelVersion
+      }
+    },
   }
 }
 

@@ -19,7 +19,7 @@ export class GoogleVertexProvider extends DefaultProviderProxy {
       if (!path) {
         return { error: 'Unable to parse path' }
       }
-      return `${this.providerProxy.baseUrl}${path}`
+      return `${stripTrailingSlash(this.providerProxy.baseUrl)}/${stripLeadingSlash(path)}`
     } else {
       return { error: 'baseUrl is required for the Google Provider' }
     }
@@ -72,7 +72,8 @@ export class GoogleVertexProvider extends DefaultProviderProxy {
       this.flavor = 'anthropic'
     }
 
-    return `/${version}/projects/${projectId}/locations/${region}/publishers/${publisher}/models/${modelAndApi}`
+    const path = `/${version}/projects/${projectId}/locations/${region}/publishers/${publisher}/models/${modelAndApi}`
+    return path
   }
 
   async prepRequest() {
@@ -104,10 +105,20 @@ export class GoogleVertexProvider extends DefaultProviderProxy {
  * @param url - The URL to extract the region from e.g. https://europe-west4-aiplatform.googleapis.com or https://aiplatform.googleapis.com.
  */
 function regionFromUrl(url: string): null | string {
-  if (url.includes('https://aiplatform.googleapis.com')) {
-    return 'global'
-  }
-  // The group includes regions with hyphen like "europe-west4"
   const match = url.match(/^https:\/\/([^-]+)-aiplatform\.googleapis\.com$/)
-  return match?.[1] ?? null
+  return match?.[1] ?? 'global'
+}
+
+function stripTrailingSlash(url: string): string {
+  if (url.endsWith('/')) {
+    return url.slice(0, -1)
+  }
+  return url
+}
+
+function stripLeadingSlash(url: string): string {
+  if (url.startsWith('/')) {
+    return url.slice(1)
+  }
+  return url
 }

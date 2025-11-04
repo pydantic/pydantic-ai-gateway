@@ -15,7 +15,7 @@ kiwi_image = Path(__file__).parent / 'assets' / 'kiwi.jpg'
 
 
 agent = Agent(
-    'gateway:anthropic/claude-sonnet-4-0',
+    'gateway/anthropic:claude-sonnet-4-0',
     instructions='Extract information about the image.',
     model_settings=AnthropicModelSettings(
         anthropic_thinking={'type': 'enabled', 'budget_tokens': 1024},

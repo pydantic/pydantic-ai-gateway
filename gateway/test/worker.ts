@@ -76,7 +76,7 @@ class TestKeysDB extends KeysDbD1 {
         injectCost: true,
         // credentials are used by the ProviderProxy to authenticate the forwarded request
         credentials: env.OPENAI_API_KEY,
-        apiTypes: ['chat'],
+        apiTypes: ['chat', 'responses'],
       },
       {
         baseUrl: 'http://localhost:8005/groq',

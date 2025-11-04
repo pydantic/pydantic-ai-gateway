@@ -25,7 +25,7 @@ class Person(BaseModel, use_attribute_docstrings=True):
 
 
 person_agent = Agent(
-    'gateway:google-vertex/gemini-2.5-flash',
+    'gateway/google-vertex:gemini-2.5-flash',
     output_type=Person,
     instructions='Extract information about the person',
     model_settings=GoogleModelSettings(stop_sequences=['potato'], temperature=0.5, top_p=0.9),

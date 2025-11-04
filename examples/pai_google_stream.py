@@ -8,7 +8,7 @@ logfire.instrument_pydantic_ai()
 logfire.instrument_httpx(capture_all=True)
 
 person_agent = Agent(
-    'gateway:google-vertex/gemini-2.5-flash',
+    'gateway/google-vertex:gemini-2.5-flash',
     # 'google-vertex:gemini-2.5-flash',
     instructions='You are a helpful assistant.',
     model_settings={'max_tokens': 1024},

@@ -18,7 +18,16 @@ export async function gateway(
   if (!apiTypeMatch) {
     return textResponse(404, 'Path not found')
   }
-  const [, apiType, restOfPath] = apiTypeMatch as unknown as [string, string, string]
+  let [, apiType, restOfPath] = apiTypeMatch as unknown as [string, string, string]
+
+  // support for other common names for openai api types
+  if (apiType === 'openai' || apiType === 'openai-chat') {
+    apiType = 'chat'
+  } else if (apiType === 'openai-responses') {
+    apiType = 'responses'
+  } else if (apiType === 'google-vertex') {
+    apiType = 'gemini'
+  }
 
   if (!guardAPIType(apiType)) {
     return textResponse(400, `Invalid API type '${apiType}', should be one of ${apiTypesArray.join(', ')}`)
@@ -43,7 +52,7 @@ export async function gateway(
   }
 
   // sort providers on priority, highest first
-  providerProxies.sort((a, b) => (b.priority ?? 1) - (a.priority ?? 1))
+  providerProxies.sort((a, b) => (b.priority ?? 0) - (a.priority ?? 0))
 
   const providerProxy = providerProxies[0]
   if (!providerProxy) {

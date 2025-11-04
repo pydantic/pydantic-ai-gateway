@@ -103,7 +103,7 @@ describe('openai', () => {
   test('openai responses', async ({ gateway }) => {
     const { fetch, otelBatch } = gateway
 
-    const client = new OpenAI({ apiKey: 'healthy', baseURL: 'https://example.com/chat', fetch })
+    const client = new OpenAI({ apiKey: 'healthy', baseURL: 'https://example.com/responses', fetch })
 
     const completion = await client.responses.create({
       model: 'gpt-5',
@@ -118,7 +118,7 @@ describe('openai', () => {
   test('openai responses with builtin tools', async ({ gateway }) => {
     const { fetch, otelBatch } = gateway
 
-    const client = new OpenAI({ apiKey: 'healthy', baseURL: 'https://example.com/chat', fetch })
+    const client = new OpenAI({ apiKey: 'healthy', baseURL: 'https://example.com/responses', fetch })
 
     const completion = await client.responses.create({
       model: 'gpt-5',
@@ -167,6 +167,44 @@ describe('openai', () => {
       chunks.push(chunk)
     }
     expect(chunks).toMatchSnapshot('chunks')
+    expect(otelBatch, 'otelBatch length not 1').toHaveLength(1)
+    expect(JSON.parse(otelBatch[0]!).resourceSpans?.[0].scopeSpans?.[0].spans?.[0]?.attributes).toMatchSnapshot('span')
+  })
+
+  test('openai chat legacy name', async ({ gateway }) => {
+    const { fetch, otelBatch } = gateway
+
+    const client = new OpenAI({ apiKey: 'healthy', baseURL: 'https://example.com/openai', fetch })
+
+    const completion = await client.chat.completions.create({
+      model: 'gpt-5',
+      messages: [
+        { role: 'developer', content: 'You are a helpful assistant.' },
+        { role: 'user', content: 'What is the capital of France?' },
+      ],
+      max_completion_tokens: 1024,
+    })
+
+    expect(completion).toMatchSnapshot('llm')
+    expect(otelBatch, 'otelBatch length not 1').toHaveLength(1)
+    expect(JSON.parse(otelBatch[0]!).resourceSpans?.[0].scopeSpans?.[0].spans?.[0]?.attributes).toMatchSnapshot('span')
+  })
+
+  test('openai responses legacy name', async ({ gateway }) => {
+    const { fetch, otelBatch } = gateway
+
+    const client = new OpenAI({ apiKey: 'healthy', baseURL: 'https://example.com/openai-responses', fetch })
+
+    const completion = await client.chat.completions.create({
+      model: 'gpt-5',
+      messages: [
+        { role: 'developer', content: 'You are a helpful assistant.' },
+        { role: 'user', content: 'What is the capital of France?' },
+      ],
+      max_completion_tokens: 1024,
+    })
+
+    expect(completion).toMatchSnapshot('llm')
     expect(otelBatch, 'otelBatch length not 1').toHaveLength(1)
     expect(JSON.parse(otelBatch[0]!).resourceSpans?.[0].scopeSpans?.[0].spans?.[0]?.attributes).toMatchSnapshot('span')
   })

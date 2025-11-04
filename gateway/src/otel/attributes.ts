@@ -58,6 +58,25 @@ export function genAiOtelAttributes(
   return [spanName, attributes, level]
 }
 
+export function attributesFromRequest(request: Request): Attributes {
+  return {
+    'http.request.method': request.method,
+    'url.full': request.url,
+    ...Object.fromEntries(
+      Array.from(request.headers.entries()).map(([name, value]) => [`http.request.header.${name}`, value]),
+    ),
+  }
+}
+
+export function attributesFromResponse(response: Response): Attributes {
+  return {
+    'http.response.status_code': response.status,
+    ...Object.fromEntries(
+      Array.from(response.headers.entries()).map(([name, value]) => [`http.response.header.${name}`, value]),
+    ),
+  }
+}
+
 /** Semantic conventions for Generative AI
  * @see https://opentelemetry.io/docs/specs/semconv/registry/attributes/gen-ai/
  */

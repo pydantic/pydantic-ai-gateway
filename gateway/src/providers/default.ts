@@ -312,6 +312,17 @@ export class DefaultProviderProxy {
     if (!response.ok) {
       // CAUTION: can we be charged in any way for failed requests?
       const responseBody = await response.text()
+      this.otelSpan.end(
+        `chat ${requestModel ?? 'unknown-model'}, unexpected response: {http.response.status_code}`,
+        {
+          ...attributesFromRequest(this.request),
+          ...attributesFromResponse(response),
+          'http.request.body.text': requestBodyText,
+          'http.response.body.text': responseBody,
+          'http.response.status_code': response.status,
+        },
+        { level: 'warn' },
+      )
       return {
         requestModel,
         requestBody: requestBodyText,

@@ -8,11 +8,6 @@ import { getProvider } from './providers'
 import { type ApiKeyInfo, apiTypesArray, guardAPIType } from './types'
 import { runAfter, textResponse } from './utils'
 
-function isRetryableError(status: number): boolean {
-  // Retry on server errors (5xx) and rate limit errors (429)
-  return status === 429 || (status >= 500 && status <= 599)
-}
-
 export async function gateway(
   request: Request,
   proxyPath: string,
@@ -65,20 +60,15 @@ export async function gateway(
 
   const otel = new OtelTrace(request, apiKeyInfo.otelSettings, options)
 
-  let result: Awaited<ReturnType<InstanceType<ReturnType<typeof getProvider>>['dispatch']>> | null = null
-  let fallbackCount = 0
+  // The AI did this, but I actually find it nice.
+  let result!: Awaited<ReturnType<InstanceType<ReturnType<typeof getProvider>>['dispatch']>>
 
-  // Try each provider in priority order
-  for (let i = 0; i < providerProxies.length; i++) {
-    const providerProxy = providerProxies[i]
-    if (!providerProxy) {
-      continue
-    }
-
+  for (const providerProxy of providerProxies) {
     const ProxyCls = getProvider(providerProxy.providerId)
 
-    const dispatchSpan = otel.startSpan()
+    const otelSpan = otel.startSpan()
     const proxy = new ProxyCls({
+      // Since the body is consumed by the proxy, we need to clone the request.
       request: request.clone(),
       gatewayOptions: options,
       apiKeyInfo,
@@ -86,40 +76,29 @@ export async function gateway(
       restOfPath,
       ctx,
       middlewares: options.proxyMiddlewares,
-      otelSpan: dispatchSpan,
+      otelSpan,
     })
 
     result = await proxy.dispatch()
 
-    // This doesn't work on streaming because the `result` object is returned as soon as we create the streaming response.
-    if (!('responseStream' in result) && !('response' in result)) {
+    // Those responses are already closing the `otelSpan`.
+    if (!('responseStream' in result) && !('response' in result) && !('unexpectedStatus' in result)) {
       const [spanName, attributes, level] = genAiOtelAttributes(result, proxy)
-      dispatchSpan.end(spanName, attributes, { level })
+      otelSpan.end(spanName, attributes, { level })
     }
 
-    // Check if we should retry with the next provider
-    if ('unexpectedStatus' in result) {
-      const isRetryable = isRetryableError(result.unexpectedStatus)
-      const hasMoreProviders = i < providerProxies.length - 1
-
-      if (isRetryable && hasMoreProviders) {
-        fallbackCount++
-        logfire.error('Provider failed with retryable error, trying next provider', {
-          providerId: providerProxy.providerId,
-          status: result.unexpectedStatus,
-          routingGroup: providerProxy.routingGroup,
-          fallbackCount,
-        })
-        continue
-      }
+    // Check if we should retry with the next provider.
+    if ('unexpectedStatus' in result && isRetryableError(result.unexpectedStatus)) {
+      logfire.info('Provider failed with retryable error, trying next provider', {
+        providerId: providerProxy.providerId,
+        status: result.unexpectedStatus,
+        routingGroup: providerProxy.routingGroup,
+      })
+      continue
     }
 
-    // Success or non-retryable error - use this result
+    // If it succeeds, or it's not a retryable error, we can break out of the loop.
     break
-  }
-
-  if (!result) {
-    return textResponse(500, 'Internal error: No result from provider dispatch')
   }
 
   let response: Response
@@ -168,7 +147,7 @@ export async function gateway(
     response = new Response(responseBody, { status: unexpectedStatus, headers: responseHeaders })
   }
 
-  // TODO(Marcelo): This needs a bit of refactoring. We need the `dispatchSpan` to be closed before we send the spans.
+  // TODO(Marcelo): This needs a bit of refactoring. We need the `otelSpan` to be closed before we send the spans.
   if (!('responseStream' in result)) {
     runAfter(ctx, 'otel.send', otel.send())
   }
@@ -269,4 +248,8 @@ function calculateExpirationTtl(ex: ExceededScope[]): number | undefined {
   }
   d.setHours(23, 59, 59)
   return Math.floor((d.getTime() - now.getTime()) / 1000)
+}
+
+function isRetryableError(status: number): boolean {
+  return status === 429 || (status >= 500 && status <= 599)
 }

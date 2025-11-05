@@ -1,14 +1,9 @@
-import type {
-  DefaultProviderProxy,
-  ProxyInvalidRequest,
-  ProxySuccess,
-  ProxyUnexpectedResponse,
-} from '../providers/default'
+import type { DefaultProviderProxy, ProxyInvalidRequest, ProxySuccess } from '../providers/default'
 import type { Attributes, Level } from '.'
 import type { InputMessages, OutputMessages, TextPart } from './genai'
 
 export function genAiOtelAttributes(
-  result: ProxySuccess | ProxyInvalidRequest | ProxyUnexpectedResponse,
+  result: ProxySuccess | ProxyInvalidRequest,
   provider: DefaultProviderProxy,
 ): [string, Attributes, Level] {
   const { requestModel } = result
@@ -39,21 +34,11 @@ export function genAiOtelAttributes(
       'gen_ai.usage.cache_audio_read_tokens': usage.cache_audio_read_tokens,
       'gen_ai.usage.output_audio_tokens': usage.output_audio_tokens,
     }
-  } else if ('error' in result) {
+  } else {
     const { error } = result
     spanName = `chat ${requestModel ?? 'unknown-model'}, invalid request {error}`
     attributes = { ...attributes, error }
     level = 'error'
-  } else {
-    const { unexpectedStatus, requestBody, responseBody } = result
-    spanName = `chat ${requestModel ?? 'unknown-model'}, unexpected response: {http.response.status_code}`
-    attributes = {
-      ...attributes,
-      'http.response.status_code': unexpectedStatus,
-      'http.request.body.text': requestBody,
-      'http.response.body.text': responseBody,
-    }
-    level = 'warn'
   }
   return [spanName, attributes, level]
 }

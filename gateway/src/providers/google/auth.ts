@@ -1,6 +1,6 @@
 import { ResponseError } from '../../utils'
 
-export async function authToken(credentials: string, kv: KVNamespace): Promise<string> {
+export async function authToken(credentials: string, kv: KVNamespace, subFetch: typeof fetch): Promise<string> {
   const serviceAccountHash = await hash(credentials)
   const cacheKey = `gcp-auth:${serviceAccountHash}`
   const cachedToken = await kv.get(cacheKey, { cacheTtl: 300 })
@@ -9,7 +9,7 @@ export async function authToken(credentials: string, kv: KVNamespace): Promise<s
   }
   const serviceAccount = getServiceAccount(credentials)
   const jwt = await jwtSign(serviceAccount)
-  const token = await getAccessToken(jwt)
+  const token = await getAccessToken(jwt, subFetch)
   await kv.put(cacheKey, token, { expirationTtl: 3000 })
   return token
 }
@@ -80,10 +80,10 @@ async function jwtSign(serviceAccount: ServiceAccount): Promise<string> {
   return `${signingInput}.${b64UrlEncodeArray(signature)}`
 }
 
-async function getAccessToken(jwt: string): Promise<string> {
+async function getAccessToken(jwt: string, subFetch: typeof fetch): Promise<string> {
   const body = new URLSearchParams({ grant_type: 'urn:ietf:params:oauth:grant-type:jwt-bearer', assertion: jwt })
 
-  const response = await fetch(tokenUrl, {
+  const response = await subFetch(tokenUrl, {
     method: 'POST',
     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
     signal: AbortSignal.timeout(10000),

@@ -15,9 +15,6 @@ interactions:
       - '224'
       content-type:
       - application/json
-      cookie:
-      - __cf_bm=MVOz_vf1d.29xNg5eAq9hZGUpEToHZ9rpFhKtO12GDM-1761823181-1.0.1.1-f_gaGN5YtX1DvFTkOFoMkGEiQh3rNh89AjWKvmjk0_.XbDAuRV_tnz21YzeMVcacrAa5yTXsqWXN_9hwojHD6iRS.NTgTTLPQd8AGlqn.vM;
-        _cfuvid=sZHytwxgk7vJY7ep7PlpK5yip7G55QSHyqVz43MKEw4-1761823181130-0.0.1.1-604800000
       host:
       - api.openai.com
       user-agent:
@@ -27,26 +24,34 @@ interactions:
   response:
     body:
       string: !!binary |
-        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
+        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
+        AAA=
     headers:
       CF-RAY:
-      - 996a85011b428e65-AMS
+      - 99954bcbdfcf1add-AMS
       Connection:
       - keep-alive
       Content-Encoding:
@@ -54,7 +59,7 @@ interactions:
       Content-Type:
       - application/json
       Date:
-      - Thu, 30 Oct 2025 11:20:15 GMT
+      - Tue, 04 Nov 2025 15:56:08 GMT
       Server:
       - cloudflare
       Strict-Transport-Security:
@@ -70,27 +75,27 @@ interactions:
       openai-organization:
       - pydantic-28gund
       openai-processing-ms:
-      - '29275'
+      - '37258'
       openai-project:
       - proj_dKobscVY9YJxeEaDJen54e3d
       openai-version:
       - '2020-10-01'
       x-envoy-upstream-service-time:
-      - '29280'
+      - '37261'
       x-ratelimit-limit-requests:
-      - '10000'
+      - '15000'
       x-ratelimit-limit-tokens:
-      - '4000000'
+      - '40000000'
       x-ratelimit-remaining-requests:
-      - '9999'
+      - '14999'
       x-ratelimit-remaining-tokens:
-      - '3999285'
+      - '39998024'
       x-ratelimit-reset-requests:
-      - 6ms
+      - 4ms
       x-ratelimit-reset-tokens:
-      - 10ms
+      - 2ms
       x-request-id:
-      - req_db1c9f23d7374e2589acb02a6dc26d34
+      - req_f6c05f852ea546d68198f61792fe49f6
     status:
       code: 200
       message: OK

@@ -6,6 +6,7 @@ interface Env {
   GROQ_API_KEY: string
   ANTHROPIC_API_KEY: string
   AWS_BEARER_TOKEN_BEDROCK: string
+  GOOGLE_SERVICE_ACCOUNT_KEY: string
 }
 
 declare module 'cloudflare:test' {

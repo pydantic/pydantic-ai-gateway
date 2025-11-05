@@ -321,9 +321,7 @@ export class DefaultProviderProxy {
       }
     }
 
-    const isStreaming =
-      responseHeaders.get('content-type')?.startsWith('text/event-stream') ||
-      ('stream' in requestBodyData && requestBodyData.stream === true)
+    const isStreaming = this.isStreaming(responseHeaders, requestBodyData)
     if (isStreaming) {
       return this.dispatchStreaming(prepResult, response, responseHeaders)
     }
@@ -463,6 +461,13 @@ export class DefaultProviderProxy {
         yield events.shift()!
       }
     }
+  }
+
+  protected isStreaming(responseHeaders: Headers, requestBodyData: JsonData): boolean {
+    return (
+      responseHeaders.get('content-type')?.toLowerCase().startsWith('text/event-stream') ||
+      ('stream' in requestBodyData && requestBodyData.stream === true)
+    )
   }
 
   protected isWhitelistedEndpoint(): boolean {

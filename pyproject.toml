@@ -43,4 +43,4 @@ include = ["examples", "proxy-vcr"]
 venv = ".venv"
 
 [tool.codespell]
-ignore-words-list = ["afterAll", "fO"]
+ignore-words-list = ["afterAll", "fO", "uE"]

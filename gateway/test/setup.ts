@@ -52,6 +52,9 @@ function testGateway(): TestGateway {
       const bodyArray = init?.body as Uint8Array
       otelBatch.push(new TextDecoder().decode(bodyArray))
       return new Response('OK', { status: 200 })
+    } else if (hostname === 'oauth2.googleapis.com') {
+      // Mock GCP token response for tests
+      return new Response(JSON.stringify({ access_token: 'mock-gcp-token' }), { status: 200 })
     } else {
       return await fetch(url, init)
     }

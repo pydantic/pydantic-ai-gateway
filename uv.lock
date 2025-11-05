@@ -1599,6 +1599,7 @@ name = "proxy-vcr"
 version = "0.1.0"
 source = { editable = "proxy-vcr" }
 dependencies = [
+    { name = "google-auth" },
     { name = "httptools" },
     { name = "httpx" },
     { name = "openai" },
@@ -1613,6 +1614,7 @@ dependencies = [
 
 [package.metadata]
 requires-dist = [
+    { name = "google-auth", specifier = ">=2.40.3" },
     { name = "httptools", specifier = ">=0.6.4" },
     { name = "httpx", specifier = ">=0.28.1" },
     { name = "openai", specifier = ">=1.99.9" },

@@ -99,6 +99,13 @@ class TestKeysDB extends KeysDbD1 {
         credentials: env.AWS_BEARER_TOKEN_BEDROCK,
         apiTypes: ['anthropic', 'converse'],
       },
+      {
+        baseUrl: 'http://localhost:8005/gemini',
+        providerId: 'google-vertex',
+        injectCost: true,
+        credentials: env.GOOGLE_SERVICE_ACCOUNT_KEY,
+        apiTypes: ['gemini', 'anthropic'],
+      },
     ]
   }
 

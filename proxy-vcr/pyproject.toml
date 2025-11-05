@@ -8,6 +8,7 @@ version = "0.1.0"
 description = "The Proxy VCR is a tool that records and replays HTTP requests."
 readme = "README.md"
 dependencies = [
+    "google-auth>=2.40.3",
     "httptools>=0.6.4",
     "httpx>=0.28.1",
     "openai>=1.99.9",

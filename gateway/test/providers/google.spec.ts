@@ -68,9 +68,11 @@ describe('google', () => {
       { method: 'POST', headers: { ...headers, 'x-vcr-filename': 'stream' }, body },
     )
 
-    const chunks: object[] = []
+    const chunks: string[] = []
+    const decoder = new TextDecoder()
     for await (const chunk of response.body!) {
-      chunks.push(chunk)
+      // This is in Uint8Array format, so we need to convert it to a string.
+      chunks.push(decoder.decode(chunk))
     }
 
     expect(chunks).toMatchSnapshot('chunks')

@@ -2,6 +2,7 @@ import { env } from 'cloudflare:test'
 import { LimitDbD1 } from '@pydantic/ai-gateway'
 import OpenAI from 'openai'
 import { describe, expect } from 'vitest'
+import { deserializeRequest } from '../otel'
 import { test } from '../setup'
 import { IDS } from '../worker'
 
@@ -112,7 +113,7 @@ describe('openai', () => {
     })
     expect(completion).toMatchSnapshot('llm')
     expect(otelBatch, 'otelBatch length not 1').toHaveLength(1)
-    expect(JSON.parse(otelBatch[0]!).resourceSpans?.[0].scopeSpans?.[0].spans?.[0]?.attributes).toMatchSnapshot('span')
+    expect(deserializeRequest(otelBatch[0]!)).toMatchSnapshot('span')
   })
 
   test('openai responses with builtin tools', async ({ gateway }) => {
@@ -144,7 +145,7 @@ describe('openai', () => {
       }
     `)
     expect(otelBatch, 'otelBatch length not 1').toHaveLength(1)
-    expect(JSON.parse(otelBatch[0]!).resourceSpans?.[0].scopeSpans?.[0].spans?.[0]?.attributes).toMatchSnapshot('span')
+    expect(deserializeRequest(otelBatch[0]!)).toMatchSnapshot('span')
   })
 
   test('openai chat stream', async ({ gateway }) => {
@@ -168,7 +169,7 @@ describe('openai', () => {
     }
     expect(chunks).toMatchSnapshot('chunks')
     expect(otelBatch, 'otelBatch length not 1').toHaveLength(1)
-    expect(JSON.parse(otelBatch[0]!).resourceSpans?.[0].scopeSpans?.[0].spans?.[0]?.attributes).toMatchSnapshot('span')
+    expect(deserializeRequest(otelBatch[0]!)).toMatchSnapshot('span')
   })
 
   test('openai chat legacy name', async ({ gateway }) => {
@@ -206,6 +207,6 @@ describe('openai', () => {
 
     expect(completion).toMatchSnapshot('llm')
     expect(otelBatch, 'otelBatch length not 1').toHaveLength(1)
-    expect(JSON.parse(otelBatch[0]!).resourceSpans?.[0].scopeSpans?.[0].spans?.[0]?.attributes).toMatchSnapshot('span')
+    expect(deserializeRequest(otelBatch[0]!)).toMatchSnapshot('span')
   })
 })

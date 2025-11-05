@@ -801,201 +801,53 @@ exports[`openai > openai chat stream > chunks 1`] = `
 exports[`openai > openai chat stream > span 1`] = `
 [
   {
-    "key": "logfire.msg",
-    "value": {
-      "stringValue": "chat gpt-5",
+    "attributes": {
+      "gen_ai.operation.name": "chat",
+      "gen_ai.request.max_tokens": 1024,
+      "gen_ai.request.model": "gpt-5",
+      "gen_ai.response.id": "chatcmpl-CYDfFsepopZlcPzyFj5cdegEMUIO3",
+      "gen_ai.response.model": "gpt-5-2025-08-07",
+      "gen_ai.system": "openai",
+      "gen_ai.usage.cache_read_tokens": 0,
+      "gen_ai.usage.input_audio_tokens": 0,
+      "gen_ai.usage.input_tokens": 23,
+      "gen_ai.usage.output_audio_tokens": 0,
+      "gen_ai.usage.output_tokens": 11,
+      "http.request.header.accept": "application/json",
+      "http.request.header.authorization": "Bearer healthy",
+      "http.request.header.content-length": "319",
+      "http.request.header.content-type": "application/json",
+      "http.request.header.user-agent": "OpenAI/JS 4.104.0",
+      "http.request.header.x-stainless-arch": "unknown",
+      "http.request.header.x-stainless-lang": "js",
+      "http.request.header.x-stainless-os": "Unknown",
+      "http.request.header.x-stainless-package-version": "4.104.0",
+      "http.request.header.x-stainless-retry-count": "0",
+      "http.request.header.x-stainless-runtime": "unknown",
+      "http.request.header.x-stainless-runtime-version": "unknown",
+      "http.request.header.x-stainless-timeout": "600",
+      "http.request.method": "POST",
+      "http.response.header.content-type": "text/event-stream; charset=utf-8",
+      "http.response.header.server": "uvicorn",
+      "http.response.header.transfer-encoding": "chunked",
+      "http.response.status_code": 200,
+      "logfire.json_schema": "{"type":"object","properties":{"gen_ai.system":{"type":"string"},"gen_ai.operation.name":{"type":"string"},"gen_ai.request.model":{"type":"string"},"gen_ai.request.max_tokens":{"type":"number"},"gen_ai.response.model":{"type":"string"},"gen_ai.response.id":{"type":"string"},"gen_ai.usage.input_tokens":{"type":"number"},"gen_ai.usage.cache_read_tokens":{"type":"number"},"gen_ai.usage.output_tokens":{"type":"number"},"gen_ai.usage.input_audio_tokens":{"type":"number"},"gen_ai.usage.output_audio_tokens":{"type":"number"},"http.request.method":{"type":"string"},"url.full":{"type":"string"},"http.request.header.accept":{"type":"string"},"http.request.header.authorization":{"type":"string"},"http.request.header.content-length":{"type":"string"},"http.request.header.content-type":{"type":"string"},"http.request.header.user-agent":{"type":"string"},"http.request.header.x-stainless-arch":{"type":"string"},"http.request.header.x-stainless-lang":{"type":"string"},"http.request.header.x-stainless-os":{"type":"string"},"http.request.header.x-stainless-package-version":{"type":"string"},"http.request.header.x-stainless-retry-count":{"type":"string"},"http.request.header.x-stainless-runtime":{"type":"string"},"http.request.header.x-stainless-runtime-version":{"type":"string"},"http.request.header.x-stainless-timeout":{"type":"string"},"http.response.status_code":{"type":"number"},"http.response.header.content-type":{"type":"string"},"http.response.header.server":{"type":"string"},"http.response.header.transfer-encoding":{"type":"string"}}}",
+      "logfire.level_num": 9,
+      "logfire.msg": "chat gpt-5",
+      "url.full": "https://example.com/chat/chat/completions",
     },
-  },
-  {
-    "key": "logfire.json_schema",
-    "value": {
-      "stringValue": "{"type":"object","properties":{"gen_ai.system":{"type":"string"},"gen_ai.operation.name":{"type":"string"},"gen_ai.request.model":{"type":"string"},"gen_ai.request.max_tokens":{"type":"number"},"gen_ai.response.model":{"type":"string"},"gen_ai.response.id":{"type":"string"},"gen_ai.usage.input_tokens":{"type":"number"},"gen_ai.usage.cache_read_tokens":{"type":"number"},"gen_ai.usage.output_tokens":{"type":"number"},"gen_ai.usage.input_audio_tokens":{"type":"number"},"gen_ai.usage.output_audio_tokens":{"type":"number"},"http.request.method":{"type":"string"},"url.full":{"type":"string"},"http.request.header.accept":{"type":"string"},"http.request.header.authorization":{"type":"string"},"http.request.header.content-length":{"type":"string"},"http.request.header.content-type":{"type":"string"},"http.request.header.user-agent":{"type":"string"},"http.request.header.x-stainless-arch":{"type":"string"},"http.request.header.x-stainless-lang":{"type":"string"},"http.request.header.x-stainless-os":{"type":"string"},"http.request.header.x-stainless-package-version":{"type":"string"},"http.request.header.x-stainless-retry-count":{"type":"string"},"http.request.header.x-stainless-runtime":{"type":"string"},"http.request.header.x-stainless-runtime-version":{"type":"string"},"http.request.header.x-stainless-timeout":{"type":"string"},"http.response.status_code":{"type":"number"},"http.response.header.content-type":{"type":"string"},"http.response.header.server":{"type":"string"},"http.response.header.transfer-encoding":{"type":"string"}}}",
+    "events": [],
+    "kind": 1,
+    "links": [],
+    "name": "chat gpt-5",
+    "parentSpanId": undefined,
+    "resource": {
+      "service.name": "PAIG",
+      "service.version": "test",
     },
-  },
-  {
-    "key": "logfire.level_num",
-    "value": {
-      "intValue": 9,
-    },
-  },
-  {
-    "key": "gen_ai.system",
-    "value": {
-      "stringValue": "openai",
-    },
-  },
-  {
-    "key": "gen_ai.operation.name",
-    "value": {
-      "stringValue": "chat",
-    },
-  },
-  {
-    "key": "gen_ai.request.model",
-    "value": {
-      "stringValue": "gpt-5",
-    },
-  },
-  {
-    "key": "gen_ai.request.max_tokens",
-    "value": {
-      "intValue": 1024,
-    },
-  },
-  {
-    "key": "gen_ai.response.model",
-    "value": {
-      "stringValue": "gpt-5-2025-08-07",
-    },
-  },
-  {
-    "key": "gen_ai.response.id",
-    "value": {
-      "stringValue": "chatcmpl-CYDfFsepopZlcPzyFj5cdegEMUIO3",
-    },
-  },
-  {
-    "key": "gen_ai.usage.input_tokens",
-    "value": {
-      "intValue": 23,
-    },
-  },
-  {
-    "key": "gen_ai.usage.cache_read_tokens",
-    "value": {
-      "intValue": 0,
-    },
-  },
-  {
-    "key": "gen_ai.usage.output_tokens",
-    "value": {
-      "intValue": 11,
-    },
-  },
-  {
-    "key": "gen_ai.usage.input_audio_tokens",
-    "value": {
-      "intValue": 0,
-    },
-  },
-  {
-    "key": "gen_ai.usage.output_audio_tokens",
-    "value": {
-      "intValue": 0,
-    },
-  },
-  {
-    "key": "http.request.method",
-    "value": {
-      "stringValue": "POST",
-    },
-  },
-  {
-    "key": "url.full",
-    "value": {
-      "stringValue": "https://example.com/chat/chat/completions",
-    },
-  },
-  {
-    "key": "http.request.header.accept",
-    "value": {
-      "stringValue": "application/json",
-    },
-  },
-  {
-    "key": "http.request.header.authorization",
-    "value": {
-      "stringValue": "Bearer healthy",
-    },
-  },
-  {
-    "key": "http.request.header.content-length",
-    "value": {
-      "stringValue": "319",
-    },
-  },
-  {
-    "key": "http.request.header.content-type",
-    "value": {
-      "stringValue": "application/json",
-    },
-  },
-  {
-    "key": "http.request.header.user-agent",
-    "value": {
-      "stringValue": "OpenAI/JS 4.104.0",
-    },
-  },
-  {
-    "key": "http.request.header.x-stainless-arch",
-    "value": {
-      "stringValue": "unknown",
-    },
-  },
-  {
-    "key": "http.request.header.x-stainless-lang",
-    "value": {
-      "stringValue": "js",
-    },
-  },
-  {
-    "key": "http.request.header.x-stainless-os",
-    "value": {
-      "stringValue": "Unknown",
-    },
-  },
-  {
-    "key": "http.request.header.x-stainless-package-version",
-    "value": {
-      "stringValue": "4.104.0",
-    },
-  },
-  {
-    "key": "http.request.header.x-stainless-retry-count",
-    "value": {
-      "stringValue": "0",
-    },
-  },
-  {
-    "key": "http.request.header.x-stainless-runtime",
-    "value": {
-      "stringValue": "unknown",
-    },
-  },
-  {
-    "key": "http.request.header.x-stainless-runtime-version",
-    "value": {
-      "stringValue": "unknown",
-    },
-  },
-  {
-    "key": "http.request.header.x-stainless-timeout",
-    "value": {
-      "stringValue": "600",
-    },
-  },
-  {
-    "key": "http.response.status_code",
-    "value": {
-      "intValue": 200,
-    },
-  },
-  {
-    "key": "http.response.header.content-type",
-    "value": {
-      "stringValue": "text/event-stream; charset=utf-8",
-    },
-  },
-  {
-    "key": "http.response.header.server",
-    "value": {
-      "stringValue": "uvicorn",
-    },
-  },
-  {
-    "key": "http.response.header.transfer-encoding",
-    "value": {
-      "stringValue": "chunked",
+    "scope": "pydantic-ai-gateway",
+    "status": {
+      "code": 1,
     },
   },
 ]
@@ -1084,256 +936,77 @@ exports[`openai > openai responses > llm 1`] = `
 exports[`openai > openai responses > span 1`] = `
 [
   {
-    "key": "logfire.msg",
-    "value": {
-      "stringValue": "chat gpt-5-2025-08-07",
-    },
-  },
-  {
-    "key": "logfire.json_schema",
-    "value": {
-      "stringValue": "{"type":"object","properties":{"gen_ai.operation.name":{"type":"string"},"gen_ai.request.model":{"type":"string"},"gen_ai.system":{"type":"string"},"gen_ai.request.max_tokens":{},"gen_ai.request.top_k":{},"gen_ai.request.top_p":{},"gen_ai.request.temperature":{},"gen_ai.request.stop_sequences":{},"gen_ai.request.seed":{},"gen_ai.response.finish_reasons":{},"gen_ai.response.id":{"type":"string"},"gen_ai.input.messages":{},"gen_ai.output.messages":{},"gen_ai.system_instructions":{},"http.response.status_code":{"type":"number"},"http.request.body.text":{"type":"string"},"http.response.body.text":{"type":"string"},"gen_ai.response.model":{"type":"string"},"gen_ai.usage.input_tokens":{"type":"number"},"gen_ai.usage.cache_read_tokens":{"type":"number"},"gen_ai.usage.cache_write_tokens":{},"gen_ai.usage.output_tokens":{"type":"number"},"gen_ai.usage.input_audio_tokens":{},"gen_ai.usage.cache_audio_read_tokens":{},"gen_ai.usage.output_audio_tokens":{}}}",
-    },
-  },
-  {
-    "key": "logfire.level_num",
-    "value": {
-      "intValue": 9,
-    },
-  },
-  {
-    "key": "gen_ai.operation.name",
-    "value": {
-      "stringValue": "chat",
-    },
-  },
-  {
-    "key": "gen_ai.request.model",
-    "value": {
-      "stringValue": "gpt-5",
-    },
-  },
-  {
-    "key": "gen_ai.system",
-    "value": {
-      "stringValue": "openai",
-    },
-  },
-  {
-    "key": "gen_ai.request.max_tokens",
-    "value": {},
-  },
-  {
-    "key": "gen_ai.request.top_k",
-    "value": {},
-  },
-  {
-    "key": "gen_ai.request.top_p",
-    "value": {},
-  },
-  {
-    "key": "gen_ai.request.temperature",
-    "value": {},
-  },
-  {
-    "key": "gen_ai.request.stop_sequences",
-    "value": {},
-  },
-  {
-    "key": "gen_ai.request.seed",
-    "value": {},
-  },
-  {
-    "key": "gen_ai.response.finish_reasons",
-    "value": {},
-  },
-  {
-    "key": "gen_ai.response.id",
-    "value": {
-      "stringValue": "resp_0460eb44ce4bf29800690a219dd0108193abee8e830ce725cb",
-    },
-  },
-  {
-    "key": "gen_ai.input.messages",
-    "value": {
-      "arrayValue": {
-        "values": [
-          {
-            "kvlistValue": {
-              "values": [
-                {
-                  "key": "role",
-                  "value": {
-                    "stringValue": "user",
-                  },
-                },
-                {
-                  "key": "parts",
-                  "value": {
-                    "arrayValue": {
-                      "values": [
-                        {
-                          "kvlistValue": {
-                            "values": [
-                              {
-                                "key": "type",
-                                "value": {
-                                  "stringValue": "text",
-                                },
-                              },
-                              {
-                                "key": "content",
-                                "value": {
-                                  "stringValue": "what color is the sky?",
-                                },
-                              },
-                            ],
-                          },
-                        },
-                      ],
-                    },
-                  },
-                },
-              ],
+    "attributes": {
+      "gen_ai.input.messages": [
+        {
+          "parts": [
+            {
+              "content": "what color is the sky?",
+              "type": "text",
             },
-          },
-        ],
-      },
-    },
-  },
-  {
-    "key": "gen_ai.output.messages",
-    "value": {
-      "arrayValue": {
-        "values": [
-          {
-            "kvlistValue": {
-              "values": [
-                {
-                  "key": "role",
-                  "value": {
-                    "stringValue": "assistant",
-                  },
-                },
-                {
-                  "key": "parts",
-                  "value": {
-                    "arrayValue": {
-                      "values": [],
-                    },
-                  },
-                },
-              ],
+          ],
+          "role": "user",
+        },
+      ],
+      "gen_ai.operation.name": "chat",
+      "gen_ai.output.messages": [
+        {
+          "parts": [],
+          "role": "assistant",
+        },
+        {
+          "parts": [
+            {
+              "content": "Usually blue on a clear day (due to Rayleigh scattering), but it can be red/orange at sunrise/sunset, gray when cloudy, and black at night.",
+              "type": "text",
             },
-          },
-          {
-            "kvlistValue": {
-              "values": [
-                {
-                  "key": "role",
-                  "value": {
-                    "stringValue": "assistant",
-                  },
-                },
-                {
-                  "key": "parts",
-                  "value": {
-                    "arrayValue": {
-                      "values": [
-                        {
-                          "kvlistValue": {
-                            "values": [
-                              {
-                                "key": "type",
-                                "value": {
-                                  "stringValue": "text",
-                                },
-                              },
-                              {
-                                "key": "content",
-                                "value": {
-                                  "stringValue": "Usually blue on a clear day (due to Rayleigh scattering), but it can be red/orange at sunrise/sunset, gray when cloudy, and black at night.",
-                                },
-                              },
-                            ],
-                          },
-                        },
-                      ],
-                    },
-                  },
-                },
-              ],
-            },
-          },
-        ],
-      },
-    },
-  },
-  {
-    "key": "gen_ai.system_instructions",
-    "value": {},
-  },
-  {
-    "key": "http.response.status_code",
-    "value": {
-      "intValue": 200,
-    },
-  },
-  {
-    "key": "http.request.body.text",
-    "value": {
-      "stringValue": "{
+          ],
+          "role": "assistant",
+        },
+      ],
+      "gen_ai.request.max_tokens": {},
+      "gen_ai.request.model": "gpt-5",
+      "gen_ai.request.seed": {},
+      "gen_ai.request.stop_sequences": {},
+      "gen_ai.request.temperature": {},
+      "gen_ai.request.top_k": {},
+      "gen_ai.request.top_p": {},
+      "gen_ai.response.finish_reasons": {},
+      "gen_ai.response.id": "resp_0460eb44ce4bf29800690a219dd0108193abee8e830ce725cb",
+      "gen_ai.response.model": "gpt-5-2025-08-07",
+      "gen_ai.system": "openai",
+      "gen_ai.system_instructions": {},
+      "gen_ai.usage.cache_audio_read_tokens": {},
+      "gen_ai.usage.cache_read_tokens": 0,
+      "gen_ai.usage.cache_write_tokens": {},
+      "gen_ai.usage.input_audio_tokens": {},
+      "gen_ai.usage.input_tokens": 20,
+      "gen_ai.usage.output_audio_tokens": {},
+      "gen_ai.usage.output_tokens": 168,
+      "http.request.body.text": "{
   "model": "gpt-5",
   "instructions": "reply concisely",
   "input": "what color is the sky?"
 }",
+      "http.response.body.text": "{"id":"resp_0460eb44ce4bf29800690a219dd0108193abee8e830ce725cb","object":"response","created_at":1762271645,"status":"completed","background":false,"billing":{"payer":"developer"},"error":null,"incomplete_details":null,"instructions":"reply concisely","max_output_tokens":null,"max_tool_calls":null,"model":"gpt-5-2025-08-07","output":[{"id":"rs_0460eb44ce4bf29800690a219ea7b08193be21548d7c847f56","type":"reasoning","summary":[]},{"id":"msg_0460eb44ce4bf29800690a21a2388c8193b3f20e6d76de9744","type":"message","status":"completed","content":[{"type":"output_text","annotations":[],"logprobs":[],"text":"Usually blue on a clear day (due to Rayleigh scattering), but it can be red/orange at sunrise/sunset, gray when cloudy, and black at night."}],"role":"assistant"}],"parallel_tool_calls":true,"previous_response_id":null,"prompt_cache_key":null,"prompt_cache_retention":null,"reasoning":{"effort":"medium","summary":null},"safety_identifier":null,"service_tier":"default","store":true,"temperature":1,"text":{"format":{"type":"text"},"verbosity":"medium"},"tool_choice":"auto","tools":[],"top_logprobs":0,"top_p":1,"truncation":"disabled","usage":{"input_tokens":20,"input_tokens_details":{"cached_tokens":0},"output_tokens":168,"output_tokens_details":{"reasoning_tokens":128},"total_tokens":188,"pydantic_ai_gateway":{"cost_estimate":0.0017050000000000001}},"user":null,"metadata":{}}",
+      "http.response.status_code": 200,
+      "logfire.json_schema": "{"type":"object","properties":{"gen_ai.operation.name":{"type":"string"},"gen_ai.request.model":{"type":"string"},"gen_ai.system":{"type":"string"},"gen_ai.request.max_tokens":{},"gen_ai.request.top_k":{},"gen_ai.request.top_p":{},"gen_ai.request.temperature":{},"gen_ai.request.stop_sequences":{},"gen_ai.request.seed":{},"gen_ai.response.finish_reasons":{},"gen_ai.response.id":{"type":"string"},"gen_ai.input.messages":{},"gen_ai.output.messages":{},"gen_ai.system_instructions":{},"http.response.status_code":{"type":"number"},"http.request.body.text":{"type":"string"},"http.response.body.text":{"type":"string"},"gen_ai.response.model":{"type":"string"},"gen_ai.usage.input_tokens":{"type":"number"},"gen_ai.usage.cache_read_tokens":{"type":"number"},"gen_ai.usage.cache_write_tokens":{},"gen_ai.usage.output_tokens":{"type":"number"},"gen_ai.usage.input_audio_tokens":{},"gen_ai.usage.cache_audio_read_tokens":{},"gen_ai.usage.output_audio_tokens":{}}}",
+      "logfire.level_num": 9,
+      "logfire.msg": "chat gpt-5-2025-08-07",
     },
-  },
-  {
-    "key": "http.response.body.text",
-    "value": {
-      "stringValue": "{"id":"resp_0460eb44ce4bf29800690a219dd0108193abee8e830ce725cb","object":"response","created_at":1762271645,"status":"completed","background":false,"billing":{"payer":"developer"},"error":null,"incomplete_details":null,"instructions":"reply concisely","max_output_tokens":null,"max_tool_calls":null,"model":"gpt-5-2025-08-07","output":[{"id":"rs_0460eb44ce4bf29800690a219ea7b08193be21548d7c847f56","type":"reasoning","summary":[]},{"id":"msg_0460eb44ce4bf29800690a21a2388c8193b3f20e6d76de9744","type":"message","status":"completed","content":[{"type":"output_text","annotations":[],"logprobs":[],"text":"Usually blue on a clear day (due to Rayleigh scattering), but it can be red/orange at sunrise/sunset, gray when cloudy, and black at night."}],"role":"assistant"}],"parallel_tool_calls":true,"previous_response_id":null,"prompt_cache_key":null,"prompt_cache_retention":null,"reasoning":{"effort":"medium","summary":null},"safety_identifier":null,"service_tier":"default","store":true,"temperature":1,"text":{"format":{"type":"text"},"verbosity":"medium"},"tool_choice":"auto","tools":[],"top_logprobs":0,"top_p":1,"truncation":"disabled","usage":{"input_tokens":20,"input_tokens_details":{"cached_tokens":0},"output_tokens":168,"output_tokens_details":{"reasoning_tokens":128},"total_tokens":188,"pydantic_ai_gateway":{"cost_estimate":0.0017050000000000001}},"user":null,"metadata":{}}",
+    "events": [],
+    "kind": 1,
+    "links": [],
+    "name": "chat gpt-5-2025-08-07",
+    "parentSpanId": undefined,
+    "resource": {
+      "service.name": "PAIG",
+      "service.version": "test",
     },
-  },
-  {
-    "key": "gen_ai.response.model",
-    "value": {
-      "stringValue": "gpt-5-2025-08-07",
+    "scope": "pydantic-ai-gateway",
+    "status": {
+      "code": 1,
     },
-  },
-  {
-    "key": "gen_ai.usage.input_tokens",
-    "value": {
-      "intValue": 20,
-    },
-  },
-  {
-    "key": "gen_ai.usage.cache_read_tokens",
-    "value": {
-      "intValue": 0,
-    },
-  },
-  {
-    "key": "gen_ai.usage.cache_write_tokens",
-    "value": {},
-  },
-  {
-    "key": "gen_ai.usage.output_tokens",
-    "value": {
-      "intValue": 168,
-    },
-  },
-  {
-    "key": "gen_ai.usage.input_audio_tokens",
-    "value": {},
-  },
-  {
-    "key": "gen_ai.usage.cache_audio_read_tokens",
-    "value": {},
-  },
-  {
-    "key": "gen_ai.usage.output_audio_tokens",
-    "value": {},
   },
 ]
 `;
@@ -1382,240 +1055,62 @@ exports[`openai > openai responses legacy name > llm 1`] = `
 exports[`openai > openai responses legacy name > span 1`] = `
 [
   {
-    "key": "logfire.msg",
-    "value": {
-      "stringValue": "chat gpt-5-2025-08-07",
-    },
-  },
-  {
-    "key": "logfire.json_schema",
-    "value": {
-      "stringValue": "{"type":"object","properties":{"gen_ai.operation.name":{"type":"string"},"gen_ai.request.model":{"type":"string"},"gen_ai.system":{"type":"string"},"gen_ai.request.max_tokens":{"type":"number"},"gen_ai.request.top_k":{},"gen_ai.request.top_p":{},"gen_ai.request.temperature":{},"gen_ai.request.stop_sequences":{},"gen_ai.request.seed":{},"gen_ai.response.finish_reasons":{},"gen_ai.response.id":{"type":"string"},"gen_ai.input.messages":{},"gen_ai.output.messages":{},"gen_ai.system_instructions":{},"http.response.status_code":{"type":"number"},"http.request.body.text":{"type":"string"},"http.response.body.text":{"type":"string"},"gen_ai.response.model":{"type":"string"},"gen_ai.usage.input_tokens":{"type":"number"},"gen_ai.usage.cache_read_tokens":{"type":"number"},"gen_ai.usage.cache_write_tokens":{},"gen_ai.usage.output_tokens":{"type":"number"},"gen_ai.usage.input_audio_tokens":{"type":"number"},"gen_ai.usage.cache_audio_read_tokens":{},"gen_ai.usage.output_audio_tokens":{"type":"number"}}}",
-    },
-  },
-  {
-    "key": "logfire.level_num",
-    "value": {
-      "intValue": 9,
-    },
-  },
-  {
-    "key": "gen_ai.operation.name",
-    "value": {
-      "stringValue": "chat",
-    },
-  },
-  {
-    "key": "gen_ai.request.model",
-    "value": {
-      "stringValue": "gpt-5",
-    },
-  },
-  {
-    "key": "gen_ai.system",
-    "value": {
-      "stringValue": "openai",
-    },
-  },
-  {
-    "key": "gen_ai.request.max_tokens",
-    "value": {
-      "intValue": 1024,
-    },
-  },
-  {
-    "key": "gen_ai.request.top_k",
-    "value": {},
-  },
-  {
-    "key": "gen_ai.request.top_p",
-    "value": {},
-  },
-  {
-    "key": "gen_ai.request.temperature",
-    "value": {},
-  },
-  {
-    "key": "gen_ai.request.stop_sequences",
-    "value": {},
-  },
-  {
-    "key": "gen_ai.request.seed",
-    "value": {},
-  },
-  {
-    "key": "gen_ai.response.finish_reasons",
-    "value": {
-      "arrayValue": {
-        "values": [
-          {
-            "stringValue": "stop",
-          },
-        ],
-      },
-    },
-  },
-  {
-    "key": "gen_ai.response.id",
-    "value": {
-      "stringValue": "chatcmpl-CYDe6BCWOKGGGTlQLofyQ2DP3QTRV",
-    },
-  },
-  {
-    "key": "gen_ai.input.messages",
-    "value": {
-      "arrayValue": {
-        "values": [
-          {
-            "kvlistValue": {
-              "values": [
-                {
-                  "key": "role",
-                  "value": {
-                    "stringValue": "system",
-                  },
-                },
-                {
-                  "key": "parts",
-                  "value": {
-                    "arrayValue": {
-                      "values": [
-                        {
-                          "kvlistValue": {
-                            "values": [
-                              {
-                                "key": "type",
-                                "value": {
-                                  "stringValue": "text",
-                                },
-                              },
-                              {
-                                "key": "content",
-                                "value": {
-                                  "stringValue": "You are a helpful assistant.",
-                                },
-                              },
-                            ],
-                          },
-                        },
-                      ],
-                    },
-                  },
-                },
-              ],
+    "attributes": {
+      "gen_ai.input.messages": [
+        {
+          "parts": [
+            {
+              "content": "You are a helpful assistant.",
+              "type": "text",
             },
-          },
-          {
-            "kvlistValue": {
-              "values": [
-                {
-                  "key": "role",
-                  "value": {
-                    "stringValue": "user",
-                  },
-                },
-                {
-                  "key": "parts",
-                  "value": {
-                    "arrayValue": {
-                      "values": [
-                        {
-                          "kvlistValue": {
-                            "values": [
-                              {
-                                "key": "type",
-                                "value": {
-                                  "stringValue": "text",
-                                },
-                              },
-                              {
-                                "key": "content",
-                                "value": {
-                                  "stringValue": "What is the capital of France?",
-                                },
-                              },
-                            ],
-                          },
-                        },
-                      ],
-                    },
-                  },
-                },
-              ],
+          ],
+          "role": "system",
+        },
+        {
+          "parts": [
+            {
+              "content": "What is the capital of France?",
+              "type": "text",
             },
-          },
-        ],
-      },
-    },
-  },
-  {
-    "key": "gen_ai.output.messages",
-    "value": {
-      "arrayValue": {
-        "values": [
-          {
-            "kvlistValue": {
-              "values": [
-                {
-                  "key": "role",
-                  "value": {
-                    "stringValue": "assistant",
-                  },
-                },
-                {
-                  "key": "parts",
-                  "value": {
-                    "arrayValue": {
-                      "values": [
-                        {
-                          "kvlistValue": {
-                            "values": [
-                              {
-                                "key": "type",
-                                "value": {
-                                  "stringValue": "text",
-                                },
-                              },
-                              {
-                                "key": "content",
-                                "value": {
-                                  "stringValue": "Paris.",
-                                },
-                              },
-                            ],
-                          },
-                        },
-                      ],
-                    },
-                  },
-                },
-                {
-                  "key": "finish_reason",
-                  "value": {
-                    "stringValue": "stop",
-                  },
-                },
-              ],
+          ],
+          "role": "user",
+        },
+      ],
+      "gen_ai.operation.name": "chat",
+      "gen_ai.output.messages": [
+        {
+          "finish_reason": "stop",
+          "parts": [
+            {
+              "content": "Paris.",
+              "type": "text",
             },
-          },
-        ],
-      },
-    },
-  },
-  {
-    "key": "gen_ai.system_instructions",
-    "value": {},
-  },
-  {
-    "key": "http.response.status_code",
-    "value": {
-      "intValue": 200,
-    },
-  },
-  {
-    "key": "http.request.body.text",
-    "value": {
-      "stringValue": "{
+          ],
+          "role": "assistant",
+        },
+      ],
+      "gen_ai.request.max_tokens": 1024,
+      "gen_ai.request.model": "gpt-5",
+      "gen_ai.request.seed": {},
+      "gen_ai.request.stop_sequences": {},
+      "gen_ai.request.temperature": {},
+      "gen_ai.request.top_k": {},
+      "gen_ai.request.top_p": {},
+      "gen_ai.response.finish_reasons": [
+        "stop",
+      ],
+      "gen_ai.response.id": "chatcmpl-CYDe6BCWOKGGGTlQLofyQ2DP3QTRV",
+      "gen_ai.response.model": "gpt-5-2025-08-07",
+      "gen_ai.system": "openai",
+      "gen_ai.system_instructions": {},
+      "gen_ai.usage.cache_audio_read_tokens": {},
+      "gen_ai.usage.cache_read_tokens": 0,
+      "gen_ai.usage.cache_write_tokens": {},
+      "gen_ai.usage.input_audio_tokens": 0,
+      "gen_ai.usage.input_tokens": 23,
+      "gen_ai.usage.output_audio_tokens": 0,
+      "gen_ai.usage.output_tokens": 11,
+      "http.request.body.text": "{
   "model": "gpt-5",
   "messages": [
     {
@@ -1629,56 +1124,24 @@ exports[`openai > openai responses legacy name > span 1`] = `
   ],
   "max_completion_tokens": 1024
 }",
+      "http.response.body.text": "{"id":"chatcmpl-CYDe6BCWOKGGGTlQLofyQ2DP3QTRV","object":"chat.completion","created":1762271642,"model":"gpt-5-2025-08-07","choices":[{"index":0,"message":{"role":"assistant","content":"Paris.","refusal":null,"annotations":[]},"finish_reason":"stop"}],"usage":{"prompt_tokens":23,"completion_tokens":11,"total_tokens":34,"prompt_tokens_details":{"cached_tokens":0,"audio_tokens":0},"completion_tokens_details":{"reasoning_tokens":0,"audio_tokens":0,"accepted_prediction_tokens":0,"rejected_prediction_tokens":0},"pydantic_ai_gateway":{"cost_estimate":0.00013875}},"service_tier":"default","system_fingerprint":null}",
+      "http.response.status_code": 200,
+      "logfire.json_schema": "{"type":"object","properties":{"gen_ai.operation.name":{"type":"string"},"gen_ai.request.model":{"type":"string"},"gen_ai.system":{"type":"string"},"gen_ai.request.max_tokens":{"type":"number"},"gen_ai.request.top_k":{},"gen_ai.request.top_p":{},"gen_ai.request.temperature":{},"gen_ai.request.stop_sequences":{},"gen_ai.request.seed":{},"gen_ai.response.finish_reasons":{},"gen_ai.response.id":{"type":"string"},"gen_ai.input.messages":{},"gen_ai.output.messages":{},"gen_ai.system_instructions":{},"http.response.status_code":{"type":"number"},"http.request.body.text":{"type":"string"},"http.response.body.text":{"type":"string"},"gen_ai.response.model":{"type":"string"},"gen_ai.usage.input_tokens":{"type":"number"},"gen_ai.usage.cache_read_tokens":{"type":"number"},"gen_ai.usage.cache_write_tokens":{},"gen_ai.usage.output_tokens":{"type":"number"},"gen_ai.usage.input_audio_tokens":{"type":"number"},"gen_ai.usage.cache_audio_read_tokens":{},"gen_ai.usage.output_audio_tokens":{"type":"number"}}}",
+      "logfire.level_num": 9,
+      "logfire.msg": "chat gpt-5-2025-08-07",
     },
-  },
-  {
-    "key": "http.response.body.text",
-    "value": {
-      "stringValue": "{"id":"chatcmpl-CYDe6BCWOKGGGTlQLofyQ2DP3QTRV","object":"chat.completion","created":1762271642,"model":"gpt-5-2025-08-07","choices":[{"index":0,"message":{"role":"assistant","content":"Paris.","refusal":null,"annotations":[]},"finish_reason":"stop"}],"usage":{"prompt_tokens":23,"completion_tokens":11,"total_tokens":34,"prompt_tokens_details":{"cached_tokens":0,"audio_tokens":0},"completion_tokens_details":{"reasoning_tokens":0,"audio_tokens":0,"accepted_prediction_tokens":0,"rejected_prediction_tokens":0},"pydantic_ai_gateway":{"cost_estimate":0.00013875}},"service_tier":"default","system_fingerprint":null}",
+    "events": [],
+    "kind": 1,
+    "links": [],
+    "name": "chat gpt-5-2025-08-07",
+    "parentSpanId": undefined,
+    "resource": {
+      "service.name": "PAIG",
+      "service.version": "test",
     },
-  },
-  {
-    "key": "gen_ai.response.model",
-    "value": {
-      "stringValue": "gpt-5-2025-08-07",
-    },
-  },
-  {
-    "key": "gen_ai.usage.input_tokens",
-    "value": {
-      "intValue": 23,
-    },
-  },
-  {
-    "key": "gen_ai.usage.cache_read_tokens",
-    "value": {
-      "intValue": 0,
-    },
-  },
-  {
-    "key": "gen_ai.usage.cache_write_tokens",
-    "value": {},
-  },
-  {
-    "key": "gen_ai.usage.output_tokens",
-    "value": {
-      "intValue": 11,
-    },
-  },
-  {
-    "key": "gen_ai.usage.input_audio_tokens",
-    "value": {
-      "intValue": 0,
-    },
-  },
-  {
-    "key": "gen_ai.usage.cache_audio_read_tokens",
-    "value": {},
-  },
-  {
-    "key": "gen_ai.usage.output_audio_tokens",
-    "value": {
-      "intValue": 0,
+    "scope": "pydantic-ai-gateway",
+    "status": {
+      "code": 1,
     },
   },
 ]
@@ -1861,775 +1324,184 @@ for p in [6, 9, 12, 15]:
 exports[`openai > openai responses with builtin tools > span 1`] = `
 [
   {
-    "key": "logfire.msg",
-    "value": {
-      "stringValue": "chat gpt-5-2025-08-07",
-    },
-  },
-  {
-    "key": "logfire.json_schema",
-    "value": {
-      "stringValue": "{"type":"object","properties":{"gen_ai.operation.name":{"type":"string"},"gen_ai.request.model":{"type":"string"},"gen_ai.system":{"type":"string"},"gen_ai.request.max_tokens":{},"gen_ai.request.top_k":{},"gen_ai.request.top_p":{},"gen_ai.request.temperature":{},"gen_ai.request.stop_sequences":{},"gen_ai.request.seed":{},"gen_ai.response.finish_reasons":{},"gen_ai.response.id":{"type":"string"},"gen_ai.input.messages":{},"gen_ai.output.messages":{},"gen_ai.system_instructions":{},"http.response.status_code":{"type":"number"},"http.request.body.text":{"type":"string"},"http.response.body.text":{"type":"string"},"gen_ai.response.model":{"type":"string"},"gen_ai.usage.input_tokens":{"type":"number"},"gen_ai.usage.cache_read_tokens":{"type":"number"},"gen_ai.usage.cache_write_tokens":{},"gen_ai.usage.output_tokens":{"type":"number"},"gen_ai.usage.input_audio_tokens":{},"gen_ai.usage.cache_audio_read_tokens":{},"gen_ai.usage.output_audio_tokens":{}}}",
-    },
-  },
-  {
-    "key": "logfire.level_num",
-    "value": {
-      "intValue": 9,
-    },
-  },
-  {
-    "key": "gen_ai.operation.name",
-    "value": {
-      "stringValue": "chat",
-    },
-  },
-  {
-    "key": "gen_ai.request.model",
-    "value": {
-      "stringValue": "gpt-5",
-    },
-  },
-  {
-    "key": "gen_ai.system",
-    "value": {
-      "stringValue": "openai",
-    },
-  },
-  {
-    "key": "gen_ai.request.max_tokens",
-    "value": {},
-  },
-  {
-    "key": "gen_ai.request.top_k",
-    "value": {},
-  },
-  {
-    "key": "gen_ai.request.top_p",
-    "value": {},
-  },
-  {
-    "key": "gen_ai.request.temperature",
-    "value": {},
-  },
-  {
-    "key": "gen_ai.request.stop_sequences",
-    "value": {},
-  },
-  {
-    "key": "gen_ai.request.seed",
-    "value": {},
-  },
-  {
-    "key": "gen_ai.response.finish_reasons",
-    "value": {},
-  },
-  {
-    "key": "gen_ai.response.id",
-    "value": {
-      "stringValue": "resp_0dc4a3c582e21a7f00690a21f2f5a881a38c2bc17284ab0bdb",
-    },
-  },
-  {
-    "key": "gen_ai.input.messages",
-    "value": {
-      "arrayValue": {
-        "values": [
-          {
-            "kvlistValue": {
-              "values": [
-                {
-                  "key": "role",
-                  "value": {
-                    "stringValue": "user",
-                  },
-                },
-                {
-                  "key": "parts",
-                  "value": {
-                    "arrayValue": {
-                      "values": [
-                        {
-                          "kvlistValue": {
-                            "values": [
-                              {
-                                "key": "type",
-                                "value": {
-                                  "stringValue": "text",
-                                },
-                              },
-                              {
-                                "key": "content",
-                                "value": {
-                                  "stringValue": "what's the root square of 123902139123?",
-                                },
-                              },
-                            ],
-                          },
-                        },
-                      ],
-                    },
-                  },
-                },
-              ],
+    "attributes": {
+      "gen_ai.input.messages": [
+        {
+          "parts": [
+            {
+              "content": "what's the root square of 123902139123?",
+              "type": "text",
             },
-          },
-        ],
-      },
-    },
-  },
-  {
-    "key": "gen_ai.output.messages",
-    "value": {
-      "arrayValue": {
-        "values": [
-          {
-            "kvlistValue": {
-              "values": [
-                {
-                  "key": "role",
-                  "value": {
-                    "stringValue": "assistant",
-                  },
-                },
-                {
-                  "key": "parts",
-                  "value": {
-                    "arrayValue": {
-                      "values": [],
-                    },
-                  },
-                },
-              ],
+          ],
+          "role": "user",
+        },
+      ],
+      "gen_ai.operation.name": "chat",
+      "gen_ai.output.messages": [
+        {
+          "parts": [],
+          "role": "assistant",
+        },
+        {
+          "parts": [
+            {
+              "part": {
+                "code": "import decimal, math, fractions, sys, statistics, random",
+                "container_id": "cntr_690a21f4fa088191a854e0303fd8e69406563a23f7fe0f18",
+                "id": "ci_0dc4a3c582e21a7f00690a21f79eb081a385bc9ea91607bb8e",
+                "outputs": {},
+                "status": "completed",
+                "type": "code_interpreter_call",
+              },
+              "type": "unknown",
             },
-          },
-          {
-            "kvlistValue": {
-              "values": [
-                {
-                  "key": "role",
-                  "value": {
-                    "stringValue": "assistant",
-                  },
-                },
-                {
-                  "key": "parts",
-                  "value": {
-                    "arrayValue": {
-                      "values": [
-                        {
-                          "kvlistValue": {
-                            "values": [
-                              {
-                                "key": "type",
-                                "value": {
-                                  "stringValue": "unknown",
-                                },
-                              },
-                              {
-                                "key": "part",
-                                "value": {
-                                  "kvlistValue": {
-                                    "values": [
-                                      {
-                                        "key": "id",
-                                        "value": {
-                                          "stringValue": "ci_0dc4a3c582e21a7f00690a21f79eb081a385bc9ea91607bb8e",
-                                        },
-                                      },
-                                      {
-                                        "key": "type",
-                                        "value": {
-                                          "stringValue": "code_interpreter_call",
-                                        },
-                                      },
-                                      {
-                                        "key": "status",
-                                        "value": {
-                                          "stringValue": "completed",
-                                        },
-                                      },
-                                      {
-                                        "key": "code",
-                                        "value": {
-                                          "stringValue": "import decimal, math, fractions, sys, statistics, random",
-                                        },
-                                      },
-                                      {
-                                        "key": "container_id",
-                                        "value": {
-                                          "stringValue": "cntr_690a21f4fa088191a854e0303fd8e69406563a23f7fe0f18",
-                                        },
-                                      },
-                                      {
-                                        "key": "outputs",
-                                        "value": {},
-                                      },
-                                    ],
-                                  },
-                                },
-                              },
-                            ],
-                          },
-                        },
-                      ],
-                    },
-                  },
-                },
-              ],
-            },
-          },
-          {
-            "kvlistValue": {
-              "values": [
-                {
-                  "key": "role",
-                  "value": {
-                    "stringValue": "assistant",
-                  },
-                },
-                {
-                  "key": "parts",
-                  "value": {
-                    "arrayValue": {
-                      "values": [
-                        {
-                          "kvlistValue": {
-                            "values": [
-                              {
-                                "key": "type",
-                                "value": {
-                                  "stringValue": "unknown",
-                                },
-                              },
-                              {
-                                "key": "part",
-                                "value": {
-                                  "kvlistValue": {
-                                    "values": [
-                                      {
-                                        "key": "id",
-                                        "value": {
-                                          "stringValue": "ci_0dc4a3c582e21a7f00690a21fb50d081a3839fffe407f88965",
-                                        },
-                                      },
-                                      {
-                                        "key": "type",
-                                        "value": {
-                                          "stringValue": "code_interpreter_call",
-                                        },
-                                      },
-                                      {
-                                        "key": "status",
-                                        "value": {
-                                          "stringValue": "completed",
-                                        },
-                                      },
-                                      {
-                                        "key": "code",
-                                        "value": {
-                                          "stringValue": "n = 123_902_139_123
+          ],
+          "role": "assistant",
+        },
+        {
+          "parts": [
+            {
+              "part": {
+                "code": "n = 123_902_139_123
 # Check if perfect square
 is_square = int(n**0.5)**2 == n
 sqrt_n = n**0.5
 int_part = int(sqrt_n)
 is_square, int_part",
-                                        },
-                                      },
-                                      {
-                                        "key": "container_id",
-                                        "value": {
-                                          "stringValue": "cntr_690a21f4fa088191a854e0303fd8e69406563a23f7fe0f18",
-                                        },
-                                      },
-                                      {
-                                        "key": "outputs",
-                                        "value": {},
-                                      },
-                                    ],
-                                  },
-                                },
-                              },
-                            ],
-                          },
-                        },
-                      ],
-                    },
-                  },
-                },
-              ],
+                "container_id": "cntr_690a21f4fa088191a854e0303fd8e69406563a23f7fe0f18",
+                "id": "ci_0dc4a3c582e21a7f00690a21fb50d081a3839fffe407f88965",
+                "outputs": {},
+                "status": "completed",
+                "type": "code_interpreter_call",
+              },
+              "type": "unknown",
             },
-          },
-          {
-            "kvlistValue": {
-              "values": [
-                {
-                  "key": "role",
-                  "value": {
-                    "stringValue": "assistant",
-                  },
-                },
-                {
-                  "key": "parts",
-                  "value": {
-                    "arrayValue": {
-                      "values": [],
-                    },
-                  },
-                },
-              ],
+          ],
+          "role": "assistant",
+        },
+        {
+          "parts": [],
+          "role": "assistant",
+        },
+        {
+          "parts": [
+            {
+              "part": {
+                "code": "int_part, int_part**2, (int_part+1)**2",
+                "container_id": "cntr_690a21f4fa088191a854e0303fd8e69406563a23f7fe0f18",
+                "id": "ci_0dc4a3c582e21a7f00690a21fe485c81a3bc4ba9ccc7418d6e",
+                "outputs": {},
+                "status": "completed",
+                "type": "code_interpreter_call",
+              },
+              "type": "unknown",
             },
-          },
-          {
-            "kvlistValue": {
-              "values": [
-                {
-                  "key": "role",
-                  "value": {
-                    "stringValue": "assistant",
-                  },
-                },
-                {
-                  "key": "parts",
-                  "value": {
-                    "arrayValue": {
-                      "values": [
-                        {
-                          "kvlistValue": {
-                            "values": [
-                              {
-                                "key": "type",
-                                "value": {
-                                  "stringValue": "unknown",
-                                },
-                              },
-                              {
-                                "key": "part",
-                                "value": {
-                                  "kvlistValue": {
-                                    "values": [
-                                      {
-                                        "key": "id",
-                                        "value": {
-                                          "stringValue": "ci_0dc4a3c582e21a7f00690a21fe485c81a3bc4ba9ccc7418d6e",
-                                        },
-                                      },
-                                      {
-                                        "key": "type",
-                                        "value": {
-                                          "stringValue": "code_interpreter_call",
-                                        },
-                                      },
-                                      {
-                                        "key": "status",
-                                        "value": {
-                                          "stringValue": "completed",
-                                        },
-                                      },
-                                      {
-                                        "key": "code",
-                                        "value": {
-                                          "stringValue": "int_part, int_part**2, (int_part+1)**2",
-                                        },
-                                      },
-                                      {
-                                        "key": "container_id",
-                                        "value": {
-                                          "stringValue": "cntr_690a21f4fa088191a854e0303fd8e69406563a23f7fe0f18",
-                                        },
-                                      },
-                                      {
-                                        "key": "outputs",
-                                        "value": {},
-                                      },
-                                    ],
-                                  },
-                                },
-                              },
-                            ],
-                          },
-                        },
-                      ],
-                    },
-                  },
-                },
-              ],
-            },
-          },
-          {
-            "kvlistValue": {
-              "values": [
-                {
-                  "key": "role",
-                  "value": {
-                    "stringValue": "assistant",
-                  },
-                },
-                {
-                  "key": "parts",
-                  "value": {
-                    "arrayValue": {
-                      "values": [],
-                    },
-                  },
-                },
-              ],
-            },
-          },
-          {
-            "kvlistValue": {
-              "values": [
-                {
-                  "key": "role",
-                  "value": {
-                    "stringValue": "assistant",
-                  },
-                },
-                {
-                  "key": "parts",
-                  "value": {
-                    "arrayValue": {
-                      "values": [
-                        {
-                          "kvlistValue": {
-                            "values": [
-                              {
-                                "key": "type",
-                                "value": {
-                                  "stringValue": "unknown",
-                                },
-                              },
-                              {
-                                "key": "part",
-                                "value": {
-                                  "kvlistValue": {
-                                    "values": [
-                                      {
-                                        "key": "id",
-                                        "value": {
-                                          "stringValue": "ci_0dc4a3c582e21a7f00690a2200de5881a3b0fb27e1e2317788",
-                                        },
-                                      },
-                                      {
-                                        "key": "type",
-                                        "value": {
-                                          "stringValue": "code_interpreter_call",
-                                        },
-                                      },
-                                      {
-                                        "key": "status",
-                                        "value": {
-                                          "stringValue": "completed",
-                                        },
-                                      },
-                                      {
-                                        "key": "code",
-                                        "value": {
-                                          "stringValue": "from decimal import Decimal, getcontext
+          ],
+          "role": "assistant",
+        },
+        {
+          "parts": [],
+          "role": "assistant",
+        },
+        {
+          "parts": [
+            {
+              "part": {
+                "code": "from decimal import Decimal, getcontext
 getcontext().prec = 50
 sqrt_val = Decimal(n).sqrt()
 sqrt_val",
-                                        },
-                                      },
-                                      {
-                                        "key": "container_id",
-                                        "value": {
-                                          "stringValue": "cntr_690a21f4fa088191a854e0303fd8e69406563a23f7fe0f18",
-                                        },
-                                      },
-                                      {
-                                        "key": "outputs",
-                                        "value": {},
-                                      },
-                                    ],
-                                  },
-                                },
-                              },
-                            ],
-                          },
-                        },
-                      ],
-                    },
-                  },
-                },
-              ],
+                "container_id": "cntr_690a21f4fa088191a854e0303fd8e69406563a23f7fe0f18",
+                "id": "ci_0dc4a3c582e21a7f00690a2200de5881a3b0fb27e1e2317788",
+                "outputs": {},
+                "status": "completed",
+                "type": "code_interpreter_call",
+              },
+              "type": "unknown",
             },
-          },
-          {
-            "kvlistValue": {
-              "values": [
-                {
-                  "key": "role",
-                  "value": {
-                    "stringValue": "assistant",
-                  },
-                },
-                {
-                  "key": "parts",
-                  "value": {
-                    "arrayValue": {
-                      "values": [],
-                    },
-                  },
-                },
-              ],
-            },
-          },
-          {
-            "kvlistValue": {
-              "values": [
-                {
-                  "key": "role",
-                  "value": {
-                    "stringValue": "assistant",
-                  },
-                },
-                {
-                  "key": "parts",
-                  "value": {
-                    "arrayValue": {
-                      "values": [
-                        {
-                          "kvlistValue": {
-                            "values": [
-                              {
-                                "key": "type",
-                                "value": {
-                                  "stringValue": "unknown",
-                                },
-                              },
-                              {
-                                "key": "part",
-                                "value": {
-                                  "kvlistValue": {
-                                    "values": [
-                                      {
-                                        "key": "id",
-                                        "value": {
-                                          "stringValue": "ci_0dc4a3c582e21a7f00690a2209f9cc81a39c0e1ddfa029c7a6",
-                                        },
-                                      },
-                                      {
-                                        "key": "type",
-                                        "value": {
-                                          "stringValue": "code_interpreter_call",
-                                        },
-                                      },
-                                      {
-                                        "key": "status",
-                                        "value": {
-                                          "stringValue": "completed",
-                                        },
-                                      },
-                                      {
-                                        "key": "code",
-                                        "value": {
-                                          "stringValue": "float_val = float(sqrt_val)
+          ],
+          "role": "assistant",
+        },
+        {
+          "parts": [],
+          "role": "assistant",
+        },
+        {
+          "parts": [
+            {
+              "part": {
+                "code": "float_val = float(sqrt_val)
 float_val",
-                                        },
-                                      },
-                                      {
-                                        "key": "container_id",
-                                        "value": {
-                                          "stringValue": "cntr_690a21f4fa088191a854e0303fd8e69406563a23f7fe0f18",
-                                        },
-                                      },
-                                      {
-                                        "key": "outputs",
-                                        "value": {},
-                                      },
-                                    ],
-                                  },
-                                },
-                              },
-                            ],
-                          },
-                        },
-                      ],
-                    },
-                  },
-                },
-              ],
+                "container_id": "cntr_690a21f4fa088191a854e0303fd8e69406563a23f7fe0f18",
+                "id": "ci_0dc4a3c582e21a7f00690a2209f9cc81a39c0e1ddfa029c7a6",
+                "outputs": {},
+                "status": "completed",
+                "type": "code_interpreter_call",
+              },
+              "type": "unknown",
             },
-          },
-          {
-            "kvlistValue": {
-              "values": [
-                {
-                  "key": "role",
-                  "value": {
-                    "stringValue": "assistant",
-                  },
-                },
-                {
-                  "key": "parts",
-                  "value": {
-                    "arrayValue": {
-                      "values": [],
-                    },
-                  },
-                },
-              ],
-            },
-          },
-          {
-            "kvlistValue": {
-              "values": [
-                {
-                  "key": "role",
-                  "value": {
-                    "stringValue": "assistant",
-                  },
-                },
-                {
-                  "key": "parts",
-                  "value": {
-                    "arrayValue": {
-                      "values": [
-                        {
-                          "kvlistValue": {
-                            "values": [
-                              {
-                                "key": "type",
-                                "value": {
-                                  "stringValue": "unknown",
-                                },
-                              },
-                              {
-                                "key": "part",
-                                "value": {
-                                  "kvlistValue": {
-                                    "values": [
-                                      {
-                                        "key": "id",
-                                        "value": {
-                                          "stringValue": "ci_0dc4a3c582e21a7f00690a220c125481a3ad139dde1b01ef42",
-                                        },
-                                      },
-                                      {
-                                        "key": "type",
-                                        "value": {
-                                          "stringValue": "code_interpreter_call",
-                                        },
-                                      },
-                                      {
-                                        "key": "status",
-                                        "value": {
-                                          "stringValue": "completed",
-                                        },
-                                      },
-                                      {
-                                        "key": "code",
-                                        "value": {
-                                          "stringValue": "from decimal import ROUND_HALF_UP
+          ],
+          "role": "assistant",
+        },
+        {
+          "parts": [],
+          "role": "assistant",
+        },
+        {
+          "parts": [
+            {
+              "part": {
+                "code": "from decimal import ROUND_HALF_UP
 def round_str(dec, places):
     q = Decimal(10) ** -places
     return str(dec.quantize(q, rounding=ROUND_HALF_UP))
 for p in [6, 9, 12, 15]:
     print(p, round_str(sqrt_val, p))",
-                                        },
-                                      },
-                                      {
-                                        "key": "container_id",
-                                        "value": {
-                                          "stringValue": "cntr_690a21f4fa088191a854e0303fd8e69406563a23f7fe0f18",
-                                        },
-                                      },
-                                      {
-                                        "key": "outputs",
-                                        "value": {},
-                                      },
-                                    ],
-                                  },
-                                },
-                              },
-                            ],
-                          },
-                        },
-                      ],
-                    },
-                  },
-                },
-              ],
+                "container_id": "cntr_690a21f4fa088191a854e0303fd8e69406563a23f7fe0f18",
+                "id": "ci_0dc4a3c582e21a7f00690a220c125481a3ad139dde1b01ef42",
+                "outputs": {},
+                "status": "completed",
+                "type": "code_interpreter_call",
+              },
+              "type": "unknown",
             },
-          },
-          {
-            "kvlistValue": {
-              "values": [
-                {
-                  "key": "role",
-                  "value": {
-                    "stringValue": "assistant",
-                  },
-                },
-                {
-                  "key": "parts",
-                  "value": {
-                    "arrayValue": {
-                      "values": [],
-                    },
-                  },
-                },
-              ],
+          ],
+          "role": "assistant",
+        },
+        {
+          "parts": [],
+          "role": "assistant",
+        },
+        {
+          "parts": [
+            {
+              "content": "The square root of 123,902,139,123 is approximately 351,997.356698882044. It’s not a perfect square.",
+              "type": "text",
             },
-          },
-          {
-            "kvlistValue": {
-              "values": [
-                {
-                  "key": "role",
-                  "value": {
-                    "stringValue": "assistant",
-                  },
-                },
-                {
-                  "key": "parts",
-                  "value": {
-                    "arrayValue": {
-                      "values": [
-                        {
-                          "kvlistValue": {
-                            "values": [
-                              {
-                                "key": "type",
-                                "value": {
-                                  "stringValue": "text",
-                                },
-                              },
-                              {
-                                "key": "content",
-                                "value": {
-                                  "stringValue": "The square root of 123,902,139,123 is approximately 351,997.356698882044. It’s not a perfect square.",
-                                },
-                              },
-                            ],
-                          },
-                        },
-                      ],
-                    },
-                  },
-                },
-              ],
-            },
-          },
-        ],
-      },
-    },
-  },
-  {
-    "key": "gen_ai.system_instructions",
-    "value": {},
-  },
-  {
-    "key": "http.response.status_code",
-    "value": {
-      "intValue": 200,
-    },
-  },
-  {
-    "key": "http.request.body.text",
-    "value": {
-      "stringValue": "{
+          ],
+          "role": "assistant",
+        },
+      ],
+      "gen_ai.request.max_tokens": {},
+      "gen_ai.request.model": "gpt-5",
+      "gen_ai.request.seed": {},
+      "gen_ai.request.stop_sequences": {},
+      "gen_ai.request.temperature": {},
+      "gen_ai.request.top_k": {},
+      "gen_ai.request.top_p": {},
+      "gen_ai.response.finish_reasons": {},
+      "gen_ai.response.id": "resp_0dc4a3c582e21a7f00690a21f2f5a881a38c2bc17284ab0bdb",
+      "gen_ai.response.model": "gpt-5-2025-08-07",
+      "gen_ai.system": "openai",
+      "gen_ai.system_instructions": {},
+      "gen_ai.usage.cache_audio_read_tokens": {},
+      "gen_ai.usage.cache_read_tokens": 0,
+      "gen_ai.usage.cache_write_tokens": {},
+      "gen_ai.usage.input_audio_tokens": {},
+      "gen_ai.usage.input_tokens": 1808,
+      "gen_ai.usage.output_audio_tokens": {},
+      "gen_ai.usage.output_tokens": 1061,
+      "http.request.body.text": "{
   "model": "gpt-5",
   "instructions": "be precise",
   "input": "what's the root square of 123902139123?",
@@ -2642,53 +1514,25 @@ for p in [6, 9, 12, 15]:
     }
   ]
 }",
+      "http.response.body.text": "{"id":"resp_0dc4a3c582e21a7f00690a21f2f5a881a38c2bc17284ab0bdb","object":"response","created_at":1762271730,"status":"completed","background":false,"billing":{"payer":"developer"},"error":null,"incomplete_details":null,"instructions":"be precise","max_output_tokens":null,"max_tool_calls":null,"model":"gpt-5-2025-08-07","output":[{"id":"rs_0dc4a3c582e21a7f00690a21f5c01c81a387696a1225044c74","type":"reasoning","summary":[]},{"id":"ci_0dc4a3c582e21a7f00690a21f79eb081a385bc9ea91607bb8e","type":"code_interpreter_call","status":"completed","code":"import decimal, math, fractions, sys, statistics, random","container_id":"cntr_690a21f4fa088191a854e0303fd8e69406563a23f7fe0f18","outputs":null},{"id":"ci_0dc4a3c582e21a7f00690a21fb50d081a3839fffe407f88965","type":"code_interpreter_call","status":"completed","code":"n = 123_902_139_123\\n# Check if perfect square\\nis_square = int(n**0.5)**2 == n\\nsqrt_n = n**0.5\\nint_part = int(sqrt_n)\\nis_square, int_part","container_id":"cntr_690a21f4fa088191a854e0303fd8e69406563a23f7fe0f18","outputs":null},{"id":"rs_0dc4a3c582e21a7f00690a21fdb20081a38c8d71579c417602","type":"reasoning","summary":[]},{"id":"ci_0dc4a3c582e21a7f00690a21fe485c81a3bc4ba9ccc7418d6e","type":"code_interpreter_call","status":"completed","code":"int_part, int_part**2, (int_part+1)**2","container_id":"cntr_690a21f4fa088191a854e0303fd8e69406563a23f7fe0f18","outputs":null},{"id":"rs_0dc4a3c582e21a7f00690a220009f081a3ae01ee9362963591","type":"reasoning","summary":[]},{"id":"ci_0dc4a3c582e21a7f00690a2200de5881a3b0fb27e1e2317788","type":"code_interpreter_call","status":"completed","code":"from decimal import Decimal, getcontext\\ngetcontext().prec = 50\\nsqrt_val = Decimal(n).sqrt()\\nsqrt_val","container_id":"cntr_690a21f4fa088191a854e0303fd8e69406563a23f7fe0f18","outputs":null},{"id":"rs_0dc4a3c582e21a7f00690a22031aa881a38cd6660b4d830c50","type":"reasoning","summary":[]},{"id":"ci_0dc4a3c582e21a7f00690a2209f9cc81a39c0e1ddfa029c7a6","type":"code_interpreter_call","status":"completed","code":"float_val = float(sqrt_val)\\nfloat_val","container_id":"cntr_690a21f4fa088191a854e0303fd8e69406563a23f7fe0f18","outputs":null},{"id":"rs_0dc4a3c582e21a7f00690a220baf1481a3bda6abb8b9c09f88","type":"reasoning","summary":[]},{"id":"ci_0dc4a3c582e21a7f00690a220c125481a3ad139dde1b01ef42","type":"code_interpreter_call","status":"completed","code":"from decimal import ROUND_HALF_UP\\ndef round_str(dec, places):\\n    q = Decimal(10) ** -places\\n    return str(dec.quantize(q, rounding=ROUND_HALF_UP))\\nfor p in [6, 9, 12, 15]:\\n    print(p, round_str(sqrt_val, p))","container_id":"cntr_690a21f4fa088191a854e0303fd8e69406563a23f7fe0f18","outputs":null},{"id":"rs_0dc4a3c582e21a7f00690a220ee65081a3b4a3c606ed32f88c","type":"reasoning","summary":[]},{"id":"msg_0dc4a3c582e21a7f00690a221614e081a3b9e5621bd0f3ba23","type":"message","status":"completed","content":[{"type":"output_text","annotations":[],"logprobs":[],"text":"The square root of 123,902,139,123 is approximately 351,997.356698882044. It’s not a perfect square."}],"role":"assistant"}],"parallel_tool_calls":true,"previous_response_id":null,"prompt_cache_key":null,"prompt_cache_retention":null,"reasoning":{"effort":"medium","summary":null},"safety_identifier":null,"service_tier":"default","store":true,"temperature":1,"text":{"format":{"type":"text"},"verbosity":"medium"},"tool_choice":"auto","tools":[{"type":"code_interpreter","container":{"type":"auto"}}],"top_logprobs":0,"top_p":1,"truncation":"disabled","usage":{"input_tokens":1808,"input_tokens_details":{"cached_tokens":0},"output_tokens":1061,"output_tokens_details":{"reasoning_tokens":1024},"total_tokens":2869,"pydantic_ai_gateway":{"cost_estimate":0.01287}},"user":null,"metadata":{}}",
+      "http.response.status_code": 200,
+      "logfire.json_schema": "{"type":"object","properties":{"gen_ai.operation.name":{"type":"string"},"gen_ai.request.model":{"type":"string"},"gen_ai.system":{"type":"string"},"gen_ai.request.max_tokens":{},"gen_ai.request.top_k":{},"gen_ai.request.top_p":{},"gen_ai.request.temperature":{},"gen_ai.request.stop_sequences":{},"gen_ai.request.seed":{},"gen_ai.response.finish_reasons":{},"gen_ai.response.id":{"type":"string"},"gen_ai.input.messages":{},"gen_ai.output.messages":{},"gen_ai.system_instructions":{},"http.response.status_code":{"type":"number"},"http.request.body.text":{"type":"string"},"http.response.body.text":{"type":"string"},"gen_ai.response.model":{"type":"string"},"gen_ai.usage.input_tokens":{"type":"number"},"gen_ai.usage.cache_read_tokens":{"type":"number"},"gen_ai.usage.cache_write_tokens":{},"gen_ai.usage.output_tokens":{"type":"number"},"gen_ai.usage.input_audio_tokens":{},"gen_ai.usage.cache_audio_read_tokens":{},"gen_ai.usage.output_audio_tokens":{}}}",
+      "logfire.level_num": 9,
+      "logfire.msg": "chat gpt-5-2025-08-07",
     },
-  },
-  {
-    "key": "http.response.body.text",
-    "value": {
-      "stringValue": "{"id":"resp_0dc4a3c582e21a7f00690a21f2f5a881a38c2bc17284ab0bdb","object":"response","created_at":1762271730,"status":"completed","background":false,"billing":{"payer":"developer"},"error":null,"incomplete_details":null,"instructions":"be precise","max_output_tokens":null,"max_tool_calls":null,"model":"gpt-5-2025-08-07","output":[{"id":"rs_0dc4a3c582e21a7f00690a21f5c01c81a387696a1225044c74","type":"reasoning","summary":[]},{"id":"ci_0dc4a3c582e21a7f00690a21f79eb081a385bc9ea91607bb8e","type":"code_interpreter_call","status":"completed","code":"import decimal, math, fractions, sys, statistics, random","container_id":"cntr_690a21f4fa088191a854e0303fd8e69406563a23f7fe0f18","outputs":null},{"id":"ci_0dc4a3c582e21a7f00690a21fb50d081a3839fffe407f88965","type":"code_interpreter_call","status":"completed","code":"n = 123_902_139_123\\n# Check if perfect square\\nis_square = int(n**0.5)**2 == n\\nsqrt_n = n**0.5\\nint_part = int(sqrt_n)\\nis_square, int_part","container_id":"cntr_690a21f4fa088191a854e0303fd8e69406563a23f7fe0f18","outputs":null},{"id":"rs_0dc4a3c582e21a7f00690a21fdb20081a38c8d71579c417602","type":"reasoning","summary":[]},{"id":"ci_0dc4a3c582e21a7f00690a21fe485c81a3bc4ba9ccc7418d6e","type":"code_interpreter_call","status":"completed","code":"int_part, int_part**2, (int_part+1)**2","container_id":"cntr_690a21f4fa088191a854e0303fd8e69406563a23f7fe0f18","outputs":null},{"id":"rs_0dc4a3c582e21a7f00690a220009f081a3ae01ee9362963591","type":"reasoning","summary":[]},{"id":"ci_0dc4a3c582e21a7f00690a2200de5881a3b0fb27e1e2317788","type":"code_interpreter_call","status":"completed","code":"from decimal import Decimal, getcontext\\ngetcontext().prec = 50\\nsqrt_val = Decimal(n).sqrt()\\nsqrt_val","container_id":"cntr_690a21f4fa088191a854e0303fd8e69406563a23f7fe0f18","outputs":null},{"id":"rs_0dc4a3c582e21a7f00690a22031aa881a38cd6660b4d830c50","type":"reasoning","summary":[]},{"id":"ci_0dc4a3c582e21a7f00690a2209f9cc81a39c0e1ddfa029c7a6","type":"code_interpreter_call","status":"completed","code":"float_val = float(sqrt_val)\\nfloat_val","container_id":"cntr_690a21f4fa088191a854e0303fd8e69406563a23f7fe0f18","outputs":null},{"id":"rs_0dc4a3c582e21a7f00690a220baf1481a3bda6abb8b9c09f88","type":"reasoning","summary":[]},{"id":"ci_0dc4a3c582e21a7f00690a220c125481a3ad139dde1b01ef42","type":"code_interpreter_call","status":"completed","code":"from decimal import ROUND_HALF_UP\\ndef round_str(dec, places):\\n    q = Decimal(10) ** -places\\n    return str(dec.quantize(q, rounding=ROUND_HALF_UP))\\nfor p in [6, 9, 12, 15]:\\n    print(p, round_str(sqrt_val, p))","container_id":"cntr_690a21f4fa088191a854e0303fd8e69406563a23f7fe0f18","outputs":null},{"id":"rs_0dc4a3c582e21a7f00690a220ee65081a3b4a3c606ed32f88c","type":"reasoning","summary":[]},{"id":"msg_0dc4a3c582e21a7f00690a221614e081a3b9e5621bd0f3ba23","type":"message","status":"completed","content":[{"type":"output_text","annotations":[],"logprobs":[],"text":"The square root of 123,902,139,123 is approximately 351,997.356698882044. It’s not a perfect square."}],"role":"assistant"}],"parallel_tool_calls":true,"previous_response_id":null,"prompt_cache_key":null,"prompt_cache_retention":null,"reasoning":{"effort":"medium","summary":null},"safety_identifier":null,"service_tier":"default","store":true,"temperature":1,"text":{"format":{"type":"text"},"verbosity":"medium"},"tool_choice":"auto","tools":[{"type":"code_interpreter","container":{"type":"auto"}}],"top_logprobs":0,"top_p":1,"truncation":"disabled","usage":{"input_tokens":1808,"input_tokens_details":{"cached_tokens":0},"output_tokens":1061,"output_tokens_details":{"reasoning_tokens":1024},"total_tokens":2869,"pydantic_ai_gateway":{"cost_estimate":0.01287}},"user":null,"metadata":{}}",
+    "events": [],
+    "kind": 1,
+    "links": [],
+    "name": "chat gpt-5-2025-08-07",
+    "parentSpanId": undefined,
+    "resource": {
+      "service.name": "PAIG",
+      "service.version": "test",
     },
-  },
-  {
-    "key": "gen_ai.response.model",
-    "value": {
-      "stringValue": "gpt-5-2025-08-07",
+    "scope": "pydantic-ai-gateway",
+    "status": {
+      "code": 1,
     },
-  },
-  {
-    "key": "gen_ai.usage.input_tokens",
-    "value": {
-      "intValue": 1808,
-    },
-  },
-  {
-    "key": "gen_ai.usage.cache_read_tokens",
-    "value": {
-      "intValue": 0,
-    },
-  },
-  {
-    "key": "gen_ai.usage.cache_write_tokens",
-    "value": {},
-  },
-  {
-    "key": "gen_ai.usage.output_tokens",
-    "value": {
-      "intValue": 1061,
-    },
-  },
-  {
-    "key": "gen_ai.usage.input_audio_tokens",
-    "value": {},
-  },
-  {
-    "key": "gen_ai.usage.cache_audio_read_tokens",
-    "value": {},
-  },
-  {
-    "key": "gen_ai.usage.output_audio_tokens",
-    "value": {},
   },
 ]
 `;

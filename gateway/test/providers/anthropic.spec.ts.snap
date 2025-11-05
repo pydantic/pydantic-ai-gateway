@@ -34,287 +34,79 @@ exports[`anthropic > should call anthropic via gateway > llm 1`] = `
 exports[`anthropic > should call anthropic via gateway > span 1`] = `
 [
   {
-    "key": "logfire.msg",
-    "value": {
-      "stringValue": "chat claude-sonnet-4-20250514",
-    },
-  },
-  {
-    "key": "logfire.json_schema",
-    "value": {
-      "stringValue": "{"type":"object","properties":{"gen_ai.operation.name":{"type":"string"},"gen_ai.request.model":{"type":"string"},"gen_ai.system":{"type":"string"},"gen_ai.request.max_tokens":{"type":"number"},"gen_ai.request.top_k":{"type":"number"},"gen_ai.request.top_p":{"type":"number"},"gen_ai.request.temperature":{"type":"number"},"gen_ai.request.stop_sequences":{},"gen_ai.request.seed":{},"gen_ai.response.finish_reasons":{},"gen_ai.response.id":{"type":"string"},"gen_ai.input.messages":{},"gen_ai.output.messages":{},"gen_ai.system_instructions":{},"http.response.status_code":{"type":"number"},"http.request.body.text":{"type":"string"},"http.response.body.text":{"type":"string"},"gen_ai.response.model":{"type":"string"},"gen_ai.usage.input_tokens":{"type":"number"},"gen_ai.usage.cache_read_tokens":{"type":"number"},"gen_ai.usage.cache_write_tokens":{"type":"number"},"gen_ai.usage.output_tokens":{"type":"number"},"gen_ai.usage.input_audio_tokens":{},"gen_ai.usage.cache_audio_read_tokens":{},"gen_ai.usage.output_audio_tokens":{}}}",
-    },
-  },
-  {
-    "key": "logfire.level_num",
-    "value": {
-      "intValue": 9,
-    },
-  },
-  {
-    "key": "gen_ai.operation.name",
-    "value": {
-      "stringValue": "chat",
-    },
-  },
-  {
-    "key": "gen_ai.request.model",
-    "value": {
-      "stringValue": "claude-sonnet-4-20250514",
-    },
-  },
-  {
-    "key": "gen_ai.system",
-    "value": {
-      "stringValue": "anthropic",
-    },
-  },
-  {
-    "key": "gen_ai.request.max_tokens",
-    "value": {
-      "intValue": 1024,
-    },
-  },
-  {
-    "key": "gen_ai.request.top_k",
-    "value": {
-      "intValue": 1,
-    },
-  },
-  {
-    "key": "gen_ai.request.top_p",
-    "value": {
-      "doubleValue": 0.95,
-    },
-  },
-  {
-    "key": "gen_ai.request.temperature",
-    "value": {
-      "doubleValue": 0.5,
-    },
-  },
-  {
-    "key": "gen_ai.request.stop_sequences",
-    "value": {
-      "arrayValue": {
-        "values": [
-          {
-            "stringValue": "potato",
-          },
-        ],
-      },
-    },
-  },
-  {
-    "key": "gen_ai.request.seed",
-    "value": {},
-  },
-  {
-    "key": "gen_ai.response.finish_reasons",
-    "value": {
-      "arrayValue": {
-        "values": [
-          {
-            "stringValue": "end_turn",
-          },
-        ],
-      },
-    },
-  },
-  {
-    "key": "gen_ai.response.id",
-    "value": {
-      "stringValue": "msg_019Eoy62TSq2WGFyrVX5mRf5",
-    },
-  },
-  {
-    "key": "gen_ai.input.messages",
-    "value": {
-      "arrayValue": {
-        "values": [
-          {
-            "kvlistValue": {
-              "values": [
-                {
-                  "key": "role",
-                  "value": {
-                    "stringValue": "user",
-                  },
-                },
-                {
-                  "key": "parts",
-                  "value": {
-                    "arrayValue": {
-                      "values": [
-                        {
-                          "kvlistValue": {
-                            "values": [
-                              {
-                                "key": "type",
-                                "value": {
-                                  "stringValue": "text",
-                                },
-                              },
-                              {
-                                "key": "content",
-                                "value": {
-                                  "stringValue": "What is the capital of France?",
-                                },
-                              },
-                            ],
-                          },
-                        },
-                      ],
-                    },
-                  },
-                },
-              ],
+    "attributes": {
+      "gen_ai.input.messages": [
+        {
+          "parts": [
+            {
+              "content": "What is the capital of France?",
+              "type": "text",
             },
-          },
-        ],
-      },
-    },
-  },
-  {
-    "key": "gen_ai.output.messages",
-    "value": {
-      "arrayValue": {
-        "values": [
-          {
-            "kvlistValue": {
-              "values": [
-                {
-                  "key": "role",
-                  "value": {
-                    "stringValue": "assistant",
-                  },
-                },
-                {
-                  "key": "parts",
-                  "value": {
-                    "arrayValue": {
-                      "values": [
-                        {
-                          "kvlistValue": {
-                            "values": [
-                              {
-                                "key": "type",
-                                "value": {
-                                  "stringValue": "text",
-                                },
-                              },
-                              {
-                                "key": "content",
-                                "value": {
-                                  "stringValue": "The capital of France is Paris.",
-                                },
-                              },
-                            ],
-                          },
-                        },
-                      ],
-                    },
-                  },
-                },
-                {
-                  "key": "finish_reason",
-                  "value": {
-                    "stringValue": "end_turn",
-                  },
-                },
-              ],
+          ],
+          "role": "user",
+        },
+      ],
+      "gen_ai.operation.name": "chat",
+      "gen_ai.output.messages": [
+        {
+          "finish_reason": "end_turn",
+          "parts": [
+            {
+              "content": "The capital of France is Paris.",
+              "type": "text",
             },
-          },
-        ],
-      },
+          ],
+          "role": "assistant",
+        },
+      ],
+      "gen_ai.request.max_tokens": 1024,
+      "gen_ai.request.model": "claude-sonnet-4-20250514",
+      "gen_ai.request.seed": {},
+      "gen_ai.request.stop_sequences": [
+        "potato",
+      ],
+      "gen_ai.request.temperature": 0.5,
+      "gen_ai.request.top_k": 1,
+      "gen_ai.request.top_p": 0.95,
+      "gen_ai.response.finish_reasons": [
+        "end_turn",
+      ],
+      "gen_ai.response.id": "msg_019Eoy62TSq2WGFyrVX5mRf5",
+      "gen_ai.response.model": "claude-sonnet-4-20250514",
+      "gen_ai.system": "anthropic",
+      "gen_ai.system_instructions": [
+        {
+          "content": "You are a helpful assistant.",
+          "type": "text",
+        },
+      ],
+      "gen_ai.usage.cache_audio_read_tokens": {},
+      "gen_ai.usage.cache_read_tokens": 0,
+      "gen_ai.usage.cache_write_tokens": 0,
+      "gen_ai.usage.input_audio_tokens": {},
+      "gen_ai.usage.input_tokens": 20,
+      "gen_ai.usage.output_audio_tokens": {},
+      "gen_ai.usage.output_tokens": 10,
+      "http.request.body.text": "{"model":"claude-sonnet-4-20250514","max_tokens":1024,"top_p":0.95,"top_k":1,"temperature":0.5,"stop_sequences":["potato"],"system":"You are a helpful assistant.","messages":[{"role":"user","content":"What is the capital of France?"}]}",
+      "http.response.body.text": "{"model":"claude-sonnet-4-20250514","id":"msg_019Eoy62TSq2WGFyrVX5mRf5","type":"message","role":"assistant","content":[{"type":"text","text":"The capital of France is Paris."}],"stop_reason":"end_turn","stop_sequence":null,"usage":{"input_tokens":20,"cache_creation_input_tokens":0,"cache_read_input_tokens":0,"cache_creation":{"ephemeral_5m_input_tokens":0,"ephemeral_1h_input_tokens":0},"output_tokens":10,"service_tier":"standard","pydantic_ai_gateway":{"cost_estimate":0.00020999999999999998}}}",
+      "http.response.status_code": 200,
+      "logfire.json_schema": "{"type":"object","properties":{"gen_ai.operation.name":{"type":"string"},"gen_ai.request.model":{"type":"string"},"gen_ai.system":{"type":"string"},"gen_ai.request.max_tokens":{"type":"number"},"gen_ai.request.top_k":{"type":"number"},"gen_ai.request.top_p":{"type":"number"},"gen_ai.request.temperature":{"type":"number"},"gen_ai.request.stop_sequences":{},"gen_ai.request.seed":{},"gen_ai.response.finish_reasons":{},"gen_ai.response.id":{"type":"string"},"gen_ai.input.messages":{},"gen_ai.output.messages":{},"gen_ai.system_instructions":{},"http.response.status_code":{"type":"number"},"http.request.body.text":{"type":"string"},"http.response.body.text":{"type":"string"},"gen_ai.response.model":{"type":"string"},"gen_ai.usage.input_tokens":{"type":"number"},"gen_ai.usage.cache_read_tokens":{"type":"number"},"gen_ai.usage.cache_write_tokens":{"type":"number"},"gen_ai.usage.output_tokens":{"type":"number"},"gen_ai.usage.input_audio_tokens":{},"gen_ai.usage.cache_audio_read_tokens":{},"gen_ai.usage.output_audio_tokens":{}}}",
+      "logfire.level_num": 9,
+      "logfire.msg": "chat claude-sonnet-4-20250514",
     },
-  },
-  {
-    "key": "gen_ai.system_instructions",
-    "value": {
-      "arrayValue": {
-        "values": [
-          {
-            "kvlistValue": {
-              "values": [
-                {
-                  "key": "type",
-                  "value": {
-                    "stringValue": "text",
-                  },
-                },
-                {
-                  "key": "content",
-                  "value": {
-                    "stringValue": "You are a helpful assistant.",
-                  },
-                },
-              ],
-            },
-          },
-        ],
-      },
+    "events": [],
+    "kind": 1,
+    "links": [],
+    "name": "chat claude-sonnet-4-20250514",
+    "parentSpanId": undefined,
+    "resource": {
+      "service.name": "PAIG",
+      "service.version": "test",
     },
-  },
-  {
-    "key": "http.response.status_code",
-    "value": {
-      "intValue": 200,
+    "scope": "pydantic-ai-gateway",
+    "status": {
+      "code": 1,
     },
-  },
-  {
-    "key": "http.request.body.text",
-    "value": {
-      "stringValue": "{"model":"claude-sonnet-4-20250514","max_tokens":1024,"top_p":0.95,"top_k":1,"temperature":0.5,"stop_sequences":["potato"],"system":"You are a helpful assistant.","messages":[{"role":"user","content":"What is the capital of France?"}]}",
-    },
-  },
-  {
-    "key": "http.response.body.text",
-    "value": {
-      "stringValue": "{"model":"claude-sonnet-4-20250514","id":"msg_019Eoy62TSq2WGFyrVX5mRf5","type":"message","role":"assistant","content":[{"type":"text","text":"The capital of France is Paris."}],"stop_reason":"end_turn","stop_sequence":null,"usage":{"input_tokens":20,"cache_creation_input_tokens":0,"cache_read_input_tokens":0,"cache_creation":{"ephemeral_5m_input_tokens":0,"ephemeral_1h_input_tokens":0},"output_tokens":10,"service_tier":"standard","pydantic_ai_gateway":{"cost_estimate":0.00020999999999999998}}}",
-    },
-  },
-  {
-    "key": "gen_ai.response.model",
-    "value": {
-      "stringValue": "claude-sonnet-4-20250514",
-    },
-  },
-  {
-    "key": "gen_ai.usage.input_tokens",
-    "value": {
-      "intValue": 20,
-    },
-  },
-  {
-    "key": "gen_ai.usage.cache_read_tokens",
-    "value": {
-      "intValue": 0,
-    },
-  },
-  {
-    "key": "gen_ai.usage.cache_write_tokens",
-    "value": {
-      "intValue": 0,
-    },
-  },
-  {
-    "key": "gen_ai.usage.output_tokens",
-    "value": {
-      "intValue": 10,
-    },
-  },
-  {
-    "key": "gen_ai.usage.input_audio_tokens",
-    "value": {},
-  },
-  {
-    "key": "gen_ai.usage.cache_audio_read_tokens",
-    "value": {},
-  },
-  {
-    "key": "gen_ai.usage.output_audio_tokens",
-    "value": {},
   },
 ]
 `;
@@ -479,212 +271,31 @@ The population standard deviation is used when your data represents the entire p
 exports[`anthropic > should call anthropic via gateway with builtin tools > span 1`] = `
 [
   {
-    "key": "logfire.msg",
-    "value": {
-      "stringValue": "chat claude-opus-4-1-20250805",
-    },
-  },
-  {
-    "key": "logfire.json_schema",
-    "value": {
-      "stringValue": "{"type":"object","properties":{"gen_ai.operation.name":{"type":"string"},"gen_ai.request.model":{"type":"string"},"gen_ai.system":{"type":"string"},"gen_ai.request.max_tokens":{"type":"number"},"gen_ai.request.top_k":{},"gen_ai.request.top_p":{},"gen_ai.request.temperature":{},"gen_ai.request.stop_sequences":{},"gen_ai.request.seed":{},"gen_ai.response.finish_reasons":{},"gen_ai.response.id":{"type":"string"},"gen_ai.input.messages":{},"gen_ai.output.messages":{},"gen_ai.system_instructions":{},"http.response.status_code":{"type":"number"},"http.request.body.text":{"type":"string"},"http.response.body.text":{"type":"string"},"gen_ai.response.model":{"type":"string"},"gen_ai.usage.input_tokens":{"type":"number"},"gen_ai.usage.cache_read_tokens":{"type":"number"},"gen_ai.usage.cache_write_tokens":{"type":"number"},"gen_ai.usage.output_tokens":{"type":"number"},"gen_ai.usage.input_audio_tokens":{},"gen_ai.usage.cache_audio_read_tokens":{},"gen_ai.usage.output_audio_tokens":{}}}",
-    },
-  },
-  {
-    "key": "logfire.level_num",
-    "value": {
-      "intValue": 9,
-    },
-  },
-  {
-    "key": "gen_ai.operation.name",
-    "value": {
-      "stringValue": "chat",
-    },
-  },
-  {
-    "key": "gen_ai.request.model",
-    "value": {
-      "stringValue": "claude-opus-4-1-20250805",
-    },
-  },
-  {
-    "key": "gen_ai.system",
-    "value": {
-      "stringValue": "anthropic",
-    },
-  },
-  {
-    "key": "gen_ai.request.max_tokens",
-    "value": {
-      "intValue": 4096,
-    },
-  },
-  {
-    "key": "gen_ai.request.top_k",
-    "value": {},
-  },
-  {
-    "key": "gen_ai.request.top_p",
-    "value": {},
-  },
-  {
-    "key": "gen_ai.request.temperature",
-    "value": {},
-  },
-  {
-    "key": "gen_ai.request.stop_sequences",
-    "value": {},
-  },
-  {
-    "key": "gen_ai.request.seed",
-    "value": {},
-  },
-  {
-    "key": "gen_ai.response.finish_reasons",
-    "value": {
-      "arrayValue": {
-        "values": [
-          {
-            "stringValue": "end_turn",
-          },
-        ],
-      },
-    },
-  },
-  {
-    "key": "gen_ai.response.id",
-    "value": {
-      "stringValue": "msg_01JHBJsdymq98CeYeSVkoMeQ",
-    },
-  },
-  {
-    "key": "gen_ai.input.messages",
-    "value": {
-      "arrayValue": {
-        "values": [
-          {
-            "kvlistValue": {
-              "values": [
-                {
-                  "key": "role",
-                  "value": {
-                    "stringValue": "user",
-                  },
-                },
-                {
-                  "key": "parts",
-                  "value": {
-                    "arrayValue": {
-                      "values": [
-                        {
-                          "kvlistValue": {
-                            "values": [
-                              {
-                                "key": "type",
-                                "value": {
-                                  "stringValue": "text",
-                                },
-                              },
-                              {
-                                "key": "content",
-                                "value": {
-                                  "stringValue": "Calculate the mean and standard deviation of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]",
-                                },
-                              },
-                            ],
-                          },
-                        },
-                      ],
-                    },
-                  },
-                },
-              ],
+    "attributes": {
+      "gen_ai.input.messages": [
+        {
+          "parts": [
+            {
+              "content": "Calculate the mean and standard deviation of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]",
+              "type": "text",
             },
-          },
-        ],
-      },
-    },
-  },
-  {
-    "key": "gen_ai.output.messages",
-    "value": {
-      "arrayValue": {
-        "values": [
-          {
-            "kvlistValue": {
-              "values": [
-                {
-                  "key": "role",
-                  "value": {
-                    "stringValue": "assistant",
-                  },
-                },
-                {
-                  "key": "parts",
-                  "value": {
-                    "arrayValue": {
-                      "values": [
-                        {
-                          "kvlistValue": {
-                            "values": [
-                              {
-                                "key": "type",
-                                "value": {
-                                  "stringValue": "text",
-                                },
-                              },
-                              {
-                                "key": "content",
-                                "value": {
-                                  "stringValue": "I'll calculate the mean and standard deviation of the given dataset [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].",
-                                },
-                              },
-                            ],
-                          },
-                        },
-                        {
-                          "kvlistValue": {
-                            "values": [
-                              {
-                                "key": "type",
-                                "value": {
-                                  "stringValue": "tool_call",
-                                },
-                              },
-                              {
-                                "key": "id",
-                                "value": {
-                                  "stringValue": "srvtoolu_014V88EfQbuZg6ZeyWb4G56e",
-                                },
-                              },
-                              {
-                                "key": "name",
-                                "value": {
-                                  "stringValue": "text_editor_code_execution",
-                                },
-                              },
-                              {
-                                "key": "arguments",
-                                "value": {
-                                  "kvlistValue": {
-                                    "values": [
-                                      {
-                                        "key": "command",
-                                        "value": {
-                                          "stringValue": "create",
-                                        },
-                                      },
-                                      {
-                                        "key": "path",
-                                        "value": {
-                                          "stringValue": "/tmp/calculate_stats.py",
-                                        },
-                                      },
-                                      {
-                                        "key": "file_text",
-                                        "value": {
-                                          "stringValue": "import math
+          ],
+          "role": "user",
+        },
+      ],
+      "gen_ai.operation.name": "chat",
+      "gen_ai.output.messages": [
+        {
+          "finish_reason": "end_turn",
+          "parts": [
+            {
+              "content": "I'll calculate the mean and standard deviation of the given dataset [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].",
+              "type": "text",
+            },
+            {
+              "arguments": {
+                "command": "create",
+                "file_text": "import math
 
 # Dataset
 data = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
@@ -722,153 +333,41 @@ for x, dev, dev_squared in deviations:
 print(f"\\nSum of squared deviations: {sum(d[2] for d in deviations):.2f}")
 print(f"Population variance = {variance:.2f}")
 print(f"Sample variance = {variance_sample:.2f}")",
-                                        },
-                                      },
-                                    ],
-                                  },
-                                },
-                              },
-                              {
-                                "key": "builtin",
-                                "value": {
-                                  "boolValue": true,
-                                },
-                              },
-                            ],
-                          },
-                        },
-                        {
-                          "kvlistValue": {
-                            "values": [
-                              {
-                                "key": "type",
-                                "value": {
-                                  "stringValue": "tool_call_response",
-                                },
-                              },
-                              {
-                                "key": "id",
-                                "value": {
-                                  "stringValue": "srvtoolu_014V88EfQbuZg6ZeyWb4G56e",
-                                },
-                              },
-                              {
-                                "key": "name",
-                                "value": {
-                                  "stringValue": "text_editor_code_execution",
-                                },
-                              },
-                              {
-                                "key": "result",
-                                "value": {
-                                  "kvlistValue": {
-                                    "values": [
-                                      {
-                                        "key": "type",
-                                        "value": {
-                                          "stringValue": "text_editor_code_execution_create_result",
-                                        },
-                                      },
-                                      {
-                                        "key": "is_file_update",
-                                        "value": {
-                                          "boolValue": false,
-                                        },
-                                      },
-                                    ],
-                                  },
-                                },
-                              },
-                              {
-                                "key": "builtin",
-                                "value": {
-                                  "boolValue": true,
-                                },
-                              },
-                            ],
-                          },
-                        },
-                        {
-                          "kvlistValue": {
-                            "values": [
-                              {
-                                "key": "type",
-                                "value": {
-                                  "stringValue": "tool_call",
-                                },
-                              },
-                              {
-                                "key": "id",
-                                "value": {
-                                  "stringValue": "srvtoolu_01W3mgwqbL8MsYAcRK3gaUb3",
-                                },
-                              },
-                              {
-                                "key": "name",
-                                "value": {
-                                  "stringValue": "bash_code_execution",
-                                },
-                              },
-                              {
-                                "key": "arguments",
-                                "value": {
-                                  "kvlistValue": {
-                                    "values": [
-                                      {
-                                        "key": "command",
-                                        "value": {
-                                          "stringValue": "python /tmp/calculate_stats.py",
-                                        },
-                                      },
-                                    ],
-                                  },
-                                },
-                              },
-                              {
-                                "key": "builtin",
-                                "value": {
-                                  "boolValue": true,
-                                },
-                              },
-                            ],
-                          },
-                        },
-                        {
-                          "kvlistValue": {
-                            "values": [
-                              {
-                                "key": "type",
-                                "value": {
-                                  "stringValue": "tool_call_response",
-                                },
-                              },
-                              {
-                                "key": "id",
-                                "value": {
-                                  "stringValue": "srvtoolu_01W3mgwqbL8MsYAcRK3gaUb3",
-                                },
-                              },
-                              {
-                                "key": "name",
-                                "value": {
-                                  "stringValue": "bash_code_execution",
-                                },
-                              },
-                              {
-                                "key": "result",
-                                "value": {
-                                  "kvlistValue": {
-                                    "values": [
-                                      {
-                                        "key": "type",
-                                        "value": {
-                                          "stringValue": "bash_code_execution_result",
-                                        },
-                                      },
-                                      {
-                                        "key": "stdout",
-                                        "value": {
-                                          "stringValue": "Dataset: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+                "path": "/tmp/calculate_stats.py",
+              },
+              "builtin": true,
+              "id": "srvtoolu_014V88EfQbuZg6ZeyWb4G56e",
+              "name": "text_editor_code_execution",
+              "type": "tool_call",
+            },
+            {
+              "builtin": true,
+              "id": "srvtoolu_014V88EfQbuZg6ZeyWb4G56e",
+              "name": "text_editor_code_execution",
+              "result": {
+                "is_file_update": false,
+                "type": "text_editor_code_execution_create_result",
+              },
+              "type": "tool_call_response",
+            },
+            {
+              "arguments": {
+                "command": "python /tmp/calculate_stats.py",
+              },
+              "builtin": true,
+              "id": "srvtoolu_01W3mgwqbL8MsYAcRK3gaUb3",
+              "name": "bash_code_execution",
+              "type": "tool_call",
+            },
+            {
+              "builtin": true,
+              "id": "srvtoolu_01W3mgwqbL8MsYAcRK3gaUb3",
+              "name": "bash_code_execution",
+              "result": {
+                "content": [],
+                "return_code": 0,
+                "stderr": "",
+                "stdout": "Dataset: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 Number of values: 10
 
 Mean: 5.5
@@ -896,54 +395,12 @@ Sum of squared deviations: 82.50
 Population variance = 8.25
 Sample variance = 9.17
 ",
-                                        },
-                                      },
-                                      {
-                                        "key": "stderr",
-                                        "value": {
-                                          "stringValue": "",
-                                        },
-                                      },
-                                      {
-                                        "key": "return_code",
-                                        "value": {
-                                          "intValue": 0,
-                                        },
-                                      },
-                                      {
-                                        "key": "content",
-                                        "value": {
-                                          "arrayValue": {
-                                            "values": [],
-                                          },
-                                        },
-                                      },
-                                    ],
-                                  },
-                                },
-                              },
-                              {
-                                "key": "builtin",
-                                "value": {
-                                  "boolValue": true,
-                                },
-                              },
-                            ],
-                          },
-                        },
-                        {
-                          "kvlistValue": {
-                            "values": [
-                              {
-                                "key": "type",
-                                "value": {
-                                  "stringValue": "text",
-                                },
-                              },
-                              {
-                                "key": "content",
-                                "value": {
-                                  "stringValue": "## Results:
+                "type": "bash_code_execution_result",
+              },
+              "type": "tool_call_response",
+            },
+            {
+              "content": "## Results:
 
 For the dataset [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]:
 
@@ -958,91 +415,53 @@ For the dataset [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]:
 - The **sample standard deviation** (s) uses N-1 in the denominator (Bessel's correction) and equals approximately 3.03.
 
 The population standard deviation is used when your data represents the entire population, while the sample standard deviation is used when your data is a sample from a larger population. In most practical applications, the sample standard deviation is more commonly used.",
-                                },
-                              },
-                            ],
-                          },
-                        },
-                      ],
-                    },
-                  },
-                },
-                {
-                  "key": "finish_reason",
-                  "value": {
-                    "stringValue": "end_turn",
-                  },
-                },
-              ],
+              "type": "text",
             },
-          },
-        ],
-      },
+          ],
+          "role": "assistant",
+        },
+      ],
+      "gen_ai.request.max_tokens": 4096,
+      "gen_ai.request.model": "claude-opus-4-1-20250805",
+      "gen_ai.request.seed": {},
+      "gen_ai.request.stop_sequences": {},
+      "gen_ai.request.temperature": {},
+      "gen_ai.request.top_k": {},
+      "gen_ai.request.top_p": {},
+      "gen_ai.response.finish_reasons": [
+        "end_turn",
+      ],
+      "gen_ai.response.id": "msg_01JHBJsdymq98CeYeSVkoMeQ",
+      "gen_ai.response.model": "claude-opus-4-1-20250805",
+      "gen_ai.system": "anthropic",
+      "gen_ai.system_instructions": {},
+      "gen_ai.usage.cache_audio_read_tokens": {},
+      "gen_ai.usage.cache_read_tokens": 0,
+      "gen_ai.usage.cache_write_tokens": 0,
+      "gen_ai.usage.input_audio_tokens": {},
+      "gen_ai.usage.input_tokens": 7862,
+      "gen_ai.usage.output_audio_tokens": {},
+      "gen_ai.usage.output_tokens": 897,
+      "http.request.body.text": "{"model":"claude-opus-4-1-20250805","max_tokens":4096,"messages":[{"role":"user","content":"Calculate the mean and standard deviation of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]"}],"tools":[{"type":"code_execution_20250825","name":"code_execution"}]}",
+      "http.response.body.text": "{"model":"claude-opus-4-1-20250805","id":"msg_01JHBJsdymq98CeYeSVkoMeQ","type":"message","role":"assistant","content":[{"type":"text","text":"I'll calculate the mean and standard deviation of the given dataset [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]."},{"type":"server_tool_use","id":"srvtoolu_014V88EfQbuZg6ZeyWb4G56e","name":"text_editor_code_execution","input":{"command":"create","path":"/tmp/calculate_stats.py","file_text":"import math\\n\\n# Dataset\\ndata = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]\\n\\n# Calculate mean\\nn = len(data)\\nmean = sum(data) / n\\n\\n# Calculate standard deviation\\n# Using population standard deviation formula\\nvariance = sum((x - mean) ** 2 for x in data) / n\\nstd_dev_population = math.sqrt(variance)\\n\\n# Also calculate sample standard deviation (dividing by n-1)\\nvariance_sample = sum((x - mean) ** 2 for x in data) / (n - 1)\\nstd_dev_sample = math.sqrt(variance_sample)\\n\\n# Display results\\nprint(f\\"Dataset: {data}\\")\\nprint(f\\"Number of values: {n}\\")\\nprint(f\\"\\\\nMean: {mean}\\")\\nprint(f\\"\\\\nPopulation Standard Deviation: {std_dev_population:.6f}\\")\\nprint(f\\"Sample Standard Deviation: {std_dev_sample:.6f}\\")\\n\\n# Show step-by-step calculation for clarity\\nprint(\\"\\\\n--- Step-by-step calculation ---\\")\\nprint(f\\"Sum of values: {sum(data)}\\")\\nprint(f\\"Mean = {sum(data)}/{n} = {mean}\\")\\n\\nprint(\\"\\\\nDeviations from mean:\\")\\ndeviations = [(x, x - mean, (x - mean) ** 2) for x in data]\\nfor x, dev, dev_squared in deviations:\\n    print(f\\"  {x}: deviation = {dev:.1f}, squared = {dev_squared:.2f}\\")\\n\\nprint(f\\"\\\\nSum of squared deviations: {sum(d[2] for d in deviations):.2f}\\")\\nprint(f\\"Population variance = {variance:.2f}\\")\\nprint(f\\"Sample variance = {variance_sample:.2f}\\")"}},{"type":"text_editor_code_execution_tool_result","tool_use_id":"srvtoolu_014V88EfQbuZg6ZeyWb4G56e","content":{"type":"text_editor_code_execution_create_result","is_file_update":false}},{"type":"server_tool_use","id":"srvtoolu_01W3mgwqbL8MsYAcRK3gaUb3","name":"bash_code_execution","input":{"command":"python /tmp/calculate_stats.py"}},{"type":"bash_code_execution_tool_result","tool_use_id":"srvtoolu_01W3mgwqbL8MsYAcRK3gaUb3","content":{"type":"bash_code_execution_result","stdout":"Dataset: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]\\nNumber of values: 10\\n\\nMean: 5.5\\n\\nPopulation Standard Deviation: 2.872281\\nSample Standard Deviation: 3.027650\\n\\n--- Step-by-step calculation ---\\nSum of values: 55\\nMean = 55/10 = 5.5\\n\\nDeviations from mean:\\n  1: deviation = -4.5, squared = 20.25\\n  2: deviation = -3.5, squared = 12.25\\n  3: deviation = -2.5, squared = 6.25\\n  4: deviation = -1.5, squared = 2.25\\n  5: deviation = -0.5, squared = 0.25\\n  6: deviation = 0.5, squared = 0.25\\n  7: deviation = 1.5, squared = 2.25\\n  8: deviation = 2.5, squared = 6.25\\n  9: deviation = 3.5, squared = 12.25\\n  10: deviation = 4.5, squared = 20.25\\n\\nSum of squared deviations: 82.50\\nPopulation variance = 8.25\\nSample variance = 9.17\\n","stderr":"","return_code":0,"content":[]}},{"type":"text","text":"## Results:\\n\\nFor the dataset [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]:\\n\\n- **Mean: 5.5**\\n- **Standard Deviation:**\\n  - Population Standard Deviation: **2.872281** (when treating the data as the entire population)\\n  - Sample Standard Deviation: **3.027650** (when treating the data as a sample from a larger population)\\n\\n### Explanation:\\n- The **mean** is calculated as the sum of all values (55) divided by the number of values (10), giving us 5.5.\\n- The **population standard deviation** (σ) uses N in the denominator and equals approximately 2.87.\\n- The **sample standard deviation** (s) uses N-1 in the denominator (Bessel's correction) and equals approximately 3.03.\\n\\nThe population standard deviation is used when your data represents the entire population, while the sample standard deviation is used when your data is a sample from a larger population. In most practical applications, the sample standard deviation is more commonly used."}],"container":{"id":"container_011CUdQHmGk52d4pDTuWk1z6","expires_at":"2025-10-30T13:43:33.209982Z"},"stop_reason":"end_turn","stop_sequence":null,"usage":{"input_tokens":7862,"cache_creation_input_tokens":0,"cache_read_input_tokens":0,"cache_creation":{"ephemeral_5m_input_tokens":0,"ephemeral_1h_input_tokens":0},"output_tokens":897,"service_tier":"standard","server_tool_use":{"web_search_requests":0},"pydantic_ai_gateway":{"cost_estimate":0.185205}}}",
+      "http.response.status_code": 200,
+      "logfire.json_schema": "{"type":"object","properties":{"gen_ai.operation.name":{"type":"string"},"gen_ai.request.model":{"type":"string"},"gen_ai.system":{"type":"string"},"gen_ai.request.max_tokens":{"type":"number"},"gen_ai.request.top_k":{},"gen_ai.request.top_p":{},"gen_ai.request.temperature":{},"gen_ai.request.stop_sequences":{},"gen_ai.request.seed":{},"gen_ai.response.finish_reasons":{},"gen_ai.response.id":{"type":"string"},"gen_ai.input.messages":{},"gen_ai.output.messages":{},"gen_ai.system_instructions":{},"http.response.status_code":{"type":"number"},"http.request.body.text":{"type":"string"},"http.response.body.text":{"type":"string"},"gen_ai.response.model":{"type":"string"},"gen_ai.usage.input_tokens":{"type":"number"},"gen_ai.usage.cache_read_tokens":{"type":"number"},"gen_ai.usage.cache_write_tokens":{"type":"number"},"gen_ai.usage.output_tokens":{"type":"number"},"gen_ai.usage.input_audio_tokens":{},"gen_ai.usage.cache_audio_read_tokens":{},"gen_ai.usage.output_audio_tokens":{}}}",
+      "logfire.level_num": 9,
+      "logfire.msg": "chat claude-opus-4-1-20250805",
     },
-  },
-  {
-    "key": "gen_ai.system_instructions",
-    "value": {},
-  },
-  {
-    "key": "http.response.status_code",
-    "value": {
-      "intValue": 200,
+    "events": [],
+    "kind": 1,
+    "links": [],
+    "name": "chat claude-opus-4-1-20250805",
+    "parentSpanId": undefined,
+    "resource": {
+      "service.name": "PAIG",
+      "service.version": "test",
     },
-  },
-  {
-    "key": "http.request.body.text",
-    "value": {
-      "stringValue": "{"model":"claude-opus-4-1-20250805","max_tokens":4096,"messages":[{"role":"user","content":"Calculate the mean and standard deviation of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]"}],"tools":[{"type":"code_execution_20250825","name":"code_execution"}]}",
+    "scope": "pydantic-ai-gateway",
+    "status": {
+      "code": 1,
     },
-  },
-  {
-    "key": "http.response.body.text",
-    "value": {
-      "stringValue": "{"model":"claude-opus-4-1-20250805","id":"msg_01JHBJsdymq98CeYeSVkoMeQ","type":"message","role":"assistant","content":[{"type":"text","text":"I'll calculate the mean and standard deviation of the given dataset [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]."},{"type":"server_tool_use","id":"srvtoolu_014V88EfQbuZg6ZeyWb4G56e","name":"text_editor_code_execution","input":{"command":"create","path":"/tmp/calculate_stats.py","file_text":"import math\\n\\n# Dataset\\ndata = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]\\n\\n# Calculate mean\\nn = len(data)\\nmean = sum(data) / n\\n\\n# Calculate standard deviation\\n# Using population standard deviation formula\\nvariance = sum((x - mean) ** 2 for x in data) / n\\nstd_dev_population = math.sqrt(variance)\\n\\n# Also calculate sample standard deviation (dividing by n-1)\\nvariance_sample = sum((x - mean) ** 2 for x in data) / (n - 1)\\nstd_dev_sample = math.sqrt(variance_sample)\\n\\n# Display results\\nprint(f\\"Dataset: {data}\\")\\nprint(f\\"Number of values: {n}\\")\\nprint(f\\"\\\\nMean: {mean}\\")\\nprint(f\\"\\\\nPopulation Standard Deviation: {std_dev_population:.6f}\\")\\nprint(f\\"Sample Standard Deviation: {std_dev_sample:.6f}\\")\\n\\n# Show step-by-step calculation for clarity\\nprint(\\"\\\\n--- Step-by-step calculation ---\\")\\nprint(f\\"Sum of values: {sum(data)}\\")\\nprint(f\\"Mean = {sum(data)}/{n} = {mean}\\")\\n\\nprint(\\"\\\\nDeviations from mean:\\")\\ndeviations = [(x, x - mean, (x - mean) ** 2) for x in data]\\nfor x, dev, dev_squared in deviations:\\n    print(f\\"  {x}: deviation = {dev:.1f}, squared = {dev_squared:.2f}\\")\\n\\nprint(f\\"\\\\nSum of squared deviations: {sum(d[2] for d in deviations):.2f}\\")\\nprint(f\\"Population variance = {variance:.2f}\\")\\nprint(f\\"Sample variance = {variance_sample:.2f}\\")"}},{"type":"text_editor_code_execution_tool_result","tool_use_id":"srvtoolu_014V88EfQbuZg6ZeyWb4G56e","content":{"type":"text_editor_code_execution_create_result","is_file_update":false}},{"type":"server_tool_use","id":"srvtoolu_01W3mgwqbL8MsYAcRK3gaUb3","name":"bash_code_execution","input":{"command":"python /tmp/calculate_stats.py"}},{"type":"bash_code_execution_tool_result","tool_use_id":"srvtoolu_01W3mgwqbL8MsYAcRK3gaUb3","content":{"type":"bash_code_execution_result","stdout":"Dataset: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]\\nNumber of values: 10\\n\\nMean: 5.5\\n\\nPopulation Standard Deviation: 2.872281\\nSample Standard Deviation: 3.027650\\n\\n--- Step-by-step calculation ---\\nSum of values: 55\\nMean = 55/10 = 5.5\\n\\nDeviations from mean:\\n  1: deviation = -4.5, squared = 20.25\\n  2: deviation = -3.5, squared = 12.25\\n  3: deviation = -2.5, squared = 6.25\\n  4: deviation = -1.5, squared = 2.25\\n  5: deviation = -0.5, squared = 0.25\\n  6: deviation = 0.5, squared = 0.25\\n  7: deviation = 1.5, squared = 2.25\\n  8: deviation = 2.5, squared = 6.25\\n  9: deviation = 3.5, squared = 12.25\\n  10: deviation = 4.5, squared = 20.25\\n\\nSum of squared deviations: 82.50\\nPopulation variance = 8.25\\nSample variance = 9.17\\n","stderr":"","return_code":0,"content":[]}},{"type":"text","text":"## Results:\\n\\nFor the dataset [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]:\\n\\n- **Mean: 5.5**\\n- **Standard Deviation:**\\n  - Population Standard Deviation: **2.872281** (when treating the data as the entire population)\\n  - Sample Standard Deviation: **3.027650** (when treating the data as a sample from a larger population)\\n\\n### Explanation:\\n- The **mean** is calculated as the sum of all values (55) divided by the number of values (10), giving us 5.5.\\n- The **population standard deviation** (σ) uses N in the denominator and equals approximately 2.87.\\n- The **sample standard deviation** (s) uses N-1 in the denominator (Bessel's correction) and equals approximately 3.03.\\n\\nThe population standard deviation is used when your data represents the entire population, while the sample standard deviation is used when your data is a sample from a larger population. In most practical applications, the sample standard deviation is more commonly used."}],"container":{"id":"container_011CUdQHmGk52d4pDTuWk1z6","expires_at":"2025-10-30T13:43:33.209982Z"},"stop_reason":"end_turn","stop_sequence":null,"usage":{"input_tokens":7862,"cache_creation_input_tokens":0,"cache_read_input_tokens":0,"cache_creation":{"ephemeral_5m_input_tokens":0,"ephemeral_1h_input_tokens":0},"output_tokens":897,"service_tier":"standard","server_tool_use":{"web_search_requests":0},"pydantic_ai_gateway":{"cost_estimate":0.185205}}}",
-    },
-  },
-  {
-    "key": "gen_ai.response.model",
-    "value": {
-      "stringValue": "claude-opus-4-1-20250805",
-    },
-  },
-  {
-    "key": "gen_ai.usage.input_tokens",
-    "value": {
-      "intValue": 7862,
-    },
-  },
-  {
-    "key": "gen_ai.usage.cache_read_tokens",
-    "value": {
-      "intValue": 0,
-    },
-  },
-  {
-    "key": "gen_ai.usage.cache_write_tokens",
-    "value": {
-      "intValue": 0,
-    },
-  },
-  {
-    "key": "gen_ai.usage.output_tokens",
-    "value": {
-      "intValue": 897,
-    },
-  },
-  {
-    "key": "gen_ai.usage.input_audio_tokens",
-    "value": {},
-  },
-  {
-    "key": "gen_ai.usage.cache_audio_read_tokens",
-    "value": {},
-  },
-  {
-    "key": "gen_ai.usage.output_audio_tokens",
-    "value": {},
   },
 ]
 `;
@@ -1122,195 +541,52 @@ exports[`anthropic > should call anthropic via gateway with stream > chunks 1`] 
 exports[`anthropic > should call anthropic via gateway with stream > span 1`] = `
 [
   {
-    "key": "logfire.msg",
-    "value": {
-      "stringValue": "chat claude-opus-4-1-20250805",
+    "attributes": {
+      "gen_ai.operation.name": "chat",
+      "gen_ai.request.max_tokens": 1024,
+      "gen_ai.request.model": "claude-opus-4-1-20250805",
+      "gen_ai.response.id": "msg_01Tce1onxgEPRDM3CRhb6A4i",
+      "gen_ai.response.model": "claude-opus-4-1-20250805",
+      "gen_ai.system": "anthropic",
+      "gen_ai.usage.cache_read_tokens": 0,
+      "gen_ai.usage.cache_write_tokens": 0,
+      "gen_ai.usage.input_tokens": 14,
+      "gen_ai.usage.output_tokens": 10,
+      "http.request.header.accept": "application/json",
+      "http.request.header.anthropic-version": "2023-06-01",
+      "http.request.header.authorization": "Bearer healthy",
+      "http.request.header.content-type": "application/json",
+      "http.request.header.user-agent": "Anthropic/JS 0.62.0",
+      "http.request.header.x-stainless-arch": "unknown",
+      "http.request.header.x-stainless-lang": "js",
+      "http.request.header.x-stainless-os": "Unknown",
+      "http.request.header.x-stainless-package-version": "0.62.0",
+      "http.request.header.x-stainless-retry-count": "0",
+      "http.request.header.x-stainless-runtime": "unknown",
+      "http.request.header.x-stainless-runtime-version": "unknown",
+      "http.request.header.x-stainless-timeout": "600",
+      "http.request.method": "POST",
+      "http.response.header.content-type": "text/event-stream; charset=utf-8",
+      "http.response.header.server": "uvicorn",
+      "http.response.header.transfer-encoding": "chunked",
+      "http.response.status_code": 200,
+      "logfire.json_schema": "{"type":"object","properties":{"gen_ai.system":{"type":"string"},"gen_ai.operation.name":{"type":"string"},"gen_ai.request.model":{"type":"string"},"gen_ai.request.max_tokens":{"type":"number"},"gen_ai.response.model":{"type":"string"},"gen_ai.response.id":{"type":"string"},"gen_ai.usage.input_tokens":{"type":"number"},"gen_ai.usage.cache_read_tokens":{"type":"number"},"gen_ai.usage.cache_write_tokens":{"type":"number"},"gen_ai.usage.output_tokens":{"type":"number"},"http.request.method":{"type":"string"},"url.full":{"type":"string"},"http.request.header.accept":{"type":"string"},"http.request.header.anthropic-version":{"type":"string"},"http.request.header.authorization":{"type":"string"},"http.request.header.content-type":{"type":"string"},"http.request.header.user-agent":{"type":"string"},"http.request.header.x-stainless-arch":{"type":"string"},"http.request.header.x-stainless-lang":{"type":"string"},"http.request.header.x-stainless-os":{"type":"string"},"http.request.header.x-stainless-package-version":{"type":"string"},"http.request.header.x-stainless-retry-count":{"type":"string"},"http.request.header.x-stainless-runtime":{"type":"string"},"http.request.header.x-stainless-runtime-version":{"type":"string"},"http.request.header.x-stainless-timeout":{"type":"string"},"http.response.status_code":{"type":"number"},"http.response.header.content-type":{"type":"string"},"http.response.header.server":{"type":"string"},"http.response.header.transfer-encoding":{"type":"string"}}}",
+      "logfire.level_num": 9,
+      "logfire.msg": "chat claude-opus-4-1-20250805",
+      "url.full": "https://example.com/anthropic/v1/messages?beta=true",
     },
-  },
-  {
-    "key": "logfire.json_schema",
-    "value": {
-      "stringValue": "{"type":"object","properties":{"gen_ai.system":{"type":"string"},"gen_ai.operation.name":{"type":"string"},"gen_ai.request.model":{"type":"string"},"gen_ai.request.max_tokens":{"type":"number"},"gen_ai.response.model":{"type":"string"},"gen_ai.response.id":{"type":"string"},"gen_ai.usage.input_tokens":{"type":"number"},"gen_ai.usage.cache_read_tokens":{"type":"number"},"gen_ai.usage.cache_write_tokens":{"type":"number"},"gen_ai.usage.output_tokens":{"type":"number"},"http.request.method":{"type":"string"},"url.full":{"type":"string"},"http.request.header.accept":{"type":"string"},"http.request.header.anthropic-version":{"type":"string"},"http.request.header.authorization":{"type":"string"},"http.request.header.content-type":{"type":"string"},"http.request.header.user-agent":{"type":"string"},"http.request.header.x-stainless-arch":{"type":"string"},"http.request.header.x-stainless-lang":{"type":"string"},"http.request.header.x-stainless-os":{"type":"string"},"http.request.header.x-stainless-package-version":{"type":"string"},"http.request.header.x-stainless-retry-count":{"type":"string"},"http.request.header.x-stainless-runtime":{"type":"string"},"http.request.header.x-stainless-runtime-version":{"type":"string"},"http.request.header.x-stainless-timeout":{"type":"string"},"http.response.status_code":{"type":"number"},"http.response.header.content-type":{"type":"string"},"http.response.header.server":{"type":"string"},"http.response.header.transfer-encoding":{"type":"string"}}}",
+    "events": [],
+    "kind": 1,
+    "links": [],
+    "name": "chat claude-opus-4-1-20250805",
+    "parentSpanId": undefined,
+    "resource": {
+      "service.name": "PAIG",
+      "service.version": "test",
     },
-  },
-  {
-    "key": "logfire.level_num",
-    "value": {
-      "intValue": 9,
-    },
-  },
-  {
-    "key": "gen_ai.system",
-    "value": {
-      "stringValue": "anthropic",
-    },
-  },
-  {
-    "key": "gen_ai.operation.name",
-    "value": {
-      "stringValue": "chat",
-    },
-  },
-  {
-    "key": "gen_ai.request.model",
-    "value": {
-      "stringValue": "claude-opus-4-1-20250805",
-    },
-  },
-  {
-    "key": "gen_ai.request.max_tokens",
-    "value": {
-      "intValue": 1024,
-    },
-  },
-  {
-    "key": "gen_ai.response.model",
-    "value": {
-      "stringValue": "claude-opus-4-1-20250805",
-    },
-  },
-  {
-    "key": "gen_ai.response.id",
-    "value": {
-      "stringValue": "msg_01Tce1onxgEPRDM3CRhb6A4i",
-    },
-  },
-  {
-    "key": "gen_ai.usage.input_tokens",
-    "value": {
-      "intValue": 14,
-    },
-  },
-  {
-    "key": "gen_ai.usage.cache_read_tokens",
-    "value": {
-      "intValue": 0,
-    },
-  },
-  {
-    "key": "gen_ai.usage.cache_write_tokens",
-    "value": {
-      "intValue": 0,
-    },
-  },
-  {
-    "key": "gen_ai.usage.output_tokens",
-    "value": {
-      "intValue": 10,
-    },
-  },
-  {
-    "key": "http.request.method",
-    "value": {
-      "stringValue": "POST",
-    },
-  },
-  {
-    "key": "url.full",
-    "value": {
-      "stringValue": "https://example.com/anthropic/v1/messages?beta=true",
-    },
-  },
-  {
-    "key": "http.request.header.accept",
-    "value": {
-      "stringValue": "application/json",
-    },
-  },
-  {
-    "key": "http.request.header.anthropic-version",
-    "value": {
-      "stringValue": "2023-06-01",
-    },
-  },
-  {
-    "key": "http.request.header.authorization",
-    "value": {
-      "stringValue": "Bearer healthy",
-    },
-  },
-  {
-    "key": "http.request.header.content-type",
-    "value": {
-      "stringValue": "application/json",
-    },
-  },
-  {
-    "key": "http.request.header.user-agent",
-    "value": {
-      "stringValue": "Anthropic/JS 0.62.0",
-    },
-  },
-  {
-    "key": "http.request.header.x-stainless-arch",
-    "value": {
-      "stringValue": "unknown",
-    },
-  },
-  {
-    "key": "http.request.header.x-stainless-lang",
-    "value": {
-      "stringValue": "js",
-    },
-  },
-  {
-    "key": "http.request.header.x-stainless-os",
-    "value": {
-      "stringValue": "Unknown",
-    },
-  },
-  {
-    "key": "http.request.header.x-stainless-package-version",
-    "value": {
-      "stringValue": "0.62.0",
-    },
-  },
-  {
-    "key": "http.request.header.x-stainless-retry-count",
-    "value": {
-      "stringValue": "0",
-    },
-  },
-  {
-    "key": "http.request.header.x-stainless-runtime",
-    "value": {
-      "stringValue": "unknown",
-    },
-  },
-  {
-    "key": "http.request.header.x-stainless-runtime-version",
-    "value": {
-      "stringValue": "unknown",
-    },
-  },
-  {
-    "key": "http.request.header.x-stainless-timeout",
-    "value": {
-      "stringValue": "600",
-    },
-  },
-  {
-    "key": "http.response.status_code",
-    "value": {
-      "intValue": 200,
-    },
-  },
-  {
-    "key": "http.response.header.content-type",
-    "value": {
-      "stringValue": "text/event-stream; charset=utf-8",
-    },
-  },
-  {
-    "key": "http.response.header.server",
-    "value": {
-      "stringValue": "uvicorn",
-    },
-  },
-  {
-    "key": "http.response.header.transfer-encoding",
-    "value": {
-      "stringValue": "chunked",
+    "scope": "pydantic-ai-gateway",
+    "status": {
+      "code": 1,
     },
   },
 ]

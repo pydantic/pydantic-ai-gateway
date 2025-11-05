@@ -1,4 +1,5 @@
 import { describe, expect } from 'vitest'
+import { deserializeRequest } from '../otel'
 import { test } from '../setup'
 
 describe('bedrock', () => {
@@ -21,6 +22,6 @@ describe('bedrock', () => {
     expect(result.status).toBe(200)
     expect(json).toMatchSnapshot('bedrock')
     expect(otelBatch, 'otelBatch length not 1').toHaveLength(1)
-    expect(JSON.parse(otelBatch[0]!).resourceSpans?.[0].scopeSpans?.[0].spans?.[0]?.attributes).toMatchSnapshot('span')
+    expect(deserializeRequest(otelBatch[0]!)).toMatchSnapshot('span')
   })
 })

@@ -360,8 +360,8 @@ exports[`openai > openai chat legacy name > llm 1`] = `
       },
     },
   ],
-  "created": 1761823178,
-  "id": "chatcmpl-CWKyoLFrrxfDdUZO6hAaDA7rYn3Fo",
+  "created": 1762271642,
+  "id": "chatcmpl-CYDe6BCWOKGGGTlQLofyQ2DP3QTRV",
   "model": "gpt-5-2025-08-07",
   "object": "chat.completion",
   "service_tier": "default",
@@ -466,7 +466,7 @@ exports[`openai > openai chat legacy name > span 1`] = `
   {
     "key": "gen_ai.response.id",
     "value": {
-      "stringValue": "chatcmpl-CWKyoLFrrxfDdUZO6hAaDA7rYn3Fo",
+      "stringValue": "chatcmpl-CYDe6BCWOKGGGTlQLofyQ2DP3QTRV",
     },
   },
   {
@@ -642,7 +642,7 @@ exports[`openai > openai chat legacy name > span 1`] = `
   {
     "key": "http.response.body.text",
     "value": {
-      "stringValue": "{"id":"chatcmpl-CWKyoLFrrxfDdUZO6hAaDA7rYn3Fo","object":"chat.completion","created":1761823178,"model":"gpt-5-2025-08-07","choices":[{"index":0,"message":{"role":"assistant","content":"Paris.","refusal":null,"annotations":[]},"finish_reason":"stop"}],"usage":{"prompt_tokens":23,"completion_tokens":11,"total_tokens":34,"prompt_tokens_details":{"cached_tokens":0,"audio_tokens":0},"completion_tokens_details":{"reasoning_tokens":0,"audio_tokens":0,"accepted_prediction_tokens":0,"rejected_prediction_tokens":0},"pydantic_ai_gateway":{"cost_estimate":0.00013875}},"service_tier":"default","system_fingerprint":null}",
+      "stringValue": "{"id":"chatcmpl-CYDe6BCWOKGGGTlQLofyQ2DP3QTRV","object":"chat.completion","created":1762271642,"model":"gpt-5-2025-08-07","choices":[{"index":0,"message":{"role":"assistant","content":"Paris.","refusal":null,"annotations":[]},"finish_reason":"stop"}],"usage":{"prompt_tokens":23,"completion_tokens":11,"total_tokens":34,"prompt_tokens_details":{"cached_tokens":0,"audio_tokens":0},"completion_tokens_details":{"reasoning_tokens":0,"audio_tokens":0,"accepted_prediction_tokens":0,"rejected_prediction_tokens":0},"pydantic_ai_gateway":{"cost_estimate":0.00013875}},"service_tier":"default","system_fingerprint":null}",
     },
   },
   {
@@ -1352,8 +1352,8 @@ exports[`openai > openai responses legacy name > llm 1`] = `
       },
     },
   ],
-  "created": 1761823178,
-  "id": "chatcmpl-CWKyoLFrrxfDdUZO6hAaDA7rYn3Fo",
+  "created": 1762271642,
+  "id": "chatcmpl-CYDe6BCWOKGGGTlQLofyQ2DP3QTRV",
   "model": "gpt-5-2025-08-07",
   "object": "chat.completion",
   "service_tier": "default",
@@ -1458,7 +1458,7 @@ exports[`openai > openai responses legacy name > span 1`] = `
   {
     "key": "gen_ai.response.id",
     "value": {
-      "stringValue": "chatcmpl-CWKyoLFrrxfDdUZO6hAaDA7rYn3Fo",
+      "stringValue": "chatcmpl-CYDe6BCWOKGGGTlQLofyQ2DP3QTRV",
     },
   },
   {
@@ -1634,7 +1634,7 @@ exports[`openai > openai responses legacy name > span 1`] = `
   {
     "key": "http.response.body.text",
     "value": {
-      "stringValue": "{"id":"chatcmpl-CWKyoLFrrxfDdUZO6hAaDA7rYn3Fo","object":"chat.completion","created":1761823178,"model":"gpt-5-2025-08-07","choices":[{"index":0,"message":{"role":"assistant","content":"Paris.","refusal":null,"annotations":[]},"finish_reason":"stop"}],"usage":{"prompt_tokens":23,"completion_tokens":11,"total_tokens":34,"prompt_tokens_details":{"cached_tokens":0,"audio_tokens":0},"completion_tokens_details":{"reasoning_tokens":0,"audio_tokens":0,"accepted_prediction_tokens":0,"rejected_prediction_tokens":0},"pydantic_ai_gateway":{"cost_estimate":0.00013875}},"service_tier":"default","system_fingerprint":null}",
+      "stringValue": "{"id":"chatcmpl-CYDe6BCWOKGGGTlQLofyQ2DP3QTRV","object":"chat.completion","created":1762271642,"model":"gpt-5-2025-08-07","choices":[{"index":0,"message":{"role":"assistant","content":"Paris.","refusal":null,"annotations":[]},"finish_reason":"stop"}],"usage":{"prompt_tokens":23,"completion_tokens":11,"total_tokens":34,"prompt_tokens_details":{"cached_tokens":0,"audio_tokens":0},"completion_tokens_details":{"reasoning_tokens":0,"audio_tokens":0,"accepted_prediction_tokens":0,"rejected_prediction_tokens":0},"pydantic_ai_gateway":{"cost_estimate":0.00013875}},"service_tier":"default","system_fingerprint":null}",
     },
   },
   {

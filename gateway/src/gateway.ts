@@ -8,6 +8,11 @@ import { getProvider } from './providers'
 import { type ApiKeyInfo, apiTypesArray, guardAPIType } from './types'
 import { runAfter, textResponse } from './utils'
 
+function isRetryableError(status: number): boolean {
+  // Retry on server errors (5xx) and rate limit errors (429)
+  return status === 429 || (status >= 500 && status <= 599)
+}
+
 export async function gateway(
   request: Request,
   proxyPath: string,
@@ -54,33 +59,67 @@ export async function gateway(
   // sort providers on priority, highest first
   providerProxies.sort((a, b) => (b.priority ?? 0) - (a.priority ?? 0))
 
-  const providerProxy = providerProxies[0]
-  if (!providerProxy) {
+  if (providerProxies.length === 0) {
     return textResponse(403, 'Forbidden - Provider not supported by this API Key')
   }
 
   const otel = new OtelTrace(request, apiKeyInfo.otelSettings, options)
 
-  const ProxyCls = getProvider(providerProxy.providerId)
+  let result: Awaited<ReturnType<InstanceType<ReturnType<typeof getProvider>>['dispatch']>> | null = null
+  let fallbackCount = 0
 
-  const dispatchSpan = otel.startSpan()
-  const proxy = new ProxyCls({
-    request,
-    gatewayOptions: options,
-    apiKeyInfo,
-    providerProxy,
-    restOfPath,
-    ctx,
-    middlewares: options.proxyMiddlewares,
-    otelSpan: dispatchSpan,
-  })
+  // Try each provider in priority order
+  for (let i = 0; i < providerProxies.length; i++) {
+    const providerProxy = providerProxies[i]
+    if (!providerProxy) {
+      continue
+    }
 
-  const result = await proxy.dispatch()
+    const ProxyCls = getProvider(providerProxy.providerId)
 
-  // This doesn't work on streaming because the `result` object is returned as soon as we create the streaming response.
-  if (!('responseStream' in result) && !('response' in result)) {
-    const [spanName, attributes, level] = genAiOtelAttributes(result, proxy)
-    dispatchSpan.end(spanName, attributes, { level })
+    const dispatchSpan = otel.startSpan()
+    const proxy = new ProxyCls({
+      request: request.clone(),
+      gatewayOptions: options,
+      apiKeyInfo,
+      providerProxy,
+      restOfPath,
+      ctx,
+      middlewares: options.proxyMiddlewares,
+      otelSpan: dispatchSpan,
+    })
+
+    result = await proxy.dispatch()
+
+    // This doesn't work on streaming because the `result` object is returned as soon as we create the streaming response.
+    if (!('responseStream' in result) && !('response' in result)) {
+      const [spanName, attributes, level] = genAiOtelAttributes(result, proxy)
+      dispatchSpan.end(spanName, attributes, { level })
+    }
+
+    // Check if we should retry with the next provider
+    if ('unexpectedStatus' in result) {
+      const isRetryable = isRetryableError(result.unexpectedStatus)
+      const hasMoreProviders = i < providerProxies.length - 1
+
+      if (isRetryable && hasMoreProviders) {
+        fallbackCount++
+        logfire.error('Provider failed with retryable error, trying next provider', {
+          providerId: providerProxy.providerId,
+          status: result.unexpectedStatus,
+          routingGroup: providerProxy.routingGroup,
+          fallbackCount,
+        })
+        continue
+      }
+    }
+
+    // Success or non-retryable error - use this result
+    break
+  }
+
+  if (!result) {
+    return textResponse(500, 'Internal error: No result from provider dispatch')
   }
 
   let response: Response

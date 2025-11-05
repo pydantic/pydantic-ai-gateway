@@ -50,6 +50,7 @@ export namespace IDS {
   export const keyHealthy = 4
   export const keyDisabled = 5
   export const keyTinyLimit = 6
+  export const keyFallbackTest = 7
 }
 
 class TestKeysDB extends KeysDbD1 {
@@ -152,6 +153,34 @@ class TestKeysDB extends KeysDbD1 {
           keySpendingLimitDaily: 0.01,
           projectSpendingLimitMonthly: 4,
           providers: [this.allProviders[0]!],
+        }
+      case 'fallback-test':
+        return {
+          id: IDS.keyFallbackTest,
+          project: IDS.projectDefault,
+          org: IDS.orgDefault,
+          key,
+          status: 'active',
+          providers: [
+            {
+              baseUrl: 'http://test.example.com/provider1',
+              providerId: 'test',
+              injectCost: true,
+              credentials: 'test1',
+              apiTypes: ['chat'],
+              routingGroup: 'test-group',
+              priority: 100,
+            },
+            {
+              baseUrl: 'http://test.example.com/provider2',
+              providerId: 'test',
+              injectCost: true,
+              credentials: 'test2',
+              apiTypes: ['chat'],
+              routingGroup: 'test-group',
+              priority: 50,
+            },
+          ],
         }
       default:
         return null

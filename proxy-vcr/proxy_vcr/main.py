@@ -85,9 +85,9 @@ async def proxy(request: Request) -> Response:
                 **anthropic_beta_headers,
             }
             response = await client.post(url, content=body, headers=headers)
-    elif request.url.path.startswith('/google-vertex'):
+    elif request.url.path.startswith('/gemini'):
         client = cast(httpx.AsyncClient, request.scope['state']['httpx_client'])
-        url = GOOGLE_BASE_URL + request.url.path[len('/google-vertex') :] + '?' + request.url.query
+        url = GOOGLE_BASE_URL + request.url.path[len('/gemini') :] + '?' + request.url.query
         headers = {'Authorization': auth_header, 'host': 'aiplatform.googleapis.com'}
         # It's a bit weird, but if we don't set the host header, it will fail. This seems very weird from Google's side.
         with vcr.use_cassette(cassette_name('google-vertex', vcr_suffix)):  # type: ignore[reportUnknownReturnType]

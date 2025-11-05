@@ -61,7 +61,7 @@ export async function gateway(
   const otel = new OtelTrace(request, apiKeyInfo.otelSettings, options)
 
   // The AI did this, but I actually find it nice.
-  let result!: Awaited<ReturnType<InstanceType<ReturnType<typeof getProvider>>['dispatch']>>
+  let result: Awaited<ReturnType<InstanceType<ReturnType<typeof getProvider>>['dispatch']>> | null = null
 
   for (const providerProxy of providerProxies) {
     const ProxyCls = getProvider(providerProxy.providerId)
@@ -79,7 +79,15 @@ export async function gateway(
       otelSpan,
     })
 
-    result = await proxy.dispatch()
+    try {
+      result = await proxy.dispatch()
+    } catch (error) {
+      logfire.reportError('Connection error', error as Error, {
+        providerId: providerProxy.providerId,
+        routingGroup: providerProxy.routingGroup,
+      })
+      continue
+    }
 
     // Those responses are already closing the `otelSpan`.
     if (!('responseStream' in result) && !('response' in result) && !('unexpectedStatus' in result)) {
@@ -99,6 +107,10 @@ export async function gateway(
 
     // If it succeeds, or it's not a retryable error, we can break out of the loop.
     break
+  }
+
+  if (!result) {
+    return textResponse(500, 'Internal Server Error')
   }
 
   let response: Response

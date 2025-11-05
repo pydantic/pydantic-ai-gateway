@@ -48,7 +48,7 @@ describe('google', () => {
     const { fetch, otelBatch } = gateway
 
     const response = await fetch(
-      'https://example.com/google-vertex/v1beta1/projects/pydantic-ai/locations/global/publishers/google/models/gemini-2.5-flash:generateContent?alt=sse',
+      'https://example.com/gemini/v1beta1/projects/pydantic-ai/locations/global/publishers/google/models/gemini-2.5-flash:generateContent?alt=sse',
       { method: 'POST', headers, body },
     )
 
@@ -63,7 +63,7 @@ describe('google', () => {
     const { fetch, otelBatch } = gateway
 
     const response = await fetch(
-      'https://example.com/google-vertex/v1beta1/projects/pydantic-ai/locations/global/publishers/google/models/gemini-2.5-flash:streamGenerateContent?alt=sse',
+      'https://example.com/gemini/v1beta1/projects/pydantic-ai/locations/global/publishers/google/models/gemini-2.5-flash:streamGenerateContent?alt=sse',
       { method: 'POST', headers: { ...headers, 'x-vcr-filename': 'stream' }, body },
     )
 

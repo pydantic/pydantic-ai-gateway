@@ -100,7 +100,7 @@ class TestKeysDB extends KeysDbD1 {
         apiTypes: ['anthropic', 'converse'],
       },
       {
-        baseUrl: 'http://localhost:8005/google-vertex',
+        baseUrl: 'http://localhost:8005/gemini',
         providerId: 'google-vertex',
         injectCost: true,
         credentials: env.GOOGLE_SERVICE_ACCOUNT_KEY,

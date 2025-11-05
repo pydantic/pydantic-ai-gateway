@@ -1,5 +1,6 @@
 import Groq from 'groq-sdk'
 import { describe, expect } from 'vitest'
+import { deserializeRequest } from '../otel'
 import { test } from '../setup'
 
 describe('groq', () => {
@@ -20,6 +21,6 @@ describe('groq', () => {
     })
     expect(completion).toMatchSnapshot('llm')
     expect(otelBatch, 'otelBatch length not 1').toHaveLength(1)
-    expect(JSON.parse(otelBatch[0]!).resourceSpans?.[0].scopeSpans?.[0].spans?.[0]?.attributes).toMatchSnapshot('span')
+    expect(deserializeRequest(otelBatch[0]!)).toMatchSnapshot('span')
   })
 })

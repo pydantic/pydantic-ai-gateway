@@ -31,140 +31,49 @@ exports[`bedrock > should call bedrock via gateway > bedrock 1`] = `
 exports[`bedrock > should call bedrock via gateway > span 1`] = `
 [
   {
-    "key": "logfire.msg",
-    "value": {
-      "stringValue": "chat amazon.nova-micro-v1:0",
+    "attributes": {
+      "gen_ai.input.messages": {},
+      "gen_ai.operation.name": "chat",
+      "gen_ai.output.messages": {},
+      "gen_ai.request.max_tokens": {},
+      "gen_ai.request.model": "m",
+      "gen_ai.request.seed": {},
+      "gen_ai.request.stop_sequences": {},
+      "gen_ai.request.temperature": {},
+      "gen_ai.request.top_k": {},
+      "gen_ai.request.top_p": {},
+      "gen_ai.response.finish_reasons": {},
+      "gen_ai.response.id": {},
+      "gen_ai.response.model": "amazon.nova-micro-v1:0",
+      "gen_ai.system": "bedrock",
+      "gen_ai.system_instructions": {},
+      "gen_ai.usage.cache_audio_read_tokens": {},
+      "gen_ai.usage.cache_read_tokens": {},
+      "gen_ai.usage.cache_write_tokens": {},
+      "gen_ai.usage.input_audio_tokens": {},
+      "gen_ai.usage.input_tokens": 13,
+      "gen_ai.usage.output_audio_tokens": {},
+      "gen_ai.usage.output_tokens": 40,
+      "http.request.body.text": "{"modelId":"amazon.nova-premier-v1:0","system":[{"text":"You are a helpful assistant."}],"messages":[{"role":"user","content":[{"text":"What is the capital of France?"}]}]}",
+      "http.response.body.text": "{"metrics":{"latencyMs":503},"output":{"message":{"content":[{"text":"The capital of France is Paris. Paris is not only the capital city but also the most populous city in France, and it is a major center for culture, commerce, fashion, and gastronomy worldwide."}],"role":"assistant"}},"stopReason":"end_turn","usage":{"inputTokens":13,"outputTokens":40,"serverToolUsage":{},"totalTokens":53,"pydantic_ai_gateway":{"cost_estimate":0.0000060550000000000005}}}",
+      "http.response.status_code": 200,
+      "logfire.json_schema": "{"type":"object","properties":{"gen_ai.operation.name":{"type":"string"},"gen_ai.request.model":{"type":"string"},"gen_ai.system":{"type":"string"},"gen_ai.request.max_tokens":{},"gen_ai.request.top_k":{},"gen_ai.request.top_p":{},"gen_ai.request.temperature":{},"gen_ai.request.stop_sequences":{},"gen_ai.request.seed":{},"gen_ai.response.finish_reasons":{},"gen_ai.response.id":{},"gen_ai.input.messages":{},"gen_ai.output.messages":{},"gen_ai.system_instructions":{},"http.response.status_code":{"type":"number"},"http.request.body.text":{"type":"string"},"http.response.body.text":{"type":"string"},"gen_ai.response.model":{"type":"string"},"gen_ai.usage.input_tokens":{"type":"number"},"gen_ai.usage.cache_read_tokens":{},"gen_ai.usage.cache_write_tokens":{},"gen_ai.usage.output_tokens":{"type":"number"},"gen_ai.usage.input_audio_tokens":{},"gen_ai.usage.cache_audio_read_tokens":{},"gen_ai.usage.output_audio_tokens":{}}}",
+      "logfire.level_num": 9,
+      "logfire.msg": "chat amazon.nova-micro-v1:0",
     },
-  },
-  {
-    "key": "logfire.json_schema",
-    "value": {
-      "stringValue": "{"type":"object","properties":{"gen_ai.operation.name":{"type":"string"},"gen_ai.request.model":{"type":"string"},"gen_ai.system":{"type":"string"},"gen_ai.request.max_tokens":{},"gen_ai.request.top_k":{},"gen_ai.request.top_p":{},"gen_ai.request.temperature":{},"gen_ai.request.stop_sequences":{},"gen_ai.request.seed":{},"gen_ai.response.finish_reasons":{},"gen_ai.response.id":{},"gen_ai.input.messages":{},"gen_ai.output.messages":{},"gen_ai.system_instructions":{},"http.response.status_code":{"type":"number"},"http.request.body.text":{"type":"string"},"http.response.body.text":{"type":"string"},"gen_ai.response.model":{"type":"string"},"gen_ai.usage.input_tokens":{"type":"number"},"gen_ai.usage.cache_read_tokens":{},"gen_ai.usage.cache_write_tokens":{},"gen_ai.usage.output_tokens":{"type":"number"},"gen_ai.usage.input_audio_tokens":{},"gen_ai.usage.cache_audio_read_tokens":{},"gen_ai.usage.output_audio_tokens":{}}}",
+    "events": [],
+    "kind": 1,
+    "links": [],
+    "name": "chat amazon.nova-micro-v1:0",
+    "parentSpanId": undefined,
+    "resource": {
+      "service.name": "PAIG",
+      "service.version": "test",
     },
-  },
-  {
-    "key": "logfire.level_num",
-    "value": {
-      "intValue": 9,
+    "scope": "pydantic-ai-gateway",
+    "status": {
+      "code": 1,
     },
-  },
-  {
-    "key": "gen_ai.operation.name",
-    "value": {
-      "stringValue": "chat",
-    },
-  },
-  {
-    "key": "gen_ai.request.model",
-    "value": {
-      "stringValue": "m",
-    },
-  },
-  {
-    "key": "gen_ai.system",
-    "value": {
-      "stringValue": "bedrock",
-    },
-  },
-  {
-    "key": "gen_ai.request.max_tokens",
-    "value": {},
-  },
-  {
-    "key": "gen_ai.request.top_k",
-    "value": {},
-  },
-  {
-    "key": "gen_ai.request.top_p",
-    "value": {},
-  },
-  {
-    "key": "gen_ai.request.temperature",
-    "value": {},
-  },
-  {
-    "key": "gen_ai.request.stop_sequences",
-    "value": {},
-  },
-  {
-    "key": "gen_ai.request.seed",
-    "value": {},
-  },
-  {
-    "key": "gen_ai.response.finish_reasons",
-    "value": {},
-  },
-  {
-    "key": "gen_ai.response.id",
-    "value": {},
-  },
-  {
-    "key": "gen_ai.input.messages",
-    "value": {},
-  },
-  {
-    "key": "gen_ai.output.messages",
-    "value": {},
-  },
-  {
-    "key": "gen_ai.system_instructions",
-    "value": {},
-  },
-  {
-    "key": "http.response.status_code",
-    "value": {
-      "intValue": 200,
-    },
-  },
-  {
-    "key": "http.request.body.text",
-    "value": {
-      "stringValue": "{"modelId":"amazon.nova-premier-v1:0","system":[{"text":"You are a helpful assistant."}],"messages":[{"role":"user","content":[{"text":"What is the capital of France?"}]}]}",
-    },
-  },
-  {
-    "key": "http.response.body.text",
-    "value": {
-      "stringValue": "{"metrics":{"latencyMs":503},"output":{"message":{"content":[{"text":"The capital of France is Paris. Paris is not only the capital city but also the most populous city in France, and it is a major center for culture, commerce, fashion, and gastronomy worldwide."}],"role":"assistant"}},"stopReason":"end_turn","usage":{"inputTokens":13,"outputTokens":40,"serverToolUsage":{},"totalTokens":53,"pydantic_ai_gateway":{"cost_estimate":0.0000060550000000000005}}}",
-    },
-  },
-  {
-    "key": "gen_ai.response.model",
-    "value": {
-      "stringValue": "amazon.nova-micro-v1:0",
-    },
-  },
-  {
-    "key": "gen_ai.usage.input_tokens",
-    "value": {
-      "intValue": 13,
-    },
-  },
-  {
-    "key": "gen_ai.usage.cache_read_tokens",
-    "value": {},
-  },
-  {
-    "key": "gen_ai.usage.cache_write_tokens",
-    "value": {},
-  },
-  {
-    "key": "gen_ai.usage.output_tokens",
-    "value": {
-      "intValue": 40,
-    },
-  },
-  {
-    "key": "gen_ai.usage.input_audio_tokens",
-    "value": {},
-  },
-  {
-    "key": "gen_ai.usage.cache_audio_read_tokens",
-    "value": {},
-  },
-  {
-    "key": "gen_ai.usage.output_audio_tokens",
-    "value": {},
   },
 ]
 `;

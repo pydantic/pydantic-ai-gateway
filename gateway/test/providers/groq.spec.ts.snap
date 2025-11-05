@@ -41,252 +41,64 @@ exports[`groq > should call groq via gateway > llm 1`] = `
 exports[`groq > should call groq via gateway > span 1`] = `
 [
   {
-    "key": "logfire.msg",
-    "value": {
-      "stringValue": "chat llama-3.3-70b-versatile",
-    },
-  },
-  {
-    "key": "logfire.json_schema",
-    "value": {
-      "stringValue": "{"type":"object","properties":{"gen_ai.operation.name":{"type":"string"},"gen_ai.request.model":{"type":"string"},"gen_ai.system":{"type":"string"},"gen_ai.request.max_tokens":{"type":"number"},"gen_ai.request.top_k":{},"gen_ai.request.top_p":{"type":"number"},"gen_ai.request.temperature":{"type":"number"},"gen_ai.request.stop_sequences":{},"gen_ai.request.seed":{},"gen_ai.response.finish_reasons":{},"gen_ai.response.id":{"type":"string"},"gen_ai.input.messages":{},"gen_ai.output.messages":{},"gen_ai.system_instructions":{},"http.response.status_code":{"type":"number"},"http.request.body.text":{"type":"string"},"http.response.body.text":{"type":"string"},"gen_ai.response.model":{"type":"string"},"gen_ai.usage.input_tokens":{"type":"number"},"gen_ai.usage.cache_read_tokens":{},"gen_ai.usage.cache_write_tokens":{},"gen_ai.usage.output_tokens":{"type":"number"},"gen_ai.usage.input_audio_tokens":{},"gen_ai.usage.cache_audio_read_tokens":{},"gen_ai.usage.output_audio_tokens":{}}}",
-    },
-  },
-  {
-    "key": "logfire.level_num",
-    "value": {
-      "intValue": 9,
-    },
-  },
-  {
-    "key": "gen_ai.operation.name",
-    "value": {
-      "stringValue": "chat",
-    },
-  },
-  {
-    "key": "gen_ai.request.model",
-    "value": {
-      "stringValue": "llama-3.3-70b-versatile",
-    },
-  },
-  {
-    "key": "gen_ai.system",
-    "value": {
-      "stringValue": "groq",
-    },
-  },
-  {
-    "key": "gen_ai.request.max_tokens",
-    "value": {
-      "intValue": 1024,
-    },
-  },
-  {
-    "key": "gen_ai.request.top_k",
-    "value": {},
-  },
-  {
-    "key": "gen_ai.request.top_p",
-    "value": {
-      "doubleValue": 0.95,
-    },
-  },
-  {
-    "key": "gen_ai.request.temperature",
-    "value": {
-      "doubleValue": 0.5,
-    },
-  },
-  {
-    "key": "gen_ai.request.stop_sequences",
-    "value": {
-      "arrayValue": {
-        "values": [
-          {
-            "stringValue": "potato",
-          },
-        ],
-      },
-    },
-  },
-  {
-    "key": "gen_ai.request.seed",
-    "value": {},
-  },
-  {
-    "key": "gen_ai.response.finish_reasons",
-    "value": {
-      "arrayValue": {
-        "values": [
-          {
-            "stringValue": "stop",
-          },
-        ],
-      },
-    },
-  },
-  {
-    "key": "gen_ai.response.id",
-    "value": {
-      "stringValue": "chatcmpl-d912623a-1d43-449e-92fe-d8d850b2555d",
-    },
-  },
-  {
-    "key": "gen_ai.input.messages",
-    "value": {
-      "arrayValue": {
-        "values": [
-          {
-            "kvlistValue": {
-              "values": [
-                {
-                  "key": "role",
-                  "value": {
-                    "stringValue": "system",
-                  },
-                },
-                {
-                  "key": "parts",
-                  "value": {
-                    "arrayValue": {
-                      "values": [
-                        {
-                          "kvlistValue": {
-                            "values": [
-                              {
-                                "key": "type",
-                                "value": {
-                                  "stringValue": "text",
-                                },
-                              },
-                              {
-                                "key": "content",
-                                "value": {
-                                  "stringValue": "You are a helpful assistant.",
-                                },
-                              },
-                            ],
-                          },
-                        },
-                      ],
-                    },
-                  },
-                },
-              ],
+    "attributes": {
+      "gen_ai.input.messages": [
+        {
+          "parts": [
+            {
+              "content": "You are a helpful assistant.",
+              "type": "text",
             },
-          },
-          {
-            "kvlistValue": {
-              "values": [
-                {
-                  "key": "role",
-                  "value": {
-                    "stringValue": "user",
-                  },
-                },
-                {
-                  "key": "parts",
-                  "value": {
-                    "arrayValue": {
-                      "values": [
-                        {
-                          "kvlistValue": {
-                            "values": [
-                              {
-                                "key": "type",
-                                "value": {
-                                  "stringValue": "text",
-                                },
-                              },
-                              {
-                                "key": "content",
-                                "value": {
-                                  "stringValue": "What is the capital of France?",
-                                },
-                              },
-                            ],
-                          },
-                        },
-                      ],
-                    },
-                  },
-                },
-              ],
+          ],
+          "role": "system",
+        },
+        {
+          "parts": [
+            {
+              "content": "What is the capital of France?",
+              "type": "text",
             },
-          },
-        ],
-      },
-    },
-  },
-  {
-    "key": "gen_ai.output.messages",
-    "value": {
-      "arrayValue": {
-        "values": [
-          {
-            "kvlistValue": {
-              "values": [
-                {
-                  "key": "role",
-                  "value": {
-                    "stringValue": "assistant",
-                  },
-                },
-                {
-                  "key": "parts",
-                  "value": {
-                    "arrayValue": {
-                      "values": [
-                        {
-                          "kvlistValue": {
-                            "values": [
-                              {
-                                "key": "type",
-                                "value": {
-                                  "stringValue": "text",
-                                },
-                              },
-                              {
-                                "key": "content",
-                                "value": {
-                                  "stringValue": "The capital of France is Paris.",
-                                },
-                              },
-                            ],
-                          },
-                        },
-                      ],
-                    },
-                  },
-                },
-                {
-                  "key": "finish_reason",
-                  "value": {
-                    "stringValue": "stop",
-                  },
-                },
-              ],
+          ],
+          "role": "user",
+        },
+      ],
+      "gen_ai.operation.name": "chat",
+      "gen_ai.output.messages": [
+        {
+          "finish_reason": "stop",
+          "parts": [
+            {
+              "content": "The capital of France is Paris.",
+              "type": "text",
             },
-          },
-        ],
-      },
-    },
-  },
-  {
-    "key": "gen_ai.system_instructions",
-    "value": {},
-  },
-  {
-    "key": "http.response.status_code",
-    "value": {
-      "intValue": 200,
-    },
-  },
-  {
-    "key": "http.request.body.text",
-    "value": {
-      "stringValue": "{
+          ],
+          "role": "assistant",
+        },
+      ],
+      "gen_ai.request.max_tokens": 1024,
+      "gen_ai.request.model": "llama-3.3-70b-versatile",
+      "gen_ai.request.seed": {},
+      "gen_ai.request.stop_sequences": [
+        "potato",
+      ],
+      "gen_ai.request.temperature": 0.5,
+      "gen_ai.request.top_k": {},
+      "gen_ai.request.top_p": 0.95,
+      "gen_ai.response.finish_reasons": [
+        "stop",
+      ],
+      "gen_ai.response.id": "chatcmpl-d912623a-1d43-449e-92fe-d8d850b2555d",
+      "gen_ai.response.model": "llama-3.3-70b-versatile",
+      "gen_ai.system": "groq",
+      "gen_ai.system_instructions": {},
+      "gen_ai.usage.cache_audio_read_tokens": {},
+      "gen_ai.usage.cache_read_tokens": {},
+      "gen_ai.usage.cache_write_tokens": {},
+      "gen_ai.usage.input_audio_tokens": {},
+      "gen_ai.usage.input_tokens": 42,
+      "gen_ai.usage.output_audio_tokens": {},
+      "gen_ai.usage.output_tokens": 8,
+      "http.request.body.text": "{
   "model": "llama-3.3-70b-versatile",
   "messages": [
     {
@@ -305,51 +117,25 @@ exports[`groq > should call groq via gateway > span 1`] = `
   ],
   "max_completion_tokens": 1024
 }",
+      "http.response.body.text": "{"id":"chatcmpl-d912623a-1d43-449e-92fe-d8d850b2555d","object":"chat.completion","created":1761823220,"model":"llama-3.3-70b-versatile","choices":[{"index":0,"message":{"role":"assistant","content":"The capital of France is Paris."},"logprobs":null,"finish_reason":"stop"}],"usage":{"queue_time":0.150119133,"prompt_tokens":42,"prompt_time":0.002274325,"completion_tokens":8,"completion_time":0.0127032,"total_tokens":50,"total_time":0.014977525,"pydantic_ai_gateway":{"cost_estimate":0.0000311}},"usage_breakdown":null,"system_fingerprint":"fp_21854da540","x_groq":{"id":"req_01k8tdhr6ke5hah7e5e3dfq95a"},"service_tier":"on_demand"}",
+      "http.response.status_code": 200,
+      "logfire.json_schema": "{"type":"object","properties":{"gen_ai.operation.name":{"type":"string"},"gen_ai.request.model":{"type":"string"},"gen_ai.system":{"type":"string"},"gen_ai.request.max_tokens":{"type":"number"},"gen_ai.request.top_k":{},"gen_ai.request.top_p":{"type":"number"},"gen_ai.request.temperature":{"type":"number"},"gen_ai.request.stop_sequences":{},"gen_ai.request.seed":{},"gen_ai.response.finish_reasons":{},"gen_ai.response.id":{"type":"string"},"gen_ai.input.messages":{},"gen_ai.output.messages":{},"gen_ai.system_instructions":{},"http.response.status_code":{"type":"number"},"http.request.body.text":{"type":"string"},"http.response.body.text":{"type":"string"},"gen_ai.response.model":{"type":"string"},"gen_ai.usage.input_tokens":{"type":"number"},"gen_ai.usage.cache_read_tokens":{},"gen_ai.usage.cache_write_tokens":{},"gen_ai.usage.output_tokens":{"type":"number"},"gen_ai.usage.input_audio_tokens":{},"gen_ai.usage.cache_audio_read_tokens":{},"gen_ai.usage.output_audio_tokens":{}}}",
+      "logfire.level_num": 9,
+      "logfire.msg": "chat llama-3.3-70b-versatile",
     },
-  },
-  {
-    "key": "http.response.body.text",
-    "value": {
-      "stringValue": "{"id":"chatcmpl-d912623a-1d43-449e-92fe-d8d850b2555d","object":"chat.completion","created":1761823220,"model":"llama-3.3-70b-versatile","choices":[{"index":0,"message":{"role":"assistant","content":"The capital of France is Paris."},"logprobs":null,"finish_reason":"stop"}],"usage":{"queue_time":0.150119133,"prompt_tokens":42,"prompt_time":0.002274325,"completion_tokens":8,"completion_time":0.0127032,"total_tokens":50,"total_time":0.014977525,"pydantic_ai_gateway":{"cost_estimate":0.0000311}},"usage_breakdown":null,"system_fingerprint":"fp_21854da540","x_groq":{"id":"req_01k8tdhr6ke5hah7e5e3dfq95a"},"service_tier":"on_demand"}",
+    "events": [],
+    "kind": 1,
+    "links": [],
+    "name": "chat llama-3.3-70b-versatile",
+    "parentSpanId": undefined,
+    "resource": {
+      "service.name": "PAIG",
+      "service.version": "test",
     },
-  },
-  {
-    "key": "gen_ai.response.model",
-    "value": {
-      "stringValue": "llama-3.3-70b-versatile",
+    "scope": "pydantic-ai-gateway",
+    "status": {
+      "code": 1,
     },
-  },
-  {
-    "key": "gen_ai.usage.input_tokens",
-    "value": {
-      "intValue": 42,
-    },
-  },
-  {
-    "key": "gen_ai.usage.cache_read_tokens",
-    "value": {},
-  },
-  {
-    "key": "gen_ai.usage.cache_write_tokens",
-    "value": {},
-  },
-  {
-    "key": "gen_ai.usage.output_tokens",
-    "value": {
-      "intValue": 8,
-    },
-  },
-  {
-    "key": "gen_ai.usage.input_audio_tokens",
-    "value": {},
-  },
-  {
-    "key": "gen_ai.usage.cache_audio_read_tokens",
-    "value": {},
-  },
-  {
-    "key": "gen_ai.usage.output_audio_tokens",
-    "value": {},
   },
 ]
 `;

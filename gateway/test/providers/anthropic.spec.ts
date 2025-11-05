@@ -1,5 +1,6 @@
 import Anthropic from '@anthropic-ai/sdk'
 import { describe, expect } from 'vitest'
+import { deserializeRequest } from '../otel'
 import { test } from '../setup'
 
 describe('anthropic', () => {
@@ -21,7 +22,7 @@ describe('anthropic', () => {
     })
     expect(completion).toMatchSnapshot('llm')
     expect(otelBatch, 'otelBatch length not 1').toHaveLength(1)
-    expect(JSON.parse(otelBatch[0]!).resourceSpans?.[0].scopeSpans?.[0].spans?.[0]?.attributes).toMatchSnapshot('span')
+    expect(deserializeRequest(otelBatch[0]!)).toMatchSnapshot('span')
   })
 
   test('should call anthropic via gateway with builtin tools', async ({ gateway }) => {
@@ -40,7 +41,7 @@ describe('anthropic', () => {
     })
     expect(response).toMatchSnapshot('llm')
     expect(otelBatch, 'otelBatch length not 1').toHaveLength(1)
-    expect(JSON.parse(otelBatch[0]!).resourceSpans?.[0].scopeSpans?.[0].spans?.[0]?.attributes).toMatchSnapshot('span')
+    expect(deserializeRequest(otelBatch[0]!)).toMatchSnapshot('span')
   })
 
   test('should call anthropic via gateway with stream', async ({ gateway }) => {
@@ -61,6 +62,6 @@ describe('anthropic', () => {
 
     expect(chunks).toMatchSnapshot('chunks')
     expect(otelBatch, 'otelBatch length not 1').toHaveLength(1)
-    expect(JSON.parse(otelBatch[0]!).resourceSpans?.[0].scopeSpans?.[0].spans?.[0]?.attributes).toMatchSnapshot('span')
+    expect(deserializeRequest(otelBatch[0]!)).toMatchSnapshot('span')
   })
 })

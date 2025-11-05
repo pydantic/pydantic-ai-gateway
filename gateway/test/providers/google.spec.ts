@@ -1,4 +1,5 @@
 import { describe, expect } from 'vitest'
+import { deserializeRequest } from '../otel'
 import { test } from '../setup'
 
 const body = JSON.stringify({
@@ -56,7 +57,7 @@ describe('google', () => {
 
     expect(content).toMatchSnapshot('llm')
     expect(otelBatch, 'otelBatch length not 1').toHaveLength(1)
-    expect(JSON.parse(otelBatch[0]!).resourceSpans?.[0].scopeSpans?.[0].spans?.[0]?.attributes).toMatchSnapshot('span')
+    expect(deserializeRequest(otelBatch[0]!)).toMatchSnapshot('span')
   })
 
   test('google-vertex/stream', async ({ gateway }) => {
@@ -74,6 +75,6 @@ describe('google', () => {
 
     expect(chunks).toMatchSnapshot('chunks')
     expect(otelBatch, 'otelBatch length not 1').toHaveLength(1)
-    expect(JSON.parse(otelBatch[0]!).resourceSpans?.[0].scopeSpans?.[0].spans?.[0]?.attributes).toMatchSnapshot('span')
+    expect(deserializeRequest(otelBatch[0]!)).toMatchSnapshot('span')
   })
 })

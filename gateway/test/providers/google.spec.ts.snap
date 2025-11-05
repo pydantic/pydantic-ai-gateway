@@ -5,57 +5,29 @@ exports[`google > google-vertex/default > llm 1`] = `"Path /gemini/v1beta1/proje
 exports[`google > google-vertex/default > span 1`] = `
 [
   {
-    "key": "logfire.msg",
-    "value": {
-      "stringValue": "chat gemini-2.5-flash, unexpected response: 404",
+    "attributes": {
+      "gen_ai.operation.name": "chat",
+      "gen_ai.request.model": "gemini-2.5-flash",
+      "gen_ai.system": "google-vertex",
+      "http.request.body.text": "{"contents":[{"parts":[{"text":"Samuel lived in London and was born on Jan 28th '87"}],"role":"user"}],"systemInstruction":{"parts":[{"text":"Extract information about the person"}],"role":"user"},"tools":[{"functionDeclarations":[{"description":"The final response which ends this conversation","name":"final_result","parameters":{"properties":{"name":{"description":"The name of the person.","type":"STRING"},"dob":{"description":"The date of birth of the person. MUST BE A VALID ISO 8601 date. (format: date)","type":"STRING"},"city":{"description":"The city where the person lives.","type":"STRING"}},"required":["name","dob","city"],"type":"OBJECT"}}]}],"toolConfig":{"functionCallingConfig":{"mode":"ANY","allowedFunctionNames":["final_result"]}},"generationConfig":{"temperature":0.5,"topP":0.9,"stopSequences":["potato"]}}",
+      "http.response.body.text": "Path /gemini/v1beta1/projects/pydantic-ai/locations/global/publishers/google/models/gemini-2.5-flash:generateContent not supported",
+      "http.response.status_code": 404,
+      "logfire.json_schema": "{"type":"object","properties":{"gen_ai.operation.name":{"type":"string"},"gen_ai.request.model":{"type":"string"},"gen_ai.system":{"type":"string"},"http.response.status_code":{"type":"number"},"http.request.body.text":{"type":"string"},"http.response.body.text":{"type":"string"}}}",
+      "logfire.level_num": 13,
+      "logfire.msg": "chat gemini-2.5-flash, unexpected response: 404",
     },
-  },
-  {
-    "key": "logfire.json_schema",
-    "value": {
-      "stringValue": "{"type":"object","properties":{"gen_ai.operation.name":{"type":"string"},"gen_ai.request.model":{"type":"string"},"gen_ai.system":{"type":"string"},"http.response.status_code":{"type":"number"},"http.request.body.text":{"type":"string"},"http.response.body.text":{"type":"string"}}}",
+    "events": [],
+    "kind": 1,
+    "links": [],
+    "name": "chat gemini-2.5-flash, unexpected response: {http.response.status_code}",
+    "parentSpanId": undefined,
+    "resource": {
+      "service.name": "PAIG",
+      "service.version": "test",
     },
-  },
-  {
-    "key": "logfire.level_num",
-    "value": {
-      "intValue": 13,
-    },
-  },
-  {
-    "key": "gen_ai.operation.name",
-    "value": {
-      "stringValue": "chat",
-    },
-  },
-  {
-    "key": "gen_ai.request.model",
-    "value": {
-      "stringValue": "gemini-2.5-flash",
-    },
-  },
-  {
-    "key": "gen_ai.system",
-    "value": {
-      "stringValue": "google-vertex",
-    },
-  },
-  {
-    "key": "http.response.status_code",
-    "value": {
-      "intValue": 404,
-    },
-  },
-  {
-    "key": "http.request.body.text",
-    "value": {
-      "stringValue": "{"contents":[{"parts":[{"text":"Samuel lived in London and was born on Jan 28th '87"}],"role":"user"}],"systemInstruction":{"parts":[{"text":"Extract information about the person"}],"role":"user"},"tools":[{"functionDeclarations":[{"description":"The final response which ends this conversation","name":"final_result","parameters":{"properties":{"name":{"description":"The name of the person.","type":"STRING"},"dob":{"description":"The date of birth of the person. MUST BE A VALID ISO 8601 date. (format: date)","type":"STRING"},"city":{"description":"The city where the person lives.","type":"STRING"}},"required":["name","dob","city"],"type":"OBJECT"}}]}],"toolConfig":{"functionCallingConfig":{"mode":"ANY","allowedFunctionNames":["final_result"]}},"generationConfig":{"temperature":0.5,"topP":0.9,"stopSequences":["potato"]}}",
-    },
-  },
-  {
-    "key": "http.response.body.text",
-    "value": {
-      "stringValue": "Path /gemini/v1beta1/projects/pydantic-ai/locations/global/publishers/google/models/gemini-2.5-flash:generateContent not supported",
+    "scope": "pydantic-ai-gateway",
+    "status": {
+      "code": 1,
     },
   },
 ]
@@ -207,57 +179,29 @@ exports[`google > google-vertex/stream > chunks 1`] = `
 exports[`google > google-vertex/stream > span 1`] = `
 [
   {
-    "key": "logfire.msg",
-    "value": {
-      "stringValue": "chat gemini-2.5-flash, unexpected response: 404",
+    "attributes": {
+      "gen_ai.operation.name": "chat",
+      "gen_ai.request.model": "gemini-2.5-flash",
+      "gen_ai.system": "google-vertex",
+      "http.request.body.text": "{"contents":[{"parts":[{"text":"Samuel lived in London and was born on Jan 28th '87"}],"role":"user"}],"systemInstruction":{"parts":[{"text":"Extract information about the person"}],"role":"user"},"tools":[{"functionDeclarations":[{"description":"The final response which ends this conversation","name":"final_result","parameters":{"properties":{"name":{"description":"The name of the person.","type":"STRING"},"dob":{"description":"The date of birth of the person. MUST BE A VALID ISO 8601 date. (format: date)","type":"STRING"},"city":{"description":"The city where the person lives.","type":"STRING"}},"required":["name","dob","city"],"type":"OBJECT"}}]}],"toolConfig":{"functionCallingConfig":{"mode":"ANY","allowedFunctionNames":["final_result"]}},"generationConfig":{"temperature":0.5,"topP":0.9,"stopSequences":["potato"]}}",
+      "http.response.body.text": "Path /gemini/v1beta1/projects/pydantic-ai/locations/global/publishers/google/models/gemini-2.5-flash:streamGenerateContent not supported",
+      "http.response.status_code": 404,
+      "logfire.json_schema": "{"type":"object","properties":{"gen_ai.operation.name":{"type":"string"},"gen_ai.request.model":{"type":"string"},"gen_ai.system":{"type":"string"},"http.response.status_code":{"type":"number"},"http.request.body.text":{"type":"string"},"http.response.body.text":{"type":"string"}}}",
+      "logfire.level_num": 13,
+      "logfire.msg": "chat gemini-2.5-flash, unexpected response: 404",
     },
-  },
-  {
-    "key": "logfire.json_schema",
-    "value": {
-      "stringValue": "{"type":"object","properties":{"gen_ai.operation.name":{"type":"string"},"gen_ai.request.model":{"type":"string"},"gen_ai.system":{"type":"string"},"http.response.status_code":{"type":"number"},"http.request.body.text":{"type":"string"},"http.response.body.text":{"type":"string"}}}",
+    "events": [],
+    "kind": 1,
+    "links": [],
+    "name": "chat gemini-2.5-flash, unexpected response: {http.response.status_code}",
+    "parentSpanId": undefined,
+    "resource": {
+      "service.name": "PAIG",
+      "service.version": "test",
     },
-  },
-  {
-    "key": "logfire.level_num",
-    "value": {
-      "intValue": 13,
-    },
-  },
-  {
-    "key": "gen_ai.operation.name",
-    "value": {
-      "stringValue": "chat",
-    },
-  },
-  {
-    "key": "gen_ai.request.model",
-    "value": {
-      "stringValue": "gemini-2.5-flash",
-    },
-  },
-  {
-    "key": "gen_ai.system",
-    "value": {
-      "stringValue": "google-vertex",
-    },
-  },
-  {
-    "key": "http.response.status_code",
-    "value": {
-      "intValue": 404,
-    },
-  },
-  {
-    "key": "http.request.body.text",
-    "value": {
-      "stringValue": "{"contents":[{"parts":[{"text":"Samuel lived in London and was born on Jan 28th '87"}],"role":"user"}],"systemInstruction":{"parts":[{"text":"Extract information about the person"}],"role":"user"},"tools":[{"functionDeclarations":[{"description":"The final response which ends this conversation","name":"final_result","parameters":{"properties":{"name":{"description":"The name of the person.","type":"STRING"},"dob":{"description":"The date of birth of the person. MUST BE A VALID ISO 8601 date. (format: date)","type":"STRING"},"city":{"description":"The city where the person lives.","type":"STRING"}},"required":["name","dob","city"],"type":"OBJECT"}}]}],"toolConfig":{"functionCallingConfig":{"mode":"ANY","allowedFunctionNames":["final_result"]}},"generationConfig":{"temperature":0.5,"topP":0.9,"stopSequences":["potato"]}}",
-    },
-  },
-  {
-    "key": "http.response.body.text",
-    "value": {
-      "stringValue": "Path /gemini/v1beta1/projects/pydantic-ai/locations/global/publishers/google/models/gemini-2.5-flash:streamGenerateContent not supported",
+    "scope": "pydantic-ai-gateway",
+    "status": {
+      "code": 1,
     },
   },
 ]

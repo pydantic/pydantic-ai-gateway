@@ -82,7 +82,7 @@ export async function gateway(
     try {
       result = await proxy.dispatch()
     } catch (error) {
-      logfire.reportError('Provider failed', error as Error, {
+      logfire.reportError('Connection error', error as Error, {
         providerId: providerProxy.providerId,
         routingGroup: providerProxy.routingGroup,
       })

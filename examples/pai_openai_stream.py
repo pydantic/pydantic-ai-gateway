@@ -26,7 +26,7 @@ class Person(BaseModel, use_attribute_docstrings=True):
 
 
 person_agent = Agent(
-    'gateway:openai/gpt-5',
+    'gateway/openai:gpt-5',
     instructions='You are a helpful assistant.',
     model_settings={'max_tokens': 1024},
     retries=2,

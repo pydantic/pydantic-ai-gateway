@@ -5,13 +5,13 @@ on:
     branches:
       - main
     tags:
-      - '**'
+      - "**"
   pull_request: {}
 
 env:
   COLUMNS: 150
   UV_PYTHON: 3.12
-  UV_FROZEN: '1'
+  UV_FROZEN: "1"
 
 jobs:
   lint:
@@ -42,6 +42,7 @@ jobs:
 
   test:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
 

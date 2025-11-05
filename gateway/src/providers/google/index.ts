@@ -109,16 +109,5 @@ function regionFromUrl(url: string): null | string {
   return match?.[1] ?? 'global'
 }
 
-function stripTrailingSlash(url: string): string {
-  if (url.endsWith('/')) {
-    return url.slice(0, -1)
-  }
-  return url
-}
-
-function stripLeadingSlash(url: string): string {
-  if (url.startsWith('/')) {
-    return url.slice(1)
-  }
-  return url
-}
+const stripTrailingSlash = (url: string): string => (url.endsWith('/') ? url.slice(0, -1) : url)
+const stripLeadingSlash = (url: string): string => (url.startsWith('/') ? url.slice(1) : url)

@@ -2,7 +2,7 @@ import { env } from 'cloudflare:workers'
 import type { Config } from '@deploy/types'
 
 // can be whatever you want, just used to make linking apiKeys to providers typesafe.
-type ProviderKeys = 'a' | 'b' | 'c' | 'd'
+type ProviderKeys = 'a' | 'b' | 'c' | 'd' | 'e'
 
 // projects, users and keys must have numeric keys, using constants here to make it easier to understand
 // of course, keys must be unique within a type (e.g. project ids must be unique) but users and projects can have the same id
@@ -37,7 +37,7 @@ export const config: Config<ProviderKeys> = {
   },
   // providers
   providers: {
-    // you would use this provider by using the model id `gateway:openai-chat/gpt-5` in Pydantic AI
+    // you would use this provider by using the model id `gateway/openai-chat:gpt-5` in Pydantic AI
     a: {
       // providerId decides on the logic used to process the request and response
       providerId: 'openai',
@@ -47,19 +47,35 @@ export const config: Config<ProviderKeys> = {
       injectCost: true,
       // credentials are used by the ProviderProxy to authenticate the forwarded request
       credentials: env.OPENAI_API_KEY,
+      apiTypes: ['chat', 'responses'],
     },
-    b: { providerId: 'groq', baseUrl: 'https://api.groq.com', injectCost: true, credentials: env.GROQ_API_KEY },
+    b: {
+      providerId: 'groq',
+      baseUrl: 'https://api.groq.com',
+      injectCost: true,
+      credentials: env.GROQ_API_KEY,
+      apiTypes: ['groq'],
+    },
     c: {
       providerId: 'google-vertex',
       baseUrl: 'https://us-central1-aiplatform.googleapis.com',
       injectCost: true,
       credentials: env.GOOGLE_SERVICE_ACCOUNT_KEY,
+      apiTypes: ['gemini', 'anthropic'],
     },
     d: {
       providerId: 'anthropic',
       baseUrl: 'https://api.anthropic.com',
       injectCost: true,
       credentials: env.ANTHROPIC_API_KEY,
+      apiTypes: ['anthropic'],
+    },
+    e: {
+      providerId: 'bedrock',
+      baseUrl: 'https://bedrock-runtime.us-east-1.amazonaws.com',
+      injectCost: true,
+      credentials: env.AWS_BEARER_TOKEN_BEDROCK,
+      apiTypes: ['anthropic', 'converse'],
     },
   },
   // individual apiKeys

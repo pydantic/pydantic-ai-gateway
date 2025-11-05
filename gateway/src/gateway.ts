@@ -54,33 +54,51 @@ export async function gateway(
   // sort providers on priority, highest first
   providerProxies.sort((a, b) => (b.priority ?? 0) - (a.priority ?? 0))
 
-  const providerProxy = providerProxies[0]
-  if (!providerProxy) {
+  if (providerProxies.length === 0) {
     return textResponse(403, 'Forbidden - Provider not supported by this API Key')
   }
 
   const otel = new OtelTrace(request, apiKeyInfo.otelSettings, options)
 
-  const ProxyCls = getProvider(providerProxy.providerId)
+  // The AI did this, but I actually find it nice.
+  let result!: Awaited<ReturnType<InstanceType<ReturnType<typeof getProvider>>['dispatch']>>
 
-  const dispatchSpan = otel.startSpan()
-  const proxy = new ProxyCls({
-    request,
-    gatewayOptions: options,
-    apiKeyInfo,
-    providerProxy,
-    restOfPath,
-    ctx,
-    middlewares: options.proxyMiddlewares,
-    otelSpan: dispatchSpan,
-  })
+  for (const providerProxy of providerProxies) {
+    const ProxyCls = getProvider(providerProxy.providerId)
 
-  const result = await proxy.dispatch()
+    const otelSpan = otel.startSpan()
+    const proxy = new ProxyCls({
+      // Since the body is consumed by the proxy, we need to clone the request.
+      request: request.clone(),
+      gatewayOptions: options,
+      apiKeyInfo,
+      providerProxy,
+      restOfPath,
+      ctx,
+      middlewares: options.proxyMiddlewares,
+      otelSpan,
+    })
 
-  // This doesn't work on streaming because the `result` object is returned as soon as we create the streaming response.
-  if (!('responseStream' in result) && !('response' in result)) {
-    const [spanName, attributes, level] = genAiOtelAttributes(result, proxy)
-    dispatchSpan.end(spanName, attributes, { level })
+    result = await proxy.dispatch()
+
+    // Those responses are already closing the `otelSpan`.
+    if (!('responseStream' in result) && !('response' in result) && !('unexpectedStatus' in result)) {
+      const [spanName, attributes, level] = genAiOtelAttributes(result, proxy)
+      otelSpan.end(spanName, attributes, { level })
+    }
+
+    // Check if we should retry with the next provider.
+    if ('unexpectedStatus' in result && isRetryableError(result.unexpectedStatus)) {
+      logfire.info('Provider failed with retryable error, trying next provider', {
+        providerId: providerProxy.providerId,
+        status: result.unexpectedStatus,
+        routingGroup: providerProxy.routingGroup,
+      })
+      continue
+    }
+
+    // If it succeeds, or it's not a retryable error, we can break out of the loop.
+    break
   }
 
   let response: Response
@@ -129,7 +147,7 @@ export async function gateway(
     response = new Response(responseBody, { status: unexpectedStatus, headers: responseHeaders })
   }
 
-  // TODO(Marcelo): This needs a bit of refactoring. We need the `dispatchSpan` to be closed before we send the spans.
+  // TODO(Marcelo): This needs a bit of refactoring. We need the `otelSpan` to be closed before we send the spans.
   if (!('responseStream' in result)) {
     runAfter(ctx, 'otel.send', otel.send())
   }
@@ -230,4 +248,8 @@ function calculateExpirationTtl(ex: ExceededScope[]): number | undefined {
   }
   d.setHours(23, 59, 59)
   return Math.floor((d.getTime() - now.getTime()) / 1000)
+}
+
+function isRetryableError(status: number): boolean {
+  return status === 429 || (status >= 500 && status <= 599)
 }

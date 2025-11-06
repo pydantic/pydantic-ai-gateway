@@ -4,8 +4,10 @@ import { DefaultProviderProxy } from './default'
 
 export class AnthropicProvider extends DefaultProviderProxy {
   protected isWhitelistedEndpoint(): boolean {
+    // If there is a query string, drop the query string from the path.
+    const path = this.restOfPath.split('?')[0]
     // This endpoint is used by Claude Code.
-    return this.restOfPath === 'v1/messages/count_tokens'
+    return path === 'v1/messages/count_tokens'
   }
 
   protected modelAPI(): ModelAPI {

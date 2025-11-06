@@ -591,3 +591,54 @@ exports[`anthropic > should call anthropic via gateway with stream > span 1`] = 
   },
 ]
 `;
+
+exports[`anthropic > should whitelist /v1/messages/count_tokens endpoint > count_tokens 1`] = `
+{
+  "input_tokens": 14,
+}
+`;
+
+exports[`anthropic > should whitelist /v1/messages/count_tokens endpoint > span 1`] = `
+[
+  {
+    "attributes": {
+      "http.request.body.text": "{"model":"claude-sonnet-4-20250514","messages":[{"role":"user","content":"What is the capital of France?"}]}",
+      "http.request.header.accept": "application/json",
+      "http.request.header.anthropic-beta": "token-counting-2024-11-01",
+      "http.request.header.anthropic-version": "2023-06-01",
+      "http.request.header.authorization": "Bearer healthy",
+      "http.request.header.content-type": "application/json",
+      "http.request.header.user-agent": "Anthropic/JS 0.62.0",
+      "http.request.header.x-stainless-arch": "unknown",
+      "http.request.header.x-stainless-lang": "js",
+      "http.request.header.x-stainless-os": "Unknown",
+      "http.request.header.x-stainless-package-version": "0.62.0",
+      "http.request.header.x-stainless-retry-count": "0",
+      "http.request.header.x-stainless-runtime": "unknown",
+      "http.request.header.x-stainless-runtime-version": "unknown",
+      "http.request.method": "POST",
+      "http.response.header.content-length": "19",
+      "http.response.header.content-type": "application/json",
+      "http.response.header.server": "uvicorn",
+      "http.response.status_code": 200,
+      "logfire.json_schema": "{"type":"object","properties":{"http.request.method":{"type":"string"},"url.full":{"type":"string"},"http.request.header.accept":{"type":"string"},"http.request.header.anthropic-beta":{"type":"string"},"http.request.header.anthropic-version":{"type":"string"},"http.request.header.authorization":{"type":"string"},"http.request.header.content-type":{"type":"string"},"http.request.header.user-agent":{"type":"string"},"http.request.header.x-stainless-arch":{"type":"string"},"http.request.header.x-stainless-lang":{"type":"string"},"http.request.header.x-stainless-os":{"type":"string"},"http.request.header.x-stainless-package-version":{"type":"string"},"http.request.header.x-stainless-retry-count":{"type":"string"},"http.request.header.x-stainless-runtime":{"type":"string"},"http.request.header.x-stainless-runtime-version":{"type":"string"},"http.response.status_code":{"type":"number"},"http.response.header.content-length":{"type":"string"},"http.response.header.content-type":{"type":"string"},"http.response.header.server":{"type":"string"},"http.request.body.text":{"type":"string"}}}",
+      "logfire.level_num": 9,
+      "logfire.msg": "POST v1/messages/count_tokens?beta=true",
+      "url.full": "https://example.com/anthropic/v1/messages/count_tokens?beta=true",
+    },
+    "events": [],
+    "kind": 1,
+    "links": [],
+    "name": "POST v1/messages/count_tokens?beta=true",
+    "parentSpanId": undefined,
+    "resource": {
+      "service.name": "PAIG",
+      "service.version": "test",
+    },
+    "scope": "pydantic-ai-gateway",
+    "status": {
+      "code": 1,
+    },
+  },
+]
+`;

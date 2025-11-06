@@ -106,6 +106,7 @@ class TestKeysDB extends KeysDbD1 {
         injectCost: true,
         credentials: env.GOOGLE_SERVICE_ACCOUNT_KEY,
         apiTypes: ['gemini', 'anthropic'],
+        profile: 'google-vertex',
       },
     ]
   }

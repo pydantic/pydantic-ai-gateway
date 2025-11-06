@@ -1,12 +1,13 @@
 import type { ModelAPI } from '../../api'
 import { AnthropicAPI } from '../../api/anthropic'
-import { GoogleAPI, type GoogleRequest } from '../../api/google'
-import { DefaultProviderProxy } from '../default'
+import { GoogleAPI } from '../../api/google'
+import { DefaultProviderProxy, type JsonData } from '../default'
 import { authToken, getProjectId } from './auth'
 
 export class GoogleVertexProvider extends DefaultProviderProxy {
   protected usageField = 'usageMetadata'
   flavor: 'default' | 'anthropic' = 'default'
+  shouldStream: boolean = false
 
   url() {
     if (this.providerProxy.baseUrl) {
@@ -54,6 +55,15 @@ export class GoogleVertexProvider extends DefaultProviderProxy {
    * @param region - The region to replace in the path.
    */
   private replacePath(projectId: string, region: string): null | string {
+    const pathWithoutQuery = this.restOfPath.split('?')[0]
+    console.log('pathWithoutQuery', pathWithoutQuery)
+    if (pathWithoutQuery === 'v1/messages') {
+      console.log('this.shouldStream', this.shouldStream)
+      console.log('this.requestModel', this.requestModel)
+      const action = this.shouldStream ? 'streamRawPredict' : 'rawPredict'
+      return `/v1/projects/${projectId}/locations/${region}/publishers/anthropic/models/${this.requestModel}:${action}`
+    }
+
     // Regex with capture groups: version (optional), publisher (optional), model
     // Path may or may not start with / and may or may not have version
     const regex =
@@ -73,23 +83,45 @@ export class GoogleVertexProvider extends DefaultProviderProxy {
     }
 
     const path = `/${version}/projects/${projectId}/locations/${region}/publishers/${publisher}/models/${modelAndApi}`
+    console.log('this.restOfPath', this.restOfPath)
     return path
   }
 
   async prepRequest() {
     const requestBodyText = await this.request.text()
-    let requestBodyData: GoogleRequest
+    let requestBodyData: JsonData
     try {
       requestBodyData = JSON.parse(requestBodyText)
     } catch (_error) {
       return { error: 'invalid request JSON' }
     }
+
+    const pathWithoutQuery = this.restOfPath.split('?')[0]
+    if (pathWithoutQuery === 'v1/messages') {
+      console.log('this is called after!')
+      this.flavor = 'anthropic'
+      if (!('model' in requestBodyData)) {
+        return { error: 'model not found in Anthropic request body' }
+      }
+      this.requestModel = requestBodyData.model as string
+      return { requestBodyText, requestBodyData, requestModel: this.requestModel }
+    }
+
     const m = /\/models\/(.+?):/.exec(this.restOfPath)
     if (m) {
       return { requestBodyText, requestBodyData, requestModel: m[1] }
     } else {
       return { error: 'unable to find model in path' }
     }
+  }
+
+  protected isStreaming(responseHeaders: Headers, requestBodyData: object): boolean {
+    if (this.flavor === 'anthropic') {
+      this.shouldStream = !!('stream' in requestBodyData && requestBodyData.stream === true)
+    } else {
+      this.shouldStream = super.isStreaming(responseHeaders, requestBodyData)
+    }
+    return this.shouldStream
   }
 
   async requestHeaders(headers: Headers): Promise<void> {

@@ -1,0 +1,52 @@
+interactions:
+- request:
+    body: '{"model":"claude-sonnet-4","max_tokens":1024,"messages":[{"role":"user","content":"What
+      is the capital of Brazil?"}]}'
+    headers:
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '117'
+      host:
+      - aiplatform.googleapis.com
+      user-agent:
+      - python-httpx/0.28.1
+    method: POST
+    uri: https://aiplatform.googleapis.com/v1/projects/pydantic-ai/locations/global/publishers/anthropic/models/null:rawPredict?
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAC/y2LMQqAMAwA974iZBZxcHIWRwXRWYqN4mCLTYqI9O9WdLw77lYASN47jxXcCRLO
+        zlCisiizT+zErNfXYU9HIBYyQFY2ueDUDNYJLC5Yk+N/sGgJ/A5tN0xNN7Y1phJVVA+26ZsFcgAA
+        AA==
+    headers:
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json; charset=UTF-8
+      Date:
+      - Thu, 06 Nov 2025 12:13:49 GMT
+      Server:
+      - scaffolding on HTTPServer2
+      Transfer-Encoding:
+      - chunked
+      Vary:
+      - Origin
+      - X-Origin
+      - Referer
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-XSS-Protection:
+      - '0'
+    status:
+      code: 404
+      message: Not Found
+version: 1

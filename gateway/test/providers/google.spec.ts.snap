@@ -1,5 +1,46 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
+exports[`google > google-vertex/anthropic-client > llm 1`] = `"{"error":{"code":404,"message":"Requested entity was not found.","status":"NOT_FOUND"}}"`;
+
+exports[`google > google-vertex/anthropic-client > span 1`] = `
+[
+  {
+    "attributes": {
+      "http.request.body.text": "{"model":"claude-sonnet-4","max_tokens":1024,"messages":[{"role":"user","content":"What is the capital of Brazil?"}]}",
+      "http.request.header.anthropic-version": "vertex-2023-10-16",
+      "http.request.header.authorization": "healthy",
+      "http.request.header.content-length": "117",
+      "http.request.header.content-type": "application/json",
+      "http.request.header.pydantic-ai-gateway-profile": "google-vertex",
+      "http.request.header.x-vcr-filename": "google-vertex-anthropic-client",
+      "http.request.method": "POST",
+      "http.response.body.text": "{"error":{"code":404,"message":"Requested entity was not found.","status":"NOT_FOUND"}}",
+      "http.response.header.content-length": "87",
+      "http.response.header.content-type": "application/json",
+      "http.response.header.server": "uvicorn",
+      "http.response.status_code": 404,
+      "logfire.json_schema": "{"type":"object","properties":{"http.request.method":{"type":"string"},"url.full":{"type":"string"},"http.request.header.anthropic-version":{"type":"string"},"http.request.header.authorization":{"type":"string"},"http.request.header.content-length":{"type":"string"},"http.request.header.content-type":{"type":"string"},"http.request.header.pydantic-ai-gateway-profile":{"type":"string"},"http.request.header.x-vcr-filename":{"type":"string"},"http.response.status_code":{"type":"number"},"http.response.header.content-length":{"type":"string"},"http.response.header.content-type":{"type":"string"},"http.response.header.server":{"type":"string"},"http.request.body.text":{"type":"string"},"http.response.body.text":{"type":"string"}}}",
+      "logfire.level_num": 13,
+      "logfire.msg": "chat claude-sonnet-4, unexpected response: 404",
+      "url.full": "https://example.com/anthropic/v1/messages",
+    },
+    "events": [],
+    "kind": 1,
+    "links": [],
+    "name": "chat claude-sonnet-4, unexpected response: {http.response.status_code}",
+    "parentSpanId": undefined,
+    "resource": {
+      "service.name": "PAIG",
+      "service.version": "test",
+    },
+    "scope": "pydantic-ai-gateway",
+    "status": {
+      "code": 1,
+    },
+  },
+]
+`;
+
 exports[`google > google-vertex/default > llm 1`] = `
 "data: {"candidates": [{"content": {"role": "model","parts": [{"functionCall": {"name": "final_result","args": {"name": "Samuel","city": "London","dob": "1987-01-28"}},"thoughtSignature": "CswDAePx/15lDrSIcIjN85FpyyOl3oASu2R23QD4Z3cj5XRUKOD/3/mMqcHv5AeXc/L+P1eVNpq5C3xM9/8zil6gOOZI91F/r1kmKvxmCECD1SW+p1dtzG6eljHd51vd2Gx7eqtEek1ORzeLP4zSWY2GDlZA9fZIs/uIfhLyOlkiiB1P/GAAUmBPT/TZqdOpQZXBt8MAUrbTOQfbhQ1qbxdrYRveZRMzXS898K6NmjrN5quNiaUgwEbc2J6NAoDOl5jdK8tIt7m25qdpjSYMpAGYD0c0Le2yPf8eO6A9J6zYp1lqVCTifby4/nP5RkVM2e1L4pH6oYisgQsyDUSEDCSG2GXhGO9WU5wFYwkjlhB8ghLU92kVgr/Rq54K/0GaYGBgzKi+YrD8c6QKSTZWTw/46D8lQ1goL1Y1YdtRiRGNFRJqKmSbkxjIOQoIk4glxcsm7L2lucL4miz4yZioBe7HEPDtmQY0FEKM5DQhwuj+AF1bBl5WE/9NYUsuGY3DxSi0lVd2v8+zd0op9U8z3PX4cmdKVkf/kA9TuQSPXBZpYgj7CssoMBT4ssLVoUgetOrNvJL99liSvsPOBZaLDKpNTXQA9GdZvQltoSolOg=="}]},"finishReason": "STOP","avgLogprobs": -0.48033348719278973}],"usageMetadata": {"promptTokenCount": 79,"candidatesTokenCount": 18,"totalTokenCount": 240,"trafficType": "ON_DEMAND","promptTokensDetails": [{"modality": "TEXT","tokenCount": 79}],"candidatesTokensDetails": [{"modality": "TEXT","tokenCount": 18}],"thoughtsTokenCount": 143},"modelVersion": "gemini-2.5-flash","createTime": "2025-11-04T15:31:56.289691Z","responseId": "bBwKaZvXEemDn9kP56mN8QI"}
 

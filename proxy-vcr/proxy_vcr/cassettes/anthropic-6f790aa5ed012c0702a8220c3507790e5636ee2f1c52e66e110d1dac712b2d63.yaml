@@ -1,0 +1,55 @@
+interactions:
+- request:
+    body: '{"model":"claude-sonnet-4-20250514","messages":[{"role":"user","content":"What
+      is the capital of France?"}]}'
+    headers:
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      anthropic-version:
+      - '2023-06-01'
+      connection:
+      - keep-alive
+      content-length:
+      - '108'
+      content-type:
+      - application/json
+      host:
+      - api.anthropic.com
+      user-agent:
+      - python-httpx/0.28.1
+    method: POST
+    uri: https://api.anthropic.com/v1/messages/count_tokens
+  response:
+    body:
+      string: '{"input_tokens":14}'
+    headers:
+      CF-RAY:
+      - 99a3fb68dde3fb9b-AMS
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '19'
+      Content-Type:
+      - application/json
+      Date:
+      - Thu, 06 Nov 2025 10:42:04 GMT
+      Server:
+      - cloudflare
+      X-Robots-Tag:
+      - none
+      anthropic-organization-id:
+      - 44ae676c-958f-4d68-9108-eae9de7b366b
+      cf-cache-status:
+      - DYNAMIC
+      request-id:
+      - req_011CUrVifYHKXaAjjTXPgXS5
+      strict-transport-security:
+      - max-age=31536000; includeSubDomains; preload
+      x-envoy-upstream-service-time:
+      - '69'
+    status:
+      code: 200
+      message: OK
+version: 1

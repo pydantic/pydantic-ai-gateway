@@ -64,4 +64,19 @@ describe('anthropic', () => {
     expect(otelBatch, 'otelBatch length not 1').toHaveLength(1)
     expect(deserializeRequest(otelBatch[0]!)).toMatchSnapshot('span')
   })
+
+  test('should whitelist /v1/messages/count_tokens endpoint', async ({ gateway }) => {
+    const { fetch, otelBatch } = gateway
+
+    const client = new Anthropic({ authToken: 'healthy', baseURL: 'https://example.com/anthropic', fetch })
+
+    const result = await client.beta.messages.countTokens({
+      model: 'claude-sonnet-4-20250514',
+      messages: [{ role: 'user', content: 'What is the capital of France?' }],
+    })
+
+    expect(result).toMatchSnapshot('count_tokens')
+    expect(otelBatch, 'otelBatch should be empty for whitelisted endpoint').toHaveLength(1)
+    expect(deserializeRequest(otelBatch[0]!)).toMatchSnapshot('span')
+  })
 })

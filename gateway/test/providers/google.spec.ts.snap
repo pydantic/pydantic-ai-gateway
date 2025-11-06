@@ -1,33 +1,67 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`google > google-vertex/anthropic-client > llm 1`] = `"{"error":{"code":404,"message":"Requested entity was not found.","status":"NOT_FOUND"}}"`;
+exports[`google > google-vertex/anthropic-client > llm 1`] = `"{"model":"claude-sonnet-4-20250514","id":"msg_vrtx_01HqMgFLT1sMDSi7RpSM8tFc","type":"message","role":"assistant","content":[{"type":"text","text":"The capital of Brazil is Brasília. It became the country's capital in 1960, replacing Rio de Janeiro, and was specifically built to serve as the new capital city."}],"stop_reason":"end_turn","stop_sequence":null,"usage":{"input_tokens":14,"cache_creation_input_tokens":0,"cache_read_input_tokens":0,"output_tokens":40}}"`;
 
 exports[`google > google-vertex/anthropic-client > span 1`] = `
 [
   {
     "attributes": {
-      "http.request.body.text": "{"model":"claude-sonnet-4","max_tokens":1024,"messages":[{"role":"user","content":"What is the capital of Brazil?"}]}",
-      "http.request.header.anthropic-version": "vertex-2023-10-16",
-      "http.request.header.authorization": "healthy",
-      "http.request.header.content-length": "117",
-      "http.request.header.content-type": "application/json",
-      "http.request.header.pydantic-ai-gateway-profile": "google-vertex",
-      "http.request.header.x-vcr-filename": "google-vertex-anthropic-client",
-      "http.request.method": "POST",
-      "http.response.body.text": "{"error":{"code":404,"message":"Requested entity was not found.","status":"NOT_FOUND"}}",
-      "http.response.header.content-length": "87",
-      "http.response.header.content-type": "application/json",
-      "http.response.header.server": "uvicorn",
-      "http.response.status_code": 404,
-      "logfire.json_schema": "{"type":"object","properties":{"http.request.method":{"type":"string"},"url.full":{"type":"string"},"http.request.header.anthropic-version":{"type":"string"},"http.request.header.authorization":{"type":"string"},"http.request.header.content-length":{"type":"string"},"http.request.header.content-type":{"type":"string"},"http.request.header.pydantic-ai-gateway-profile":{"type":"string"},"http.request.header.x-vcr-filename":{"type":"string"},"http.response.status_code":{"type":"number"},"http.response.header.content-length":{"type":"string"},"http.response.header.content-type":{"type":"string"},"http.response.header.server":{"type":"string"},"http.request.body.text":{"type":"string"},"http.response.body.text":{"type":"string"}}}",
-      "logfire.level_num": 13,
-      "logfire.msg": "chat claude-sonnet-4, unexpected response: 404",
-      "url.full": "https://example.com/anthropic/v1/messages",
+      "gen_ai.input.messages": [
+        {
+          "parts": [
+            {
+              "content": "What is the capital of Brazil?",
+              "type": "text",
+            },
+          ],
+          "role": "user",
+        },
+      ],
+      "gen_ai.operation.name": "chat",
+      "gen_ai.output.messages": [
+        {
+          "finish_reason": "end_turn",
+          "parts": [
+            {
+              "content": "The capital of Brazil is Brasília. It became the country's capital in 1960, replacing Rio de Janeiro, and was specifically built to serve as the new capital city.",
+              "type": "text",
+            },
+          ],
+          "role": "assistant",
+        },
+      ],
+      "gen_ai.request.max_tokens": 1024,
+      "gen_ai.request.model": "claude-sonnet-4",
+      "gen_ai.request.seed": {},
+      "gen_ai.request.stop_sequences": {},
+      "gen_ai.request.temperature": {},
+      "gen_ai.request.top_k": {},
+      "gen_ai.request.top_p": {},
+      "gen_ai.response.finish_reasons": [
+        "end_turn",
+      ],
+      "gen_ai.response.id": "msg_vrtx_01HqMgFLT1sMDSi7RpSM8tFc",
+      "gen_ai.response.model": "claude-sonnet-4-20250514",
+      "gen_ai.system": "google-vertex",
+      "gen_ai.system_instructions": {},
+      "gen_ai.usage.cache_audio_read_tokens": {},
+      "gen_ai.usage.cache_read_tokens": 0,
+      "gen_ai.usage.cache_write_tokens": 0,
+      "gen_ai.usage.input_audio_tokens": {},
+      "gen_ai.usage.input_tokens": 14,
+      "gen_ai.usage.output_audio_tokens": {},
+      "gen_ai.usage.output_tokens": 40,
+      "http.request.body.text": "{"max_tokens":1024,"messages":[{"role":"user","content":"What is the capital of Brazil?"}],"anthropic_version":"vertex-2023-10-16"}",
+      "http.response.body.text": "{"model":"claude-sonnet-4-20250514","id":"msg_vrtx_01HqMgFLT1sMDSi7RpSM8tFc","type":"message","role":"assistant","content":[{"type":"text","text":"The capital of Brazil is Brasília. It became the country's capital in 1960, replacing Rio de Janeiro, and was specifically built to serve as the new capital city."}],"stop_reason":"end_turn","stop_sequence":null,"usage":{"input_tokens":14,"cache_creation_input_tokens":0,"cache_read_input_tokens":0,"output_tokens":40}}",
+      "http.response.status_code": 200,
+      "logfire.json_schema": "{"type":"object","properties":{"gen_ai.operation.name":{"type":"string"},"gen_ai.request.model":{"type":"string"},"gen_ai.system":{"type":"string"},"gen_ai.request.max_tokens":{"type":"number"},"gen_ai.request.top_k":{},"gen_ai.request.top_p":{},"gen_ai.request.temperature":{},"gen_ai.request.stop_sequences":{},"gen_ai.request.seed":{},"gen_ai.response.finish_reasons":{},"gen_ai.response.id":{"type":"string"},"gen_ai.input.messages":{},"gen_ai.output.messages":{},"gen_ai.system_instructions":{},"http.response.status_code":{"type":"number"},"http.request.body.text":{"type":"string"},"http.response.body.text":{"type":"string"},"gen_ai.response.model":{"type":"string"},"gen_ai.usage.input_tokens":{"type":"number"},"gen_ai.usage.cache_read_tokens":{"type":"number"},"gen_ai.usage.cache_write_tokens":{"type":"number"},"gen_ai.usage.output_tokens":{"type":"number"},"gen_ai.usage.input_audio_tokens":{},"gen_ai.usage.cache_audio_read_tokens":{},"gen_ai.usage.output_audio_tokens":{}}}",
+      "logfire.level_num": 9,
+      "logfire.msg": "chat claude-sonnet-4-20250514",
     },
     "events": [],
     "kind": 1,
     "links": [],
-    "name": "chat claude-sonnet-4, unexpected response: {http.response.status_code}",
+    "name": "chat claude-sonnet-4-20250514",
     "parentSpanId": undefined,
     "resource": {
       "service.name": "PAIG",

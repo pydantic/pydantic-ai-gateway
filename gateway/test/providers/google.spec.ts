@@ -87,6 +87,7 @@ describe('google', () => {
       model: 'claude-sonnet-4',
       max_tokens: 1024,
       messages: [{ role: 'user', content: 'What is the capital of Brazil?' }],
+      anthropic_version: 'vertex-2023-10-16',
     })
 
     const response = await fetch('https://example.com/anthropic/v1/messages', {
@@ -97,7 +98,6 @@ describe('google', () => {
         'content-length': anthropicBody.length.toString(),
         'x-vcr-filename': 'google-vertex-anthropic-client',
         'pydantic-ai-gateway-profile': 'google-vertex',
-        'anthropic-version': 'vertex-2023-10-16',
       },
       body: anthropicBody,
     })

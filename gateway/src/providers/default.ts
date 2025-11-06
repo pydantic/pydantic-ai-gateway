@@ -275,6 +275,12 @@ export class DefaultProviderProxy {
       return checkResult
     }
 
+    const prepResult = await this.prepRequest()
+    if ('error' in prepResult) {
+      return prepResult
+    }
+    const { requestBodyText, requestBodyData, requestModel } = prepResult
+
     const method = this.method()
     const url = this.url()
     if (typeof url === 'object') {
@@ -287,11 +293,6 @@ export class DefaultProviderProxy {
     requestHeaders.delete('authorization')
     await this.requestHeaders(requestHeaders)
 
-    const prepResult = await this.prepRequest()
-    if ('error' in prepResult) {
-      return prepResult
-    }
-    const { requestBodyText, requestBodyData, requestModel } = prepResult
     const response = await this.fetch(url, { method, headers: requestHeaders, body: requestBodyText })
 
     if (this.isWhitelistedEndpoint()) {

@@ -56,11 +56,11 @@ export class GoogleVertexProvider extends DefaultProviderProxy {
    */
   private replacePath(projectId: string, region: string): null | string {
     const pathWithoutQuery = this.restOfPath.split('?')[0]
-    console.log('pathWithoutQuery', pathWithoutQuery)
-    if (pathWithoutQuery === 'v1/messages') {
-      console.log('this.shouldStream', this.shouldStream)
-      console.log('this.requestModel', this.requestModel)
-      const action = this.shouldStream ? 'streamRawPredict' : 'rawPredict'
+
+    // Handle Anthropic client format: /v1/messages
+    if (pathWithoutQuery === 'v1/messages' && this.requestModel) {
+      // Always use streamRawPredict for Anthropic on Vertex (it handles both streaming and non-streaming)
+      const action = 'streamRawPredict'
       return `/v1/projects/${projectId}/locations/${region}/publishers/anthropic/models/${this.requestModel}:${action}`
     }
 
@@ -83,7 +83,6 @@ export class GoogleVertexProvider extends DefaultProviderProxy {
     }
 
     const path = `/${version}/projects/${projectId}/locations/${region}/publishers/${publisher}/models/${modelAndApi}`
-    console.log('this.restOfPath', this.restOfPath)
     return path
   }
 
@@ -98,13 +97,20 @@ export class GoogleVertexProvider extends DefaultProviderProxy {
 
     const pathWithoutQuery = this.restOfPath.split('?')[0]
     if (pathWithoutQuery === 'v1/messages') {
-      console.log('this is called after!')
       this.flavor = 'anthropic'
       if (!('model' in requestBodyData)) {
         return { error: 'model not found in Anthropic request body' }
       }
-      this.requestModel = requestBodyData.model as string
-      return { requestBodyText, requestBodyData, requestModel: this.requestModel }
+      const model = requestBodyData.model as string
+      this.requestModel = model
+
+      // Remove the model from the request body since Google Vertex doesn't expect it
+      delete requestBodyData.model
+
+      // Update requestBodyText without the model field
+      const updatedRequestBodyText = JSON.stringify(requestBodyData)
+
+      return { requestBodyText: updatedRequestBodyText, requestBodyData, requestModel: model }
     }
 
     const m = /\/models\/(.+?):/.exec(this.restOfPath)

@@ -6,6 +6,7 @@ import {
   type Provider as UsageProvider,
 } from '@pydantic/genai-prices'
 import * as logfire from '@pydantic/logfire-api'
+import { EventStreamCodec } from '@smithy/eventstream-codec'
 import { createParser, type EventSourceMessage } from 'eventsource-parser'
 
 import type { GatewayOptions } from '..'
@@ -385,12 +386,14 @@ export class DefaultProviderProxy {
 
     // IMPORTANT: Start consuming BOTH streams immediately to prevent tee() from buffering
     // The tee() requires both streams to be consumed concurrently, otherwise it will buffer
-
-    // Tee stream: one for client, one for processing
     const [responseStream, processingStream] = response.body.tee()
 
-    // Parse SSE events from processing stream
-    const events = this.parseSSE(processingStream)
+    let events: AsyncIterable<JsonData>
+    if (responseHeaders.get('content-type')?.toLowerCase().startsWith('application/vnd.amazon.eventstream')) {
+      events = this.parseAmazonEventStream(processingStream)
+    } else {
+      events = this.parseSSE(processingStream)
+    }
 
     // @ts-expect-error: TODO(Marcelo): Fix this type error.
     const extractionPromise = this.processChunks(modelAPI, events)
@@ -474,9 +477,42 @@ export class DefaultProviderProxy {
     }
   }
 
+  protected async *parseAmazonEventStream(stream: ReadableStream<Uint8Array>): AsyncIterable<JsonData> {
+    const encoder = new TextEncoder()
+    const codec = new EventStreamCodec((str) => str, encoder.encode)
+    const decoder = new TextDecoder()
+    let buffer = new Uint8Array(0)
+
+    for await (const chunk of stream) {
+      // Append incoming chunk to buffer since messages can span multiple network chunks
+      const combined = new Uint8Array(buffer.length + chunk.length)
+      combined.set(buffer, 0)
+      combined.set(chunk, buffer.length)
+      buffer = combined
+
+      // Extract complete messages from buffer (eventstream format: 4-byte length prefix + message data)
+      while (buffer.length >= 4) {
+        const messageLength = new DataView(buffer.buffer, buffer.byteOffset).getUint32(0, false)
+        if (buffer.length < messageLength) break
+
+        try {
+          const message = codec.decode(buffer.subarray(0, messageLength))
+          if (message.body?.length > 0) {
+            yield JSON.parse(decoder.decode(message.body))
+          }
+          buffer = buffer.subarray(messageLength)
+        } catch (error) {
+          logfire.reportError('Error parsing Amazon EventStream', error as Error)
+          break
+        }
+      }
+    }
+  }
+
   protected isStreaming(responseHeaders: Headers, requestBodyData: JsonData): boolean {
     return (
       responseHeaders.get('content-type')?.toLowerCase().startsWith('text/event-stream') ||
+      responseHeaders.get('content-type')?.toLowerCase().startsWith('application/vnd.amazon.eventstream') ||
       ('stream' in requestBodyData && requestBodyData.stream === true)
     )
   }

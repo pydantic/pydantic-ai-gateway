@@ -26,9 +26,9 @@ export class BedrockProvider extends DefaultProviderProxy {
     } catch (_error) {
       return { error: 'invalid request JSON' }
     }
-    const m = this.inferModel(this.restOfPath)
-    if (m) {
-      return { requestBodyText, requestBodyData, requestModel: m[1] }
+    const model = this.inferModel(this.restOfPath)
+    if (model) {
+      return { requestBodyText, requestBodyData, requestModel: model }
     }
     return { error: 'unable to find model in path' }
   }

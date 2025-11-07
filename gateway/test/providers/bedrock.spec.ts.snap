@@ -1,5 +1,255 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
+exports[`bedrock > bedrock/stream > chunks 1`] = `
+[
+  {
+    "p": "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ01234567",
+    "role": "assistant",
+  },
+  {
+    "contentBlockIndex": 0,
+    "delta": {
+      "text": "The",
+    },
+    "p": "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ012",
+  },
+  {
+    "contentBlockIndex": 0,
+    "delta": {
+      "text": " capital of France is Paris",
+    },
+    "p": "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ012",
+  },
+  {
+    "contentBlockIndex": 0,
+    "delta": {
+      "text": ". Paris",
+    },
+    "p": "abcdefghijklmnopqrstuvwxyzABCDEFGHIJK",
+  },
+  {
+    "contentBlockIndex": 0,
+    "delta": {
+      "text": " is not",
+    },
+    "p": "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRS",
+  },
+  {
+    "contentBlockIndex": 0,
+    "delta": {
+      "text": " only the",
+    },
+    "p": "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123",
+  },
+  {
+    "contentBlockIndex": 0,
+    "delta": {
+      "text": " capital city but also the",
+    },
+    "p": "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTU",
+  },
+  {
+    "contentBlockIndex": 0,
+    "delta": {
+      "text": " most",
+    },
+    "p": "abcdefghijklmno",
+  },
+  {
+    "contentBlockIndex": 0,
+    "delta": {
+      "text": " populous city in",
+    },
+    "p": "abcdefghijklmnopqrstuvwxyzABCDEFGHIJK",
+  },
+  {
+    "contentBlockIndex": 0,
+    "delta": {
+      "text": " France, known",
+    },
+    "p": "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQR",
+  },
+  {
+    "contentBlockIndex": 0,
+    "delta": {
+      "text": " for its significant",
+    },
+    "p": "abcdefghijklmnopqrstuvwxyzABCDE",
+  },
+  {
+    "contentBlockIndex": 0,
+    "delta": {
+      "text": " cultural,",
+    },
+    "p": "abcdefghijklmnopqrstuvwxyzABCDEFGHIJ",
+  },
+  {
+    "contentBlockIndex": 0,
+    "delta": {
+      "text": " political",
+    },
+    "p": "abcdefghijklmnopqrstuvwxyzABC",
+  },
+  {
+    "contentBlockIndex": 0,
+    "delta": {
+      "text": ", and economic",
+    },
+    "p": "abcdefghijklm",
+  },
+  {
+    "contentBlockIndex": 0,
+    "delta": {
+      "text": " influence. It is famous",
+    },
+    "p": "abcdefghijklmn",
+  },
+  {
+    "contentBlockIndex": 0,
+    "delta": {
+      "text": " for landmarks",
+    },
+    "p": "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRS",
+  },
+  {
+    "contentBlockIndex": 0,
+    "delta": {
+      "text": " such as the Eiffel",
+    },
+    "p": "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUV",
+  },
+  {
+    "contentBlockIndex": 0,
+    "delta": {
+      "text": " Tower, the Louvre",
+    },
+    "p": "abcdefghijklm",
+  },
+  {
+    "contentBlockIndex": 0,
+    "delta": {
+      "text": " Museum, and Notre",
+    },
+    "p": "abcdefghijklmnopqrstuvwxyzABCDEFGHIJK",
+  },
+  {
+    "contentBlockIndex": 0,
+    "delta": {
+      "text": "-Dame",
+    },
+    "p": "abcdefghijklm",
+  },
+  {
+    "contentBlockIndex": 0,
+    "delta": {
+      "text": " Cathedral,",
+    },
+    "p": "abcdefghijklmnopqrstuvwxyzABCDEFGHIJK",
+  },
+  {
+    "contentBlockIndex": 0,
+    "delta": {
+      "text": " among other",
+    },
+    "p": "abcdefghijklmnopqrstuvwxyzABCDEF",
+  },
+  {
+    "contentBlockIndex": 0,
+    "delta": {
+      "text": " historical",
+    },
+    "p": "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ",
+  },
+  {
+    "contentBlockIndex": 0,
+    "delta": {
+      "text": " and",
+    },
+    "p": "abcdefghijklmnopqr",
+  },
+  {
+    "contentBlockIndex": 0,
+    "delta": {
+      "text": " architectural",
+    },
+    "p": "abcdef",
+  },
+  {
+    "contentBlockIndex": 0,
+    "delta": {
+      "text": " sites",
+    },
+    "p": "abcdefghijklmnopqrstuvwxyzABCDEF",
+  },
+  {
+    "contentBlockIndex": 0,
+    "delta": {
+      "text": ".",
+    },
+    "p": "abcdefghijklmnopqrstuvw",
+  },
+  {
+    "contentBlockIndex": 0,
+    "p": "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ",
+  },
+  {
+    "p": "abcdefghi",
+    "stopReason": "end_turn",
+  },
+  {
+    "metrics": {
+      "latencyMs": 554,
+    },
+    "p": "abcdefghijklmnopq",
+    "usage": {
+      "inputTokens": 13,
+      "outputTokens": 63,
+      "serverToolUsage": {},
+      "totalTokens": 76,
+    },
+  },
+]
+`;
+
+exports[`bedrock > bedrock/stream > span 1`] = `
+[
+  {
+    "attributes": {
+      "gen_ai.operation.name": "chat",
+      "gen_ai.request.model": "amazon.nova-premier-v1:0",
+      "gen_ai.system": "bedrock",
+      "gen_ai.usage.input_tokens": 13,
+      "gen_ai.usage.output_tokens": 63,
+      "http.request.header.authorization": "healthy",
+      "http.request.header.content-type": "application/json",
+      "http.request.header.x-vcr-filename": "stream",
+      "http.request.method": "POST",
+      "http.response.header.content-type": "application/vnd.amazon.eventstream",
+      "http.response.header.server": "uvicorn",
+      "http.response.header.transfer-encoding": "chunked",
+      "http.response.status_code": 200,
+      "logfire.json_schema": "{"type":"object","properties":{"gen_ai.system":{"type":"string"},"gen_ai.operation.name":{"type":"string"},"gen_ai.request.model":{"type":"string"},"gen_ai.usage.input_tokens":{"type":"number"},"gen_ai.usage.output_tokens":{"type":"number"},"http.request.method":{"type":"string"},"url.full":{"type":"string"},"http.request.header.authorization":{"type":"string"},"http.request.header.content-type":{"type":"string"},"http.request.header.x-vcr-filename":{"type":"string"},"http.response.status_code":{"type":"number"},"http.response.header.content-type":{"type":"string"},"http.response.header.server":{"type":"string"},"http.response.header.transfer-encoding":{"type":"string"}}}",
+      "logfire.level_num": 9,
+      "logfire.msg": "chat amazon.nova-premier-v1:0",
+      "url.full": "https://example.com/converse/model/amazon.nova-micro-v1%3A0/converse-stream",
+    },
+    "events": [],
+    "kind": 1,
+    "links": [],
+    "name": "chat amazon.nova-premier-v1:0",
+    "parentSpanId": undefined,
+    "resource": {
+      "service.name": "PAIG",
+      "service.version": "test",
+    },
+    "scope": "pydantic-ai-gateway",
+    "status": {
+      "code": 1,
+    },
+  },
+]
+`;
+
 exports[`bedrock > should call bedrock via gateway > bedrock 1`] = `
 {
   "metrics": {
@@ -36,7 +286,7 @@ exports[`bedrock > should call bedrock via gateway > span 1`] = `
       "gen_ai.operation.name": "chat",
       "gen_ai.output.messages": {},
       "gen_ai.request.max_tokens": {},
-      "gen_ai.request.model": "m",
+      "gen_ai.request.model": "amazon.nova-micro-v1%3A0",
       "gen_ai.request.seed": {},
       "gen_ai.request.stop_sequences": {},
       "gen_ai.request.temperature": {},

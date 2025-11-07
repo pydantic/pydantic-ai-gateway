@@ -47,19 +47,21 @@ async def proxy(request: Request) -> Response:
     # We should cache based on request body content, so we should make a hash of the request body.
     vcr_suffix = request.headers.get('x-vcr-filename', hashlib.sha256(body).hexdigest())
 
-    if request.url.path.startswith('/openai'):
+    provider = select_provider(request)
+
+    if provider == 'openai':
         client = cast(httpx.AsyncClient, request.scope['state']['httpx_client'])
         url = OPENAI_BASE_URL + request.url.path.strip('/openai')
         with vcr.use_cassette(cassette_name('openai', vcr_suffix)):  # type: ignore[reportUnknownReturnType]
             headers = {'Authorization': auth_header, 'content-type': 'application/json'}
             response = await client.post(url, content=body, headers=headers)
-    elif request.url.path.startswith('/groq'):
+    elif provider == 'groq':
         client = cast(httpx.AsyncClient, request.scope['state']['httpx_client'])
         url = GROQ_BASE_URL + request.url.path[len('/groq') :]
         with vcr.use_cassette(cassette_name('groq', vcr_suffix)):  # type: ignore[reportUnknownReturnType]
             headers = {'Authorization': auth_header, 'content-type': 'application/json'}
             response = await client.post(url, content=body, headers=headers)
-    elif request.url.path.startswith('/bedrock'):
+    elif provider == 'bedrock':
         client = cast(httpx.AsyncClient, request.scope['state']['httpx_client'])
         url = BEDROCK_BASE_URL + request.url.path[len('/bedrock') :]
         with vcr.use_cassette(cassette_name('bedrock', vcr_suffix)):  # type: ignore[reportUnknownReturnType]
@@ -69,7 +71,7 @@ async def proxy(request: Request) -> Response:
                 'x-amz-security-token': auth_header.replace('Bearer ', ''),
             }
             response = await client.post(url, content=body, headers=headers)
-    elif request.url.path.startswith('/anthropic'):
+    elif provider == 'anthropic':
         client = cast(httpx.AsyncClient, request.scope['state']['httpx_client'])
         url = ANTHROPIC_BASE_URL + request.url.path[len('/anthropic') :]
         api_key = request.headers.get('x-api-key', '')
@@ -85,11 +87,19 @@ async def proxy(request: Request) -> Response:
                 **anthropic_beta_headers,
             }
             response = await client.post(url, content=body, headers=headers)
-    elif request.url.path.startswith('/gemini'):
+    elif provider == 'google-vertex':
         client = cast(httpx.AsyncClient, request.scope['state']['httpx_client'])
-        url = GOOGLE_BASE_URL + request.url.path[len('/gemini') :] + '?' + request.url.query
-        headers = {'Authorization': auth_header, 'host': 'aiplatform.googleapis.com'}
-        # It's a bit weird, but if we don't set the host header, it will fail. This seems very weird from Google's side.
+        url = (
+            GOOGLE_BASE_URL
+            + request.url.path[len('/gemini') :]
+            + ('?' + request.url.query if request.url.query else '')
+        )
+        headers = {
+            'Authorization': auth_header,
+            # It's a bit weird, but if we don't set the host header, it will fail. This seems very weird from Google's side.
+            'host': 'aiplatform.googleapis.com',
+            'anthropic-version': request.headers.get('anthropic-version', 'vertex-2023-10-16'),
+        }
         with vcr.use_cassette(cassette_name('google-vertex', vcr_suffix)):  # type: ignore[reportUnknownReturnType]
             response = await client.post(url, content=body, headers=headers)
     else:
@@ -131,3 +141,23 @@ if __name__ == '__main__':
 
 def cassette_name(provider: str, vcr_suffix: str) -> str:
     return f'{provider}-{vcr_suffix}.yaml'
+
+
+def select_provider(request: Request) -> str:
+    vcr_filename = request.headers.get('x-vcr-filename', '')
+
+    if vcr_filename == 'google-vertex-anthropic-client':
+        return 'google-vertex'
+
+    if request.url.path.startswith('/openai'):
+        return 'openai'
+    elif request.url.path.startswith('/groq'):
+        return 'groq'
+    elif request.url.path.startswith('/bedrock'):
+        return 'bedrock'
+    elif request.url.path.startswith('/anthropic'):
+        return 'anthropic'
+    elif request.url.path.startswith('/gemini'):
+        return 'google-vertex'
+    else:
+        raise HTTPException(status_code=404, detail=f'Path {request.url.path} not supported')

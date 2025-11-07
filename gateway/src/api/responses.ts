@@ -8,12 +8,13 @@ import type {
   ResponseCreateParams,
   ResponseInputItem,
   ResponseOutputItem,
+  ResponseStreamEvent,
 } from 'openai/resources/responses/responses'
 import { match, P } from 'ts-pattern'
 import type { ChatMessage, InputMessages, MessagePart, OutputMessage, OutputMessages } from '../otel/genai'
-import { BaseAPI } from './base'
+import { BaseAPI, type ExtractedRequest, type ExtractedResponse, type ExtractorConfig } from './base'
 
-export class ResponsesAPI extends BaseAPI<ResponseCreateParams, Response> {
+export class ResponsesAPI extends BaseAPI<ResponseCreateParams, Response, ResponseStreamEvent> {
   apiFlavor = 'responses'
 
   // The Responses API does not support stop sequences.
@@ -46,6 +47,79 @@ export class ResponsesAPI extends BaseAPI<ResponseCreateParams, Response> {
 
   outputMessages = (responseBody: Response): OutputMessages | undefined => {
     return responseBody.output.map(mapOutputMessage)
+  }
+
+  // SafeExtractor implementation
+
+  requestExtractors: ExtractorConfig<ResponseCreateParams, ExtractedRequest> = {
+    requestModel: (requestBody: ResponseCreateParams) => {
+      this.extractedRequest.requestModel = requestBody.model ?? undefined
+    },
+    maxTokens: (requestBody: ResponseCreateParams) => {
+      this.extractedRequest.maxTokens = requestBody.max_output_tokens ?? undefined
+    },
+    temperature: (requestBody: ResponseCreateParams) => {
+      this.extractedRequest.temperature = requestBody.temperature ?? undefined
+    },
+    topP: (requestBody: ResponseCreateParams) => {
+      this.extractedRequest.topP = requestBody.top_p ?? undefined
+    },
+    inputMessages: (requestBody: ResponseCreateParams) => {
+      this.extractedRequest.inputMessages = this.inputMessages(requestBody)
+    },
+  }
+
+  responseExtractors: ExtractorConfig<Response, ExtractedResponse> = {
+    usage: (responseBody: Response) => {
+      if (responseBody.usage) {
+        this.extractedResponse.usage = this.extractUsage(responseBody)
+      }
+    },
+    responseModel: (responseBody: Response) => {
+      this.extractedResponse.responseModel = responseBody.model ?? undefined
+    },
+    responseId: (responseBody: Response) => {
+      this.extractedResponse.responseId = responseBody.id ?? undefined
+    },
+    finishReasons: (responseBody: Response) => {
+      this.extractedResponse.finishReasons = responseBody.incomplete_details?.reason
+        ? [responseBody.incomplete_details.reason]
+        : undefined
+    },
+    outputMessages: (responseBody: Response) => {
+      this.extractedResponse.outputMessages = responseBody.output.map(mapOutputMessage)
+    },
+  }
+
+  chunkExtractors: ExtractorConfig<ResponseStreamEvent, ExtractedResponse> = {
+    usage: (chunk: ResponseStreamEvent) => {
+      if ('response' in chunk) {
+        if (chunk.response?.usage) {
+          this.extractedResponse.usage = this.extractUsage(chunk.response)
+        }
+      }
+    },
+    responseModel: (chunk: ResponseStreamEvent) => {
+      if ('response' in chunk) {
+        if (chunk.response?.model) {
+          this.extractedResponse.responseModel = chunk.response.model
+        }
+      }
+    },
+    responseId: (chunk: ResponseStreamEvent) => {
+      if ('response' in chunk) {
+        if (chunk.response?.id) {
+          this.extractedResponse.responseId = chunk.response.id
+        }
+      }
+    },
+    finishReasons: (chunk: ResponseStreamEvent) => {
+      if ('response' in chunk) {
+        if (chunk.response?.incomplete_details?.reason) {
+          this.extractedResponse.finishReasons = [chunk.response.incomplete_details.reason]
+        }
+      }
+    },
   }
 }
 

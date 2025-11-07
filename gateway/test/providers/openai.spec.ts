@@ -172,6 +172,26 @@ describe('openai', () => {
     expect(deserializeRequest(otelBatch[0]!)).toMatchSnapshot('span')
   })
 
+  test('openai responses stream', async ({ gateway }) => {
+    const { fetch, otelBatch } = gateway
+
+    const client = new OpenAI({ apiKey: 'healthy', baseURL: 'https://example.com/responses', fetch })
+
+    const stream = await client.responses.create({
+      model: 'gpt-5',
+      instructions: 'reply concisely',
+      input: 'what color is the sky?',
+      stream: true,
+    })
+    const chunks: object[] = []
+    for await (const chunk of stream) {
+      chunks.push(chunk)
+    }
+    expect(chunks).toMatchSnapshot('chunks')
+    expect(otelBatch, 'otelBatch length not 1').toHaveLength(1)
+    expect(deserializeRequest(otelBatch[0]!)).toMatchSnapshot('span')
+  })
+
   test('openai chat legacy name', async ({ gateway }) => {
     const { fetch, otelBatch } = gateway
 

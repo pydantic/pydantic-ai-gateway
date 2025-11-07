@@ -105,7 +105,7 @@ async def proxy(request: Request) -> Response:
     else:
         raise HTTPException(status_code=404, detail=f'Path {request.url.path} not supported')
     content_type = cast(str | None, response.headers.get('content-type'))
-    if content_type and content_type.startswith('text/event-stream'):
+    if content_type and content_type.startswith(('text/event-stream', 'application/vnd.amazon.eventstream')):
 
         async def generator():
             async for chunk in response.aiter_bytes():

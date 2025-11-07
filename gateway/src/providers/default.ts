@@ -93,6 +93,7 @@ export interface ProviderOptions {
   ctx: ExecutionContext
   middlewares?: Middleware[]
   otelSpan: OtelSpan
+  abortController?: AbortController
 }
 
 export class DefaultProviderProxy {
@@ -105,6 +106,7 @@ export class DefaultProviderProxy {
   protected usageField: string | null = 'usage'
   protected middlewares: Middleware[]
   protected otelSpan: OtelSpan
+  protected abortController?: AbortController
 
   // NOTE: Those fields are used only for streaming responses for the time being.
   protected usage: Usage | null = null
@@ -122,6 +124,7 @@ export class DefaultProviderProxy {
     this.restOfPath = options.restOfPath
     this.middlewares = options.middlewares ?? []
     this.otelSpan = options.otelSpan
+    this.abortController = options.abortController
   }
 
   /**
@@ -206,7 +209,7 @@ export class DefaultProviderProxy {
 
   protected fetch(url: string, init: RequestInit): Promise<Response> {
     const { subFetch } = this.options
-    return subFetch(url, init)
+    return subFetch(url, { ...init, signal: this.abortController?.signal })
   }
 
   protected async extractUsage(response: Response): Promise<ProcessResponse | ProxyInvalidRequest> {

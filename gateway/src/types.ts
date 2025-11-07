@@ -30,6 +30,7 @@ export interface ApiKeyInfo {
   userSpendingLimitMonthly?: number
   providers: ProviderProxy[]
   otelSettings?: OtelSettings
+  fetchAbortController?: AbortController
 }
 
 export type ProviderID = 'groq' | 'openai' | 'google-vertex' | 'anthropic' | 'test' | 'bedrock'

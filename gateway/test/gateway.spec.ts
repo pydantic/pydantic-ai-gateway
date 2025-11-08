@@ -389,4 +389,20 @@ describe('routing group fallback', () => {
     expect(response.status).toBe(503)
     expect(attemptCount).toBe(2)
   })
+
+  test('cancel openai request', async ({ gateway }) => {
+    const { fetch } = gateway
+
+    const client = new OpenAI({ apiKey: 'abort', baseURL: 'https://example.com/chat', fetch })
+
+    const completion = await client.chat.completions.create({
+      model: 'gpt-5',
+      messages: [
+        { role: 'developer', content: 'You are a helpful assistant.' },
+        { role: 'user', content: 'What is the capital of France?' },
+      ],
+      max_completion_tokens: 1024,
+    })
+    console.log(completion.choices[0]!.message.content)
+  })
 })

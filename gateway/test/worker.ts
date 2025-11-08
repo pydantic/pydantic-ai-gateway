@@ -182,6 +182,17 @@ class TestKeysDB extends KeysDbD1 {
             },
           ],
         }
+      case 'abort':
+        return {
+          id: IDS.keyHealthy,
+          user: IDS.userDefault,
+          project: IDS.projectDefault,
+          org: IDS.orgDefault,
+          key,
+          status: (await this.getDbKeyStatus(IDS.keyHealthy)) ?? 'active',
+          providers: this.allProviders,
+          fetchAbortController: abortSoon(),
+        }
       default:
         return null
     }
@@ -191,4 +202,13 @@ class TestKeysDB extends KeysDbD1 {
     await super.disableKey(id, reason, newStatus, expirationTtl)
     this.disableEvents.push({ id, reason, newStatus, expirationTtl })
   }
+}
+
+function abortSoon(): AbortController {
+  const controller = new AbortController()
+  setTimeout(() => {
+    console.log('Aborting')
+    controller.abort()
+  }, 20)
+  return controller
 }

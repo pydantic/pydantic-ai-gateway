@@ -1,6 +1,6 @@
 import * as logfire from '@pydantic/logfire-api'
 import type { GatewayOptions } from '.'
-import { apiKeyAuth, setApiKeyCache } from './auth'
+import { apiKeyAuth, extractApiKey, setApiKeyCache } from './auth'
 import { currentScopeIntervals, type ExceededScope, endOfMonth, endOfWeek, type SpendScope } from './db'
 import { OtelTrace } from './otel'
 import { genAiOtelAttributes } from './otel/attributes'
@@ -77,11 +77,17 @@ export async function gateway(
       ctx,
       middlewares: options.proxyMiddlewares,
       otelSpan,
+      abortController: providerProxy.fetchAbortController,
     })
 
     try {
       result = await proxy.dispatch()
     } catch (error) {
+      // detect abort error and stop
+      if (error instanceof Error && error.name === 'AbortError') {
+        console.log('connection aborted')
+      }
+
       logfire.reportError('Connection error', error as Error, {
         providerId: providerProxy.providerId,
         routingGroup: providerProxy.routingGroup,

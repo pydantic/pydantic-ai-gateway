@@ -30,7 +30,6 @@ export interface ApiKeyInfo {
   userSpendingLimitMonthly?: number
   providers: ProviderProxy[]
   otelSettings?: OtelSettings
-  fetchAbortController?: AbortController
 }
 
 export type ProviderID = 'groq' | 'openai' | 'google-vertex' | 'anthropic' | 'test' | 'bedrock'
@@ -83,6 +82,8 @@ export interface ProviderProxy {
   /** A grouping of APIs that serve the same models.
    * @example: 'anthropic' would route the requests to Anthropic, Bedrock and Vertex AI. */
   routingGroup?: string
+  /** AbortController for the fetch request to this provider */
+  fetchAbortController?: AbortController
 }
 
 export interface OtelSettings {

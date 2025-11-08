@@ -1,5 +1,6 @@
 from __future__ import annotations as _annotations
 
+import asyncio
 import hashlib
 import pathlib
 from contextlib import asynccontextmanager
@@ -46,6 +47,7 @@ async def proxy(request: Request) -> Response:
 
     # We should cache based on request body content, so we should make a hash of the request body.
     vcr_suffix = request.headers.get('x-vcr-filename', hashlib.sha256(body).hexdigest())
+    await asyncio.sleep(0.05)
 
     if request.url.path.startswith('/openai'):
         client = cast(httpx.AsyncClient, request.scope['state']['httpx_client'])

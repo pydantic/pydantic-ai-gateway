@@ -15,9 +15,14 @@ export class TestProvider extends DefaultProviderProxy {
     return 'chat'
   }
 
-  async fetch(url: string): Promise<Response> {
-    const { searchParams } = new URL(this.request.url)
-    await sleep(Number(searchParams.get('sleep') || '1000'))
+  async fetch(url: string, init: RequestInit): Promise<Response> {
+    if (typeof init.body === 'string') {
+      const sleepTime = /sleep=(?<sleep>\d+)/.exec(init.body)?.groups?.sleep
+      if (sleepTime) {
+        console.log(`Sleeping for ${sleepTime}ms`)
+        await sleep(Number(sleepTime))
+      }
+    }
     const data = {
       choices: [
         {

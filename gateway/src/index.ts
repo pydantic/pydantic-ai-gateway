@@ -14,12 +14,11 @@ GNU Affero General Public License for more details.
 You should have received a copy of the GNU Affero General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
-import * as logfire from '@pydantic/logfire-api'
 import type { KeysDb, LimitDb } from './db'
 import { gateway } from './gateway'
 import type { DefaultProviderProxy, Middleware, Next } from './providers/default'
 import type { SubFetch } from './types'
-import { ctHeader, ResponseError, response405, textResponse } from './utils'
+import { ctHeader, response405, textResponse } from './utils'
 
 export { changeProjectState as setProjectState, deleteApiKeyCache, setApiKeyCache } from './auth'
 export type { DefaultProviderProxy, Middleware, Next }
@@ -49,19 +48,10 @@ export async function gatewayFetch(
   if (options.proxyPrefixLength) {
     proxyPath = proxyPath.slice(options.proxyPrefixLength)
   }
-  try {
-    if (proxyPath === '/') {
-      return index(request, options)
-    } else {
-      return await gateway(request, `${proxyPath}${queryString}`, ctx, options)
-    }
-  } catch (error) {
-    if (error instanceof ResponseError) {
-      logfire.reportError('ResponseError', error)
-      return error.response()
-    } else {
-      throw error
-    }
+  if (proxyPath === '/') {
+    return index(request, options)
+  } else {
+    return await gateway(request, `${proxyPath}${queryString}`, ctx, options)
   }
 }
 

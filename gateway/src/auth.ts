@@ -1,6 +1,6 @@
 import type { GatewayOptions } from '.'
 import type { ApiKeyInfo } from './types'
-import { ResponseError, runAfter } from './utils'
+import { runAfter, textResponse } from './utils'
 
 const CACHE_TTL = 86400 * 30
 
@@ -8,12 +8,12 @@ export async function apiKeyAuth(
   request: Request,
   ctx: ExecutionContext,
   options: GatewayOptions,
-): Promise<ApiKeyInfo> {
+): Promise<ApiKeyInfo | Response> {
   const authorization = request.headers.get('authorization')
   const xApiKey = request.headers.get('x-api-key')
 
   if (authorization && xApiKey) {
-    throw new ResponseError(401, 'Unauthorized - Both Authorization and X-API-Key headers are present, use only one')
+    return textResponse(401, 'Unauthorized - Both Authorization and X-API-Key headers are present, use only one')
   }
 
   const authHeader = authorization || xApiKey
@@ -26,11 +26,11 @@ export async function apiKeyAuth(
       key = authHeader
     }
   } else {
-    throw new ResponseError(401, 'Unauthorized - Missing Authorization Header')
+    return textResponse(401, 'Unauthorized - Missing Authorization Header')
   }
   // avoid very long queries to the DB
   if (key.length > 100) {
-    throw new ResponseError(401, 'Unauthorized - Key too long')
+    return textResponse(401, 'Unauthorized - Key too long')
   }
 
   const cacheKey = apiKeyCacheKey(key, options.kvVersion)
@@ -51,7 +51,7 @@ export async function apiKeyAuth(
     runAfter(ctx, 'setApiKeyCache', setApiKeyCache(apiKey, options))
     return apiKey
   }
-  throw new ResponseError(401, 'Unauthorized - Key not found')
+  return textResponse(401, 'Unauthorized - Key not found')
 }
 
 export async function setApiKeyCache(

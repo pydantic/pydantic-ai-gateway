@@ -24,6 +24,23 @@ class CountingKeysDb implements KeysDb {
     return this.wrapped.disableKey(id, reason, newStatus, expirationTtl)
   }
 }
+describe('apiKeyAuth fails', () => {
+  test('no header', async () => {
+    const ctx = createExecutionContext()
+    const baseOptions = buildGatewayEnv(env, [], fetch)
+    const countingDb = new CountingKeysDb(baseOptions.keysDb)
+    const options = { ...baseOptions, keysDb: countingDb }
+
+    const request = new Request('https://example.com')
+
+    // First call should fetch from DB
+    const result = await apiKeyAuth(request, ctx, options)
+    expect(result).instanceOf(Response)
+    const response = result as Response
+    expect(response.status).toBe(401)
+    expect(await response.text()).toEqual('Unauthorized - Missing Authorization Header')
+  })
+})
 
 describe('apiKeyAuth cache invalidation', () => {
   test('caches api key and returns cached value', async () => {
@@ -36,7 +53,7 @@ describe('apiKeyAuth cache invalidation', () => {
 
     // First call should fetch from DB
     const apiKey1 = await apiKeyAuth(request, ctx, options)
-    expect(apiKey1.key).toBe('healthy')
+    expect((apiKey1 as ApiKeyInfo).key).toBe('healthy')
     // Wait for cache to be set (it's set asynchronously via runAfter)
     await waitOnExecutionContext(ctx)
     expect(countingDb.callCount).toBe(1)
@@ -48,7 +65,7 @@ describe('apiKeyAuth cache invalidation', () => {
     // Second call should use cache, not hit DB
     const ctx2 = createExecutionContext()
     const apiKey2 = await apiKeyAuth(request, ctx2, options)
-    expect(apiKey2.key).toBe('healthy')
+    expect((apiKey2 as ApiKeyInfo).key).toBe('healthy')
 
     expect(countingDb.callCount).toBe(1)
   })
@@ -85,7 +102,7 @@ describe('apiKeyAuth cache invalidation', () => {
     // Third call - cache is invalidated, should hit DB again
     const ctx3 = createExecutionContext()
     const apiKey3 = await apiKeyAuth(request, ctx3, options)
-    expect(apiKey3.key).toBe('healthy')
+    expect((apiKey3 as ApiKeyInfo).key).toBe('healthy')
     await waitOnExecutionContext(ctx3)
 
     expect(countingDb.callCount).toBe(2)

@@ -182,8 +182,9 @@ export class DefaultProviderProxy {
   }
 
   // biome-ignore lint/suspicious/useAwait: required by google auth
-  protected async requestHeaders(headers: Headers): Promise<void> {
+  protected async requestHeaders(headers: Headers): Promise<ProxyInvalidRequest | null> {
     headers.set('Authorization', `Bearer ${this.providerProxy.credentials}`)
+    return null
   }
 
   protected async prepRequest(): Promise<Prepare | ProxyInvalidRequest> {
@@ -285,7 +286,10 @@ export class DefaultProviderProxy {
     requestHeaders.set('user-agent', this.userAgent())
     // authorization header was used by the gateway auth, it definitely should not be forwarded to the target api
     requestHeaders.delete('authorization')
-    await this.requestHeaders(requestHeaders)
+    const requestHeadersError = await this.requestHeaders(requestHeaders)
+    if (requestHeadersError) {
+      return requestHeadersError
+    }
 
     const prepResult = await this.prepRequest()
     if ('error' in prepResult) {

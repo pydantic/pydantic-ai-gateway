@@ -1,5 +1,5 @@
 import type { GatewayOptions } from '.'
-import type { LimiterResult } from './limiter'
+import type { LimiterResult, RateLimiter } from './rateLimiter'
 import type { ApiKeyInfo } from './types'
 import { ResponseError, runAfter } from './utils'
 
@@ -9,6 +9,7 @@ export async function apiKeyAuth(
   request: Request,
   ctx: ExecutionContext,
   options: GatewayOptions,
+  rateLimiter: RateLimiter,
 ): Promise<{ apiKeyInfo: ApiKeyInfo; limiterSlot: string }> {
   const authorization = request.headers.get('authorization')
   const xApiKey = request.headers.get('x-api-key')
@@ -42,7 +43,7 @@ export async function apiKeyAuth(
     const apiKeyInfo = cacheResult.value
     const [projectState, limiterResult] = await Promise.all([
       options.kv.get(projectStateCacheKey(apiKeyInfo.project, options.kvVersion)),
-      options.limiter.requestStart(request, apiKeyInfo),
+      rateLimiter.requestStart(request, apiKeyInfo),
     ])
     const limiterSlot = processLimiterResult(limiterResult)
     // we only return a cache match if the project state is the same, so updating the project state invalidates the cache
@@ -54,7 +55,7 @@ export async function apiKeyAuth(
 
   const apiKeyInfo = await options.keysDb.getApiKey(key)
   if (apiKeyInfo) {
-    const limiterResult = await options.limiter.requestStart(request, apiKeyInfo)
+    const limiterResult = await rateLimiter.requestStart(request, apiKeyInfo)
     const limiterSlot = processLimiterResult(limiterResult)
     runAfter(ctx, 'setApiKeyCache', setApiKeyCache(apiKeyInfo, options))
     return { apiKeyInfo, limiterSlot }

@@ -1,10 +1,11 @@
 import * as logfire from '@pydantic/logfire-api'
-import type { GatewayOptions } from '.'
+import { type GatewayOptions, noopLimiter } from '.'
 import { apiKeyAuth, setApiKeyCache } from './auth'
 import { currentScopeIntervals, type ExceededScope, endOfMonth, endOfWeek, type SpendScope } from './db'
 import { OtelTrace } from './otel'
 import { genAiOtelAttributes } from './otel/attributes'
 import { getProvider } from './providers'
+import type { APIType } from './types'
 import { type ApiKeyInfo, apiTypesArray, guardAPIType } from './types'
 import { runAfter, textResponse } from './utils'
 
@@ -33,8 +34,23 @@ export async function gateway(
     return textResponse(400, `Invalid API type '${apiType}', should be one of ${apiTypesArray.join(', ')}`)
   }
 
-  const { apiKeyInfo, limiterSlot } = await apiKeyAuth(request, ctx, options)
+  const rateLimiter = options.rateLimiter ?? noopLimiter
+  const { apiKeyInfo, limiterSlot } = await apiKeyAuth(request, ctx, options, rateLimiter)
+  try {
+    return await gatewayWithLimiter(request, restOfPath, apiType, apiKeyInfo, ctx, options)
+  } finally {
+    runAfter(ctx, 'options.rateLimiter.requestFinish', rateLimiter.requestFinish(limiterSlot))
+  }
+}
 
+export async function gatewayWithLimiter(
+  request: Request,
+  restOfPath: string,
+  apiType: APIType,
+  apiKeyInfo: ApiKeyInfo,
+  ctx: ExecutionContext,
+  options: GatewayOptions,
+): Promise<Response> {
   if (apiKeyInfo.status !== 'active') {
     return textResponse(403, `Unauthorized - Key ${apiKeyInfo.status}`)
   }

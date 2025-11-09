@@ -1,9 +1,14 @@
 import type { ApiKeyInfo } from './types'
 
 export interface RateLimiter {
-  // returns either a string which is the text content of a 429 response, or null to indicate no rate limit exceeded
+  /**
+   * Returns either a string which is the text content of a 429 response, or null to indicate no rate limit exceeded
+   */
   requestStart(keyInfo: ApiKeyInfo): Promise<string | null>
 
+  /**
+   * Called after a gateway proxy request completes whether it was successful or not.
+   */
   requestFinish(): Promise<void>
 }
 

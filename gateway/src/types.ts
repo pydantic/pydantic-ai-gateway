@@ -13,7 +13,7 @@ export interface ApiKeyInfo {
   user?: number
   project: number
   org: string
-  // can be used however you link in rate limiter
+  // can be used however you like in rate limiter
   orgLimit?: number
   key: string
   status: KeyStatus

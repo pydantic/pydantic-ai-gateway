@@ -15,7 +15,9 @@ export class TestProvider extends DefaultProviderProxy {
     return 'chat'
   }
 
-  fetch(url: string): Promise<Response> {
+  async fetch(url: string): Promise<Response> {
+    const { searchParams } = new URL(this.request.url)
+    await sleep(Number(searchParams.get('sleep') || '1000'))
     const data = {
       choices: [
         {
@@ -44,6 +46,8 @@ export class TestProvider extends DefaultProviderProxy {
       },
     }
     const headers = { 'Content-Type': 'application/json', 'pydantic-ai-gateway': 'test' }
-    return Promise.resolve(new Response(JSON.stringify(data), { status: 200, headers }))
+    return new Response(JSON.stringify(data, null, 2) + '\n', { status: 200, headers })
   }
 }
+
+const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))

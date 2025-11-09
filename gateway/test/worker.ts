@@ -47,7 +47,7 @@ export function buildGatewayEnv(
 }
 
 export namespace IDS {
-  export const orgDefault = 1
+  export const orgDefault = 'org1'
   export const projectDefault = 2
   export const userDefault = 3
   export const keyHealthy = 4

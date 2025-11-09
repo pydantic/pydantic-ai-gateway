@@ -17,6 +17,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 import * as logfire from '@pydantic/logfire-api'
 import type { KeysDb, LimitDb } from './db'
 import { gateway } from './gateway'
+import type { Limiter } from './limiter'
 import type { DefaultProviderProxy, Middleware, Next } from './providers/default'
 import type { SubFetch } from './types'
 import { ctHeader, ResponseError, response405, textResponse } from './utils'
@@ -24,12 +25,14 @@ import { ctHeader, ResponseError, response405, textResponse } from './utils'
 export { changeProjectState as setProjectState, deleteApiKeyCache, setApiKeyCache } from './auth'
 export type { DefaultProviderProxy, Middleware, Next }
 export * from './db'
+export * from './limiter'
 export * from './types'
 
 export interface GatewayOptions {
   githubSha: string
   keysDb: KeysDb
   limitDb: LimitDb
+  limiter: Limiter
   kv: KVNamespace
   kvVersion: string
   subFetch: SubFetch

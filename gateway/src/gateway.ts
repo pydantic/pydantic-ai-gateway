@@ -33,7 +33,7 @@ export async function gateway(
     return textResponse(400, `Invalid API type '${apiType}', should be one of ${apiTypesArray.join(', ')}`)
   }
 
-  const apiKeyInfo = await apiKeyAuth(request, ctx, options)
+  const { apiKeyInfo, limiterSlot } = await apiKeyAuth(request, ctx, options)
 
   if (apiKeyInfo.status !== 'active') {
     return textResponse(403, `Unauthorized - Key ${apiKeyInfo.status}`)

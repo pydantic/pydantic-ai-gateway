@@ -6,6 +6,7 @@ import {
   KeysDbD1,
   LimitDbD1,
   type ProviderProxy,
+  type RateLimiter,
   type SubFetch,
 } from '@pydantic/ai-gateway'
 import type { Middleware } from '../src/providers/default'
@@ -30,6 +31,7 @@ export function buildGatewayEnv(
   subFetch: SubFetch,
   proxyPrefixLength?: number,
   proxyMiddlewares?: Middleware[],
+  rateLimiter?: RateLimiter,
 ): GatewayOptions {
   return {
     githubSha: 'test',
@@ -40,11 +42,12 @@ export function buildGatewayEnv(
     subFetch,
     proxyPrefixLength,
     proxyMiddlewares,
+    rateLimiter,
   }
 }
 
 export namespace IDS {
-  export const orgDefault = 1
+  export const orgDefault = 'org1'
   export const projectDefault = 2
   export const userDefault = 3
   export const keyHealthy = 4

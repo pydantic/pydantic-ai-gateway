@@ -18,18 +18,21 @@ import * as logfire from '@pydantic/logfire-api'
 import type { KeysDb, LimitDb } from './db'
 import { gateway } from './gateway'
 import type { DefaultProviderProxy, Middleware, Next } from './providers/default'
+import type { RateLimiter } from './rateLimiter'
 import type { SubFetch } from './types'
 import { ctHeader, ResponseError, response405, textResponse } from './utils'
 
 export { changeProjectState as setProjectState, deleteApiKeyCache, setApiKeyCache } from './auth'
 export type { DefaultProviderProxy, Middleware, Next }
 export * from './db'
+export * from './rateLimiter'
 export * from './types'
 
 export interface GatewayOptions {
   githubSha: string
   keysDb: KeysDb
   limitDb: LimitDb
+  rateLimiter?: RateLimiter
   kv: KVNamespace
   kvVersion: string
   subFetch: SubFetch

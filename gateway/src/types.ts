@@ -12,7 +12,9 @@ export interface ApiKeyInfo {
   id: number
   user?: number
   project: number
-  org: number
+  org: string
+  // can be used however you like in rate limiter
+  orgLimit?: number
   key: string
   status: KeyStatus
   // limits per apiKey - note the extra field since keys can have a total limit

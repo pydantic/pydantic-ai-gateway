@@ -1,4 +1,5 @@
 import type { GatewayOptions } from '.'
+import type { RateLimiter } from './rateLimiter'
 import type { ApiKeyInfo } from './types'
 import { ResponseError, runAfter } from './utils'
 
@@ -8,6 +9,7 @@ export async function apiKeyAuth(
   request: Request,
   ctx: ExecutionContext,
   options: GatewayOptions,
+  rateLimiter: RateLimiter,
 ): Promise<ApiKeyInfo> {
   const authorization = request.headers.get('authorization')
   const xApiKey = request.headers.get('x-api-key')
@@ -35,21 +37,31 @@ export async function apiKeyAuth(
 
   const cacheKey = apiKeyCacheKey(key, options.kvVersion)
   const cacheResult = await options.kv.getWithMetadata<ApiKeyInfo, string>(cacheKey, { type: 'json' })
+  let rateLimiterStarted = false
 
+  // if we have a cached api key, use that
   if (cacheResult?.value) {
-    const apiKey = cacheResult.value
-    const projectState = await options.kv.get(projectStateCacheKey(apiKey.project, options.kvVersion))
+    const apiKeyInfo = cacheResult.value
+    const [projectState, limiterResult] = await Promise.all([
+      options.kv.get(projectStateCacheKey(apiKeyInfo.project, options.kvVersion)),
+      rateLimiter.requestStart(apiKeyInfo),
+    ])
+    processLimiterResult(limiterResult)
     // we only return a cache match if the project state is the same, so updating the project state invalidates the cache
     // projectState is null if we have never invalidated the cache which will only be true for the first request after a deployment
     if (projectState === null || projectState === cacheResult.metadata) {
-      return apiKey
+      return apiKeyInfo
     }
+    rateLimiterStarted = true
   }
 
-  const apiKey = await options.keysDb.getApiKey(key)
-  if (apiKey) {
-    runAfter(ctx, 'setApiKeyCache', setApiKeyCache(apiKey, options))
-    return apiKey
+  const apiKeyInfo = await options.keysDb.getApiKey(key)
+  if (apiKeyInfo) {
+    if (!rateLimiterStarted) {
+      processLimiterResult(await rateLimiter.requestStart(apiKeyInfo))
+    }
+    runAfter(ctx, 'setApiKeyCache', setApiKeyCache(apiKeyInfo, options))
+    return apiKeyInfo
   }
   throw new ResponseError(401, 'Unauthorized - Key not found')
 }
@@ -84,3 +96,9 @@ export async function changeProjectState(project: number, options: Pick<GatewayO
 
 const apiKeyCacheKey = (key: string, kvVersion: string) => `apiKeyAuth:${kvVersion}:${key}`
 const projectStateCacheKey = (project: number, kvVersion: string) => `projectState:${kvVersion}:${project}`
+
+function processLimiterResult(limiterResult: string | null) {
+  if (typeof limiterResult === 'string') {
+    throw new ResponseError(429, limiterResult)
+  }
+}

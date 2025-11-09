@@ -1,12 +1,5 @@
 import { createExecutionContext, env, waitOnExecutionContext } from 'cloudflare:test'
-import {
-  type ApiKeyInfo,
-  gatewayFetch,
-  type LimiterResult,
-  type Middleware,
-  type Next,
-  type RateLimiter,
-} from '@pydantic/ai-gateway'
+import { type ApiKeyInfo, gatewayFetch, type Middleware, type Next, type RateLimiter } from '@pydantic/ai-gateway'
 import { describe, expect } from 'vitest'
 import type { DefaultProviderProxy } from '../src/providers/default'
 import { test } from './setup'
@@ -14,24 +7,20 @@ import { buildGatewayEnv } from './worker'
 
 class TestRateLimiter implements RateLimiter {
   requestStartCount: number = 0
-  requestEndSlots: string[] = []
-  error?: string
+  requestEndCount: number = 0
+  error: string | null
 
-  constructor(error?: string) {
+  constructor(error: string | null = null) {
     this.error = error
   }
 
-  requestStart(_: ApiKeyInfo): Promise<LimiterResult> {
+  requestStart(_: ApiKeyInfo): Promise<string | null> {
     this.requestStartCount++
-    if (this.error) {
-      return Promise.resolve({ error: this.error })
-    } else {
-      return Promise.resolve({ slot: 'abc' })
-    }
+    return Promise.resolve(this.error)
   }
 
-  requestFinish(slot: string): Promise<void> {
-    this.requestEndSlots.push(slot)
+  requestFinish(): Promise<void> {
+    this.requestEndCount++
     return Promise.resolve()
   }
 }
@@ -53,7 +42,7 @@ describe('rate limiter', () => {
 
     expect(response.status).toBe(200)
     expect(rateLimiter.requestStartCount).toBe(1)
-    expect(rateLimiter.requestEndSlots).toEqual(['abc'])
+    expect(rateLimiter.requestEndCount).toEqual(1)
   })
 
   test('should call requestStart and requestFinish on failed request', async () => {
@@ -86,7 +75,7 @@ describe('rate limiter', () => {
 
     expect(response.status).toBe(500)
     expect(rateLimiter.requestStartCount).toBe(1)
-    expect(rateLimiter.requestEndSlots).toEqual(['abc'])
+    expect(rateLimiter.requestEndCount).toEqual(1)
   })
 
   test('should not call requestStart on invalid auth', async () => {
@@ -105,7 +94,7 @@ describe('rate limiter', () => {
 
     expect(response.status).toBe(401)
     expect(rateLimiter.requestStartCount).toBe(0)
-    expect(rateLimiter.requestEndSlots).toEqual([])
+    expect(rateLimiter.requestEndCount).toEqual(0)
   })
 
   test('should call requestStart and requestFinish even when key is disabled', async () => {
@@ -125,7 +114,7 @@ describe('rate limiter', () => {
     // Disabled keys are still authenticated, so rate limiter is called
     expect(response.status).toBe(403)
     expect(rateLimiter.requestStartCount).toBe(1)
-    expect(rateLimiter.requestEndSlots).toEqual(['abc'])
+    expect(rateLimiter.requestEndCount).toEqual(1)
   })
 
   test('should return 429 when rate limiter returns error (cached key path)', async () => {
@@ -159,7 +148,7 @@ describe('rate limiter', () => {
     expect(text).toBe('Rate limit exceeded')
     expect(rateLimiter.requestStartCount).toBe(1)
     // requestFinish should not be called since error was thrown
-    expect(rateLimiter.requestEndSlots).toEqual([])
+    expect(rateLimiter.requestEndCount).toEqual(0)
   })
 
   test('should return 429 when rate limiter returns error (fresh key path)', async () => {
@@ -182,6 +171,6 @@ describe('rate limiter', () => {
     expect(text).toBe('Too many requests')
     expect(rateLimiter.requestStartCount).toBe(1)
     // requestFinish should not be called since error was thrown
-    expect(rateLimiter.requestEndSlots).toEqual([])
+    expect(rateLimiter.requestEndCount).toEqual(0)
   })
 })

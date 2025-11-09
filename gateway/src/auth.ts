@@ -1,5 +1,5 @@
 import type { GatewayOptions } from '.'
-import type { LimiterResult, RateLimiter } from './rateLimiter'
+import type { RateLimiter } from './rateLimiter'
 import type { ApiKeyInfo } from './types'
 import { ResponseError, runAfter } from './utils'
 
@@ -10,7 +10,7 @@ export async function apiKeyAuth(
   ctx: ExecutionContext,
   options: GatewayOptions,
   rateLimiter: RateLimiter,
-): Promise<{ apiKeyInfo: ApiKeyInfo; limiterSlot: string }> {
+): Promise<ApiKeyInfo> {
   const authorization = request.headers.get('authorization')
   const xApiKey = request.headers.get('x-api-key')
 
@@ -45,20 +45,20 @@ export async function apiKeyAuth(
       options.kv.get(projectStateCacheKey(apiKeyInfo.project, options.kvVersion)),
       rateLimiter.requestStart(apiKeyInfo),
     ])
-    const limiterSlot = processLimiterResult(limiterResult)
+    processLimiterResult(limiterResult)
     // we only return a cache match if the project state is the same, so updating the project state invalidates the cache
     // projectState is null if we have never invalidated the cache which will only be true for the first request after a deployment
     if (projectState === null || projectState === cacheResult.metadata) {
-      return { apiKeyInfo, limiterSlot }
+      return apiKeyInfo
     }
   }
 
   const apiKeyInfo = await options.keysDb.getApiKey(key)
   if (apiKeyInfo) {
     const limiterResult = await rateLimiter.requestStart(apiKeyInfo)
-    const limiterSlot = processLimiterResult(limiterResult)
+    processLimiterResult(limiterResult)
     runAfter(ctx, 'setApiKeyCache', setApiKeyCache(apiKeyInfo, options))
-    return { apiKeyInfo, limiterSlot }
+    return apiKeyInfo
   }
   throw new ResponseError(401, 'Unauthorized - Key not found')
 }
@@ -94,10 +94,8 @@ export async function changeProjectState(project: number, options: Pick<GatewayO
 const apiKeyCacheKey = (key: string, kvVersion: string) => `apiKeyAuth:${kvVersion}:${key}`
 const projectStateCacheKey = (project: number, kvVersion: string) => `projectState:${kvVersion}:${project}`
 
-function processLimiterResult(limiterResult: LimiterResult): string {
-  if ('slot' in limiterResult) {
-    return limiterResult.slot
-  } else {
-    throw new ResponseError(429, limiterResult.error)
+function processLimiterResult(limiterResult: string | null) {
+  if (typeof limiterResult === 'string') {
+    throw new ResponseError(429, limiterResult)
   }
 }

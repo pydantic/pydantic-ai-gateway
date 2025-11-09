@@ -1,19 +1,17 @@
 import type { ApiKeyInfo } from './types'
 
-export type LimiterResult = { slot: string } | { error: string }
-
 export interface RateLimiter {
   // returns either a slot if the request is allowed, or a string error message if not
-  requestStart(keyInfo: ApiKeyInfo): Promise<LimiterResult>
+  requestStart(keyInfo: ApiKeyInfo): Promise<string | null>
 
-  requestFinish(slot: string): Promise<void>
+  requestFinish(): Promise<void>
 }
 
 export const noopLimiter: RateLimiter = {
-  requestStart(_: ApiKeyInfo): Promise<LimiterResult> {
-    return Promise.resolve({ slot: 'ok' })
+  requestStart(_: ApiKeyInfo): Promise<string | null> {
+    return Promise.resolve(null)
   },
-  requestFinish(_: string): Promise<void> {
+  requestFinish(): Promise<void> {
     return Promise.resolve()
   },
 }

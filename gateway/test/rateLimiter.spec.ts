@@ -75,7 +75,7 @@ describe('rate limiter', () => {
 
     expect(response.status).toBe(500)
     expect(rateLimiter.requestStartCount).toBe(1)
-    expect(rateLimiter.requestEndCount).toEqual(1)
+    expect(rateLimiter.requestEndCount).toBe(1)
   })
 
   test('should not call requestStart on invalid auth', async () => {
@@ -114,7 +114,7 @@ describe('rate limiter', () => {
     // Disabled keys are still authenticated, so rate limiter is called
     expect(response.status).toBe(403)
     expect(rateLimiter.requestStartCount).toBe(1)
-    expect(rateLimiter.requestEndCount).toEqual(1)
+    expect(rateLimiter.requestEndCount).toBe(1)
   })
 
   test('should return 429 when rate limiter returns error (cached key path)', async () => {
@@ -148,14 +148,13 @@ describe('rate limiter', () => {
     expect(text).toBe('Rate limit exceeded')
     expect(rateLimiter.requestStartCount).toBe(1)
     // requestFinish should not be called since error was thrown
-    expect(rateLimiter.requestEndCount).toEqual(0)
+    expect(rateLimiter.requestEndCount).toBe(0)
   })
 
   test('should return 429 when rate limiter returns error (fresh key path)', async () => {
     const rateLimiter = new TestRateLimiter('Too many requests')
     const ctx = createExecutionContext()
 
-    // Use a fresh key that won't be cached
     const request = new Request<unknown, IncomingRequestCfProperties>('https://example.com/test/gpt-5', {
       method: 'POST',
       headers: { Authorization: 'healthy' },
@@ -171,6 +170,6 @@ describe('rate limiter', () => {
     expect(text).toBe('Too many requests')
     expect(rateLimiter.requestStartCount).toBe(1)
     // requestFinish should not be called since error was thrown
-    expect(rateLimiter.requestEndCount).toEqual(0)
+    expect(rateLimiter.requestEndCount).toBe(0)
   })
 })

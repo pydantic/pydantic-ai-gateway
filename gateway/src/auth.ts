@@ -37,6 +37,7 @@ export async function apiKeyAuth(
 
   const cacheKey = apiKeyCacheKey(key, options.kvVersion)
   const cacheResult = await options.kv.getWithMetadata<ApiKeyInfo, string>(cacheKey, { type: 'json' })
+  let rateLimiterStarted = false
 
   // if we have a cached api key, use that
   if (cacheResult?.value) {
@@ -51,11 +52,14 @@ export async function apiKeyAuth(
     if (projectState === null || projectState === cacheResult.metadata) {
       return apiKeyInfo
     }
+    rateLimiterStarted = true
   }
 
   const apiKeyInfo = await options.keysDb.getApiKey(key)
   if (apiKeyInfo) {
-    processLimiterResult(await rateLimiter.requestStart(apiKeyInfo))
+    if (!rateLimiterStarted) {
+      processLimiterResult(await rateLimiter.requestStart(apiKeyInfo))
+    }
     runAfter(ctx, 'setApiKeyCache', setApiKeyCache(apiKeyInfo, options))
     return apiKeyInfo
   }

@@ -1,7 +1,7 @@
 import type { ApiKeyInfo } from './types'
 
 export interface RateLimiter {
-  // returns either a slot if the request is allowed, or a string error message if not
+  // returns either a string which is the text content of a 429 response, or null to indicate no rate limit exceeded
   requestStart(keyInfo: ApiKeyInfo): Promise<string | null>
 
   requestFinish(): Promise<void>

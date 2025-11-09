@@ -21,7 +21,7 @@ class TestRateLimiter implements RateLimiter {
     this.error = error
   }
 
-  requestStart(_request: Request, _keyInfo: ApiKeyInfo): Promise<LimiterResult> {
+  requestStart(_: ApiKeyInfo): Promise<LimiterResult> {
     this.requestStartCount++
     if (this.error) {
       return Promise.resolve({ error: this.error })

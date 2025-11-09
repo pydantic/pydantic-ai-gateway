@@ -43,7 +43,7 @@ export async function apiKeyAuth(
     const apiKeyInfo = cacheResult.value
     const [projectState, limiterResult] = await Promise.all([
       options.kv.get(projectStateCacheKey(apiKeyInfo.project, options.kvVersion)),
-      rateLimiter.requestStart(request, apiKeyInfo),
+      rateLimiter.requestStart(apiKeyInfo),
     ])
     const limiterSlot = processLimiterResult(limiterResult)
     // we only return a cache match if the project state is the same, so updating the project state invalidates the cache
@@ -55,7 +55,7 @@ export async function apiKeyAuth(
 
   const apiKeyInfo = await options.keysDb.getApiKey(key)
   if (apiKeyInfo) {
-    const limiterResult = await rateLimiter.requestStart(request, apiKeyInfo)
+    const limiterResult = await rateLimiter.requestStart(apiKeyInfo)
     const limiterSlot = processLimiterResult(limiterResult)
     runAfter(ctx, 'setApiKeyCache', setApiKeyCache(apiKeyInfo, options))
     return { apiKeyInfo, limiterSlot }

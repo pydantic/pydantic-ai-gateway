@@ -19,6 +19,7 @@ import type { KeysDb, LimitDb } from './db'
 import { gateway } from './gateway'
 import type { DefaultProviderProxy, Middleware, Next } from './providers/default'
 import type { RateLimiter } from './rateLimiter'
+import { refreshGenaiPrices } from './refreshGenaiPrices'
 import type { SubFetch } from './types'
 import { ctHeader, ResponseError, response405, textResponse } from './utils'
 
@@ -48,6 +49,7 @@ export async function gatewayFetch(
   ctx: ExecutionContext,
   options: GatewayOptions,
 ): Promise<Response> {
+  ctx.waitUntil(refreshGenaiPrices())
   let { pathname: proxyPath, search: queryString } = url
   if (options.proxyPrefixLength) {
     proxyPath = proxyPath.slice(options.proxyPrefixLength)

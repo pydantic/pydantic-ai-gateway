@@ -88,7 +88,7 @@ exports[`key status > should change key status if limit is exceeded > kv-value 1
   "id": 6,
   "key": "tiny-limit",
   "keySpendingLimitDaily": 0.01,
-  "org": 1,
+  "org": "org1",
   "project": 2,
   "projectSpendingLimitMonthly": 4,
   "providers": [

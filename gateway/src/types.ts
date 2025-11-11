@@ -84,6 +84,9 @@ export interface ProviderProxy {
   /** A grouping of APIs that serve the same models.
    * @example: 'anthropic' would route the requests to Anthropic, Bedrock and Vertex AI. */
   routingGroup?: string
+
+  /** Whether the provider is managed by the platform and not by the user. */
+  isBuiltIn?: boolean
 }
 
 export interface OtelSettings {

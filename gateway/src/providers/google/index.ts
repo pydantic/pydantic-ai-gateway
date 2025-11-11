@@ -1,8 +1,8 @@
 import type { ModelAPI } from '../../api'
 import { AnthropicAPI } from '../../api/anthropic'
 import { GoogleAPI, type GoogleRequest } from '../../api/google'
-import { DefaultProviderProxy } from '../default'
-import { authToken, getProjectId } from './auth'
+import { DefaultProviderProxy, type ProxyInvalidRequest } from '../default'
+import { authToken, getServiceAccount } from './auth'
 
 export class GoogleVertexProvider extends DefaultProviderProxy {
   protected usageField = 'usageMetadata'
@@ -10,7 +10,11 @@ export class GoogleVertexProvider extends DefaultProviderProxy {
 
   url() {
     if (this.providerProxy.baseUrl) {
-      const projectId = getProjectId(this.providerProxy.credentials)
+      const serviceAccountResult = getServiceAccount(this.providerProxy.credentials)
+      if ('error' in serviceAccountResult) {
+        return serviceAccountResult
+      }
+      const projectId = serviceAccountResult.project_id
       const region = regionFromUrl(this.providerProxy.baseUrl)
       if (!region) {
         return { error: 'Unable to extract region from URL' }
@@ -92,9 +96,14 @@ export class GoogleVertexProvider extends DefaultProviderProxy {
     }
   }
 
-  async requestHeaders(headers: Headers): Promise<void> {
-    const token = await authToken(this.providerProxy.credentials, this.options.kv, this.options.subFetch)
-    headers.set('Authorization', `Bearer ${token}`)
+  async requestHeaders(headers: Headers): Promise<ProxyInvalidRequest | null> {
+    const tokenResult = await authToken(this.providerProxy.credentials, this.options.kv, this.options.subFetch)
+    if ('error' in tokenResult) {
+      return tokenResult
+    } else {
+      headers.set('Authorization', `Bearer ${tokenResult.token}`)
+      return null
+    }
   }
 }
 

@@ -2,7 +2,6 @@ import { type Provider, updatePrices, waitForUpdate } from '@pydantic/genai-pric
 
 // data will be refetched every 30 minutes
 const PRICE_TTL = 1000 * 60 * 30
-let genaiData: Provider[] | null = null
 let genaiDataTimestamp: number | null = null
 let isFetching = false
 
@@ -10,10 +9,6 @@ export function refreshGenaiPrices() {
   updatePrices(({ setProviderData, remoteDataUrl }) => {
     if (genaiDataTimestamp !== null) {
       console.debug('genai prices in-memory cache found')
-
-      if (genaiData !== null) {
-        setProviderData(genaiData)
-      }
 
       if (Date.now() - genaiDataTimestamp < PRICE_TTL) {
         // this will be the most frequent, cheap path
@@ -43,7 +38,6 @@ export function refreshGenaiPrices() {
         const freshData = (await response.json()) as Provider[]
         console.debug('Updated genai prices data, %d providers', freshData.length)
         genaiDataTimestamp = Date.now()
-        genaiData = freshData
         return freshData
       })
       .catch((error: unknown) => {

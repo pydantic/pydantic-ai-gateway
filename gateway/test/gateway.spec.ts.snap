@@ -14,8 +14,8 @@ exports[`custom proxyPrefixLength > inference > proxyPrefixLength 1`] = `
       },
     },
   ],
-  "created": 1762271642,
-  "id": "chatcmpl-CYDe6BCWOKGGGTlQLofyQ2DP3QTRV",
+  "created": 1762860490,
+  "id": "chatcmpl-CagpeM1SJL1btImFBBsJ3DlGZ2nKb",
   "model": "gpt-5-2025-08-07",
   "object": "chat.completion",
   "service_tier": "default",
@@ -93,15 +93,20 @@ exports[`key status > should change key status if limit is exceeded > kv-value 1
   "projectSpendingLimitMonthly": 4,
   "providers": [
     {
-      "apiTypes": [
-        "test",
-      ],
       "baseUrl": "http://test.example.com/test",
       "credentials": "test",
       "injectCost": true,
+      "key": "test",
       "providerId": "test",
     },
   ],
+  "routingGroups": {
+    "test": [
+      {
+        "key": "test",
+      },
+    ],
+  },
   "status": "limit-exceeded",
 }
 `;

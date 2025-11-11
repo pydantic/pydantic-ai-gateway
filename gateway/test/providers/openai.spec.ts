@@ -10,7 +10,7 @@ describe('openai', () => {
   test('openai chat', async ({ gateway }) => {
     const { fetch, otelBatch } = gateway
 
-    const client = new OpenAI({ apiKey: 'healthy', baseURL: 'https://example.com/chat', fetch })
+    const client = new OpenAI({ apiKey: 'healthy', baseURL: 'https://example.com/openai', fetch })
 
     const completion = await client.chat.completions.create({
       model: 'gpt-5',
@@ -130,18 +130,18 @@ describe('openai', () => {
     expect(completion).toMatchSnapshot('llm')
     expect(completion.usage).toMatchInlineSnapshot(`
       {
-        "input_tokens": 1808,
+        "input_tokens": 1879,
         "input_tokens_details": {
           "cached_tokens": 0,
         },
-        "output_tokens": 1061,
+        "output_tokens": 1053,
         "output_tokens_details": {
           "reasoning_tokens": 1024,
         },
         "pydantic_ai_gateway": {
-          "cost_estimate": 0.01287,
+          "cost_estimate": 0.01287875,
         },
-        "total_tokens": 2869,
+        "total_tokens": 2932,
       }
     `)
     expect(otelBatch, 'otelBatch length not 1').toHaveLength(1)
@@ -151,7 +151,7 @@ describe('openai', () => {
   test('openai chat stream', async ({ gateway }) => {
     const { fetch, otelBatch } = gateway
 
-    const client = new OpenAI({ apiKey: 'healthy', baseURL: 'https://example.com/chat', fetch })
+    const client = new OpenAI({ apiKey: 'healthy', baseURL: 'https://example.com/openai', fetch })
 
     const stream = await client.chat.completions.create({
       stream: true,

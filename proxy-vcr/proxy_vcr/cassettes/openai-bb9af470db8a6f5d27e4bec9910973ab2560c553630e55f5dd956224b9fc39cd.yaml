@@ -24,19 +24,19 @@ interactions:
     uri: https://api.openai.com/v1/chat/completions
   response:
     body:
-      string: 'data: {"id":"chatcmpl-CYDfFsepopZlcPzyFj5cdegEMUIO3","object":"chat.completion.chunk","created":1762271713,"model":"gpt-5-2025-08-07","service_tier":"default","system_fingerprint":null,"choices":[{"index":0,"delta":{"role":"assistant","content":"","refusal":null},"finish_reason":null}],"usage":null,"obfuscation":"1oeFyzekfM"}
+      string: 'data: {"id":"chatcmpl-CagqgcMC5BuFBbC8tkJpiQ8SnkdsO","object":"chat.completion.chunk","created":1762860554,"model":"gpt-5-2025-08-07","service_tier":"default","system_fingerprint":null,"choices":[{"index":0,"delta":{"role":"assistant","content":"","refusal":null},"finish_reason":null}],"usage":null,"obfuscation":"MDpId38oCM"}
 
 
-        data: {"id":"chatcmpl-CYDfFsepopZlcPzyFj5cdegEMUIO3","object":"chat.completion.chunk","created":1762271713,"model":"gpt-5-2025-08-07","service_tier":"default","system_fingerprint":null,"choices":[{"index":0,"delta":{"content":"Paris"},"finish_reason":null}],"usage":null,"obfuscation":"iNYovHl"}
+        data: {"id":"chatcmpl-CagqgcMC5BuFBbC8tkJpiQ8SnkdsO","object":"chat.completion.chunk","created":1762860554,"model":"gpt-5-2025-08-07","service_tier":"default","system_fingerprint":null,"choices":[{"index":0,"delta":{"content":"Paris"},"finish_reason":null}],"usage":null,"obfuscation":"HCdHjav"}
 
 
-        data: {"id":"chatcmpl-CYDfFsepopZlcPzyFj5cdegEMUIO3","object":"chat.completion.chunk","created":1762271713,"model":"gpt-5-2025-08-07","service_tier":"default","system_fingerprint":null,"choices":[{"index":0,"delta":{"content":"."},"finish_reason":null}],"usage":null,"obfuscation":"z2nujSb0c5n"}
+        data: {"id":"chatcmpl-CagqgcMC5BuFBbC8tkJpiQ8SnkdsO","object":"chat.completion.chunk","created":1762860554,"model":"gpt-5-2025-08-07","service_tier":"default","system_fingerprint":null,"choices":[{"index":0,"delta":{"content":"."},"finish_reason":null}],"usage":null,"obfuscation":"2DbJDfge2l7"}
 
 
-        data: {"id":"chatcmpl-CYDfFsepopZlcPzyFj5cdegEMUIO3","object":"chat.completion.chunk","created":1762271713,"model":"gpt-5-2025-08-07","service_tier":"default","system_fingerprint":null,"choices":[{"index":0,"delta":{},"finish_reason":"stop"}],"usage":null,"obfuscation":"OvkX97"}
+        data: {"id":"chatcmpl-CagqgcMC5BuFBbC8tkJpiQ8SnkdsO","object":"chat.completion.chunk","created":1762860554,"model":"gpt-5-2025-08-07","service_tier":"default","system_fingerprint":null,"choices":[{"index":0,"delta":{},"finish_reason":"stop"}],"usage":null,"obfuscation":"Mg4E76"}
 
 
-        data: {"id":"chatcmpl-CYDfFsepopZlcPzyFj5cdegEMUIO3","object":"chat.completion.chunk","created":1762271713,"model":"gpt-5-2025-08-07","service_tier":"default","system_fingerprint":null,"choices":[],"usage":{"prompt_tokens":23,"completion_tokens":11,"total_tokens":34,"prompt_tokens_details":{"cached_tokens":0,"audio_tokens":0},"completion_tokens_details":{"reasoning_tokens":0,"audio_tokens":0,"accepted_prediction_tokens":0,"rejected_prediction_tokens":0}},"obfuscation":"d9x8d108MYZ"}
+        data: {"id":"chatcmpl-CagqgcMC5BuFBbC8tkJpiQ8SnkdsO","object":"chat.completion.chunk","created":1762860554,"model":"gpt-5-2025-08-07","service_tier":"default","system_fingerprint":null,"choices":[],"usage":{"prompt_tokens":23,"completion_tokens":11,"total_tokens":34,"prompt_tokens_details":{"cached_tokens":0,"audio_tokens":0},"completion_tokens_details":{"reasoning_tokens":0,"audio_tokens":0,"accepted_prediction_tokens":0,"rejected_prediction_tokens":0}},"obfuscation":"zmlfl9RrKMq"}
 
 
         data: [DONE]
@@ -45,13 +45,13 @@ interactions:
         '
     headers:
       CF-RAY:
-      - 99954b5e9a142383-AMS
+      - 99cd735ea8aa5754-MAD
       Connection:
       - keep-alive
       Content-Type:
       - text/event-stream; charset=utf-8
       Date:
-      - Tue, 04 Nov 2025 15:55:14 GMT
+      - Tue, 11 Nov 2025 11:29:16 GMT
       Server:
       - cloudflare
       Strict-Transport-Security:
@@ -69,13 +69,13 @@ interactions:
       openai-organization:
       - pydantic-28gund
       openai-processing-ms:
-      - '1373'
+      - '1628'
       openai-project:
       - proj_dKobscVY9YJxeEaDJen54e3d
       openai-version:
       - '2020-10-01'
       x-envoy-upstream-service-time:
-      - '1387'
+      - '1814'
       x-openai-proxy-wasm:
       - v0.1
       x-ratelimit-limit-requests:
@@ -85,13 +85,13 @@ interactions:
       x-ratelimit-remaining-requests:
       - '14999'
       x-ratelimit-remaining-tokens:
-      - '39999982'
+      - '39999981'
       x-ratelimit-reset-requests:
       - 4ms
       x-ratelimit-reset-tokens:
       - 0s
       x-request-id:
-      - req_22e611c54e0a420ba711cbdbcb64e3ed
+      - req_ec5df081f9dc45268f4acd02e022cb10
     status:
       code: 200
       message: OK

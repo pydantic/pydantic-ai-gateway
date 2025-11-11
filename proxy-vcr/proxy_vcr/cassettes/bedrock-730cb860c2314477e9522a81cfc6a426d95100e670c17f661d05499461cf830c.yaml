@@ -22,21 +22,23 @@ interactions:
     uri: https://bedrock-runtime.us-east-1.amazonaws.com/model/amazon.nova-micro-v1:0/converse
   response:
     body:
-      string: '{"metrics":{"latencyMs":503},"output":{"message":{"content":[{"text":"The
+      string: '{"metrics":{"latencyMs":611},"output":{"message":{"content":[{"text":"The
         capital of France is Paris. Paris is not only the capital city but also the
-        most populous city in France, and it is a major center for culture, commerce,
-        fashion, and gastronomy worldwide."}],"role":"assistant"}},"stopReason":"end_turn","usage":{"inputTokens":13,"outputTokens":40,"serverToolUsage":{},"totalTokens":53}}'
+        most populous city in France, known for its significant cultural, political,
+        and economic influence both within the country and globally. It is famous
+        for landmarks such as the Eiffel Tower, the Louvre Museum, and Notre-Dame
+        Cathedral, among other historical and architectural sites."}],"role":"assistant"}},"stopReason":"end_turn","usage":{"inputTokens":13,"outputTokens":69,"serverToolUsage":{},"totalTokens":82}}'
     headers:
       Connection:
       - keep-alive
       Content-Length:
-      - '394'
+      - '565'
       Content-Type:
       - application/json
       Date:
-      - Thu, 30 Oct 2025 11:20:21 GMT
+      - Tue, 11 Nov 2025 11:46:24 GMT
       x-amzn-RequestId:
-      - 9c1ab1c5-9afb-492a-abcc-165653c3c85f
+      - 45070bb3-74e3-439e-bbee-f1dc1c6eb065
     status:
       code: 200
       message: OK

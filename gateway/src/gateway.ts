@@ -5,8 +5,7 @@ import { currentScopeIntervals, type ExceededScope, endOfMonth, endOfWeek, type 
 import { OtelTrace } from './otel'
 import { genAiOtelAttributes } from './otel/attributes'
 import { getProvider } from './providers'
-import type { APIType } from './types'
-import { type ApiKeyInfo, apiTypesArray, guardAPIType } from './types'
+import type { ApiKeyInfo, ProviderProxy } from './types'
 import { runAfter, textResponse } from './utils'
 
 export async function gateway(
@@ -15,23 +14,19 @@ export async function gateway(
   ctx: ExecutionContext,
   options: GatewayOptions,
 ): Promise<Response> {
-  const apiTypeMatch = /^\/([^/]+)\/(.*)$/.exec(proxyPath)
-  if (!apiTypeMatch) {
+  const routeMatch = /^\/([^/]+)\/(.*)$/.exec(proxyPath)
+  if (!routeMatch) {
     return textResponse(404, 'Path not found')
   }
-  let [, apiType, restOfPath] = apiTypeMatch as unknown as [string, string, string]
+  let [, route, restOfPath] = routeMatch as unknown as [string, string, string]
 
-  // support for other common names for openai api types
-  if (apiType === 'openai' || apiType === 'openai-chat') {
-    apiType = 'chat'
-  } else if (apiType === 'openai-responses') {
-    apiType = 'responses'
-  } else if (apiType === 'google-vertex') {
-    apiType = 'gemini'
-  }
-
-  if (!guardAPIType(apiType)) {
-    return textResponse(400, `Invalid API type '${apiType}', should be one of ${apiTypesArray.join(', ')}`)
+  // Backwards compatibility with the old route format.
+  if (route === 'openai-responses' || route === 'openai-chat' || route === 'chat' || route === 'responses') {
+    route = 'openai'
+  } else if (route === 'gemini') {
+    route = 'google-vertex'
+  } else if (route === 'converse') {
+    route = 'bedrock'
   }
 
   const rateLimiter = options.rateLimiter ?? noopLimiter
@@ -41,16 +36,43 @@ export async function gateway(
   }
   const apiKeyInfo = authResult
   try {
-    return await gatewayWithLimiter(request, restOfPath, apiType, apiKeyInfo, ctx, options)
+    return await gatewayWithLimiter(request, restOfPath, route, apiKeyInfo, ctx, options)
   } finally {
     runAfter(ctx, 'options.rateLimiter.requestFinish', rateLimiter.requestFinish())
   }
 }
 
+const getProviderProxies = (
+  route: string,
+  providerProxyMapping: Record<string, ProviderProxy>,
+  routingGroups: ApiKeyInfo['routingGroups'],
+): ProviderProxy[] | { status: number; message: string } => {
+  if (route in providerProxyMapping) {
+    return [providerProxyMapping[route]!]
+  }
+  const routingGroup = routingGroups?.[route]
+  if (!routingGroup) {
+    const supportedValues = [...new Set([...Object.keys(providerProxyMapping), ...Object.keys(routingGroups ?? {})])]
+      .sort()
+      .join(', ')
+    return { status: 404, message: `Route not found: ${route}. Supported values: ${supportedValues}` }
+  }
+  const providerProxies = routingGroup
+    .map(({ key }) => providerProxyMapping[key])
+    .filter((x): x is ProviderProxy & { key: string } => !!x)
+  if (providerProxies.length === 0) {
+    return {
+      status: 400,
+      message: `No providers included in routing group '${route}'. Add one or more providers to this routing group in the Pydantic AI Gateway console.`,
+    }
+  }
+  return providerProxies
+}
+
 export async function gatewayWithLimiter(
   request: Request,
   restOfPath: string,
-  apiType: APIType,
+  route: string,
   apiKeyInfo: ApiKeyInfo,
   ctx: ExecutionContext,
   options: GatewayOptions,
@@ -59,23 +81,13 @@ export async function gatewayWithLimiter(
     return textResponse(403, `Unauthorized - Key ${apiKeyInfo.status}`)
   }
 
-  let providerProxies = apiKeyInfo.providers.filter((p) => p.apiTypes.includes(apiType))
-
-  const routingGroup = request.headers.get('pydantic-ai-gateway-routing-group')
-  if (routingGroup !== null) {
-    providerProxies = providerProxies.filter((p) => p.routingGroup === routingGroup)
-  }
-
-  const profile = request.headers.get('pydantic-ai-gateway-profile')
-  if (profile !== null) {
-    providerProxies = providerProxies.filter((p) => p.profile === profile)
-  }
-
-  // sort providers on priority, highest first
-  providerProxies.sort((a, b) => (b.priority ?? 0) - (a.priority ?? 0))
-
-  if (providerProxies.length === 0) {
-    return textResponse(403, 'Forbidden - Provider not supported by this API Key')
+  const { routingGroups } = apiKeyInfo
+  const providerProxyMapping: Record<string, ProviderProxy> = Object.fromEntries(
+    apiKeyInfo.providers.map((p) => [p.key, p]),
+  )
+  const providerProxies = getProviderProxies(route, providerProxyMapping, routingGroups)
+  if (!Array.isArray(providerProxies)) {
+    return textResponse(providerProxies.status, providerProxies.message)
   }
 
   const otel = new OtelTrace(request, apiKeyInfo.otelSettings, options)
@@ -102,10 +114,7 @@ export async function gatewayWithLimiter(
     try {
       result = await proxy.dispatch()
     } catch (error) {
-      logfire.reportError('Connection error', error as Error, {
-        providerId: providerProxy.providerId,
-        routingGroup: providerProxy.routingGroup,
-      })
+      logfire.reportError('Connection error', error as Error, { providerId: providerProxy.providerId, route })
       continue
     }
 
@@ -120,7 +129,7 @@ export async function gatewayWithLimiter(
       logfire.info('Provider failed with retryable error, trying next provider', {
         providerId: providerProxy.providerId,
         status: result.unexpectedStatus,
-        routingGroup: providerProxy.routingGroup,
+        route,
       })
       continue
     }

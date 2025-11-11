@@ -1,7 +1,7 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`google > google-vertex/default > llm 1`] = `
-"data: {"candidates": [{"content": {"role": "model","parts": [{"functionCall": {"name": "final_result","args": {"name": "Samuel","city": "London","dob": "1987-01-28"}},"thoughtSignature": "CswDAePx/15lDrSIcIjN85FpyyOl3oASu2R23QD4Z3cj5XRUKOD/3/mMqcHv5AeXc/L+P1eVNpq5C3xM9/8zil6gOOZI91F/r1kmKvxmCECD1SW+p1dtzG6eljHd51vd2Gx7eqtEek1ORzeLP4zSWY2GDlZA9fZIs/uIfhLyOlkiiB1P/GAAUmBPT/TZqdOpQZXBt8MAUrbTOQfbhQ1qbxdrYRveZRMzXS898K6NmjrN5quNiaUgwEbc2J6NAoDOl5jdK8tIt7m25qdpjSYMpAGYD0c0Le2yPf8eO6A9J6zYp1lqVCTifby4/nP5RkVM2e1L4pH6oYisgQsyDUSEDCSG2GXhGO9WU5wFYwkjlhB8ghLU92kVgr/Rq54K/0GaYGBgzKi+YrD8c6QKSTZWTw/46D8lQ1goL1Y1YdtRiRGNFRJqKmSbkxjIOQoIk4glxcsm7L2lucL4miz4yZioBe7HEPDtmQY0FEKM5DQhwuj+AF1bBl5WE/9NYUsuGY3DxSi0lVd2v8+zd0op9U8z3PX4cmdKVkf/kA9TuQSPXBZpYgj7CssoMBT4ssLVoUgetOrNvJL99liSvsPOBZaLDKpNTXQA9GdZvQltoSolOg=="}]},"finishReason": "STOP","avgLogprobs": -0.48033348719278973}],"usageMetadata": {"promptTokenCount": 79,"candidatesTokenCount": 18,"totalTokenCount": 240,"trafficType": "ON_DEMAND","promptTokensDetails": [{"modality": "TEXT","tokenCount": 79}],"candidatesTokensDetails": [{"modality": "TEXT","tokenCount": 18}],"thoughtsTokenCount": 143},"modelVersion": "gemini-2.5-flash","createTime": "2025-11-04T15:31:56.289691Z","responseId": "bBwKaZvXEemDn9kP56mN8QI"}
+"data: {"candidates": [{"content": {"role": "model","parts": [{"functionCall": {"name": "final_result","args": {"dob": "1987-01-28","city": "London","name": "Samuel"}},"thoughtSignature": "Cv8DAePx/15NPXivPq2qwHSM/UINgrfX0lK5LFzFdj5Mjrk4L/kSOfdjv9N9A0ZvoBO/F1xwsqaMgLziYOk3cKk+6+oCcdyxjGbg8YkxRQqD+rx8TsGh6OhTNVjQpxAeWNUNvNkCa7E0oMbyFTtJIShIH0VudUMG2fkK+OFYFor9AoEdOidktBnebO439tkMBRq5XLPBF1STpo/+1V57oO+ioaLF8j3VbYGMHad/b3+eamMM1sfm2y4gwSeAVz9rIDLs7PlDoaYVxLSQsxX+bkNY9Jgk9o/CSZuM4G3ScuoDB45bOFncjJM9aTByuHFJbGThUAaFpsYfl1rq+FdjmxUWOa25lEA8SAMk977hstUpcTMwdKxQ3f3OOpnrYZAqmA0bpEIwqC+UwWETZ5bye0GBG6WxpbYdWX/UyD3cUTjym7YX59pTU5sZxOXRZ6+OM3eMq4fri8MqANj+dZtIDsglcVhK+Tu0NG5vGFDszApNByUpgn2JWGh2DRvYEFPrqEMXkZQRs71/udbwlFuJvqtSP6ZdZ1QpSPDvDqxFK1YQH61ZjEi54rK8nLDPHEPnKguk8G3binWoO9a1M6NygjmRicHP27OUMJvq8/VfwS73J5/Hz22TRKIuCmbE2jYvYhm2dYsClDzEOkg243L9EuCiJgzFb6lEdLe0Zub/wyku9g=="}]},"finishReason": "STOP","avgLogprobs": -0.67329925960964632}],"usageMetadata": {"promptTokenCount": 79,"candidatesTokenCount": 18,"totalTokenCount": 248,"trafficType": "ON_DEMAND","promptTokensDetails": [{"modality": "TEXT","tokenCount": 79}],"candidatesTokensDetails": [{"modality": "TEXT","tokenCount": 18}],"thoughtsTokenCount": 151},"modelVersion": "gemini-2.5-flash","createTime": "2025-11-11T11:44:04.295950Z","responseId": "hCETaY6IEtqemLAPtq7I8QE"}
 
 "
 `;
@@ -14,7 +14,7 @@ exports[`google > google-vertex/default > span 1`] = `
       "gen_ai.response.model": "gemini-2.5-flash",
       "gen_ai.system": "google-vertex",
       "gen_ai.usage.input_tokens": 79,
-      "gen_ai.usage.output_tokens": 161,
+      "gen_ai.usage.output_tokens": 169,
       "http.request.header.accept": "*/*",
       "http.request.header.accept-encoding": "deflate",
       "http.request.header.authorization": "healthy",
@@ -53,7 +53,7 @@ exports[`google > google-vertex/default > span 1`] = `
 
 exports[`google > google-vertex/stream > chunks 1`] = `
 [
-  "data: {"candidates": [{"content": {"role": "model","parts": [{"functionCall": {"name": "final_result","args": {"name": "Samuel","dob": "1987-01-28","city": "London"}},"thoughtSignature": "CiwB4/H/XrFHcqJ5pwIEMQnBhQBHazYmUb7XC1cZhL68mxASIIbmWyFjuzXxawqAAQHj8f9epXxVjCDy0/oGNXN1LFyOtdAaqPjsycM5BxCYAPEwlGkiTMVUtJaGnZOZVjMCA1E7jjwjyaUnLi0JXUn/kHHpNZIKHHFz26Uo5OUNYt8CanXEsbfLY6i+5wIMvLYURSxBeWq814uEwV+Sif6z37WfaNvU5KrR9ek41rCRCmkB4/H/XlhR1HkHgmKGkNZnCbzL4aLYVnnA39p5YFaZvsOvv8OTwed/arFcVREVegT9jIusC+BHbxQL6jxAi/r+7Yxo4D6LFkh68j/dbGz/Y1kVy+dwqrQHJ4+c9UuPOZnMKzts+eIip6gKewHj8f9eDAdCB1AcgaXceQTctqq0PeycbHisSqLKqb0bktTud5S11F2l6iB2agdWl6J/4Lrx7Xg0mDpvJmIZbmDGGr9zAy+PyXTDpca8XwEPDOCbOaosDGofqvAcfIlCSph5m56vwlIfn8QD6HfLsUCuG8XQZF13bc3rkAp1AePx/17HSA1oMLywdmQx6jXY5g+3iBVcskBePcXaL4Jd4FeSUSqD63zVuVSuoh3QJlU0zOYyrfZL+f3Lt5VgUgLG0si8OvoDXAzPn9pu4XRRoLBKJqgB26LPWU0XI/vv11L8eXREncg46Z5AUbs2vGJ1sQMnCqUBAePx/14DiPsegv86CHeOTaMg8p7dwzDDSOfDmLXycjtGqZKMytXUXiWcBs3mtNi0rx4D4yQihmPQClBfTkpPx4pT9+wGi86Nf97CCKADwIfDPJBQF4LTUvA24v1ay9REpdaI22jadcHlE2sTvD28im63HsQ5vmoV0YYLiaj82jd52vyYLKDzb7+LgkWl2V4UhJBHyTFk+wMgkPiRuftpgAkjDlmuCkgB4/H/XtKR+rJrbrTPrKAdaDts8M1WzGEpscucnYFpeqIOkQ7GeadukWQec5GBsJVTQ6rsmaRzp6n42BAlrLmoIUIacMt2fE8="}]},"finishReason": "STOP"}],"usageMetadata": {"promptTokenCount": 79,"candidatesTokenCount": 18,"totalTokenCount": 267,"trafficType": "ON_DEMAND","promptTokensDetails": [{"modality": "TEXT","tokenCount": 79}],"candidatesTokensDetails": [{"modality": "TEXT","tokenCount": 18}],"thoughtsTokenCount": 170},"modelVersion": "gemini-2.5-flash","createTime": "2025-11-04T16:00:09.183509Z","responseId": "CSMKadWZC7G36MEP1Yfl-Ag"}
+  "data: {"candidates": [{"content": {"role": "model","parts": [{"functionCall": {"name": "final_result","args": {"city": "London","name": "Samuel","dob": "1987-01-28"}},"thoughtSignature": "CiwB4/H/Xq4zuTAomDbpEQ8/5bqFVqtIB//HOeJMxThUcY06DbmOoH4Vbq+rtApnAePx/16J5B2/oRVJAn92YgG5b4Qz+MpFpe+4eRJJqsRRYSB11did+mjPoDkFuvWvwqkar9mZgD4nE5YIgELuDp0wzB8lxMcmTUuEZ81XwknkZEtp3nASsuFzHTZA6J07Z9+67wor/QpxAePx/15yJ9xJWZUZDkT//owC2ySqC1HdzaaHR6S3WYHKSJADKp9NFQn1RguwpkazjhbQGcgqETnWUGizDyzx/wkkFSVDa6UuOjBv7tIa218VcBWCa0WQI0XS8SqaM/bHgXmPovmVpURg0H8mF0/UcNIKlAEB4/H/XkL8gCvv5WGIrXceZnYXCL1qYFBd7zP6NPft2dGZd4eEUxfHmu6MZ/MgIib7JsuyNdHLjr/tSHXiRPBwZnS1W9Q+nn8en2KCHDhhHXRMOSbBIu69d0SOEBe8qpGD2M3U3S82xT1p+wantHCMO/x9JW9tEQvUN9SxNMbOZU6JVTVQn4OxF4mqq2d9tcjf8MdrCoABAePx/165cbuSfXKJBNGC3Y7ZKEbpRnWnkzDgZhQZd3mwctxXOgXK8L6tfBAL8nUDeh3lO4j+eT+SKT8MHp1UFrEDkV7coLL1f6KTWYPZkwhy9a1lazPI3Ydb9oV3mlW4hBEgndTGZpk0L37rMQaUhequ3xoNZtHHRyePAXe07dIKeAHj8f9e3nSet/F/WPP9/dnGWXLP6Ur03+i5BKEYsDOGrZV56ddNFv17sFQMznGxszCIo+pLGVmRZzanTk1z98SMiOX9sRbdyZpiFd6Gi3R0G3qGZAgbH+3ArmmoneJKlfAB1ESBDIVS39SrYlAumkMPQnnkjs03zw=="}]},"finishReason": "STOP"}],"usageMetadata": {"promptTokenCount": 79,"candidatesTokenCount": 18,"totalTokenCount": 228,"trafficType": "ON_DEMAND","promptTokensDetails": [{"modality": "TEXT","tokenCount": 79}],"candidatesTokensDetails": [{"modality": "TEXT","tokenCount": 18}],"thoughtsTokenCount": 131},"modelVersion": "gemini-2.5-flash","createTime": "2025-11-11T11:44:06.023997Z","responseId": "hiETab27AZ_kmLAPi5S32QI"}
 
 ",
 ]
@@ -67,7 +67,7 @@ exports[`google > google-vertex/stream > span 1`] = `
       "gen_ai.response.model": "gemini-2.5-flash",
       "gen_ai.system": "google-vertex",
       "gen_ai.usage.input_tokens": 79,
-      "gen_ai.usage.output_tokens": 188,
+      "gen_ai.usage.output_tokens": 149,
       "http.request.header.accept": "*/*",
       "http.request.header.accept-encoding": "deflate",
       "http.request.header.authorization": "healthy",

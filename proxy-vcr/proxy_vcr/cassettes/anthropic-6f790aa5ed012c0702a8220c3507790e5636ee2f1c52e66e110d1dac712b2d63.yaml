@@ -7,6 +7,8 @@ interactions:
       - '*/*'
       accept-encoding:
       - gzip, deflate
+      anthropic-beta:
+      - token-counting-2024-11-01
       anthropic-version:
       - '2023-06-01'
       connection:
@@ -26,7 +28,7 @@ interactions:
       string: '{"input_tokens":14}'
     headers:
       CF-RAY:
-      - 99a3fb68dde3fb9b-AMS
+      - 99cd8be45bef0270-MAD
       Connection:
       - keep-alive
       Content-Length:
@@ -34,7 +36,7 @@ interactions:
       Content-Type:
       - application/json
       Date:
-      - Thu, 06 Nov 2025 10:42:04 GMT
+      - Tue, 11 Nov 2025 11:45:58 GMT
       Server:
       - cloudflare
       X-Robots-Tag:
@@ -44,11 +46,11 @@ interactions:
       cf-cache-status:
       - DYNAMIC
       request-id:
-      - req_011CUrVifYHKXaAjjTXPgXS5
+      - req_011CV23dsk81dVeyA5Hwk496
       strict-transport-security:
       - max-age=31536000; includeSubDomains; preload
       x-envoy-upstream-service-time:
-      - '69'
+      - '73'
     status:
       code: 200
       message: OK

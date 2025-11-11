@@ -30,21 +30,6 @@ export function getIP(request: Request): string {
   }
 }
 
-export class ResponseError extends Error {
-  status: number
-  message: string
-
-  constructor(status: number, message: string) {
-    super(message)
-    this.status = status
-    this.message = message
-  }
-
-  response(): Response {
-    return textResponse(this.status, this.message)
-  }
-}
-
 export function runAfter(ctx: ExecutionContext, name: string, promise: Promise<unknown>) {
   ctx.waitUntil(wrapLogfire(name, promise))
 }

@@ -25,6 +25,24 @@ class CountingKeysDb implements KeysDb {
   }
 }
 
+describe('apiKeyAuth fails', () => {
+  test('no header', async () => {
+    const ctx = createExecutionContext()
+    const baseOptions = buildGatewayEnv(env, [], fetch)
+    const countingDb = new CountingKeysDb(baseOptions.keysDb)
+    const options = { ...baseOptions, keysDb: countingDb }
+
+    const request = new Request('https://example.com')
+
+    // First call should fetch from DB
+    const result = await apiKeyAuth(request, ctx, options, noopLimiter)
+    expect(result).instanceOf(Response)
+    const response = result as Response
+    expect(response.status).toBe(401)
+    expect(await response.text()).toEqual('Unauthorized - Missing Authorization Header')
+  })
+})
+
 describe('apiKeyAuth cache invalidation', () => {
   test('caches api key and returns cached value', async () => {
     const ctx = createExecutionContext()

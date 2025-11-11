@@ -1,26 +1,9 @@
-/*
-Copyright (C) 2025 to present Pydantic Services Inc.
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU Affero General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Affero General Public License for more details.
-
-You should have received a copy of the GNU Affero General Public License
-along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
-import * as logfire from '@pydantic/logfire-api'
 import type { KeysDb, LimitDb } from './db'
 import { gateway } from './gateway'
 import type { DefaultProviderProxy, Middleware, Next } from './providers/default'
 import type { RateLimiter } from './rateLimiter'
 import type { SubFetch } from './types'
-import { ctHeader, ResponseError, response405, runAfter, textResponse } from './utils'
+import { ctHeader, response405, runAfter, textResponse } from './utils'
 
 export { changeProjectState as setProjectState, deleteApiKeyCache, setApiKeyCache } from './auth'
 export type { DefaultProviderProxy, Middleware, Next }
@@ -52,21 +35,12 @@ export async function gatewayFetch(
   if (options.proxyPrefixLength) {
     proxyPath = proxyPath.slice(options.proxyPrefixLength)
   }
-  try {
-    if (proxyPath === '/') {
-      return index(request, options)
-    } else {
-      const gatewayPromise = gateway(request, `${proxyPath}${queryString}`, ctx, options)
-      runAfter(ctx, 'gatewayPromise', gatewayPromise)
-      return await gatewayPromise
-    }
-  } catch (error) {
-    if (error instanceof ResponseError) {
-      logfire.reportError('ResponseError', error)
-      return error.response()
-    } else {
-      throw error
-    }
+  if (proxyPath === '/') {
+    return index(request, options)
+  } else {
+    const gatewayPromise = gateway(request, `${proxyPath}${queryString}`, ctx, options)
+    runAfter(ctx, 'gatewayPromise', gatewayPromise)
+    return await gatewayPromise
   }
 }
 

@@ -35,7 +35,11 @@ export async function gateway(
   }
 
   const rateLimiter = options.rateLimiter ?? noopLimiter
-  const apiKeyInfo = await apiKeyAuth(request, ctx, options, rateLimiter)
+  const authResult = await apiKeyAuth(request, ctx, options, rateLimiter)
+  if (authResult instanceof Response) {
+    return authResult
+  }
+  const apiKeyInfo = authResult
   try {
     return await gatewayWithLimiter(request, restOfPath, apiType, apiKeyInfo, ctx, options)
   } finally {

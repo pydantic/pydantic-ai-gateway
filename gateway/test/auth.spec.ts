@@ -54,7 +54,7 @@ describe('apiKeyAuth cache invalidation', () => {
 
     // First call should fetch from DB
     const apiKey1 = await apiKeyAuth(request, ctx, options, noopLimiter)
-    expect(apiKey1.key).toBe('healthy')
+    expect((apiKey1 as ApiKeyInfo).key).toBe('healthy')
     // Wait for cache to be set (it's set asynchronously via runAfter)
     await waitOnExecutionContext(ctx)
     expect(countingDb.callCount).toBe(1)
@@ -66,7 +66,7 @@ describe('apiKeyAuth cache invalidation', () => {
     // Second call should use cache, not hit DB
     const ctx2 = createExecutionContext()
     const apiKey2 = await apiKeyAuth(request, ctx2, options, noopLimiter)
-    expect(apiKey2.key).toBe('healthy')
+    expect((apiKey2 as ApiKeyInfo).key).toBe('healthy')
 
     expect(countingDb.callCount).toBe(1)
   })
@@ -103,7 +103,7 @@ describe('apiKeyAuth cache invalidation', () => {
     // Third call - cache is invalidated, should hit DB again
     const ctx3 = createExecutionContext()
     const apiKey3 = await apiKeyAuth(request, ctx3, options, noopLimiter)
-    expect(apiKey3.key).toBe('healthy')
+    expect((apiKey3 as ApiKeyInfo).key).toBe('healthy')
     await waitOnExecutionContext(ctx3)
 
     expect(countingDb.callCount).toBe(2)

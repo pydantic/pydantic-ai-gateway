@@ -61,7 +61,11 @@ export async function apiKeyAuth(
   const apiKeyInfo = await options.keysDb.getApiKey(key)
   if (apiKeyInfo) {
     if (!rateLimiterStarted) {
-      processLimiterResult(await rateLimiter.requestStart(apiKeyInfo))
+      const limiterResult = await rateLimiter.requestStart(apiKeyInfo)
+      const limiterResponse = processLimiterResult(limiterResult)
+      if (limiterResponse) {
+        return limiterResponse
+      }
     }
     runAfter(ctx, 'setApiKeyCache', setApiKeyCache(apiKeyInfo, options))
     return apiKeyInfo

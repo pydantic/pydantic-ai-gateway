@@ -91,7 +91,7 @@ async def proxy(request: Request) -> Response:
         client = cast(httpx.AsyncClient, request.scope['state']['httpx_client'])
         url = (
             GOOGLE_BASE_URL
-            + request.url.path[len('/gemini') :]
+            + request.url.path[len('/google-vertex') :]
             + ('?' + request.url.query if request.url.query else '')
         )
         headers = {
@@ -157,7 +157,7 @@ def select_provider(request: Request) -> str:
         return 'bedrock'
     elif request.url.path.startswith('/anthropic'):
         return 'anthropic'
-    elif request.url.path.startswith('/gemini'):
+    elif request.url.path.startswith('/google-vertex'):
         return 'google-vertex'
     else:
         raise HTTPException(status_code=404, detail=f'Path {request.url.path} not supported')

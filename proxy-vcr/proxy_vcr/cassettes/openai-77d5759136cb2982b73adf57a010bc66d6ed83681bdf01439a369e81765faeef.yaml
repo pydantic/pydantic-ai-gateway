@@ -1,91 +1,93 @@
 interactions:
-  - request:
-      body:
-        "{\n  \"model\": \"gpt-5\",\n  \"messages\": [\n    {\n      \"role\": \"developer\",\n
-        \     \"content\": \"You are a helpful assistant.\"\n    },\n    {\n      \"role\":
-        \"user\",\n      \"content\": \"What is the capital of France?\"\n    }\n  ]\n}"
-      headers:
-        accept:
-          - "*/*"
-        accept-encoding:
-          - gzip, deflate
-        connection:
-          - keep-alive
-        content-length:
-          - "215"
-        content-type:
-          - application/json
-        host:
-          - api.openai.com
-        user-agent:
-          - python-httpx/0.28.1
-      method: POST
-      uri: https://api.openai.com/v1/chat/completions
-    response:
-      body:
-        string: !!binary |
-          H4sIAAAAAAAAA3SSzU7DMBCE73kKy+cGhUAa6I2fKwghJAQIRcbetm4c27I3QFX13ZGdUqeiXHzY
-          b3c0s95NRgiVgs4I5UuGvLMqv3m5bdUXu6+/L03bPz/pq+u7G/e6bo18XNFJmDAfK+D4O3XCTWcV
-          oDR6wNwBQwiqp/W0LOuyqKoIOiNAhbGFxbzKy6Ks8uIiL+rd3NJIDp7OyFtGCCGb+AaHWsA3nZFi
-          8lvpwHu2ADrbNxFCnVGhQpn30iPTSCcJcqMRdDT9wJz0J2PoYN57FqzpXqkRYFobZCFatPW+I9u9
-          kbnU0i8bB8wbHcQ9Gksj3WaEvMdg/YFXap3pLDZoWoiy5dkgR9MiE6yrHUSDTKX65cXkiFojAJlU
-          frQYyhlfgkiTaYusF9KMQDbK9tfMMe0ht9SLpDI9/1c/Ac7BIojGOhCSHyZObQ7Cnf3Xtl9ydEw9
-          uE/JoUEJLnyEgDnr1XAD1K89QtfMpV6As07GQwh/nW2zHwAAAP//AwDEqLh9BQMAAA==
-      headers:
-        CF-RAY:
-          - 999553b98d079fe1-AMS
-        Connection:
-          - keep-alive
-        Content-Encoding:
-          - gzip
-        Content-Type:
-          - application/json
-        Date:
-          - Tue, 04 Nov 2025 16:00:58 GMT
-        Server:
-          - cloudflare
-        Set-Cookie:
-          - _cfuvid=UBQpySOnSt6IR9DLxPFwUIoRDx9Cqm85._iC.MDdCow-1762272058246-0.0.1.1-604800000;
-            path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
-        Strict-Transport-Security:
-          - max-age=31536000; includeSubDomains; preload
-        Transfer-Encoding:
-          - chunked
-        X-Content-Type-Options:
-          - nosniff
-        access-control-expose-headers:
-          - X-Request-ID
-        alt-svc:
-          - h3=":443"; ma=86400
-        cf-cache-status:
-          - DYNAMIC
-        openai-organization:
-          - pydantic-28gund
-        openai-processing-ms:
-          - "2732"
-        openai-project:
-          - proj_dKobscVY9YJxeEaDJen54e3d
-        openai-version:
-          - "2020-10-01"
-        x-envoy-upstream-service-time:
-          - "2774"
-        x-openai-proxy-wasm:
-          - v0.1
-        x-ratelimit-limit-requests:
-          - "15000"
-        x-ratelimit-limit-tokens:
-          - "40000000"
-        x-ratelimit-remaining-requests:
-          - "14999"
-        x-ratelimit-remaining-tokens:
-          - "39999982"
-        x-ratelimit-reset-requests:
-          - 4ms
-        x-ratelimit-reset-tokens:
-          - 0s
-        x-request-id:
-          - req_89c169bce248450b8abbdb8749ab0ac8
-      status:
-        code: 200
-        message: OK
+- request:
+    body: "{\n  \"model\": \"gpt-5\",\n  \"messages\": [\n    {\n      \"role\": \"developer\",\n
+      \     \"content\": \"You are a helpful assistant.\"\n    },\n    {\n      \"role\":
+      \"user\",\n      \"content\": \"What is the capital of France?\"\n    }\n  ]\n}"
+    headers:
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '215'
+      content-type:
+      - application/json
+      host:
+      - api.openai.com
+      user-agent:
+      - python-httpx/0.28.1
+    method: POST
+    uri: https://api.openai.com/v1/chat/completions
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAAA3SSy07DMBBF9/kKy+sGhdCkaZdU7IvY8BCKjD1pDI5t2RPEQ/13ZLfUqaAbL+bM
+        XN07nu+MECoFXRHKe4Z8sCpfs/66Xm7Wvph3d4/DS718uH//qKuv2+L+hs7ChHl5BY6/UxfcDFYB
+        SqP3mDtgCEH1clGXTX3ZlEUEgxGgwtjWYl7lZVFWedHkxeIw1xvJwdMVecoIIeQ7vsGhFvBBVySq
+        xMoA3rMt0NWxiRDqjAoVyryXHplGOkuQG42go+kNc9JfTKGDbvQsWNOjUhPAtDbIQrRo6/lAdkcj
+        ndTS960D5o0O4h6NpZHuMkKeY7DxxCu1zgwWWzRvEGXLq70cTYtMcFEdIBpkKtWXzewftVYAMqn8
+        ZDGUM96DSJNpi2wU0kxANsn218x/2vvcUm+TSj0/q58A52ARRGsdCMlPE6c2B+HOzrUdlxwdUw/u
+        XXJoUYILHyGgY6Pa3wD1nx5haDupt+Csk/EQwl9nu+wHAAD//wMA2X2WBQUDAAA=
+    headers:
+      CF-RAY:
+      - 99cd92469c2dcfbd-MAD
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json
+      Date:
+      - Tue, 11 Nov 2025 11:50:22 GMT
+      Server:
+      - cloudflare
+      Set-Cookie:
+      - __cf_bm=ne0_vGqhysbXh7PLGrv5l7aK1bz5zs6_Z6FrVQZRQP8-1762861822-1.0.1.1-.kuYjJ4EwJDRkV_.4JXnXoh1OooFX4Oo2shVlfvP.V9U._R4QmH3PZqIrVtZbJ4brAe64yyLoes0yPZmFxL4d7YDGzJsX3Z5PzAnoLJcp54;
+        path=/; expires=Tue, 11-Nov-25 12:20:22 GMT; domain=.api.openai.com; HttpOnly;
+        Secure; SameSite=None
+      - _cfuvid=eaD72LJclIwiPtVLy989y2gQrO.m95who0phi_hkbJE-1762861822210-0.0.1.1-604800000;
+        path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains; preload
+      Transfer-Encoding:
+      - chunked
+      X-Content-Type-Options:
+      - nosniff
+      access-control-expose-headers:
+      - X-Request-ID
+      alt-svc:
+      - h3=":443"; ma=86400
+      cf-cache-status:
+      - DYNAMIC
+      openai-organization:
+      - pydantic-28gund
+      openai-processing-ms:
+      - '1927'
+      openai-project:
+      - proj_dKobscVY9YJxeEaDJen54e3d
+      openai-version:
+      - '2020-10-01'
+      x-envoy-upstream-service-time:
+      - '2135'
+      x-openai-proxy-wasm:
+      - v0.1
+      x-ratelimit-limit-requests:
+      - '15000'
+      x-ratelimit-limit-tokens:
+      - '40000000'
+      x-ratelimit-remaining-requests:
+      - '14999'
+      x-ratelimit-remaining-tokens:
+      - '39999982'
+      x-ratelimit-reset-requests:
+      - 4ms
+      x-ratelimit-reset-tokens:
+      - 0s
+      x-request-id:
+      - req_2542bfee99394d409f8fd61a88a655c4
+    status:
+      code: 200
+      message: OK
 version: 1

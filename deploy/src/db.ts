@@ -25,6 +25,15 @@ export class ConfigDB extends KeysDbD1 {
       }
     }
 
+    // Transform providersWithKeys to routingGroups
+    for (const provider of providersWithKeys) {
+      if (!routingGroups[provider.providerId]) {
+        routingGroups[provider.providerId] = [{ key: provider.key }]
+      } else {
+        routingGroups[provider.providerId]!.push({ key: provider.key })
+      }
+    }
+
     // if keyInfo.id is unset, hash the API key to give something unique without explicitly using the key directly
     const keyId = keyInfo.id
 

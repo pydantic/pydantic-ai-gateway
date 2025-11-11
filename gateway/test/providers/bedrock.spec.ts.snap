@@ -3,7 +3,7 @@
 exports[`bedrock > bedrock/stream > chunks 1`] = `
 [
   {
-    "p": "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ01234567",
+    "p": "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQ",
     "role": "assistant",
   },
   {
@@ -11,196 +11,203 @@ exports[`bedrock > bedrock/stream > chunks 1`] = `
     "delta": {
       "text": "The",
     },
-    "p": "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ012",
+    "p": "abcdefghijklm",
   },
   {
     "contentBlockIndex": 0,
     "delta": {
       "text": " capital of France is Paris",
     },
-    "p": "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ012",
+    "p": "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456",
   },
   {
     "contentBlockIndex": 0,
     "delta": {
       "text": ". Paris",
     },
-    "p": "abcdefghijklmnopqrstuvwxyzABCDEFGHIJK",
+    "p": "abcdefghijklmnopqrstuvwxyzABC",
   },
   {
     "contentBlockIndex": 0,
     "delta": {
       "text": " is not",
     },
-    "p": "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRS",
+    "p": "abcdefghijklmnopqrstuvw",
   },
   {
     "contentBlockIndex": 0,
     "delta": {
       "text": " only the",
     },
-    "p": "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123",
+    "p": "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0",
   },
   {
     "contentBlockIndex": 0,
     "delta": {
       "text": " capital city but also the",
     },
-    "p": "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTU",
+    "p": "abcdefghijklmnopq",
   },
   {
     "contentBlockIndex": 0,
     "delta": {
       "text": " most",
     },
-    "p": "abcdefghijklmno",
+    "p": "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQR",
   },
   {
     "contentBlockIndex": 0,
     "delta": {
       "text": " populous city in",
     },
-    "p": "abcdefghijklmnopqrstuvwxyzABCDEFGHIJK",
+    "p": "abcde",
   },
   {
     "contentBlockIndex": 0,
     "delta": {
-      "text": " France, known",
+      "text": " France,",
     },
-    "p": "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQR",
+    "p": "abcdefghijklmnop",
+  },
+  {
+    "contentBlockIndex": 0,
+    "delta": {
+      "text": " known",
+    },
+    "p": "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVW",
   },
   {
     "contentBlockIndex": 0,
     "delta": {
       "text": " for its significant",
     },
-    "p": "abcdefghijklmnopqrstuvwxyzABCDE",
+    "p": "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWX",
   },
   {
     "contentBlockIndex": 0,
     "delta": {
       "text": " cultural,",
     },
-    "p": "abcdefghijklmnopqrstuvwxyzABCDEFGHIJ",
+    "p": "abcde",
   },
   {
     "contentBlockIndex": 0,
     "delta": {
       "text": " political",
     },
-    "p": "abcdefghijklmnopqrstuvwxyzABC",
+    "p": "abcdefghijk",
   },
   {
     "contentBlockIndex": 0,
     "delta": {
       "text": ", and economic",
     },
-    "p": "abcdefghijklm",
+    "p": "abcdefghijklmnop",
   },
   {
     "contentBlockIndex": 0,
     "delta": {
-      "text": " influence. It is famous",
+      "text": " influence. It is",
     },
-    "p": "abcdefghijklmn",
+    "p": "abcdefghijklmnopqrstuvwxyz",
   },
   {
     "contentBlockIndex": 0,
     "delta": {
-      "text": " for landmarks",
+      "text": " famous for landmarks",
     },
-    "p": "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRS",
+    "p": "abcdefghijklmnopqrstuvwxyzABC",
   },
   {
     "contentBlockIndex": 0,
     "delta": {
       "text": " such as the Eiffel",
     },
-    "p": "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUV",
+    "p": "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123",
   },
   {
     "contentBlockIndex": 0,
     "delta": {
       "text": " Tower, the Louvre",
     },
-    "p": "abcdefghijklm",
+    "p": "abcdefgh",
   },
   {
     "contentBlockIndex": 0,
     "delta": {
       "text": " Museum, and Notre",
     },
-    "p": "abcdefghijklmnopqrstuvwxyzABCDEFGHIJK",
+    "p": "abcdefghijklmnopqrstuvwxyzABCDEFGHIJ",
   },
   {
     "contentBlockIndex": 0,
     "delta": {
       "text": "-Dame",
     },
-    "p": "abcdefghijklm",
+    "p": "abcdefghijklmnop",
   },
   {
     "contentBlockIndex": 0,
     "delta": {
       "text": " Cathedral,",
     },
-    "p": "abcdefghijklmnopqrstuvwxyzABCDEFGHIJK",
+    "p": "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLM",
   },
   {
     "contentBlockIndex": 0,
     "delta": {
       "text": " among other",
     },
-    "p": "abcdefghijklmnopqrstuvwxyzABCDEF",
+    "p": "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQ",
   },
   {
     "contentBlockIndex": 0,
     "delta": {
       "text": " historical",
     },
-    "p": "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ",
+    "p": "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ012345",
   },
   {
     "contentBlockIndex": 0,
     "delta": {
       "text": " and",
     },
-    "p": "abcdefghijklmnopqr",
+    "p": "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXY",
   },
   {
     "contentBlockIndex": 0,
     "delta": {
       "text": " architectural",
     },
-    "p": "abcdef",
+    "p": "abcdefghijklm",
   },
   {
     "contentBlockIndex": 0,
     "delta": {
       "text": " sites",
     },
-    "p": "abcdefghijklmnopqrstuvwxyzABCDEF",
+    "p": "abcde",
   },
   {
     "contentBlockIndex": 0,
     "delta": {
       "text": ".",
     },
-    "p": "abcdefghijklmnopqrstuvw",
+    "p": "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ012",
   },
   {
     "contentBlockIndex": 0,
-    "p": "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ",
+    "p": "abcdefghijklmnopqrst",
   },
   {
-    "p": "abcdefghi",
+    "p": "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWX",
     "stopReason": "end_turn",
   },
   {
     "metrics": {
-      "latencyMs": 554,
+      "latencyMs": 566,
     },
-    "p": "abcdefghijklmnopq",
+    "p": "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVW",
     "usage": {
       "inputTokens": 13,
       "outputTokens": 63,
@@ -253,13 +260,13 @@ exports[`bedrock > bedrock/stream > span 1`] = `
 exports[`bedrock > should call bedrock via gateway > bedrock 1`] = `
 {
   "metrics": {
-    "latencyMs": 503,
+    "latencyMs": 611,
   },
   "output": {
     "message": {
       "content": [
         {
-          "text": "The capital of France is Paris. Paris is not only the capital city but also the most populous city in France, and it is a major center for culture, commerce, fashion, and gastronomy worldwide.",
+          "text": "The capital of France is Paris. Paris is not only the capital city but also the most populous city in France, known for its significant cultural, political, and economic influence both within the country and globally. It is famous for landmarks such as the Eiffel Tower, the Louvre Museum, and Notre-Dame Cathedral, among other historical and architectural sites.",
         },
       ],
       "role": "assistant",
@@ -268,12 +275,12 @@ exports[`bedrock > should call bedrock via gateway > bedrock 1`] = `
   "stopReason": "end_turn",
   "usage": {
     "inputTokens": 13,
-    "outputTokens": 40,
+    "outputTokens": 69,
     "pydantic_ai_gateway": {
-      "cost_estimate": 0.0000060550000000000005,
+      "cost_estimate": 0.000010115,
     },
     "serverToolUsage": {},
-    "totalTokens": 53,
+    "totalTokens": 82,
   },
 }
 `;
@@ -303,9 +310,9 @@ exports[`bedrock > should call bedrock via gateway > span 1`] = `
       "gen_ai.usage.input_audio_tokens": {},
       "gen_ai.usage.input_tokens": 13,
       "gen_ai.usage.output_audio_tokens": {},
-      "gen_ai.usage.output_tokens": 40,
+      "gen_ai.usage.output_tokens": 69,
       "http.request.body.text": "{"modelId":"amazon.nova-premier-v1:0","system":[{"text":"You are a helpful assistant."}],"messages":[{"role":"user","content":[{"text":"What is the capital of France?"}]}]}",
-      "http.response.body.text": "{"metrics":{"latencyMs":503},"output":{"message":{"content":[{"text":"The capital of France is Paris. Paris is not only the capital city but also the most populous city in France, and it is a major center for culture, commerce, fashion, and gastronomy worldwide."}],"role":"assistant"}},"stopReason":"end_turn","usage":{"inputTokens":13,"outputTokens":40,"serverToolUsage":{},"totalTokens":53,"pydantic_ai_gateway":{"cost_estimate":0.0000060550000000000005}}}",
+      "http.response.body.text": "{"metrics":{"latencyMs":611},"output":{"message":{"content":[{"text":"The capital of France is Paris. Paris is not only the capital city but also the most populous city in France, known for its significant cultural, political, and economic influence both within the country and globally. It is famous for landmarks such as the Eiffel Tower, the Louvre Museum, and Notre-Dame Cathedral, among other historical and architectural sites."}],"role":"assistant"}},"stopReason":"end_turn","usage":{"inputTokens":13,"outputTokens":69,"serverToolUsage":{},"totalTokens":82,"pydantic_ai_gateway":{"cost_estimate":0.000010115}}}",
       "http.response.status_code": 200,
       "logfire.json_schema": "{"type":"object","properties":{"gen_ai.operation.name":{"type":"string"},"gen_ai.request.model":{"type":"string"},"gen_ai.system":{"type":"string"},"gen_ai.request.max_tokens":{},"gen_ai.request.top_k":{},"gen_ai.request.top_p":{},"gen_ai.request.temperature":{},"gen_ai.request.stop_sequences":{},"gen_ai.request.seed":{},"gen_ai.response.finish_reasons":{},"gen_ai.response.id":{},"gen_ai.input.messages":{},"gen_ai.output.messages":{},"gen_ai.system_instructions":{},"http.response.status_code":{"type":"number"},"http.request.body.text":{"type":"string"},"http.response.body.text":{"type":"string"},"gen_ai.response.model":{"type":"string"},"gen_ai.usage.input_tokens":{"type":"number"},"gen_ai.usage.cache_read_tokens":{},"gen_ai.usage.cache_write_tokens":{},"gen_ai.usage.output_tokens":{"type":"number"},"gen_ai.usage.input_audio_tokens":{},"gen_ai.usage.cache_audio_read_tokens":{},"gen_ai.usage.output_audio_tokens":{}}}",
       "logfire.level_num": 9,

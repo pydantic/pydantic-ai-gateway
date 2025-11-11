@@ -25,16 +25,16 @@ interactions:
   response:
     body:
       string: !!binary |
-        H4sIAAAAAAAA/1VSu47bMBDs8xXC1pLBh2g9PiB1inRBIFDiymJMkTJJXy4w/O9ZHWwfruRyZnZm
-        yBtYAz1Mi87TurnKdFwchdQVN7Ws6rrDqhMzVqY1rWKjUEoZKCGMf3DKD+JhCkTFbIOnqymizkii
-        vDnyVkghWAlrMOgI7pxedSUPsmrYWL1hTDpbhzttCXbCBP2vG1hv8B36nYcp6RNCf4MYCNeDTsmm
-        rH3eOcFn9LuNnwsWk95s1q4Ic/E9aj9hYVPxQ0ebDnAvwYXTFsNIG/zVuRJm621aBnKbyHcPKYcN
-        7r9LuD43Xq54xSHblU7swBXjvONSlkA665aHHM7oSa8Wn6MHmDEhmloKtZt8lvMitF+nTw4XDZOk
-        lQPFeIEVe01ewLprGiXU/WF2GCnF2YS//hku/UsZ14EynjBu0X6UNG+D4K2qjVY1o/reh1MMlz3p
-        xx+IeBkYP7fZLPF4RrXopUGF0syXTum9woTxjR6JjGAkAnk3uGpv4P7tP8FV2NpIAgAA
+        H4sIAAAAAAAA/1WSwY7bIBCG730Ka852BMQxth+g5x56qyoLwzghwWAD2d0qyrt3vFqn6pHh/2e+
+        f+AB1kAP+qKynhdXyUYZcWK6qrsjr+qJ15UyklcjG5lsx86YhkMJYbyizl/Ggw5kxWyDpysdUWWk
+        plw2om34qW1KmINBR3Ln1Kyq4+FYSTZWbxiTytbhZrsEqzFB/+sB1hv8gJ6RD1NSZ4T+ATGQrgeV
+        kk1Z+bx5gs/oN4yfFyy0WmxWrghT8T0qr7Gwqfihok0HeJbgwnmJYaQJ/u5cCZP1Nl0Gok3E3UPK
+        YYHn7xLu+8T1jnccsp3pxA6sFkfZMV6XQH3mJQ853NBTv1r8K+1ixim4YGKD3JfzMrT/V3cP56Jp
+        GiFLyIGCvOQn9qq8pKIWdSu65xfuMFKOmwnvfo+X/qSM80ApzxiXaD/XNC2DEVopaYiNFvgxnGNY
+        t6yfvyDiOjB+69KYG7FOy6qmd97qLMX1dNXbEhPGN3omAsFIBqI3OCtv4PntLwJBGiFKAgAA
     headers:
       CF-RAY:
-      - 996a85d479858a22-AMS
+      - 99cd8c93997dec96-MAD
       Cache-Control:
       - private, max-age=0, no-store, no-cache, must-revalidate
       Connection:
@@ -44,12 +44,13 @@ interactions:
       Content-Type:
       - application/json
       Date:
-      - Thu, 30 Oct 2025 11:20:20 GMT
+      - Tue, 11 Nov 2025 11:46:26 GMT
       Server:
       - cloudflare
       Set-Cookie:
-      - __cf_bm=GFK2du3fO.CI0fMRK2xBmwvuU55AZNGOm7FxbOM5wtE-1761823219.9137926-1.0.1.1-14wyjkARmwUYbImERManyuqNJvFx5HHTTKygyG8AIP.rV79z.RcLv9teMIQ2Am7dcLzW1I5cs55Jn2neW5qw8nXSwN.8RScJBXjEmPW8yf7.4mC5ILptvLLAqAp.6e6l;
-        HttpOnly; Secure; Path=/; Expires=Thu, 30 Oct 2025 11:50:20 GMT
+      - __cf_bm=T2lfeaHA5m7QA4aftmMDUI449j5XyxC6AuE4ZjB17mM-1762861586.494857-1.0.1.1-C5xC3qQ9G7qZz3KzjI_irN_6nvI3x1ZhaErN9Kvm3fPcX0Ef56AmDjOYsFm_cY28GD.T9xUv6JUC10NwrPeIzn0btkHJpojwfFTLc98_DvJmwNgg9Guh3b3xqZvatwaq;
+        HttpOnly; Secure; Path=/; Domain=groq.com; Expires=Tue, 11 Nov 2025 12:16:26
+        GMT
       Transfer-Encoding:
       - chunked
       alt-svc:
@@ -75,7 +76,7 @@ interactions:
       x-ratelimit-reset-tokens:
       - 8.6ms
       x-request-id:
-      - req_01k8tdhr6ke5hah7e5e3dfq95a
+      - req_01k9sbt62qfpqafw18ct72j5jc
     status:
       code: 200
       message: OK

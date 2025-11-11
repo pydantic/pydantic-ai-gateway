@@ -15,13 +15,13 @@ import { buildGatewayEnv, type DisableEvent, IDS } from './worker'
 
 describe('invalid request', () => {
   test('401 on no auth header', async ({ gateway }) => {
-    const response = await gateway.fetch('https://example.com/chat/gpt-5')
+    const response = await gateway.fetch('https://example.com/openai/gpt-5')
     const text = await response.text()
     expect(response.status, `got ${response.status} response: ${text}`).toBe(401)
     expect(text).toMatchInlineSnapshot(`"Unauthorized - Missing Authorization Header"`)
   })
   test('401 on unknown auth header', async ({ gateway }) => {
-    const response = await gateway.fetch('https://example.com/chat/gpt-5', {
+    const response = await gateway.fetch('https://example.com/openai/gpt-5', {
       headers: { Authorization: 'unknown-token' },
     })
     const text = await response.text()
@@ -35,7 +35,7 @@ describe('invalid request', () => {
     const text = await response.text()
     expect(response.status, `got ${response.status} response: ${text}`).toBe(400)
     expect(text).toMatchInlineSnapshot(
-      `"Invalid API type 'wrong', should be one of chat, responses, converse, anthropic, gemini, groq, test"`,
+      `"Invalid provider ID 'wrong', should be one of groq, openai, google-vertex, anthropic, test, bedrock"`,
     )
   })
 })
@@ -66,7 +66,7 @@ describe('key status', () => {
   test('should block request if key is disabled', async ({ gateway }) => {
     const { fetch } = gateway
 
-    const response = await fetch('https://example.com/chat/xxx', { headers: { Authorization: 'disabled' } })
+    const response = await fetch('https://example.com/openai/xxx', { headers: { Authorization: 'disabled' } })
     const text = await response.text()
     expect(response.status, `got response: ${response.status} ${text}`).toBe(403)
     expect(text).toMatchInlineSnapshot(`"Unauthorized - Key disabled"`)
@@ -132,7 +132,7 @@ describe('key status', () => {
     expect(Math.abs(keyStatusQuery.results[0]!.expiresAtDiff - disableEvents[0]!.expirationTtl!)).toBeLessThan(2)
 
     {
-      const response = await fetch('https://example.com/chat/xxx', { headers: { Authorization: 'tiny-limit' } })
+      const response = await fetch('https://example.com/openai/xxx', { headers: { Authorization: 'tiny-limit' } })
       const text = await response.text()
       expect(response.status, `got ${response.status} response: ${text}`).toBe(403)
       expect(text).toMatchInlineSnapshot(`"Unauthorized - Key limit-exceeded"`)
@@ -215,7 +215,7 @@ describe('custom proxyPrefixLength', () => {
     const disableEvents: DisableEvent[] = []
     const mockFetch = mockFetchFactory(disableEvents)
 
-    const client = new OpenAI({ apiKey: 'healthy', baseURL: 'https://example.com/proxy/chat', fetch: mockFetch })
+    const client = new OpenAI({ apiKey: 'healthy', baseURL: 'https://example.com/proxy/openai', fetch: mockFetch })
 
     const completion = await client.chat.completions.create({
       model: 'gpt-5',
@@ -249,7 +249,7 @@ describe('custom middleware', () => {
     )[] = []
 
     const ctx = createExecutionContext()
-    const request = new Request<unknown, IncomingRequestCfProperties>('https://example.com/chat/gpt-5', {
+    const request = new Request<unknown, IncomingRequestCfProperties>('https://example.com/openai/gpt-5', {
       headers: { Authorization: 'healthy' },
     })
 
@@ -299,9 +299,9 @@ describe('routing group fallback', () => {
     }
 
     const ctx = createExecutionContext()
-    const request = new Request<unknown, IncomingRequestCfProperties>('https://example.com/chat/gpt-5', {
+    const request = new Request<unknown, IncomingRequestCfProperties>('https://example.com/test/gpt-5', {
       method: 'POST',
-      headers: { Authorization: 'fallback-test', 'pydantic-ai-gateway-routing-group': 'test-group' },
+      headers: { Authorization: 'fallback-test', 'pydantic-ai-gateway-route': 'test' },
       body: JSON.stringify({ model: 'gpt-5', messages: [{ role: 'user', content: 'Hello' }] }),
     })
 
@@ -340,9 +340,9 @@ describe('routing group fallback', () => {
     }
 
     const ctx = createExecutionContext()
-    const request = new Request<unknown, IncomingRequestCfProperties>('https://example.com/chat/gpt-5', {
+    const request = new Request<unknown, IncomingRequestCfProperties>('https://example.com/test/gpt-5', {
       method: 'POST',
-      headers: { Authorization: 'fallback-test', 'pydantic-ai-gateway-routing-group': 'test-group' },
+      headers: { Authorization: 'fallback-test', 'pydantic-ai-gateway-route': 'test' },
       body: JSON.stringify({ model: 'gpt-5', messages: [{ role: 'user', content: 'Hello' }] }),
     })
 
@@ -375,9 +375,9 @@ describe('routing group fallback', () => {
     }
 
     const ctx = createExecutionContext()
-    const request = new Request<unknown, IncomingRequestCfProperties>('https://example.com/chat/gpt-5', {
+    const request = new Request<unknown, IncomingRequestCfProperties>('https://example.com/openai/gpt-5', {
       method: 'POST',
-      headers: { Authorization: 'fallback-test', 'pydantic-ai-gateway-routing-group': 'test-group' },
+      headers: { Authorization: 'fallback-test', 'pydantic-ai-gateway-route': 'test' },
       body: JSON.stringify({ model: 'gpt-5', messages: [{ role: 'user', content: 'Hello' }] }),
     })
 

@@ -57,15 +57,22 @@ export namespace IDS {
 }
 
 class TestKeysDB extends KeysDbD1 {
-  allProviders: ProviderProxy[]
+  allProviders: (ProviderProxy & { key: string })[]
   disableEvents: DisableEvent[]
 
   constructor(env: Env, disableEvents: DisableEvent[]) {
     super(env.limitsDB)
     this.disableEvents = disableEvents
     this.allProviders = [
-      { baseUrl: 'http://test.example.com/test', providerId: 'test', injectCost: true, credentials: 'test' },
       {
+        key: 'test',
+        baseUrl: 'http://test.example.com/test',
+        providerId: 'test',
+        injectCost: true,
+        credentials: 'test',
+      },
+      {
+        key: 'openai',
         // baseUrl decides what URL the request will be forwarded to
         baseUrl: 'http://localhost:8005/openai',
         // providerId decides on the logic used to process the request and response
@@ -75,21 +82,30 @@ class TestKeysDB extends KeysDbD1 {
         // credentials are used by the ProviderProxy to authenticate the forwarded request
         credentials: env.OPENAI_API_KEY,
       },
-      { baseUrl: 'http://localhost:8005/groq', providerId: 'groq', injectCost: true, credentials: env.GROQ_API_KEY },
       {
+        key: 'groq',
+        baseUrl: 'http://localhost:8005/groq',
+        providerId: 'groq',
+        injectCost: true,
+        credentials: env.GROQ_API_KEY,
+      },
+      {
+        key: 'anthropic',
         baseUrl: 'http://localhost:8005/anthropic',
         providerId: 'anthropic',
         injectCost: true,
         credentials: env.ANTHROPIC_API_KEY,
       },
       {
+        key: 'bedrock',
         baseUrl: 'http://localhost:8005/bedrock',
         providerId: 'bedrock',
         injectCost: true,
         credentials: env.AWS_BEARER_TOKEN_BEDROCK,
       },
       {
-        baseUrl: 'http://localhost:8005/gemini',
+        key: 'google-vertex',
+        baseUrl: 'http://localhost:8005/google-vertex',
         providerId: 'google-vertex',
         injectCost: true,
         credentials: env.GOOGLE_SERVICE_ACCOUNT_KEY,
@@ -115,6 +131,14 @@ class TestKeysDB extends KeysDbD1 {
           // project limits
           projectSpendingLimitMonthly: 4,
           providers: this.allProviders,
+          routingGroups: {
+            test: [{ key: 'test' }],
+            openai: [{ key: 'openai' }],
+            groq: [{ key: 'groq' }],
+            anthropic: [{ key: 'anthropic' }],
+            bedrock: [{ key: 'bedrock' }],
+            'google-vertex': [{ key: 'google-vertex' }],
+          },
           otelSettings: {
             writeToken: 'write-token',
             baseUrl: 'https://logfire.pydantic.dev',
@@ -129,6 +153,14 @@ class TestKeysDB extends KeysDbD1 {
           key,
           status: 'disabled',
           providers: this.allProviders,
+          routingGroups: {
+            test: [{ key: 'test' }],
+            openai: [{ key: 'openai' }],
+            groq: [{ key: 'groq' }],
+            anthropic: [{ key: 'anthropic' }],
+            bedrock: [{ key: 'bedrock' }],
+            'google-vertex': [{ key: 'google-vertex' }],
+          },
         }
       case 'tiny-limit':
         return {
@@ -140,6 +172,7 @@ class TestKeysDB extends KeysDbD1 {
           keySpendingLimitDaily: 0.01,
           projectSpendingLimitMonthly: 4,
           providers: [this.allProviders[0]!],
+          routingGroups: { test: [{ key: 'test' }] },
         }
       case 'fallback-test':
         return {
@@ -150,6 +183,7 @@ class TestKeysDB extends KeysDbD1 {
           status: 'active',
           providers: [
             {
+              key: 'test1',
               baseUrl: 'http://test.example.com/provider1',
               providerId: 'test',
               injectCost: true,
@@ -157,6 +191,7 @@ class TestKeysDB extends KeysDbD1 {
               priority: 100,
             },
             {
+              key: 'test2',
               baseUrl: 'http://test.example.com/provider2',
               providerId: 'test',
               injectCost: true,
@@ -164,6 +199,7 @@ class TestKeysDB extends KeysDbD1 {
               priority: 50,
             },
           ],
+          routingGroups: { test: [{ key: 'test1' }, { key: 'test2' }] },
         }
       default:
         return null

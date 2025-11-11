@@ -18,7 +18,15 @@ export async function gateway(
   if (!providerIdMatch) {
     return textResponse(404, 'Path not found')
   }
-  const [, providerId, restOfPath] = providerIdMatch as unknown as [string, string, string]
+  let [, providerId, restOfPath] = providerIdMatch as unknown as [string, string, string]
+
+  if (['openai-responses', 'openai-chat', 'chat', 'responses'].includes(providerId)) {
+    providerId = 'openai'
+  } else if (providerId === 'gemini') {
+    providerId = 'google-vertex'
+  } else if (providerId === 'converse') {
+    providerId = 'bedrock'
+  }
 
   if (!guardProviderID(providerId)) {
     return textResponse(400, `Invalid provider ID '${providerId}', should be one of ${providerIdsArray.join(', ')}`)
@@ -43,9 +51,9 @@ const getProviderProxies = (
     if (route in providerProxyMapping) {
       return [providerProxyMapping[route]!]
     }
-    const routingGroup = routingGroups[route]
+    const routingGroup = routingGroups?.[route]
     if (!routingGroup) {
-      const supportedValues = [...Object.keys(providerProxyMapping), ...Object.keys(routingGroups)].join(', ')
+      const supportedValues = [...Object.keys(providerProxyMapping), ...Object.keys(routingGroups ?? {})].join(', ')
       return { status: 404, message: `Route not found. Supported values: ${supportedValues}` }
     }
     const providerProxies = routingGroup

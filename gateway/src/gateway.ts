@@ -5,7 +5,7 @@ import { currentScopeIntervals, type ExceededScope, endOfMonth, endOfWeek, type 
 import { OtelTrace } from './otel'
 import { genAiOtelAttributes } from './otel/attributes'
 import { getProvider } from './providers'
-import { type ApiKeyInfo, guardProviderID, type ProviderID, providerIdsArray, ProviderProxy } from './types'
+import { type ApiKeyInfo, guardProviderID, type ProviderID, type ProviderProxy, providerIdsArray } from './types'
 import { runAfter, textResponse } from './utils'
 
 export async function gateway(
@@ -33,6 +33,46 @@ export async function gateway(
   }
 }
 
+const getProviderProxies = (
+  route: string | null,
+  providerId: ProviderID,
+  providerProxyMapping: Record<string, ProviderProxy>,
+  routingGroups: ApiKeyInfo['routingGroups'],
+): ProviderProxy[] | { status: number; message: string } => {
+  if (route !== null) {
+    if (route in providerProxyMapping) {
+      return [providerProxyMapping[route]!]
+    }
+    const routingGroup = routingGroups[route]
+    if (!routingGroup) {
+      const supportedValues = [...Object.keys(providerProxyMapping), ...Object.keys(routingGroups)].join(', ')
+      return { status: 404, message: `Route not found. Supported values: ${supportedValues}` }
+    }
+    const providerProxies = routingGroup
+      .map(({ key }) => providerProxyMapping[key])
+      .filter((x): x is ProviderProxy & { key: string } => !!x)
+    if (providerProxies.length === 0) {
+      return {
+        status: 400,
+        message: `No providers included in routing group '${route}'. Add one or more providers to this routing group in the Pydantic AI Gateway console.`,
+      }
+    }
+    return providerProxies
+  }
+
+  const routingGroup = routingGroups[providerId]
+  let providerProxies: ProviderProxy[] = []
+  if (routingGroup) {
+    providerProxies = routingGroup
+      .map(({ key }) => providerProxyMapping[key])
+      .filter((x): x is ProviderProxy & { key: string } => !!x)
+  }
+  if (providerProxies.length === 0) {
+    return { status: 400, message: `No providers found compatible with ${providerId} requests` }
+  }
+  return providerProxies
+}
+
 export async function gatewayWithLimiter(
   request: Request,
   restOfPath: string,
@@ -46,22 +86,13 @@ export async function gatewayWithLimiter(
   }
 
   const { routingGroups } = apiKeyInfo
-  let providerProxies: (ProviderProxy & { key: string })[] = []
-
+  const providerProxyMapping: Record<string, ProviderProxy> = Object.fromEntries(
+    apiKeyInfo.providers.map((p) => [p.key, p]),
+  )
   const route = request.headers.get('pydantic-ai-gateway-route')
-  if (route !== null) {
-    const routingGroup = routingGroups[route]
-    if (routingGroup) {
-      providerProxies = routingGroup.map(({ key }) => apiKeyInfo.providers.find((p) => p.key === key))
-    }
-    // providerProxies = providerProxies.filter((p) => p.route === route)
-  }
-
-  // sort providers on priority, highest first
-  providerProxies.sort((a, b) => (b.priority ?? 0) - (a.priority ?? 0))
-
-  if (providerProxies.length === 0) {
-    return textResponse(403, 'Forbidden - Provider not supported by this API Key')
+  const providerProxies = getProviderProxies(route, providerId, providerProxyMapping, routingGroups)
+  if (!Array.isArray(providerProxies)) {
+    return textResponse(providerProxies.status, providerProxies.message)
   }
 
   const otel = new OtelTrace(request, apiKeyInfo.otelSettings, options)
@@ -88,10 +119,7 @@ export async function gatewayWithLimiter(
     try {
       result = await proxy.dispatch()
     } catch (error) {
-      logfire.reportError('Connection error', error as Error, {
-        providerId: providerProxy.providerId,
-        routingGroup: providerProxy.routingGroup,
-      })
+      logfire.reportError('Connection error', error as Error, { providerId: providerProxy.providerId, route })
       continue
     }
 
@@ -106,7 +134,7 @@ export async function gatewayWithLimiter(
       logfire.info('Provider failed with retryable error, trying next provider', {
         providerId: providerProxy.providerId,
         status: result.unexpectedStatus,
-        routingGroup: providerProxy.routingGroup,
+        route,
       })
       continue
     }

@@ -8,7 +8,7 @@ export type KeyStatus =
   | 'blocked' // when we got a valid response that we couldn't calculate the cost for
 
 // Info about an API key for a particular provider returned by the DB during a request
-export interface ApiKeyInfo<ProviderKey extends string = string,> {
+export interface ApiKeyInfo<ProviderKey extends string = string> {
   id: number
   user?: number
   project: number

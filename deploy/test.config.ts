@@ -58,12 +58,7 @@ export const config: Config<ProviderKeys> = {
       injectCost: true,
       credentials: env.AWS_BEARER_TOKEN_BEDROCK,
     },
-    test: {
-      baseUrl: 'http://test.example.com/test',
-      providerId: 'test',
-      injectCost: true,
-      credentials: 'test',
-    },
+    test: { baseUrl: 'http://test.example.com/test', providerId: 'test', injectCost: true, credentials: 'test' },
   },
   // individual apiKeys
   apiKeys: {

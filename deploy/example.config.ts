@@ -48,12 +48,7 @@ export const config: Config<ProviderKeys> = {
       // credentials are used by the ProviderProxy to authenticate the forwarded request
       credentials: env.OPENAI_API_KEY,
     },
-    b: {
-      providerId: 'groq',
-      baseUrl: 'https://api.groq.com',
-      injectCost: true,
-      credentials: env.GROQ_API_KEY,
-    },
+    b: { providerId: 'groq', baseUrl: 'https://api.groq.com', injectCost: true, credentials: env.GROQ_API_KEY },
     c: {
       providerId: 'google-vertex',
       baseUrl: 'https://us-central1-aiplatform.googleapis.com',

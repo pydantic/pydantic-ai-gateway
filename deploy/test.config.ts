@@ -32,14 +32,12 @@ export const config: Config<ProviderKeys> = {
       injectCost: true,
       // credentials are used by the ProviderProxy to authenticate the forwarded request
       credentials: env.OPENAI_API_KEY,
-      apiTypes: ['chat'],
     },
     groq: {
       baseUrl: 'http://localhost:8005/groq',
       providerId: 'groq',
       injectCost: true,
       credentials: env.GROQ_API_KEY,
-      apiTypes: ['groq'],
     },
     // google: {
     //     baseUrl:
@@ -53,21 +51,18 @@ export const config: Config<ProviderKeys> = {
       providerId: 'anthropic',
       injectCost: true,
       credentials: env.ANTHROPIC_API_KEY,
-      apiTypes: ['anthropic'],
     },
     bedrock: {
       baseUrl: 'http://localhost:8005/bedrock',
       providerId: 'bedrock',
       injectCost: true,
       credentials: env.AWS_BEARER_TOKEN_BEDROCK,
-      apiTypes: ['anthropic', 'converse'],
     },
     test: {
       baseUrl: 'http://test.example.com/test',
       providerId: 'test',
       injectCost: true,
       credentials: 'test',
-      apiTypes: ['test'],
     },
   },
   // individual apiKeys

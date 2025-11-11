@@ -64,13 +64,7 @@ class TestKeysDB extends KeysDbD1 {
     super(env.limitsDB)
     this.disableEvents = disableEvents
     this.allProviders = [
-      {
-        baseUrl: 'http://test.example.com/test',
-        providerId: 'test',
-        injectCost: true,
-        credentials: 'test',
-        apiTypes: ['test'],
-      },
+      { baseUrl: 'http://test.example.com/test', providerId: 'test', injectCost: true, credentials: 'test' },
       {
         // baseUrl decides what URL the request will be forwarded to
         baseUrl: 'http://localhost:8005/openai',
@@ -80,35 +74,25 @@ class TestKeysDB extends KeysDbD1 {
         injectCost: true,
         // credentials are used by the ProviderProxy to authenticate the forwarded request
         credentials: env.OPENAI_API_KEY,
-        apiTypes: ['chat', 'responses'],
       },
-      {
-        baseUrl: 'http://localhost:8005/groq',
-        providerId: 'groq',
-        injectCost: true,
-        credentials: env.GROQ_API_KEY,
-        apiTypes: ['groq'],
-      },
+      { baseUrl: 'http://localhost:8005/groq', providerId: 'groq', injectCost: true, credentials: env.GROQ_API_KEY },
       {
         baseUrl: 'http://localhost:8005/anthropic',
         providerId: 'anthropic',
         injectCost: true,
         credentials: env.ANTHROPIC_API_KEY,
-        apiTypes: ['anthropic'],
       },
       {
         baseUrl: 'http://localhost:8005/bedrock',
         providerId: 'bedrock',
         injectCost: true,
         credentials: env.AWS_BEARER_TOKEN_BEDROCK,
-        apiTypes: ['anthropic', 'converse'],
       },
       {
         baseUrl: 'http://localhost:8005/gemini',
         providerId: 'google-vertex',
         injectCost: true,
         credentials: env.GOOGLE_SERVICE_ACCOUNT_KEY,
-        apiTypes: ['gemini', 'anthropic'],
       },
     ]
   }
@@ -170,8 +154,6 @@ class TestKeysDB extends KeysDbD1 {
               providerId: 'test',
               injectCost: true,
               credentials: 'test1',
-              apiTypes: ['chat'],
-              routingGroup: 'test-group',
               priority: 100,
             },
             {
@@ -179,8 +161,6 @@ class TestKeysDB extends KeysDbD1 {
               providerId: 'test',
               injectCost: true,
               credentials: 'test2',
-              apiTypes: ['chat'],
-              routingGroup: 'test-group',
               priority: 50,
             },
           ],

@@ -8,7 +8,7 @@ export type KeyStatus =
   | 'blocked' // when we got a valid response that we couldn't calculate the cost for
 
 // Info about an API key for a particular provider returned by the DB during a request
-export interface ApiKeyInfo {
+export interface ApiKeyInfo<ProviderKey extends string = string,> {
   id: number
   user?: number
   project: number
@@ -30,29 +30,27 @@ export interface ApiKeyInfo {
   userSpendingLimitDaily?: number
   userSpendingLimitWeekly?: number
   userSpendingLimitMonthly?: number
-  providers: ProviderProxy[]
+  providers: (ProviderProxy & { key: ProviderKey })[]
+  routingGroups: Record<string, { key: ProviderKey }[]>
   otelSettings?: OtelSettings
 }
 
 export type ProviderID = 'groq' | 'openai' | 'google-vertex' | 'anthropic' | 'test' | 'bedrock'
 // TODO | 'azure' | 'fireworks' | 'mistral' | 'cohere'
 
-export type APIType = 'chat' | 'responses' | 'converse' | 'anthropic' | 'gemini' | 'groq' | 'test'
-
-const apiTypes: Record<APIType, boolean> = {
-  chat: true,
-  responses: true,
-  converse: true,
-  anthropic: true,
-  gemini: true,
+const providerIds: Record<ProviderID, boolean> = {
   groq: true,
+  openai: true,
+  'google-vertex': true,
+  anthropic: true,
   test: true,
+  bedrock: true,
 }
 
-export const apiTypesArray = Object.keys(apiTypes) as APIType[]
+export const providerIdsArray = Object.keys(providerIds) as ProviderID[]
 
-export function guardAPIType(type: string): type is APIType {
-  return type in apiTypes
+export function guardProviderID(id: string): id is ProviderID {
+  return id in providerIds
 }
 
 export interface ProviderProxy {
@@ -73,17 +71,11 @@ export interface ProviderProxy {
   profile?: string
 
   /** Higher priority providers will be used first */
+  // TODO(Marcelo): Remove now - this should live in the routingGroups.
   priority?: number
 
   /** Weather to disable the key in case of error, if missing defaults to True. */
   disableKey?: boolean
-
-  /** The APIs that the provider supports. Example: ['chat', 'responses'] */
-  apiTypes: APIType[]
-
-  /** A grouping of APIs that serve the same models.
-   * @example: 'anthropic' would route the requests to Anthropic, Bedrock and Vertex AI. */
-  routingGroup?: string
 }
 
 export interface OtelSettings {

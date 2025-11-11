@@ -5,8 +5,7 @@ import { currentScopeIntervals, type ExceededScope, endOfMonth, endOfWeek, type 
 import { OtelTrace } from './otel'
 import { genAiOtelAttributes } from './otel/attributes'
 import { getProvider } from './providers'
-import type { APIType } from './types'
-import { type ApiKeyInfo, apiTypesArray, guardAPIType } from './types'
+import { type ApiKeyInfo, guardProviderID, type ProviderID, providerIdsArray, ProviderProxy } from './types'
 import { runAfter, textResponse } from './utils'
 
 export async function gateway(
@@ -15,29 +14,20 @@ export async function gateway(
   ctx: ExecutionContext,
   options: GatewayOptions,
 ): Promise<Response> {
-  const apiTypeMatch = /^\/([^/]+)\/(.*)$/.exec(proxyPath)
-  if (!apiTypeMatch) {
+  const providerIdMatch = /^\/([^/]+)\/(.*)$/.exec(proxyPath)
+  if (!providerIdMatch) {
     return textResponse(404, 'Path not found')
   }
-  let [, apiType, restOfPath] = apiTypeMatch as unknown as [string, string, string]
+  const [, providerId, restOfPath] = providerIdMatch as unknown as [string, string, string]
 
-  // support for other common names for openai api types
-  if (apiType === 'openai' || apiType === 'openai-chat') {
-    apiType = 'chat'
-  } else if (apiType === 'openai-responses') {
-    apiType = 'responses'
-  } else if (apiType === 'google-vertex') {
-    apiType = 'gemini'
-  }
-
-  if (!guardAPIType(apiType)) {
-    return textResponse(400, `Invalid API type '${apiType}', should be one of ${apiTypesArray.join(', ')}`)
+  if (!guardProviderID(providerId)) {
+    return textResponse(400, `Invalid provider ID '${providerId}', should be one of ${providerIdsArray.join(', ')}`)
   }
 
   const rateLimiter = options.rateLimiter ?? noopLimiter
   const apiKeyInfo = await apiKeyAuth(request, ctx, options, rateLimiter)
   try {
-    return await gatewayWithLimiter(request, restOfPath, apiType, apiKeyInfo, ctx, options)
+    return await gatewayWithLimiter(request, restOfPath, providerId, apiKeyInfo, ctx, options)
   } finally {
     runAfter(ctx, 'options.rateLimiter.requestFinish', rateLimiter.requestFinish())
   }
@@ -46,7 +36,7 @@ export async function gateway(
 export async function gatewayWithLimiter(
   request: Request,
   restOfPath: string,
-  apiType: APIType,
+  providerId: ProviderID,
   apiKeyInfo: ApiKeyInfo,
   ctx: ExecutionContext,
   options: GatewayOptions,
@@ -55,16 +45,16 @@ export async function gatewayWithLimiter(
     return textResponse(403, `Unauthorized - Key ${apiKeyInfo.status}`)
   }
 
-  let providerProxies = apiKeyInfo.providers.filter((p) => p.apiTypes.includes(apiType))
+  const { routingGroups } = apiKeyInfo
+  let providerProxies: (ProviderProxy & { key: string })[] = []
 
-  const routingGroup = request.headers.get('pydantic-ai-gateway-routing-group')
-  if (routingGroup !== null) {
-    providerProxies = providerProxies.filter((p) => p.routingGroup === routingGroup)
-  }
-
-  const profile = request.headers.get('pydantic-ai-gateway-profile')
-  if (profile !== null) {
-    providerProxies = providerProxies.filter((p) => p.profile === profile)
+  const route = request.headers.get('pydantic-ai-gateway-route')
+  if (route !== null) {
+    const routingGroup = routingGroups[route]
+    if (routingGroup) {
+      providerProxies = routingGroup.map(({ key }) => apiKeyInfo.providers.find((p) => p.key === key))
+    }
+    // providerProxies = providerProxies.filter((p) => p.route === route)
   }
 
   // sort providers on priority, highest first

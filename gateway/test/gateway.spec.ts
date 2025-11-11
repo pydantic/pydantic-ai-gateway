@@ -29,13 +29,11 @@ describe('invalid request', () => {
     expect(text).toMatchInlineSnapshot(`"Unauthorized - Key not found"`)
   })
   test('400 on unknown provider', async ({ gateway }) => {
-    const response = await gateway.fetch('https://example.com/wrong/gpt-5', {
-      headers: { Authorization: 'unknown-token' },
-    })
+    const response = await gateway.fetch('https://example.com/wrong/gpt-5', { headers: { Authorization: 'healthy' } })
     const text = await response.text()
-    expect(response.status, `got ${response.status} response: ${text}`).toBe(400)
+    expect(response.status, `got ${response.status} response: ${text}`).toBe(404)
     expect(text).toMatchInlineSnapshot(
-      `"Invalid provider ID 'wrong', should be one of groq, openai, google-vertex, anthropic, test, bedrock"`,
+      `"Route not found: wrong. Supported values: anthropic, bedrock, google-vertex, groq, openai, test"`,
     )
   })
 })
@@ -299,9 +297,9 @@ describe('routing group fallback', () => {
     }
 
     const ctx = createExecutionContext()
-    const request = new Request<unknown, IncomingRequestCfProperties>('https://example.com/test/gpt-5', {
+    const request = new Request<unknown, IncomingRequestCfProperties>('https://example.com/test/chat/completions', {
       method: 'POST',
-      headers: { Authorization: 'fallback-test', 'pydantic-ai-gateway-route': 'test' },
+      headers: { Authorization: 'fallback-test' },
       body: JSON.stringify({ model: 'gpt-5', messages: [{ role: 'user', content: 'Hello' }] }),
     })
 
@@ -316,7 +314,7 @@ describe('routing group fallback', () => {
     // Verify the response came from the second provider
     const content = (await response.json()) as { choices: [{ message: { content: string } }] }
     expect(content.choices[0].message.content).toMatchInlineSnapshot(
-      `"request URL: http://test.example.com/provider2/gpt-5"`,
+      `"request URL: http://test.example.com/provider2/chat/completions"`,
     )
   })
 
@@ -340,9 +338,9 @@ describe('routing group fallback', () => {
     }
 
     const ctx = createExecutionContext()
-    const request = new Request<unknown, IncomingRequestCfProperties>('https://example.com/test/gpt-5', {
+    const request = new Request<unknown, IncomingRequestCfProperties>('https://example.com/test/chat/completions', {
       method: 'POST',
-      headers: { Authorization: 'fallback-test', 'pydantic-ai-gateway-route': 'test' },
+      headers: { Authorization: 'fallback-test' },
       body: JSON.stringify({ model: 'gpt-5', messages: [{ role: 'user', content: 'Hello' }] }),
     })
 
@@ -375,9 +373,9 @@ describe('routing group fallback', () => {
     }
 
     const ctx = createExecutionContext()
-    const request = new Request<unknown, IncomingRequestCfProperties>('https://example.com/openai/gpt-5', {
+    const request = new Request<unknown, IncomingRequestCfProperties>('https://example.com/test/chat/completions', {
       method: 'POST',
-      headers: { Authorization: 'fallback-test', 'pydantic-ai-gateway-route': 'test' },
+      headers: { Authorization: 'fallback-test' },
       body: JSON.stringify({ model: 'gpt-5', messages: [{ role: 'user', content: 'Hello' }] }),
     })
 

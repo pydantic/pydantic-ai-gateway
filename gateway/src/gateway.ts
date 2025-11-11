@@ -5,7 +5,7 @@ import { currentScopeIntervals, type ExceededScope, endOfMonth, endOfWeek, type 
 import { OtelTrace } from './otel'
 import { genAiOtelAttributes } from './otel/attributes'
 import { getProvider } from './providers'
-import { type ApiKeyInfo, guardProviderID, type ProviderID, type ProviderProxy, providerIdsArray } from './types'
+import type { ApiKeyInfo, ProviderProxy } from './types'
 import { runAfter, textResponse } from './utils'
 
 export async function gateway(
@@ -14,69 +14,53 @@ export async function gateway(
   ctx: ExecutionContext,
   options: GatewayOptions,
 ): Promise<Response> {
-  const providerIdMatch = /^\/([^/]+)\/(.*)$/.exec(proxyPath)
-  if (!providerIdMatch) {
+  const routeMatch = /^\/([^/]+)\/(.*)$/.exec(proxyPath)
+  if (!routeMatch) {
     return textResponse(404, 'Path not found')
   }
-  let [, providerId, restOfPath] = providerIdMatch as unknown as [string, string, string]
+  let [, route, restOfPath] = routeMatch as unknown as [string, string, string]
 
-  if (['openai-responses', 'openai-chat', 'chat', 'responses'].includes(providerId)) {
-    providerId = 'openai'
-  } else if (providerId === 'gemini') {
-    providerId = 'google-vertex'
-  } else if (providerId === 'converse') {
-    providerId = 'bedrock'
-  }
-
-  if (!guardProviderID(providerId)) {
-    return textResponse(400, `Invalid provider ID '${providerId}', should be one of ${providerIdsArray.join(', ')}`)
+  // Backwards compatibility with the old route format.
+  if (route === 'openai-responses' || route === 'openai-chat' || route === 'chat' || route === 'responses') {
+    route = 'openai'
+  } else if (route === 'gemini') {
+    route = 'google-vertex'
+  } else if (route === 'converse') {
+    route = 'bedrock'
   }
 
   const rateLimiter = options.rateLimiter ?? noopLimiter
   const apiKeyInfo = await apiKeyAuth(request, ctx, options, rateLimiter)
   try {
-    return await gatewayWithLimiter(request, restOfPath, providerId, apiKeyInfo, ctx, options)
+    return await gatewayWithLimiter(request, restOfPath, route, apiKeyInfo, ctx, options)
   } finally {
     runAfter(ctx, 'options.rateLimiter.requestFinish', rateLimiter.requestFinish())
   }
 }
 
 const getProviderProxies = (
-  route: string | null,
-  providerId: ProviderID,
+  route: string,
   providerProxyMapping: Record<string, ProviderProxy>,
   routingGroups: ApiKeyInfo['routingGroups'],
 ): ProviderProxy[] | { status: number; message: string } => {
-  if (route !== null) {
-    if (route in providerProxyMapping) {
-      return [providerProxyMapping[route]!]
-    }
-    const routingGroup = routingGroups?.[route]
-    if (!routingGroup) {
-      const supportedValues = [...Object.keys(providerProxyMapping), ...Object.keys(routingGroups ?? {})].join(', ')
-      return { status: 404, message: `Route not found. Supported values: ${supportedValues}` }
-    }
-    const providerProxies = routingGroup
-      .map(({ key }) => providerProxyMapping[key])
-      .filter((x): x is ProviderProxy & { key: string } => !!x)
-    if (providerProxies.length === 0) {
-      return {
-        status: 400,
-        message: `No providers included in routing group '${route}'. Add one or more providers to this routing group in the Pydantic AI Gateway console.`,
-      }
-    }
-    return providerProxies
+  if (route in providerProxyMapping) {
+    return [providerProxyMapping[route]!]
   }
-
-  const routingGroup = routingGroups[providerId]
-  let providerProxies: ProviderProxy[] = []
-  if (routingGroup) {
-    providerProxies = routingGroup
-      .map(({ key }) => providerProxyMapping[key])
-      .filter((x): x is ProviderProxy & { key: string } => !!x)
+  const routingGroup = routingGroups?.[route]
+  if (!routingGroup) {
+    const supportedValues = [...new Set([...Object.keys(providerProxyMapping), ...Object.keys(routingGroups ?? {})])]
+      .sort()
+      .join(', ')
+    return { status: 404, message: `Route not found: ${route}. Supported values: ${supportedValues}` }
   }
+  const providerProxies = routingGroup
+    .map(({ key }) => providerProxyMapping[key])
+    .filter((x): x is ProviderProxy & { key: string } => !!x)
   if (providerProxies.length === 0) {
-    return { status: 400, message: `No providers found compatible with ${providerId} requests` }
+    return {
+      status: 400,
+      message: `No providers included in routing group '${route}'. Add one or more providers to this routing group in the Pydantic AI Gateway console.`,
+    }
   }
   return providerProxies
 }
@@ -84,7 +68,7 @@ const getProviderProxies = (
 export async function gatewayWithLimiter(
   request: Request,
   restOfPath: string,
-  providerId: ProviderID,
+  route: string,
   apiKeyInfo: ApiKeyInfo,
   ctx: ExecutionContext,
   options: GatewayOptions,
@@ -97,8 +81,7 @@ export async function gatewayWithLimiter(
   const providerProxyMapping: Record<string, ProviderProxy> = Object.fromEntries(
     apiKeyInfo.providers.map((p) => [p.key, p]),
   )
-  const route = request.headers.get('pydantic-ai-gateway-route')
-  const providerProxies = getProviderProxies(route, providerId, providerProxyMapping, routingGroups)
+  const providerProxies = getProviderProxies(route, providerProxyMapping, routingGroups)
   if (!Array.isArray(providerProxies)) {
     return textResponse(providerProxies.status, providerProxies.message)
   }

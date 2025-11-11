@@ -139,6 +139,10 @@ export class DefaultProviderProxy {
     return this.providerProxy.providerId
   }
 
+  providerIsBuiltin(): boolean {
+    return this.providerProxy.isBuiltIn ?? false
+  }
+
   disableKey(): boolean {
     return this.providerProxy.disableKey ?? true
   }

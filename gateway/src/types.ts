@@ -76,6 +76,9 @@ export interface ProviderProxy {
 
   /** Weather to disable the key in case of error, if missing defaults to True. */
   disableKey?: boolean
+
+  /** Whether the provider is managed by the platform and not by the user. */
+  isBuiltIn?: boolean
 }
 
 export interface OtelSettings {

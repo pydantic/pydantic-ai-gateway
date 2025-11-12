@@ -136,8 +136,8 @@ class TestKeysDB extends KeysDbD1 {
             openai: [{ key: 'openai' }],
             groq: [{ key: 'groq' }],
             anthropic: [{ key: 'anthropic' }],
-            bedrock: [{ key: 'bedrock' }],
-            'google-vertex': [{ key: 'google-vertex' }],
+            converse: [{ key: 'bedrock' }],
+            gemini: [{ key: 'google-vertex' }],
           },
           otelSettings: {
             writeToken: 'write-token',
@@ -158,8 +158,8 @@ class TestKeysDB extends KeysDbD1 {
             openai: [{ key: 'openai' }],
             groq: [{ key: 'groq' }],
             anthropic: [{ key: 'anthropic' }],
-            bedrock: [{ key: 'bedrock' }],
-            'google-vertex': [{ key: 'google-vertex' }],
+            converse: [{ key: 'bedrock' }],
+            gemini: [{ key: 'google-vertex' }],
           },
         }
       case 'tiny-limit':

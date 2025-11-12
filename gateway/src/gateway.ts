@@ -23,10 +23,10 @@ export async function gateway(
   // Backwards compatibility with the old route format.
   if (route === 'openai-responses' || route === 'openai-chat' || route === 'chat' || route === 'responses') {
     route = 'openai'
-  } else if (route === 'gemini') {
-    route = 'google-vertex'
-  } else if (route === 'converse') {
-    route = 'bedrock'
+  } else if (route === 'google-vertex') {
+    route = 'gemini'
+  } else if (route === 'bedrock') {
+    route = 'converse'
   }
 
   const rateLimiter = options.rateLimiter ?? noopLimiter

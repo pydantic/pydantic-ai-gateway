@@ -244,11 +244,7 @@ function mapOutputParts(output: ResponseOutputItem[]): MessagePart[] {
   for (const item of output) {
     match(item)
       .with({ type: 'reasoning' }, (item) => {
-        if (item.summary.length === 0) {
-          parts.push({ type: 'thinking' as const, content: '' })
-        } else {
-          parts.push(...item.summary.map((summary) => ({ type: 'thinking' as const, content: summary.text })))
-        }
+        parts.push({ type: 'thinking' as const, content: item.summary.join('\n') })
       })
       .with({ content: P.array(P.union({ type: 'output_text' }, { type: 'refusal' })) }, (_item) => {
         parts.push(

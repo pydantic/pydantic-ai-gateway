@@ -46,7 +46,7 @@ export class ResponsesAPI extends BaseAPI<ResponseCreateParams, Response, Respon
   }
 
   outputMessages = (responseBody: Response): OutputMessages | undefined => {
-    return responseBody.output.map(mapOutputMessage)
+    return [mapOutputMessage(responseBody.output)]
   }
 
   // SafeExtractor implementation
@@ -87,7 +87,7 @@ export class ResponsesAPI extends BaseAPI<ResponseCreateParams, Response, Respon
         : undefined
     },
     outputMessages: (responseBody: Response) => {
-      this.extractedResponse.outputMessages = responseBody.output.map(mapOutputMessage)
+      this.extractedResponse.outputMessages = [mapOutputMessage(responseBody.output)]
     },
   }
 
@@ -234,55 +234,58 @@ function mapInputMessage(input: ResponseInputItem): ChatMessage {
   )
 }
 
-function mapOutputMessage(output: ResponseOutputItem): OutputMessage {
-  return match(output)
-    .returnType<OutputMessage>()
-    .with({ content: P.array(P.union({ type: 'output_text' }, { type: 'refusal' })) }, (_output) => {
-      return {
-        role: _output.role,
-        parts: _output.content.map((part) => {
-          return (
-            match(part)
+function mapOutputMessage(output: ResponseOutputItem[]): OutputMessage {
+  return { role: 'assistant', parts: mapOutputParts(output) }
+}
+
+function mapOutputParts(output: ResponseOutputItem[]): MessagePart[] {
+  const parts: MessagePart[] = []
+
+  for (const item of output) {
+    match(item)
+      .with({ type: 'reasoning' }, (item) => {
+        if (item.summary.length === 0) {
+          parts.push({ type: 'thinking' as const, content: '' })
+        } else {
+          parts.push(...item.summary.map((summary) => ({ type: 'thinking' as const, content: summary.text })))
+        }
+      })
+      .with({ content: P.array(P.union({ type: 'output_text' }, { type: 'refusal' })) }, (_item) => {
+        parts.push(
+          ..._item.content.map((part) => {
+            return match(part)
               .returnType<MessagePart>()
               .with({ type: 'output_text' }, (_part) => {
                 return { type: 'text', content: _part.text }
               })
-              // TODO(Marcelo): How do we represent refusals?
               .with({ type: 'refusal' }, (_part) => {
                 return { type: 'unknown', part: { ..._part } }
               })
               .exhaustive()
-          )
-        }),
-      }
-    })
-    .with({ type: 'function_call' }, (_output) => {
-      return {
-        role: 'assistant',
-        parts: [{ type: 'tool_call', id: _output.call_id, name: _output.name, arguments: _output.arguments }],
-      }
-    })
-    .with({ type: 'reasoning' }, (_output) => {
-      return {
-        role: 'assistant',
-        parts: _output.summary.map((summary) => ({ type: 'thinking', content: summary.text })),
-      }
-    })
-    .with(
-      P.union(
-        { type: 'file_search_call' },
-        { type: 'code_interpreter_call' },
-        { type: 'image_generation_call' },
-        { type: 'local_shell_call' },
-        { type: 'computer_call' },
-        { type: 'mcp_call' },
-        { type: 'mcp_list_tools' },
-        { type: 'mcp_approval_request' },
-        { type: 'web_search_call' },
-      ),
-      (_output) => {
-        return { role: 'assistant', parts: [{ type: 'unknown', part: { ..._output } }] }
-      },
-    )
-    .exhaustive()
+          }),
+        )
+      })
+      .with({ type: 'function_call' }, (_item) => {
+        parts.push({ type: 'tool_call', id: _item.call_id, name: _item.name, arguments: _item.arguments })
+      })
+      .with(
+        P.union(
+          { type: 'file_search_call' },
+          { type: 'code_interpreter_call' },
+          { type: 'image_generation_call' },
+          { type: 'local_shell_call' },
+          { type: 'computer_call' },
+          { type: 'mcp_call' },
+          { type: 'mcp_list_tools' },
+          { type: 'mcp_approval_request' },
+          { type: 'web_search_call' },
+        ),
+        (_item) => {
+          parts.push({ type: 'unknown', part: { ..._item } })
+        },
+      )
+      .exhaustive()
+  }
+
+  return parts
 }

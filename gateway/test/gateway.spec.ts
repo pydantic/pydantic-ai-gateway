@@ -450,7 +450,7 @@ describe('authentication', () => {
     })
 
     test('should reject key that is too long', async ({ gateway }) => {
-      const longKey = 'a'.repeat(101)
+      const longKey = 'a'.repeat(201)
       const response = await gateway.fetch('https://example.com/openai/gpt-5', { headers: { Authorization: longKey } })
       const text = await response.text()
       expect(response.status).toBe(401)

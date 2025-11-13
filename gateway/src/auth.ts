@@ -99,7 +99,7 @@ function getApiKey(request: Request): Response | string {
   const key = authorization || xApiKey
   if (key) {
     // avoid very long queries to the DB
-    if (key.length > 100) {
+    if (key.length > 200) {
       return textResponse(401, 'Unauthorized - Key too long')
     } else {
       return key

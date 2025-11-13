@@ -323,7 +323,7 @@ export class DefaultProviderProxy {
     }
 
     // Validate that it's possible to calculate the price for the request model.
-    if (requestModel && this.providerProxy.blockOnError) {
+    if (requestModel && this.providerProxy.disableKey) {
       const price = calcPrice({ input_tokens: 0, output_tokens: 0 }, requestModel, { provider: this.usageProvider() })
       if (!price) {
         return { modelNotFound: true, requestModel }

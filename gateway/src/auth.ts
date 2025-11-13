@@ -16,6 +16,10 @@ export async function apiKeyAuth(
     return keyResult
   }
   const key = keyResult
+  // avoid very long queries to the DB
+  if (key.length > 200) {
+    return textResponse(401, 'Unauthorized - Key too long')
+  }
 
   const cacheKey = apiKeyCacheKey(key, options.kvVersion)
   const cacheResult = await options.kv.getWithMetadata<ApiKeyInfo, string>(cacheKey, { type: 'json' })
@@ -98,12 +102,7 @@ function getApiKey(request: Request): Response | string {
   }
   const key = authorization || xApiKey
   if (key) {
-    // avoid very long queries to the DB
-    if (key.length > 200) {
-      return textResponse(401, 'Unauthorized - Key too long')
-    } else {
-      return key
-    }
+    return key
   } else {
     return textResponse(401, 'Unauthorized - Missing Authorization Header')
   }

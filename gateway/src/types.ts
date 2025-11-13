@@ -74,8 +74,11 @@ export interface ProviderProxy {
   // TODO(Marcelo): Remove now - this should live in the routingGroups.
   priority?: number
 
-  /** Weather to disable the key in case of error, if missing defaults to True. */
+  /** Whether to disable the key in case of error, if missing defaults to True. */
   disableKey?: boolean
+
+  /** Whether to block the key in case of error, if missing defaults to True. */
+  blockOnError?: boolean
 
   /** Whether the provider is managed by the platform and not by the user. */
   isBuiltIn?: boolean

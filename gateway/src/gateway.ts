@@ -119,7 +119,12 @@ export async function gatewayWithLimiter(
     }
 
     // Those responses are already closing the `otelSpan`.
-    if (!('responseStream' in result) && !('response' in result) && !('unexpectedStatus' in result)) {
+    if (
+      !('responseStream' in result) &&
+      !('response' in result) &&
+      !('unexpectedStatus' in result) &&
+      !('modelNotFound' in result)
+    ) {
       const [spanName, attributes, level] = genAiOtelAttributes(result, proxy)
       otelSpan.end(spanName, attributes, { level })
     }
@@ -168,6 +173,9 @@ export async function gatewayWithLimiter(
     )
 
     response = new Response(responseStream, { status, headers })
+  } else if ('modelNotFound' in result) {
+    const { requestModel } = result
+    response = textResponse(404, `PAIG does not support the model \`${requestModel}\` yet. We're working on it!`)
   } else if ('successStatus' in result) {
     const { successStatus: status, responseHeaders: headers, responseBody, cost } = result
     runAfter(ctx, 'recordSpend', recordSpend(apiKeyInfo, cost, options))

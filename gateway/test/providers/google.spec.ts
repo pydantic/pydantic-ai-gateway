@@ -90,6 +90,8 @@ describe('google', () => {
 
     expect(response.status).toBe(404)
     const text = await response.text()
-    expect(text).toMatchInlineSnapshot(`"PAIG does not support the model \`unsupported-model-xyz\` yet. We're working on it!"`)
+    expect(text).toMatchInlineSnapshot(
+      `"PAIG does not support the model \`unsupported-model-xyz\` yet. We're working on it!"`,
+    )
   })
 })

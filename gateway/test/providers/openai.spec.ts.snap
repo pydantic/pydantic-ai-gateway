@@ -951,11 +951,11 @@ exports[`openai > openai responses > span 1`] = `
       "gen_ai.operation.name": "chat",
       "gen_ai.output.messages": [
         {
-          "parts": [],
-          "role": "assistant",
-        },
-        {
           "parts": [
+            {
+              "content": "",
+              "type": "thinking",
+            },
             {
               "content": "Usually blue in daytime, but it can be red/orange at sunrise/sunset, gray when cloudy, and black at night.",
               "type": "text",
@@ -1908,11 +1908,11 @@ exports[`openai > openai responses with builtin tools > span 1`] = `
       "gen_ai.operation.name": "chat",
       "gen_ai.output.messages": [
         {
-          "parts": [],
-          "role": "assistant",
-        },
-        {
           "parts": [
+            {
+              "content": "",
+              "type": "thinking",
+            },
             {
               "part": {
                 "code": "import math, decimal
@@ -1926,15 +1926,10 @@ math.sqrt(n)",
               },
               "type": "unknown",
             },
-          ],
-          "role": "assistant",
-        },
-        {
-          "parts": [],
-          "role": "assistant",
-        },
-        {
-          "parts": [
+            {
+              "content": "",
+              "type": "thinking",
+            },
             {
               "part": {
                 "code": "from decimal import Decimal, getcontext
@@ -1950,15 +1945,10 @@ root",
               },
               "type": "unknown",
             },
-          ],
-          "role": "assistant",
-        },
-        {
-          "parts": [],
-          "role": "assistant",
-        },
-        {
-          "parts": [
+            {
+              "content": "",
+              "type": "thinking",
+            },
             {
               "part": {
                 "code": "import math
@@ -1973,15 +1963,10 @@ s, s*s <= n, (s+1)*(s+1) > n",
               },
               "type": "unknown",
             },
-          ],
-          "role": "assistant",
-        },
-        {
-          "parts": [],
-          "role": "assistant",
-        },
-        {
-          "parts": [
+            {
+              "content": "",
+              "type": "thinking",
+            },
             {
               "part": {
                 "code": "s=351_997
@@ -1994,15 +1979,10 @@ s*s, (s+1)*(s+1)",
               },
               "type": "unknown",
             },
-          ],
-          "role": "assistant",
-        },
-        {
-          "parts": [],
-          "role": "assistant",
-        },
-        {
-          "parts": [
+            {
+              "content": "",
+              "type": "thinking",
+            },
             {
               "part": {
                 "code": "from decimal import Decimal, getcontext, ROUND_HALF_UP
@@ -2021,15 +2001,10 @@ str(rounded)",
               },
               "type": "unknown",
             },
-          ],
-          "role": "assistant",
-        },
-        {
-          "parts": [],
-          "role": "assistant",
-        },
-        {
-          "parts": [
+            {
+              "content": "",
+              "type": "thinking",
+            },
             {
               "part": {
                 "code": "from decimal import Decimal, getcontext, ROUND_HALF_UP
@@ -2046,15 +2021,10 @@ root.quantize(q, rounding=ROUND_HALF_UP)",
               },
               "type": "unknown",
             },
-          ],
-          "role": "assistant",
-        },
-        {
-          "parts": [],
-          "role": "assistant",
-        },
-        {
-          "parts": [
+            {
+              "content": "",
+              "type": "thinking",
+            },
             {
               "content": "The square root of 123902139123 is approximately 351,997.356698882044317918.",
               "type": "text",

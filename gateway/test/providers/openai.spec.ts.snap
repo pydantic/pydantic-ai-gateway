@@ -14,8 +14,8 @@ exports[`openai > openai chat > llm 1`] = `
       },
     },
   ],
-  "created": 1762271642,
-  "id": "chatcmpl-CYDe6BCWOKGGGTlQLofyQ2DP3QTRV",
+  "created": 1762860490,
+  "id": "chatcmpl-CagpeM1SJL1btImFBBsJ3DlGZ2nKb",
   "model": "gpt-5-2025-08-07",
   "object": "chat.completion",
   "service_tier": "default",
@@ -120,7 +120,7 @@ exports[`openai > openai chat > span 1`] = `
   {
     "key": "gen_ai.response.id",
     "value": {
-      "stringValue": "chatcmpl-CYDe6BCWOKGGGTlQLofyQ2DP3QTRV",
+      "stringValue": "chatcmpl-CagpeM1SJL1btImFBBsJ3DlGZ2nKb",
     },
   },
   {
@@ -296,7 +296,7 @@ exports[`openai > openai chat > span 1`] = `
   {
     "key": "http.response.body.text",
     "value": {
-      "stringValue": "{"id":"chatcmpl-CYDe6BCWOKGGGTlQLofyQ2DP3QTRV","object":"chat.completion","created":1762271642,"model":"gpt-5-2025-08-07","choices":[{"index":0,"message":{"role":"assistant","content":"Paris.","refusal":null,"annotations":[]},"finish_reason":"stop"}],"usage":{"prompt_tokens":23,"completion_tokens":11,"total_tokens":34,"prompt_tokens_details":{"cached_tokens":0,"audio_tokens":0},"completion_tokens_details":{"reasoning_tokens":0,"audio_tokens":0,"accepted_prediction_tokens":0,"rejected_prediction_tokens":0},"pydantic_ai_gateway":{"cost_estimate":0.00013875}},"service_tier":"default","system_fingerprint":null}",
+      "stringValue": "{"id":"chatcmpl-CagpeM1SJL1btImFBBsJ3DlGZ2nKb","object":"chat.completion","created":1762860490,"model":"gpt-5-2025-08-07","choices":[{"index":0,"message":{"role":"assistant","content":"Paris.","refusal":null,"annotations":[]},"finish_reason":"stop"}],"usage":{"prompt_tokens":23,"completion_tokens":11,"total_tokens":34,"prompt_tokens_details":{"cached_tokens":0,"audio_tokens":0},"completion_tokens_details":{"reasoning_tokens":0,"audio_tokens":0,"accepted_prediction_tokens":0,"rejected_prediction_tokens":0},"pydantic_ai_gateway":{"cost_estimate":0.00013875}},"service_tier":"default","system_fingerprint":null}",
     },
   },
   {
@@ -360,8 +360,8 @@ exports[`openai > openai chat legacy name > llm 1`] = `
       },
     },
   ],
-  "created": 1762271642,
-  "id": "chatcmpl-CYDe6BCWOKGGGTlQLofyQ2DP3QTRV",
+  "created": 1762860490,
+  "id": "chatcmpl-CagpeM1SJL1btImFBBsJ3DlGZ2nKb",
   "model": "gpt-5-2025-08-07",
   "object": "chat.completion",
   "service_tier": "default",
@@ -466,7 +466,7 @@ exports[`openai > openai chat legacy name > span 1`] = `
   {
     "key": "gen_ai.response.id",
     "value": {
-      "stringValue": "chatcmpl-CYDe6BCWOKGGGTlQLofyQ2DP3QTRV",
+      "stringValue": "chatcmpl-CagpeM1SJL1btImFBBsJ3DlGZ2nKb",
     },
   },
   {
@@ -642,7 +642,7 @@ exports[`openai > openai chat legacy name > span 1`] = `
   {
     "key": "http.response.body.text",
     "value": {
-      "stringValue": "{"id":"chatcmpl-CYDe6BCWOKGGGTlQLofyQ2DP3QTRV","object":"chat.completion","created":1762271642,"model":"gpt-5-2025-08-07","choices":[{"index":0,"message":{"role":"assistant","content":"Paris.","refusal":null,"annotations":[]},"finish_reason":"stop"}],"usage":{"prompt_tokens":23,"completion_tokens":11,"total_tokens":34,"prompt_tokens_details":{"cached_tokens":0,"audio_tokens":0},"completion_tokens_details":{"reasoning_tokens":0,"audio_tokens":0,"accepted_prediction_tokens":0,"rejected_prediction_tokens":0},"pydantic_ai_gateway":{"cost_estimate":0.00013875}},"service_tier":"default","system_fingerprint":null}",
+      "stringValue": "{"id":"chatcmpl-CagpeM1SJL1btImFBBsJ3DlGZ2nKb","object":"chat.completion","created":1762860490,"model":"gpt-5-2025-08-07","choices":[{"index":0,"message":{"role":"assistant","content":"Paris.","refusal":null,"annotations":[]},"finish_reason":"stop"}],"usage":{"prompt_tokens":23,"completion_tokens":11,"total_tokens":34,"prompt_tokens_details":{"cached_tokens":0,"audio_tokens":0},"completion_tokens_details":{"reasoning_tokens":0,"audio_tokens":0,"accepted_prediction_tokens":0,"rejected_prediction_tokens":0},"pydantic_ai_gateway":{"cost_estimate":0.00013875}},"service_tier":"default","system_fingerprint":null}",
     },
   },
   {
@@ -706,10 +706,10 @@ exports[`openai > openai chat stream > chunks 1`] = `
         "index": 0,
       },
     ],
-    "created": 1762271713,
-    "id": "chatcmpl-CYDfFsepopZlcPzyFj5cdegEMUIO3",
+    "created": 1762860554,
+    "id": "chatcmpl-CagqgcMC5BuFBbC8tkJpiQ8SnkdsO",
     "model": "gpt-5-2025-08-07",
-    "obfuscation": "1oeFyzekfM",
+    "obfuscation": "MDpId38oCM",
     "object": "chat.completion.chunk",
     "service_tier": "default",
     "system_fingerprint": null,
@@ -725,10 +725,10 @@ exports[`openai > openai chat stream > chunks 1`] = `
         "index": 0,
       },
     ],
-    "created": 1762271713,
-    "id": "chatcmpl-CYDfFsepopZlcPzyFj5cdegEMUIO3",
+    "created": 1762860554,
+    "id": "chatcmpl-CagqgcMC5BuFBbC8tkJpiQ8SnkdsO",
     "model": "gpt-5-2025-08-07",
-    "obfuscation": "iNYovHl",
+    "obfuscation": "HCdHjav",
     "object": "chat.completion.chunk",
     "service_tier": "default",
     "system_fingerprint": null,
@@ -744,10 +744,10 @@ exports[`openai > openai chat stream > chunks 1`] = `
         "index": 0,
       },
     ],
-    "created": 1762271713,
-    "id": "chatcmpl-CYDfFsepopZlcPzyFj5cdegEMUIO3",
+    "created": 1762860554,
+    "id": "chatcmpl-CagqgcMC5BuFBbC8tkJpiQ8SnkdsO",
     "model": "gpt-5-2025-08-07",
-    "obfuscation": "z2nujSb0c5n",
+    "obfuscation": "2DbJDfge2l7",
     "object": "chat.completion.chunk",
     "service_tier": "default",
     "system_fingerprint": null,
@@ -761,10 +761,10 @@ exports[`openai > openai chat stream > chunks 1`] = `
         "index": 0,
       },
     ],
-    "created": 1762271713,
-    "id": "chatcmpl-CYDfFsepopZlcPzyFj5cdegEMUIO3",
+    "created": 1762860554,
+    "id": "chatcmpl-CagqgcMC5BuFBbC8tkJpiQ8SnkdsO",
     "model": "gpt-5-2025-08-07",
-    "obfuscation": "OvkX97",
+    "obfuscation": "Mg4E76",
     "object": "chat.completion.chunk",
     "service_tier": "default",
     "system_fingerprint": null,
@@ -772,10 +772,10 @@ exports[`openai > openai chat stream > chunks 1`] = `
   },
   {
     "choices": [],
-    "created": 1762271713,
-    "id": "chatcmpl-CYDfFsepopZlcPzyFj5cdegEMUIO3",
+    "created": 1762860554,
+    "id": "chatcmpl-CagqgcMC5BuFBbC8tkJpiQ8SnkdsO",
     "model": "gpt-5-2025-08-07",
-    "obfuscation": "d9x8d108MYZ",
+    "obfuscation": "zmlfl9RrKMq",
     "object": "chat.completion.chunk",
     "service_tier": "default",
     "system_fingerprint": null,
@@ -805,7 +805,7 @@ exports[`openai > openai chat stream > span 1`] = `
       "gen_ai.operation.name": "chat",
       "gen_ai.request.max_tokens": 1024,
       "gen_ai.request.model": "gpt-5",
-      "gen_ai.response.id": "chatcmpl-CYDfFsepopZlcPzyFj5cdegEMUIO3",
+      "gen_ai.response.id": "chatcmpl-CagqgcMC5BuFBbC8tkJpiQ8SnkdsO",
       "gen_ai.response.model": "gpt-5-2025-08-07",
       "gen_ai.system": "openai",
       "gen_ai.usage.cache_read_tokens": 0,
@@ -834,7 +834,7 @@ exports[`openai > openai chat stream > span 1`] = `
       "logfire.json_schema": "{"type":"object","properties":{"gen_ai.system":{"type":"string"},"gen_ai.operation.name":{"type":"string"},"gen_ai.request.model":{"type":"string"},"gen_ai.request.max_tokens":{"type":"number"},"gen_ai.response.model":{"type":"string"},"gen_ai.response.id":{"type":"string"},"gen_ai.usage.input_tokens":{"type":"number"},"gen_ai.usage.cache_read_tokens":{"type":"number"},"gen_ai.usage.output_tokens":{"type":"number"},"gen_ai.usage.input_audio_tokens":{"type":"number"},"gen_ai.usage.output_audio_tokens":{"type":"number"},"http.request.method":{"type":"string"},"url.full":{"type":"string"},"http.request.header.accept":{"type":"string"},"http.request.header.authorization":{"type":"string"},"http.request.header.content-length":{"type":"string"},"http.request.header.content-type":{"type":"string"},"http.request.header.user-agent":{"type":"string"},"http.request.header.x-stainless-arch":{"type":"string"},"http.request.header.x-stainless-lang":{"type":"string"},"http.request.header.x-stainless-os":{"type":"string"},"http.request.header.x-stainless-package-version":{"type":"string"},"http.request.header.x-stainless-retry-count":{"type":"string"},"http.request.header.x-stainless-runtime":{"type":"string"},"http.request.header.x-stainless-runtime-version":{"type":"string"},"http.request.header.x-stainless-timeout":{"type":"string"},"http.response.status_code":{"type":"number"},"http.response.header.content-type":{"type":"string"},"http.response.header.server":{"type":"string"},"http.response.header.transfer-encoding":{"type":"string"}}}",
       "logfire.level_num": 9,
       "logfire.msg": "chat gpt-5",
-      "url.full": "https://example.com/chat/chat/completions",
+      "url.full": "https://example.com/openai/chat/completions",
     },
     "events": [],
     "kind": 1,
@@ -859,9 +859,9 @@ exports[`openai > openai responses > llm 1`] = `
   "billing": {
     "payer": "developer",
   },
-  "created_at": 1762271645,
+  "created_at": 1762860501,
   "error": null,
-  "id": "resp_0460eb44ce4bf29800690a219dd0108193abee8e830ce725cb",
+  "id": "resp_06980adb25617f1f0069131dd594748191acfa111979088ba1",
   "incomplete_details": null,
   "instructions": "reply concisely",
   "max_output_tokens": null,
@@ -871,7 +871,7 @@ exports[`openai > openai responses > llm 1`] = `
   "object": "response",
   "output": [
     {
-      "id": "rs_0460eb44ce4bf29800690a219ea7b08193be21548d7c847f56",
+      "id": "rs_06980adb25617f1f0069131dd62a988191b7246fab30360669",
       "summary": [],
       "type": "reasoning",
     },
@@ -880,17 +880,17 @@ exports[`openai > openai responses > llm 1`] = `
         {
           "annotations": [],
           "logprobs": [],
-          "text": "Usually blue on a clear day (due to Rayleigh scattering), but it can be red/orange at sunrise/sunset, gray when cloudy, and black at night.",
+          "text": "Usually blue in daytime, but it can be red/orange at sunrise/sunset, gray when cloudy, and black at night.",
           "type": "output_text",
         },
       ],
-      "id": "msg_0460eb44ce4bf29800690a21a2388c8193b3f20e6d76de9744",
+      "id": "msg_06980adb25617f1f0069131ddbb65081919889ee4ba15e0ec4",
       "role": "assistant",
       "status": "completed",
       "type": "message",
     },
   ],
-  "output_text": "Usually blue on a clear day (due to Rayleigh scattering), but it can be red/orange at sunrise/sunset, gray when cloudy, and black at night.",
+  "output_text": "Usually blue in daytime, but it can be red/orange at sunrise/sunset, gray when cloudy, and black at night.",
   "parallel_tool_calls": true,
   "previous_response_id": null,
   "prompt_cache_key": null,
@@ -920,14 +920,14 @@ exports[`openai > openai responses > llm 1`] = `
     "input_tokens_details": {
       "cached_tokens": 0,
     },
-    "output_tokens": 168,
+    "output_tokens": 160,
     "output_tokens_details": {
       "reasoning_tokens": 128,
     },
     "pydantic_ai_gateway": {
-      "cost_estimate": 0.0017050000000000001,
+      "cost_estimate": 0.0016250000000000001,
     },
-    "total_tokens": 188,
+    "total_tokens": 180,
   },
   "user": null,
 }
@@ -957,7 +957,7 @@ exports[`openai > openai responses > span 1`] = `
         {
           "parts": [
             {
-              "content": "Usually blue on a clear day (due to Rayleigh scattering), but it can be red/orange at sunrise/sunset, gray when cloudy, and black at night.",
+              "content": "Usually blue in daytime, but it can be red/orange at sunrise/sunset, gray when cloudy, and black at night.",
               "type": "text",
             },
           ],
@@ -972,7 +972,7 @@ exports[`openai > openai responses > span 1`] = `
       "gen_ai.request.top_k": {},
       "gen_ai.request.top_p": {},
       "gen_ai.response.finish_reasons": {},
-      "gen_ai.response.id": "resp_0460eb44ce4bf29800690a219dd0108193abee8e830ce725cb",
+      "gen_ai.response.id": "resp_06980adb25617f1f0069131dd594748191acfa111979088ba1",
       "gen_ai.response.model": "gpt-5-2025-08-07",
       "gen_ai.system": "openai",
       "gen_ai.system_instructions": {},
@@ -982,13 +982,13 @@ exports[`openai > openai responses > span 1`] = `
       "gen_ai.usage.input_audio_tokens": {},
       "gen_ai.usage.input_tokens": 20,
       "gen_ai.usage.output_audio_tokens": {},
-      "gen_ai.usage.output_tokens": 168,
+      "gen_ai.usage.output_tokens": 160,
       "http.request.body.text": "{
   "model": "gpt-5",
   "instructions": "reply concisely",
   "input": "what color is the sky?"
 }",
-      "http.response.body.text": "{"id":"resp_0460eb44ce4bf29800690a219dd0108193abee8e830ce725cb","object":"response","created_at":1762271645,"status":"completed","background":false,"billing":{"payer":"developer"},"error":null,"incomplete_details":null,"instructions":"reply concisely","max_output_tokens":null,"max_tool_calls":null,"model":"gpt-5-2025-08-07","output":[{"id":"rs_0460eb44ce4bf29800690a219ea7b08193be21548d7c847f56","type":"reasoning","summary":[]},{"id":"msg_0460eb44ce4bf29800690a21a2388c8193b3f20e6d76de9744","type":"message","status":"completed","content":[{"type":"output_text","annotations":[],"logprobs":[],"text":"Usually blue on a clear day (due to Rayleigh scattering), but it can be red/orange at sunrise/sunset, gray when cloudy, and black at night."}],"role":"assistant"}],"parallel_tool_calls":true,"previous_response_id":null,"prompt_cache_key":null,"prompt_cache_retention":null,"reasoning":{"effort":"medium","summary":null},"safety_identifier":null,"service_tier":"default","store":true,"temperature":1,"text":{"format":{"type":"text"},"verbosity":"medium"},"tool_choice":"auto","tools":[],"top_logprobs":0,"top_p":1,"truncation":"disabled","usage":{"input_tokens":20,"input_tokens_details":{"cached_tokens":0},"output_tokens":168,"output_tokens_details":{"reasoning_tokens":128},"total_tokens":188,"pydantic_ai_gateway":{"cost_estimate":0.0017050000000000001}},"user":null,"metadata":{}}",
+      "http.response.body.text": "{"id":"resp_06980adb25617f1f0069131dd594748191acfa111979088ba1","object":"response","created_at":1762860501,"status":"completed","background":false,"billing":{"payer":"developer"},"error":null,"incomplete_details":null,"instructions":"reply concisely","max_output_tokens":null,"max_tool_calls":null,"model":"gpt-5-2025-08-07","output":[{"id":"rs_06980adb25617f1f0069131dd62a988191b7246fab30360669","type":"reasoning","summary":[]},{"id":"msg_06980adb25617f1f0069131ddbb65081919889ee4ba15e0ec4","type":"message","status":"completed","content":[{"type":"output_text","annotations":[],"logprobs":[],"text":"Usually blue in daytime, but it can be red/orange at sunrise/sunset, gray when cloudy, and black at night."}],"role":"assistant"}],"parallel_tool_calls":true,"previous_response_id":null,"prompt_cache_key":null,"prompt_cache_retention":null,"reasoning":{"effort":"medium","summary":null},"safety_identifier":null,"service_tier":"default","store":true,"temperature":1,"text":{"format":{"type":"text"},"verbosity":"medium"},"tool_choice":"auto","tools":[],"top_logprobs":0,"top_p":1,"truncation":"disabled","usage":{"input_tokens":20,"input_tokens_details":{"cached_tokens":0},"output_tokens":160,"output_tokens_details":{"reasoning_tokens":128},"total_tokens":180,"pydantic_ai_gateway":{"cost_estimate":0.0016250000000000001}},"user":null,"metadata":{}}",
       "http.response.status_code": 200,
       "logfire.json_schema": "{"type":"object","properties":{"gen_ai.operation.name":{"type":"string"},"gen_ai.request.model":{"type":"string"},"gen_ai.system":{"type":"string"},"gen_ai.request.max_tokens":{},"gen_ai.request.top_k":{},"gen_ai.request.top_p":{},"gen_ai.request.temperature":{},"gen_ai.request.stop_sequences":{},"gen_ai.request.seed":{},"gen_ai.response.finish_reasons":{},"gen_ai.response.id":{"type":"string"},"gen_ai.input.messages":{},"gen_ai.output.messages":{},"gen_ai.system_instructions":{},"http.response.status_code":{"type":"number"},"http.request.body.text":{"type":"string"},"http.response.body.text":{"type":"string"},"gen_ai.response.model":{"type":"string"},"gen_ai.usage.input_tokens":{"type":"number"},"gen_ai.usage.cache_read_tokens":{"type":"number"},"gen_ai.usage.cache_write_tokens":{},"gen_ai.usage.output_tokens":{"type":"number"},"gen_ai.usage.input_audio_tokens":{},"gen_ai.usage.cache_audio_read_tokens":{},"gen_ai.usage.output_audio_tokens":{}}}",
       "logfire.level_num": 9,
@@ -1025,8 +1025,8 @@ exports[`openai > openai responses legacy name > llm 1`] = `
       },
     },
   ],
-  "created": 1762271642,
-  "id": "chatcmpl-CYDe6BCWOKGGGTlQLofyQ2DP3QTRV",
+  "created": 1762860490,
+  "id": "chatcmpl-CagpeM1SJL1btImFBBsJ3DlGZ2nKb",
   "model": "gpt-5-2025-08-07",
   "object": "chat.completion",
   "service_tier": "default",
@@ -1099,7 +1099,7 @@ exports[`openai > openai responses legacy name > span 1`] = `
       "gen_ai.response.finish_reasons": [
         "stop",
       ],
-      "gen_ai.response.id": "chatcmpl-CYDe6BCWOKGGGTlQLofyQ2DP3QTRV",
+      "gen_ai.response.id": "chatcmpl-CagpeM1SJL1btImFBBsJ3DlGZ2nKb",
       "gen_ai.response.model": "gpt-5-2025-08-07",
       "gen_ai.system": "openai",
       "gen_ai.system_instructions": {},
@@ -1124,7 +1124,7 @@ exports[`openai > openai responses legacy name > span 1`] = `
   ],
   "max_completion_tokens": 1024
 }",
-      "http.response.body.text": "{"id":"chatcmpl-CYDe6BCWOKGGGTlQLofyQ2DP3QTRV","object":"chat.completion","created":1762271642,"model":"gpt-5-2025-08-07","choices":[{"index":0,"message":{"role":"assistant","content":"Paris.","refusal":null,"annotations":[]},"finish_reason":"stop"}],"usage":{"prompt_tokens":23,"completion_tokens":11,"total_tokens":34,"prompt_tokens_details":{"cached_tokens":0,"audio_tokens":0},"completion_tokens_details":{"reasoning_tokens":0,"audio_tokens":0,"accepted_prediction_tokens":0,"rejected_prediction_tokens":0},"pydantic_ai_gateway":{"cost_estimate":0.00013875}},"service_tier":"default","system_fingerprint":null}",
+      "http.response.body.text": "{"id":"chatcmpl-CagpeM1SJL1btImFBBsJ3DlGZ2nKb","object":"chat.completion","created":1762860490,"model":"gpt-5-2025-08-07","choices":[{"index":0,"message":{"role":"assistant","content":"Paris.","refusal":null,"annotations":[]},"finish_reason":"stop"}],"usage":{"prompt_tokens":23,"completion_tokens":11,"total_tokens":34,"prompt_tokens_details":{"cached_tokens":0,"audio_tokens":0},"completion_tokens_details":{"reasoning_tokens":0,"audio_tokens":0,"accepted_prediction_tokens":0,"rejected_prediction_tokens":0},"pydantic_ai_gateway":{"cost_estimate":0.00013875}},"service_tier":"default","system_fingerprint":null}",
       "http.response.status_code": 200,
       "logfire.json_schema": "{"type":"object","properties":{"gen_ai.operation.name":{"type":"string"},"gen_ai.request.model":{"type":"string"},"gen_ai.system":{"type":"string"},"gen_ai.request.max_tokens":{"type":"number"},"gen_ai.request.top_k":{},"gen_ai.request.top_p":{},"gen_ai.request.temperature":{},"gen_ai.request.stop_sequences":{},"gen_ai.request.seed":{},"gen_ai.response.finish_reasons":{},"gen_ai.response.id":{"type":"string"},"gen_ai.input.messages":{},"gen_ai.output.messages":{},"gen_ai.system_instructions":{},"http.response.status_code":{"type":"number"},"http.request.body.text":{"type":"string"},"http.response.body.text":{"type":"string"},"gen_ai.response.model":{"type":"string"},"gen_ai.usage.input_tokens":{"type":"number"},"gen_ai.usage.cache_read_tokens":{"type":"number"},"gen_ai.usage.cache_write_tokens":{},"gen_ai.usage.output_tokens":{"type":"number"},"gen_ai.usage.input_audio_tokens":{"type":"number"},"gen_ai.usage.cache_audio_read_tokens":{},"gen_ai.usage.output_audio_tokens":{"type":"number"}}}",
       "logfire.level_num": 9,
@@ -1152,9 +1152,9 @@ exports[`openai > openai responses stream > chunks 1`] = `
   {
     "response": {
       "background": false,
-      "created_at": 1762530675,
+      "created_at": 1762860556,
       "error": null,
-      "id": "resp_009cd1fb5c5745df00690e157272e481a0a62b0981be1ad5ab",
+      "id": "resp_05e9f6e35bff13970069131e0c3d6881a0a0a473b7052b7b42",
       "incomplete_details": null,
       "instructions": "reply concisely",
       "max_output_tokens": null,
@@ -1196,9 +1196,9 @@ exports[`openai > openai responses stream > chunks 1`] = `
   {
     "response": {
       "background": false,
-      "created_at": 1762530675,
+      "created_at": 1762860556,
       "error": null,
-      "id": "resp_009cd1fb5c5745df00690e157272e481a0a62b0981be1ad5ab",
+      "id": "resp_05e9f6e35bff13970069131e0c3d6881a0a0a473b7052b7b42",
       "incomplete_details": null,
       "instructions": "reply concisely",
       "max_output_tokens": null,
@@ -1239,7 +1239,7 @@ exports[`openai > openai responses stream > chunks 1`] = `
   },
   {
     "item": {
-      "id": "rs_009cd1fb5c5745df00690e157396e481a0957dce72e75edafe",
+      "id": "rs_05e9f6e35bff13970069131e0c7fac81a099cb84a46c036f3e",
       "summary": [],
       "type": "reasoning",
     },
@@ -1249,7 +1249,7 @@ exports[`openai > openai responses stream > chunks 1`] = `
   },
   {
     "item": {
-      "id": "rs_009cd1fb5c5745df00690e157396e481a0957dce72e75edafe",
+      "id": "rs_05e9f6e35bff13970069131e0c7fac81a099cb84a46c036f3e",
       "summary": [],
       "type": "reasoning",
     },
@@ -1260,7 +1260,7 @@ exports[`openai > openai responses stream > chunks 1`] = `
   {
     "item": {
       "content": [],
-      "id": "msg_009cd1fb5c5745df00690e157619cc81a0910861959c277461",
+      "id": "msg_05e9f6e35bff13970069131e0f647081a0a16827cc22d1adb9",
       "role": "assistant",
       "status": "in_progress",
       "type": "message",
@@ -1271,7 +1271,7 @@ exports[`openai > openai responses stream > chunks 1`] = `
   },
   {
     "content_index": 0,
-    "item_id": "msg_009cd1fb5c5745df00690e157619cc81a0910861959c277461",
+    "item_id": "msg_05e9f6e35bff13970069131e0f647081a0a16827cc22d1adb9",
     "output_index": 1,
     "part": {
       "annotations": [],
@@ -1285,9 +1285,9 @@ exports[`openai > openai responses stream > chunks 1`] = `
   {
     "content_index": 0,
     "delta": "Usually",
-    "item_id": "msg_009cd1fb5c5745df00690e157619cc81a0910861959c277461",
+    "item_id": "msg_05e9f6e35bff13970069131e0f647081a0a16827cc22d1adb9",
     "logprobs": [],
-    "obfuscation": "Y6c55fcnK",
+    "obfuscation": "GRSCr6cdG",
     "output_index": 1,
     "sequence_number": 6,
     "type": "response.output_text.delta",
@@ -1295,273 +1295,253 @@ exports[`openai > openai responses stream > chunks 1`] = `
   {
     "content_index": 0,
     "delta": " blue",
-    "item_id": "msg_009cd1fb5c5745df00690e157619cc81a0910861959c277461",
+    "item_id": "msg_05e9f6e35bff13970069131e0f647081a0a16827cc22d1adb9",
     "logprobs": [],
-    "obfuscation": "ykCZBFhn4Q9",
+    "obfuscation": "vUSmzaWDHkC",
     "output_index": 1,
     "sequence_number": 7,
     "type": "response.output_text.delta",
   },
   {
     "content_index": 0,
-    "delta": " in",
-    "item_id": "msg_009cd1fb5c5745df00690e157619cc81a0910861959c277461",
+    "delta": " during",
+    "item_id": "msg_05e9f6e35bff13970069131e0f647081a0a16827cc22d1adb9",
     "logprobs": [],
-    "obfuscation": "erWu25aiquUJt",
+    "obfuscation": "920kZst40",
     "output_index": 1,
     "sequence_number": 8,
     "type": "response.output_text.delta",
   },
   {
     "content_index": 0,
-    "delta": " daytime",
-    "item_id": "msg_009cd1fb5c5745df00690e157619cc81a0910861959c277461",
+    "delta": " the",
+    "item_id": "msg_05e9f6e35bff13970069131e0f647081a0a16827cc22d1adb9",
     "logprobs": [],
-    "obfuscation": "KPXE8YsB",
+    "obfuscation": "q0EeCwDS3MH2",
     "output_index": 1,
     "sequence_number": 9,
     "type": "response.output_text.delta",
   },
   {
     "content_index": 0,
-    "delta": " (",
-    "item_id": "msg_009cd1fb5c5745df00690e157619cc81a0910861959c277461",
+    "delta": " day",
+    "item_id": "msg_05e9f6e35bff13970069131e0f647081a0a16827cc22d1adb9",
     "logprobs": [],
-    "obfuscation": "Y79kF92FBN8Hmf",
+    "obfuscation": "Xtx2X9q57puy",
     "output_index": 1,
     "sequence_number": 10,
     "type": "response.output_text.delta",
   },
   {
     "content_index": 0,
-    "delta": "Ray",
-    "item_id": "msg_009cd1fb5c5745df00690e157619cc81a0910861959c277461",
+    "delta": ";",
+    "item_id": "msg_05e9f6e35bff13970069131e0f647081a0a16827cc22d1adb9",
     "logprobs": [],
-    "obfuscation": "cIK8M0lEE3YzA",
+    "obfuscation": "HfV2ZrSe5V10YFp",
     "output_index": 1,
     "sequence_number": 11,
     "type": "response.output_text.delta",
   },
   {
     "content_index": 0,
-    "delta": "leigh",
-    "item_id": "msg_009cd1fb5c5745df00690e157619cc81a0910861959c277461",
+    "delta": " red",
+    "item_id": "msg_05e9f6e35bff13970069131e0f647081a0a16827cc22d1adb9",
     "logprobs": [],
-    "obfuscation": "bK7CdxeuL5K",
+    "obfuscation": "TOPe8qt0jf7i",
     "output_index": 1,
     "sequence_number": 12,
     "type": "response.output_text.delta",
   },
   {
     "content_index": 0,
-    "delta": " scattering",
-    "item_id": "msg_009cd1fb5c5745df00690e157619cc81a0910861959c277461",
+    "delta": "/or",
+    "item_id": "msg_05e9f6e35bff13970069131e0f647081a0a16827cc22d1adb9",
     "logprobs": [],
-    "obfuscation": "WRRbL",
+    "obfuscation": "M8wezGfvkGyW9",
     "output_index": 1,
     "sequence_number": 13,
     "type": "response.output_text.delta",
   },
   {
     "content_index": 0,
-    "delta": ");",
-    "item_id": "msg_009cd1fb5c5745df00690e157619cc81a0910861959c277461",
+    "delta": "ange",
+    "item_id": "msg_05e9f6e35bff13970069131e0f647081a0a16827cc22d1adb9",
     "logprobs": [],
-    "obfuscation": "wEdg1aNquL3aA9",
+    "obfuscation": "0Xssdu0j39Oe",
     "output_index": 1,
     "sequence_number": 14,
     "type": "response.output_text.delta",
   },
   {
     "content_index": 0,
-    "delta": " red",
-    "item_id": "msg_009cd1fb5c5745df00690e157619cc81a0910861959c277461",
+    "delta": " at",
+    "item_id": "msg_05e9f6e35bff13970069131e0f647081a0a16827cc22d1adb9",
     "logprobs": [],
-    "obfuscation": "dziPmC2LXs2R",
+    "obfuscation": "idOn23lcciQYz",
     "output_index": 1,
     "sequence_number": 15,
     "type": "response.output_text.delta",
   },
   {
     "content_index": 0,
-    "delta": "/or",
-    "item_id": "msg_009cd1fb5c5745df00690e157619cc81a0910861959c277461",
+    "delta": " sunrise",
+    "item_id": "msg_05e9f6e35bff13970069131e0f647081a0a16827cc22d1adb9",
     "logprobs": [],
-    "obfuscation": "pqS1KJ3JYY2oF",
+    "obfuscation": "NLys57YO",
     "output_index": 1,
     "sequence_number": 16,
     "type": "response.output_text.delta",
   },
   {
     "content_index": 0,
-    "delta": "ange",
-    "item_id": "msg_009cd1fb5c5745df00690e157619cc81a0910861959c277461",
+    "delta": " and",
+    "item_id": "msg_05e9f6e35bff13970069131e0f647081a0a16827cc22d1adb9",
     "logprobs": [],
-    "obfuscation": "gmh146U3SCPc",
+    "obfuscation": "TiS1sMSVX8Wi",
     "output_index": 1,
     "sequence_number": 17,
     "type": "response.output_text.delta",
   },
   {
     "content_index": 0,
-    "delta": " at",
-    "item_id": "msg_009cd1fb5c5745df00690e157619cc81a0910861959c277461",
+    "delta": " sunset",
+    "item_id": "msg_05e9f6e35bff13970069131e0f647081a0a16827cc22d1adb9",
     "logprobs": [],
-    "obfuscation": "ZWWPG3FWtva0m",
+    "obfuscation": "9O687daL3",
     "output_index": 1,
     "sequence_number": 18,
     "type": "response.output_text.delta",
   },
   {
     "content_index": 0,
-    "delta": " sunrise",
-    "item_id": "msg_009cd1fb5c5745df00690e157619cc81a0910861959c277461",
+    "delta": ",",
+    "item_id": "msg_05e9f6e35bff13970069131e0f647081a0a16827cc22d1adb9",
     "logprobs": [],
-    "obfuscation": "KcrJwlOt",
+    "obfuscation": "TPwmI3GJcHEw1gt",
     "output_index": 1,
     "sequence_number": 19,
     "type": "response.output_text.delta",
   },
   {
     "content_index": 0,
-    "delta": "/s",
-    "item_id": "msg_009cd1fb5c5745df00690e157619cc81a0910861959c277461",
+    "delta": " gray",
+    "item_id": "msg_05e9f6e35bff13970069131e0f647081a0a16827cc22d1adb9",
     "logprobs": [],
-    "obfuscation": "m6rPAfY9B2wJnX",
+    "obfuscation": "QuvTUTNyxzY",
     "output_index": 1,
     "sequence_number": 20,
     "type": "response.output_text.delta",
   },
   {
     "content_index": 0,
-    "delta": "unset",
-    "item_id": "msg_009cd1fb5c5745df00690e157619cc81a0910861959c277461",
+    "delta": " when",
+    "item_id": "msg_05e9f6e35bff13970069131e0f647081a0a16827cc22d1adb9",
     "logprobs": [],
-    "obfuscation": "Xb1emQk0HKL",
+    "obfuscation": "0S4gMpk3UU3",
     "output_index": 1,
     "sequence_number": 21,
     "type": "response.output_text.delta",
   },
   {
     "content_index": 0,
-    "delta": ",",
-    "item_id": "msg_009cd1fb5c5745df00690e157619cc81a0910861959c277461",
+    "delta": " over",
+    "item_id": "msg_05e9f6e35bff13970069131e0f647081a0a16827cc22d1adb9",
     "logprobs": [],
-    "obfuscation": "etzj24pXnvAtH5B",
+    "obfuscation": "e1rfUzQ4cqW",
     "output_index": 1,
     "sequence_number": 22,
     "type": "response.output_text.delta",
   },
   {
     "content_index": 0,
-    "delta": " gray",
-    "item_id": "msg_009cd1fb5c5745df00690e157619cc81a0910861959c277461",
+    "delta": "cast",
+    "item_id": "msg_05e9f6e35bff13970069131e0f647081a0a16827cc22d1adb9",
     "logprobs": [],
-    "obfuscation": "GUfbCr5GZBe",
+    "obfuscation": "FIC7b6AViOTZ",
     "output_index": 1,
     "sequence_number": 23,
     "type": "response.output_text.delta",
   },
   {
     "content_index": 0,
-    "delta": " when",
-    "item_id": "msg_009cd1fb5c5745df00690e157619cc81a0910861959c277461",
+    "delta": ",",
+    "item_id": "msg_05e9f6e35bff13970069131e0f647081a0a16827cc22d1adb9",
     "logprobs": [],
-    "obfuscation": "3elxfTQFFSi",
+    "obfuscation": "BTdtdBrdnn5P5jM",
     "output_index": 1,
     "sequence_number": 24,
     "type": "response.output_text.delta",
   },
   {
     "content_index": 0,
-    "delta": " cloudy",
-    "item_id": "msg_009cd1fb5c5745df00690e157619cc81a0910861959c277461",
+    "delta": " and",
+    "item_id": "msg_05e9f6e35bff13970069131e0f647081a0a16827cc22d1adb9",
     "logprobs": [],
-    "obfuscation": "g0DIqO7OE",
+    "obfuscation": "q75kIYqvEUYU",
     "output_index": 1,
     "sequence_number": 25,
     "type": "response.output_text.delta",
   },
   {
     "content_index": 0,
-    "delta": ",",
-    "item_id": "msg_009cd1fb5c5745df00690e157619cc81a0910861959c277461",
+    "delta": " black",
+    "item_id": "msg_05e9f6e35bff13970069131e0f647081a0a16827cc22d1adb9",
     "logprobs": [],
-    "obfuscation": "iSZ4Qw4HijUw5Cu",
+    "obfuscation": "MnURALaslq",
     "output_index": 1,
     "sequence_number": 26,
     "type": "response.output_text.delta",
   },
   {
     "content_index": 0,
-    "delta": " and",
-    "item_id": "msg_009cd1fb5c5745df00690e157619cc81a0910861959c277461",
+    "delta": " at",
+    "item_id": "msg_05e9f6e35bff13970069131e0f647081a0a16827cc22d1adb9",
     "logprobs": [],
-    "obfuscation": "b5BTeUABEUTA",
+    "obfuscation": "ThgkPep2ldBrX",
     "output_index": 1,
     "sequence_number": 27,
     "type": "response.output_text.delta",
   },
   {
     "content_index": 0,
-    "delta": " black",
-    "item_id": "msg_009cd1fb5c5745df00690e157619cc81a0910861959c277461",
+    "delta": " night",
+    "item_id": "msg_05e9f6e35bff13970069131e0f647081a0a16827cc22d1adb9",
     "logprobs": [],
-    "obfuscation": "VYq8RxDxTn",
+    "obfuscation": "OiCjV5m7Mh",
     "output_index": 1,
     "sequence_number": 28,
     "type": "response.output_text.delta",
   },
   {
     "content_index": 0,
-    "delta": " at",
-    "item_id": "msg_009cd1fb5c5745df00690e157619cc81a0910861959c277461",
+    "delta": ".",
+    "item_id": "msg_05e9f6e35bff13970069131e0f647081a0a16827cc22d1adb9",
     "logprobs": [],
-    "obfuscation": "DtYX229RaB5AP",
+    "obfuscation": "5vPteqlXqeMT1uz",
     "output_index": 1,
     "sequence_number": 29,
     "type": "response.output_text.delta",
   },
   {
     "content_index": 0,
-    "delta": " night",
-    "item_id": "msg_009cd1fb5c5745df00690e157619cc81a0910861959c277461",
+    "item_id": "msg_05e9f6e35bff13970069131e0f647081a0a16827cc22d1adb9",
     "logprobs": [],
-    "obfuscation": "BbvTGufK42",
     "output_index": 1,
     "sequence_number": 30,
-    "type": "response.output_text.delta",
-  },
-  {
-    "content_index": 0,
-    "delta": ".",
-    "item_id": "msg_009cd1fb5c5745df00690e157619cc81a0910861959c277461",
-    "logprobs": [],
-    "obfuscation": "G3VAJl2mI9rIYpe",
-    "output_index": 1,
-    "sequence_number": 31,
-    "type": "response.output_text.delta",
-  },
-  {
-    "content_index": 0,
-    "item_id": "msg_009cd1fb5c5745df00690e157619cc81a0910861959c277461",
-    "logprobs": [],
-    "output_index": 1,
-    "sequence_number": 32,
-    "text": "Usually blue in daytime (Rayleigh scattering); red/orange at sunrise/sunset, gray when cloudy, and black at night.",
+    "text": "Usually blue during the day; red/orange at sunrise and sunset, gray when overcast, and black at night.",
     "type": "response.output_text.done",
   },
   {
     "content_index": 0,
-    "item_id": "msg_009cd1fb5c5745df00690e157619cc81a0910861959c277461",
+    "item_id": "msg_05e9f6e35bff13970069131e0f647081a0a16827cc22d1adb9",
     "output_index": 1,
     "part": {
       "annotations": [],
       "logprobs": [],
-      "text": "Usually blue in daytime (Rayleigh scattering); red/orange at sunrise/sunset, gray when cloudy, and black at night.",
+      "text": "Usually blue during the day; red/orange at sunrise and sunset, gray when overcast, and black at night.",
       "type": "output_text",
     },
-    "sequence_number": 33,
+    "sequence_number": 31,
     "type": "response.content_part.done",
   },
   {
@@ -1570,25 +1550,25 @@ exports[`openai > openai responses stream > chunks 1`] = `
         {
           "annotations": [],
           "logprobs": [],
-          "text": "Usually blue in daytime (Rayleigh scattering); red/orange at sunrise/sunset, gray when cloudy, and black at night.",
+          "text": "Usually blue during the day; red/orange at sunrise and sunset, gray when overcast, and black at night.",
           "type": "output_text",
         },
       ],
-      "id": "msg_009cd1fb5c5745df00690e157619cc81a0910861959c277461",
+      "id": "msg_05e9f6e35bff13970069131e0f647081a0a16827cc22d1adb9",
       "role": "assistant",
       "status": "completed",
       "type": "message",
     },
     "output_index": 1,
-    "sequence_number": 34,
+    "sequence_number": 32,
     "type": "response.output_item.done",
   },
   {
     "response": {
       "background": false,
-      "created_at": 1762530675,
+      "created_at": 1762860556,
       "error": null,
-      "id": "resp_009cd1fb5c5745df00690e157272e481a0a62b0981be1ad5ab",
+      "id": "resp_05e9f6e35bff13970069131e0c3d6881a0a0a473b7052b7b42",
       "incomplete_details": null,
       "instructions": "reply concisely",
       "max_output_tokens": null,
@@ -1598,7 +1578,7 @@ exports[`openai > openai responses stream > chunks 1`] = `
       "object": "response",
       "output": [
         {
-          "id": "rs_009cd1fb5c5745df00690e157396e481a0957dce72e75edafe",
+          "id": "rs_05e9f6e35bff13970069131e0c7fac81a099cb84a46c036f3e",
           "summary": [],
           "type": "reasoning",
         },
@@ -1607,11 +1587,11 @@ exports[`openai > openai responses stream > chunks 1`] = `
             {
               "annotations": [],
               "logprobs": [],
-              "text": "Usually blue in daytime (Rayleigh scattering); red/orange at sunrise/sunset, gray when cloudy, and black at night.",
+              "text": "Usually blue during the day; red/orange at sunrise and sunset, gray when overcast, and black at night.",
               "type": "output_text",
             },
           ],
-          "id": "msg_009cd1fb5c5745df00690e157619cc81a0910861959c277461",
+          "id": "msg_05e9f6e35bff13970069131e0f647081a0a16827cc22d1adb9",
           "role": "assistant",
           "status": "completed",
           "type": "message",
@@ -1646,15 +1626,15 @@ exports[`openai > openai responses stream > chunks 1`] = `
         "input_tokens_details": {
           "cached_tokens": 0,
         },
-        "output_tokens": 160,
+        "output_tokens": 158,
         "output_tokens_details": {
           "reasoning_tokens": 128,
         },
-        "total_tokens": 180,
+        "total_tokens": 178,
       },
       "user": null,
     },
-    "sequence_number": 35,
+    "sequence_number": 33,
     "type": "response.completed",
   },
 ]
@@ -1677,12 +1657,12 @@ exports[`openai > openai responses stream > span 1`] = `
       ],
       "gen_ai.operation.name": "chat",
       "gen_ai.request.model": "gpt-5",
-      "gen_ai.response.id": "resp_009cd1fb5c5745df00690e157272e481a0a62b0981be1ad5ab",
+      "gen_ai.response.id": "resp_05e9f6e35bff13970069131e0c3d6881a0a0a473b7052b7b42",
       "gen_ai.response.model": "gpt-5-2025-08-07",
       "gen_ai.system": "openai",
       "gen_ai.usage.cache_read_tokens": 0,
       "gen_ai.usage.input_tokens": 20,
-      "gen_ai.usage.output_tokens": 160,
+      "gen_ai.usage.output_tokens": 158,
       "http.request.header.accept": "application/json",
       "http.request.header.authorization": "Bearer healthy",
       "http.request.header.content-length": "114",
@@ -1729,9 +1709,9 @@ exports[`openai > openai responses with builtin tools > llm 1`] = `
   "billing": {
     "payer": "developer",
   },
-  "created_at": 1762271730,
+  "created_at": 1762860509,
   "error": null,
-  "id": "resp_0dc4a3c582e21a7f00690a21f2f5a881a38c2bc17284ab0bdb",
+  "id": "resp_082fa8e15dcf68ca0069131ddd1d5c81a3a39abf96937660d6",
   "incomplete_details": null,
   "instructions": "be precise",
   "max_output_tokens": null,
@@ -1741,94 +1721,107 @@ exports[`openai > openai responses with builtin tools > llm 1`] = `
   "object": "response",
   "output": [
     {
-      "id": "rs_0dc4a3c582e21a7f00690a21f5c01c81a387696a1225044c74",
+      "id": "rs_082fa8e15dcf68ca0069131ddfa7c881a3a87573df0d17a16c",
       "summary": [],
       "type": "reasoning",
     },
     {
-      "code": "import decimal, math, fractions, sys, statistics, random",
-      "container_id": "cntr_690a21f4fa088191a854e0303fd8e69406563a23f7fe0f18",
-      "id": "ci_0dc4a3c582e21a7f00690a21f79eb081a385bc9ea91607bb8e",
+      "code": "import math, decimal
+n=123_902_139_123
+math.sqrt(n)",
+      "container_id": "cntr_69131ddf2c9481919aeb6463f689d10d080191d2eca8fa03",
+      "id": "ci_082fa8e15dcf68ca0069131de4a57081a3853a6508c3cb6979",
       "outputs": null,
       "status": "completed",
       "type": "code_interpreter_call",
     },
     {
-      "code": "n = 123_902_139_123
-# Check if perfect square
-is_square = int(n**0.5)**2 == n
-sqrt_n = n**0.5
-int_part = int(sqrt_n)
-is_square, int_part",
-      "container_id": "cntr_690a21f4fa088191a854e0303fd8e69406563a23f7fe0f18",
-      "id": "ci_0dc4a3c582e21a7f00690a21fb50d081a3839fffe407f88965",
-      "outputs": null,
-      "status": "completed",
-      "type": "code_interpreter_call",
-    },
-    {
-      "id": "rs_0dc4a3c582e21a7f00690a21fdb20081a38c8d71579c417602",
-      "summary": [],
-      "type": "reasoning",
-    },
-    {
-      "code": "int_part, int_part**2, (int_part+1)**2",
-      "container_id": "cntr_690a21f4fa088191a854e0303fd8e69406563a23f7fe0f18",
-      "id": "ci_0dc4a3c582e21a7f00690a21fe485c81a3bc4ba9ccc7418d6e",
-      "outputs": null,
-      "status": "completed",
-      "type": "code_interpreter_call",
-    },
-    {
-      "id": "rs_0dc4a3c582e21a7f00690a220009f081a3ae01ee9362963591",
+      "id": "rs_082fa8e15dcf68ca0069131de8f87081a3ac0520569a5e815a",
       "summary": [],
       "type": "reasoning",
     },
     {
       "code": "from decimal import Decimal, getcontext
-getcontext().prec = 50
-sqrt_val = Decimal(n).sqrt()
-sqrt_val",
-      "container_id": "cntr_690a21f4fa088191a854e0303fd8e69406563a23f7fe0f18",
-      "id": "ci_0dc4a3c582e21a7f00690a2200de5881a3b0fb27e1e2317788",
+getcontext().prec=50
+n=Decimal(123902139123)
+root=n.sqrt()
+root",
+      "container_id": "cntr_69131ddf2c9481919aeb6463f689d10d080191d2eca8fa03",
+      "id": "ci_082fa8e15dcf68ca0069131deb218081a38a044aec98c3a573",
       "outputs": null,
       "status": "completed",
       "type": "code_interpreter_call",
     },
     {
-      "id": "rs_0dc4a3c582e21a7f00690a22031aa881a38cd6660b4d830c50",
+      "id": "rs_082fa8e15dcf68ca0069131dece9d081a384f0196dc03e48fe",
       "summary": [],
       "type": "reasoning",
     },
     {
-      "code": "float_val = float(sqrt_val)
-float_val",
-      "container_id": "cntr_690a21f4fa088191a854e0303fd8e69406563a23f7fe0f18",
-      "id": "ci_0dc4a3c582e21a7f00690a2209f9cc81a39c0e1ddfa029c7a6",
+      "code": "import math
+n=123_902_139_123
+s=math.isqrt(n)
+s, s*s <= n, (s+1)*(s+1) > n",
+      "container_id": "cntr_69131ddf2c9481919aeb6463f689d10d080191d2eca8fa03",
+      "id": "ci_082fa8e15dcf68ca0069131ded86a481a387440dca19cae123",
       "outputs": null,
       "status": "completed",
       "type": "code_interpreter_call",
     },
     {
-      "id": "rs_0dc4a3c582e21a7f00690a220baf1481a3bda6abb8b9c09f88",
+      "id": "rs_082fa8e15dcf68ca0069131defa9d881a3b2d13641a81cda7b",
       "summary": [],
       "type": "reasoning",
     },
     {
-      "code": "from decimal import ROUND_HALF_UP
-def round_str(dec, places):
-    q = Decimal(10) ** -places
-    return str(dec.quantize(q, rounding=ROUND_HALF_UP))
-for p in [6, 9, 12, 15]:
-    print(p, round_str(sqrt_val, p))",
-      "container_id": "cntr_690a21f4fa088191a854e0303fd8e69406563a23f7fe0f18",
-      "id": "ci_0dc4a3c582e21a7f00690a220c125481a3ad139dde1b01ef42",
+      "code": "s=351_997
+s*s, (s+1)*(s+1)",
+      "container_id": "cntr_69131ddf2c9481919aeb6463f689d10d080191d2eca8fa03",
+      "id": "ci_082fa8e15dcf68ca0069131df3779081a3a5bd846478776ed5",
       "outputs": null,
       "status": "completed",
       "type": "code_interpreter_call",
     },
     {
-      "id": "rs_0dc4a3c582e21a7f00690a220ee65081a3b4a3c606ed32f88c",
+      "id": "rs_082fa8e15dcf68ca0069131df5529881a397fd0df21324c748",
+      "summary": [],
+      "type": "reasoning",
+    },
+    {
+      "code": "from decimal import Decimal, getcontext, ROUND_HALF_UP
+getcontext().prec=60
+n=Decimal(123902139123)
+root=n.sqrt()
+# format to 18 decimal places
+q = Decimal('0.000000000000000001')
+rounded = root.quantize(q, rounding=ROUND_HALF_UP)
+str(rounded)",
+      "container_id": "cntr_69131ddf2c9481919aeb6463f689d10d080191d2eca8fa03",
+      "id": "ci_082fa8e15dcf68ca0069131df91d7081a3a476c5035db491f9",
+      "outputs": null,
+      "status": "completed",
+      "type": "code_interpreter_call",
+    },
+    {
+      "id": "rs_082fa8e15dcf68ca0069131dfb9a4081a3b484fe739baa5f9b",
+      "summary": [],
+      "type": "reasoning",
+    },
+    {
+      "code": "from decimal import Decimal, getcontext, ROUND_HALF_UP
+getcontext().prec=60
+n=Decimal(123902139123)
+root=n.sqrt()
+q=Decimal('0.000000000001')
+root.quantize(q, rounding=ROUND_HALF_UP)",
+      "container_id": "cntr_69131ddf2c9481919aeb6463f689d10d080191d2eca8fa03",
+      "id": "ci_082fa8e15dcf68ca0069131dfc81a081a3a67254f5f6980c48",
+      "outputs": null,
+      "status": "completed",
+      "type": "code_interpreter_call",
+    },
+    {
+      "id": "rs_082fa8e15dcf68ca0069131dfed1f481a3a609fcee50c39467",
       "summary": [],
       "type": "reasoning",
     },
@@ -1837,17 +1830,17 @@ for p in [6, 9, 12, 15]:
         {
           "annotations": [],
           "logprobs": [],
-          "text": "The square root of 123,902,139,123 is approximately 351,997.356698882044. It’s not a perfect square.",
+          "text": "The square root of 123902139123 is approximately 351,997.356698882044317918.",
           "type": "output_text",
         },
       ],
-      "id": "msg_0dc4a3c582e21a7f00690a221614e081a3b9e5621bd0f3ba23",
+      "id": "msg_082fa8e15dcf68ca0069131e07c83c81a3ac749c5a0ecdbdc9",
       "role": "assistant",
       "status": "completed",
       "type": "message",
     },
   ],
-  "output_text": "The square root of 123,902,139,123 is approximately 351,997.356698882044. It’s not a perfect square.",
+  "output_text": "The square root of 123902139123 is approximately 351,997.356698882044317918.",
   "parallel_tool_calls": true,
   "previous_response_id": null,
   "prompt_cache_key": null,
@@ -1880,18 +1873,18 @@ for p in [6, 9, 12, 15]:
   "top_p": 1,
   "truncation": "disabled",
   "usage": {
-    "input_tokens": 1808,
+    "input_tokens": 1879,
     "input_tokens_details": {
       "cached_tokens": 0,
     },
-    "output_tokens": 1061,
+    "output_tokens": 1053,
     "output_tokens_details": {
       "reasoning_tokens": 1024,
     },
     "pydantic_ai_gateway": {
-      "cost_estimate": 0.01287,
+      "cost_estimate": 0.01287875,
     },
-    "total_tokens": 2869,
+    "total_tokens": 2932,
   },
   "user": null,
 }
@@ -1922,50 +1915,11 @@ exports[`openai > openai responses with builtin tools > span 1`] = `
           "parts": [
             {
               "part": {
-                "code": "import decimal, math, fractions, sys, statistics, random",
-                "container_id": "cntr_690a21f4fa088191a854e0303fd8e69406563a23f7fe0f18",
-                "id": "ci_0dc4a3c582e21a7f00690a21f79eb081a385bc9ea91607bb8e",
-                "outputs": {},
-                "status": "completed",
-                "type": "code_interpreter_call",
-              },
-              "type": "unknown",
-            },
-          ],
-          "role": "assistant",
-        },
-        {
-          "parts": [
-            {
-              "part": {
-                "code": "n = 123_902_139_123
-# Check if perfect square
-is_square = int(n**0.5)**2 == n
-sqrt_n = n**0.5
-int_part = int(sqrt_n)
-is_square, int_part",
-                "container_id": "cntr_690a21f4fa088191a854e0303fd8e69406563a23f7fe0f18",
-                "id": "ci_0dc4a3c582e21a7f00690a21fb50d081a3839fffe407f88965",
-                "outputs": {},
-                "status": "completed",
-                "type": "code_interpreter_call",
-              },
-              "type": "unknown",
-            },
-          ],
-          "role": "assistant",
-        },
-        {
-          "parts": [],
-          "role": "assistant",
-        },
-        {
-          "parts": [
-            {
-              "part": {
-                "code": "int_part, int_part**2, (int_part+1)**2",
-                "container_id": "cntr_690a21f4fa088191a854e0303fd8e69406563a23f7fe0f18",
-                "id": "ci_0dc4a3c582e21a7f00690a21fe485c81a3bc4ba9ccc7418d6e",
+                "code": "import math, decimal
+n=123_902_139_123
+math.sqrt(n)",
+                "container_id": "cntr_69131ddf2c9481919aeb6463f689d10d080191d2eca8fa03",
+                "id": "ci_082fa8e15dcf68ca0069131de4a57081a3853a6508c3cb6979",
                 "outputs": {},
                 "status": "completed",
                 "type": "code_interpreter_call",
@@ -1984,11 +1938,12 @@ is_square, int_part",
             {
               "part": {
                 "code": "from decimal import Decimal, getcontext
-getcontext().prec = 50
-sqrt_val = Decimal(n).sqrt()
-sqrt_val",
-                "container_id": "cntr_690a21f4fa088191a854e0303fd8e69406563a23f7fe0f18",
-                "id": "ci_0dc4a3c582e21a7f00690a2200de5881a3b0fb27e1e2317788",
+getcontext().prec=50
+n=Decimal(123902139123)
+root=n.sqrt()
+root",
+                "container_id": "cntr_69131ddf2c9481919aeb6463f689d10d080191d2eca8fa03",
+                "id": "ci_082fa8e15dcf68ca0069131deb218081a38a044aec98c3a573",
                 "outputs": {},
                 "status": "completed",
                 "type": "code_interpreter_call",
@@ -2006,10 +1961,12 @@ sqrt_val",
           "parts": [
             {
               "part": {
-                "code": "float_val = float(sqrt_val)
-float_val",
-                "container_id": "cntr_690a21f4fa088191a854e0303fd8e69406563a23f7fe0f18",
-                "id": "ci_0dc4a3c582e21a7f00690a2209f9cc81a39c0e1ddfa029c7a6",
+                "code": "import math
+n=123_902_139_123
+s=math.isqrt(n)
+s, s*s <= n, (s+1)*(s+1) > n",
+                "container_id": "cntr_69131ddf2c9481919aeb6463f689d10d080191d2eca8fa03",
+                "id": "ci_082fa8e15dcf68ca0069131ded86a481a387440dca19cae123",
                 "outputs": {},
                 "status": "completed",
                 "type": "code_interpreter_call",
@@ -2027,14 +1984,10 @@ float_val",
           "parts": [
             {
               "part": {
-                "code": "from decimal import ROUND_HALF_UP
-def round_str(dec, places):
-    q = Decimal(10) ** -places
-    return str(dec.quantize(q, rounding=ROUND_HALF_UP))
-for p in [6, 9, 12, 15]:
-    print(p, round_str(sqrt_val, p))",
-                "container_id": "cntr_690a21f4fa088191a854e0303fd8e69406563a23f7fe0f18",
-                "id": "ci_0dc4a3c582e21a7f00690a220c125481a3ad139dde1b01ef42",
+                "code": "s=351_997
+s*s, (s+1)*(s+1)",
+                "container_id": "cntr_69131ddf2c9481919aeb6463f689d10d080191d2eca8fa03",
+                "id": "ci_082fa8e15dcf68ca0069131df3779081a3a5bd846478776ed5",
                 "outputs": {},
                 "status": "completed",
                 "type": "code_interpreter_call",
@@ -2051,7 +2004,59 @@ for p in [6, 9, 12, 15]:
         {
           "parts": [
             {
-              "content": "The square root of 123,902,139,123 is approximately 351,997.356698882044. It’s not a perfect square.",
+              "part": {
+                "code": "from decimal import Decimal, getcontext, ROUND_HALF_UP
+getcontext().prec=60
+n=Decimal(123902139123)
+root=n.sqrt()
+# format to 18 decimal places
+q = Decimal('0.000000000000000001')
+rounded = root.quantize(q, rounding=ROUND_HALF_UP)
+str(rounded)",
+                "container_id": "cntr_69131ddf2c9481919aeb6463f689d10d080191d2eca8fa03",
+                "id": "ci_082fa8e15dcf68ca0069131df91d7081a3a476c5035db491f9",
+                "outputs": {},
+                "status": "completed",
+                "type": "code_interpreter_call",
+              },
+              "type": "unknown",
+            },
+          ],
+          "role": "assistant",
+        },
+        {
+          "parts": [],
+          "role": "assistant",
+        },
+        {
+          "parts": [
+            {
+              "part": {
+                "code": "from decimal import Decimal, getcontext, ROUND_HALF_UP
+getcontext().prec=60
+n=Decimal(123902139123)
+root=n.sqrt()
+q=Decimal('0.000000000001')
+root.quantize(q, rounding=ROUND_HALF_UP)",
+                "container_id": "cntr_69131ddf2c9481919aeb6463f689d10d080191d2eca8fa03",
+                "id": "ci_082fa8e15dcf68ca0069131dfc81a081a3a67254f5f6980c48",
+                "outputs": {},
+                "status": "completed",
+                "type": "code_interpreter_call",
+              },
+              "type": "unknown",
+            },
+          ],
+          "role": "assistant",
+        },
+        {
+          "parts": [],
+          "role": "assistant",
+        },
+        {
+          "parts": [
+            {
+              "content": "The square root of 123902139123 is approximately 351,997.356698882044317918.",
               "type": "text",
             },
           ],
@@ -2066,7 +2071,7 @@ for p in [6, 9, 12, 15]:
       "gen_ai.request.top_k": {},
       "gen_ai.request.top_p": {},
       "gen_ai.response.finish_reasons": {},
-      "gen_ai.response.id": "resp_0dc4a3c582e21a7f00690a21f2f5a881a38c2bc17284ab0bdb",
+      "gen_ai.response.id": "resp_082fa8e15dcf68ca0069131ddd1d5c81a3a39abf96937660d6",
       "gen_ai.response.model": "gpt-5-2025-08-07",
       "gen_ai.system": "openai",
       "gen_ai.system_instructions": {},
@@ -2074,9 +2079,9 @@ for p in [6, 9, 12, 15]:
       "gen_ai.usage.cache_read_tokens": 0,
       "gen_ai.usage.cache_write_tokens": {},
       "gen_ai.usage.input_audio_tokens": {},
-      "gen_ai.usage.input_tokens": 1808,
+      "gen_ai.usage.input_tokens": 1879,
       "gen_ai.usage.output_audio_tokens": {},
-      "gen_ai.usage.output_tokens": 1061,
+      "gen_ai.usage.output_tokens": 1053,
       "http.request.body.text": "{
   "model": "gpt-5",
   "instructions": "be precise",
@@ -2090,7 +2095,7 @@ for p in [6, 9, 12, 15]:
     }
   ]
 }",
-      "http.response.body.text": "{"id":"resp_0dc4a3c582e21a7f00690a21f2f5a881a38c2bc17284ab0bdb","object":"response","created_at":1762271730,"status":"completed","background":false,"billing":{"payer":"developer"},"error":null,"incomplete_details":null,"instructions":"be precise","max_output_tokens":null,"max_tool_calls":null,"model":"gpt-5-2025-08-07","output":[{"id":"rs_0dc4a3c582e21a7f00690a21f5c01c81a387696a1225044c74","type":"reasoning","summary":[]},{"id":"ci_0dc4a3c582e21a7f00690a21f79eb081a385bc9ea91607bb8e","type":"code_interpreter_call","status":"completed","code":"import decimal, math, fractions, sys, statistics, random","container_id":"cntr_690a21f4fa088191a854e0303fd8e69406563a23f7fe0f18","outputs":null},{"id":"ci_0dc4a3c582e21a7f00690a21fb50d081a3839fffe407f88965","type":"code_interpreter_call","status":"completed","code":"n = 123_902_139_123\\n# Check if perfect square\\nis_square = int(n**0.5)**2 == n\\nsqrt_n = n**0.5\\nint_part = int(sqrt_n)\\nis_square, int_part","container_id":"cntr_690a21f4fa088191a854e0303fd8e69406563a23f7fe0f18","outputs":null},{"id":"rs_0dc4a3c582e21a7f00690a21fdb20081a38c8d71579c417602","type":"reasoning","summary":[]},{"id":"ci_0dc4a3c582e21a7f00690a21fe485c81a3bc4ba9ccc7418d6e","type":"code_interpreter_call","status":"completed","code":"int_part, int_part**2, (int_part+1)**2","container_id":"cntr_690a21f4fa088191a854e0303fd8e69406563a23f7fe0f18","outputs":null},{"id":"rs_0dc4a3c582e21a7f00690a220009f081a3ae01ee9362963591","type":"reasoning","summary":[]},{"id":"ci_0dc4a3c582e21a7f00690a2200de5881a3b0fb27e1e2317788","type":"code_interpreter_call","status":"completed","code":"from decimal import Decimal, getcontext\\ngetcontext().prec = 50\\nsqrt_val = Decimal(n).sqrt()\\nsqrt_val","container_id":"cntr_690a21f4fa088191a854e0303fd8e69406563a23f7fe0f18","outputs":null},{"id":"rs_0dc4a3c582e21a7f00690a22031aa881a38cd6660b4d830c50","type":"reasoning","summary":[]},{"id":"ci_0dc4a3c582e21a7f00690a2209f9cc81a39c0e1ddfa029c7a6","type":"code_interpreter_call","status":"completed","code":"float_val = float(sqrt_val)\\nfloat_val","container_id":"cntr_690a21f4fa088191a854e0303fd8e69406563a23f7fe0f18","outputs":null},{"id":"rs_0dc4a3c582e21a7f00690a220baf1481a3bda6abb8b9c09f88","type":"reasoning","summary":[]},{"id":"ci_0dc4a3c582e21a7f00690a220c125481a3ad139dde1b01ef42","type":"code_interpreter_call","status":"completed","code":"from decimal import ROUND_HALF_UP\\ndef round_str(dec, places):\\n    q = Decimal(10) ** -places\\n    return str(dec.quantize(q, rounding=ROUND_HALF_UP))\\nfor p in [6, 9, 12, 15]:\\n    print(p, round_str(sqrt_val, p))","container_id":"cntr_690a21f4fa088191a854e0303fd8e69406563a23f7fe0f18","outputs":null},{"id":"rs_0dc4a3c582e21a7f00690a220ee65081a3b4a3c606ed32f88c","type":"reasoning","summary":[]},{"id":"msg_0dc4a3c582e21a7f00690a221614e081a3b9e5621bd0f3ba23","type":"message","status":"completed","content":[{"type":"output_text","annotations":[],"logprobs":[],"text":"The square root of 123,902,139,123 is approximately 351,997.356698882044. It’s not a perfect square."}],"role":"assistant"}],"parallel_tool_calls":true,"previous_response_id":null,"prompt_cache_key":null,"prompt_cache_retention":null,"reasoning":{"effort":"medium","summary":null},"safety_identifier":null,"service_tier":"default","store":true,"temperature":1,"text":{"format":{"type":"text"},"verbosity":"medium"},"tool_choice":"auto","tools":[{"type":"code_interpreter","container":{"type":"auto"}}],"top_logprobs":0,"top_p":1,"truncation":"disabled","usage":{"input_tokens":1808,"input_tokens_details":{"cached_tokens":0},"output_tokens":1061,"output_tokens_details":{"reasoning_tokens":1024},"total_tokens":2869,"pydantic_ai_gateway":{"cost_estimate":0.01287}},"user":null,"metadata":{}}",
+      "http.response.body.text": "{"id":"resp_082fa8e15dcf68ca0069131ddd1d5c81a3a39abf96937660d6","object":"response","created_at":1762860509,"status":"completed","background":false,"billing":{"payer":"developer"},"error":null,"incomplete_details":null,"instructions":"be precise","max_output_tokens":null,"max_tool_calls":null,"model":"gpt-5-2025-08-07","output":[{"id":"rs_082fa8e15dcf68ca0069131ddfa7c881a3a87573df0d17a16c","type":"reasoning","summary":[]},{"id":"ci_082fa8e15dcf68ca0069131de4a57081a3853a6508c3cb6979","type":"code_interpreter_call","status":"completed","code":"import math, decimal\\r\\nn=123_902_139_123\\r\\nmath.sqrt(n)","container_id":"cntr_69131ddf2c9481919aeb6463f689d10d080191d2eca8fa03","outputs":null},{"id":"rs_082fa8e15dcf68ca0069131de8f87081a3ac0520569a5e815a","type":"reasoning","summary":[]},{"id":"ci_082fa8e15dcf68ca0069131deb218081a38a044aec98c3a573","type":"code_interpreter_call","status":"completed","code":"from decimal import Decimal, getcontext\\r\\ngetcontext().prec=50\\r\\nn=Decimal(123902139123)\\r\\nroot=n.sqrt()\\r\\nroot","container_id":"cntr_69131ddf2c9481919aeb6463f689d10d080191d2eca8fa03","outputs":null},{"id":"rs_082fa8e15dcf68ca0069131dece9d081a384f0196dc03e48fe","type":"reasoning","summary":[]},{"id":"ci_082fa8e15dcf68ca0069131ded86a481a387440dca19cae123","type":"code_interpreter_call","status":"completed","code":"import math\\r\\nn=123_902_139_123\\r\\ns=math.isqrt(n)\\r\\ns, s*s <= n, (s+1)*(s+1) > n","container_id":"cntr_69131ddf2c9481919aeb6463f689d10d080191d2eca8fa03","outputs":null},{"id":"rs_082fa8e15dcf68ca0069131defa9d881a3b2d13641a81cda7b","type":"reasoning","summary":[]},{"id":"ci_082fa8e15dcf68ca0069131df3779081a3a5bd846478776ed5","type":"code_interpreter_call","status":"completed","code":"s=351_997\\r\\ns*s, (s+1)*(s+1)","container_id":"cntr_69131ddf2c9481919aeb6463f689d10d080191d2eca8fa03","outputs":null},{"id":"rs_082fa8e15dcf68ca0069131df5529881a397fd0df21324c748","type":"reasoning","summary":[]},{"id":"ci_082fa8e15dcf68ca0069131df91d7081a3a476c5035db491f9","type":"code_interpreter_call","status":"completed","code":"from decimal import Decimal, getcontext, ROUND_HALF_UP\\r\\ngetcontext().prec=60\\r\\nn=Decimal(123902139123)\\r\\nroot=n.sqrt()\\r\\n# format to 18 decimal places\\r\\nq = Decimal('0.000000000000000001')\\r\\nrounded = root.quantize(q, rounding=ROUND_HALF_UP)\\r\\nstr(rounded)","container_id":"cntr_69131ddf2c9481919aeb6463f689d10d080191d2eca8fa03","outputs":null},{"id":"rs_082fa8e15dcf68ca0069131dfb9a4081a3b484fe739baa5f9b","type":"reasoning","summary":[]},{"id":"ci_082fa8e15dcf68ca0069131dfc81a081a3a67254f5f6980c48","type":"code_interpreter_call","status":"completed","code":"from decimal import Decimal, getcontext, ROUND_HALF_UP\\r\\ngetcontext().prec=60\\r\\nn=Decimal(123902139123)\\r\\nroot=n.sqrt()\\r\\nq=Decimal('0.000000000001')\\r\\nroot.quantize(q, rounding=ROUND_HALF_UP)","container_id":"cntr_69131ddf2c9481919aeb6463f689d10d080191d2eca8fa03","outputs":null},{"id":"rs_082fa8e15dcf68ca0069131dfed1f481a3a609fcee50c39467","type":"reasoning","summary":[]},{"id":"msg_082fa8e15dcf68ca0069131e07c83c81a3ac749c5a0ecdbdc9","type":"message","status":"completed","content":[{"type":"output_text","annotations":[],"logprobs":[],"text":"The square root of 123902139123 is approximately 351,997.356698882044317918."}],"role":"assistant"}],"parallel_tool_calls":true,"previous_response_id":null,"prompt_cache_key":null,"prompt_cache_retention":null,"reasoning":{"effort":"medium","summary":null},"safety_identifier":null,"service_tier":"default","store":true,"temperature":1,"text":{"format":{"type":"text"},"verbosity":"medium"},"tool_choice":"auto","tools":[{"type":"code_interpreter","container":{"type":"auto"}}],"top_logprobs":0,"top_p":1,"truncation":"disabled","usage":{"input_tokens":1879,"input_tokens_details":{"cached_tokens":0},"output_tokens":1053,"output_tokens_details":{"reasoning_tokens":1024},"total_tokens":2932,"pydantic_ai_gateway":{"cost_estimate":0.01287875}},"user":null,"metadata":{}}",
       "http.response.status_code": 200,
       "logfire.json_schema": "{"type":"object","properties":{"gen_ai.operation.name":{"type":"string"},"gen_ai.request.model":{"type":"string"},"gen_ai.system":{"type":"string"},"gen_ai.request.max_tokens":{},"gen_ai.request.top_k":{},"gen_ai.request.top_p":{},"gen_ai.request.temperature":{},"gen_ai.request.stop_sequences":{},"gen_ai.request.seed":{},"gen_ai.response.finish_reasons":{},"gen_ai.response.id":{"type":"string"},"gen_ai.input.messages":{},"gen_ai.output.messages":{},"gen_ai.system_instructions":{},"http.response.status_code":{"type":"number"},"http.request.body.text":{"type":"string"},"http.response.body.text":{"type":"string"},"gen_ai.response.model":{"type":"string"},"gen_ai.usage.input_tokens":{"type":"number"},"gen_ai.usage.cache_read_tokens":{"type":"number"},"gen_ai.usage.cache_write_tokens":{},"gen_ai.usage.output_tokens":{"type":"number"},"gen_ai.usage.input_audio_tokens":{},"gen_ai.usage.cache_audio_read_tokens":{},"gen_ai.usage.output_audio_tokens":{}}}",
       "logfire.level_num": 9,

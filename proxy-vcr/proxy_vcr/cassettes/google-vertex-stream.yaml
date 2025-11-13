@@ -12,6 +12,8 @@ interactions:
       - '*/*'
       accept-encoding:
       - gzip, deflate
+      anthropic-version:
+      - vertex-2023-10-16
       connection:
       - keep-alive
       content-length:
@@ -25,14 +27,14 @@ interactions:
   response:
     body:
       string: "data: {\"candidates\": [{\"content\": {\"role\": \"model\",\"parts\":
-        [{\"functionCall\": {\"name\": \"final_result\",\"args\": {\"name\": \"Samuel\",\"dob\":
-        \"1987-01-28\",\"city\": \"London\"}},\"thoughtSignature\": \"CiwB4/H/XrFHcqJ5pwIEMQnBhQBHazYmUb7XC1cZhL68mxASIIbmWyFjuzXxawqAAQHj8f9epXxVjCDy0/oGNXN1LFyOtdAaqPjsycM5BxCYAPEwlGkiTMVUtJaGnZOZVjMCA1E7jjwjyaUnLi0JXUn/kHHpNZIKHHFz26Uo5OUNYt8CanXEsbfLY6i+5wIMvLYURSxBeWq814uEwV+Sif6z37WfaNvU5KrR9ek41rCRCmkB4/H/XlhR1HkHgmKGkNZnCbzL4aLYVnnA39p5YFaZvsOvv8OTwed/arFcVREVegT9jIusC+BHbxQL6jxAi/r+7Yxo4D6LFkh68j/dbGz/Y1kVy+dwqrQHJ4+c9UuPOZnMKzts+eIip6gKewHj8f9eDAdCB1AcgaXceQTctqq0PeycbHisSqLKqb0bktTud5S11F2l6iB2agdWl6J/4Lrx7Xg0mDpvJmIZbmDGGr9zAy+PyXTDpca8XwEPDOCbOaosDGofqvAcfIlCSph5m56vwlIfn8QD6HfLsUCuG8XQZF13bc3rkAp1AePx/17HSA1oMLywdmQx6jXY5g+3iBVcskBePcXaL4Jd4FeSUSqD63zVuVSuoh3QJlU0zOYyrfZL+f3Lt5VgUgLG0si8OvoDXAzPn9pu4XRRoLBKJqgB26LPWU0XI/vv11L8eXREncg46Z5AUbs2vGJ1sQMnCqUBAePx/14DiPsegv86CHeOTaMg8p7dwzDDSOfDmLXycjtGqZKMytXUXiWcBs3mtNi0rx4D4yQihmPQClBfTkpPx4pT9+wGi86Nf97CCKADwIfDPJBQF4LTUvA24v1ay9REpdaI22jadcHlE2sTvD28im63HsQ5vmoV0YYLiaj82jd52vyYLKDzb7+LgkWl2V4UhJBHyTFk+wMgkPiRuftpgAkjDlmuCkgB4/H/XtKR+rJrbrTPrKAdaDts8M1WzGEpscucnYFpeqIOkQ7GeadukWQec5GBsJVTQ6rsmaRzp6n42BAlrLmoIUIacMt2fE8=\"}]},\"finishReason\":
+        [{\"functionCall\": {\"name\": \"final_result\",\"args\": {\"city\": \"London\",\"name\":
+        \"Samuel\",\"dob\": \"1987-01-28\"}},\"thoughtSignature\": \"CiwB4/H/Xq4zuTAomDbpEQ8/5bqFVqtIB//HOeJMxThUcY06DbmOoH4Vbq+rtApnAePx/16J5B2/oRVJAn92YgG5b4Qz+MpFpe+4eRJJqsRRYSB11did+mjPoDkFuvWvwqkar9mZgD4nE5YIgELuDp0wzB8lxMcmTUuEZ81XwknkZEtp3nASsuFzHTZA6J07Z9+67wor/QpxAePx/15yJ9xJWZUZDkT//owC2ySqC1HdzaaHR6S3WYHKSJADKp9NFQn1RguwpkazjhbQGcgqETnWUGizDyzx/wkkFSVDa6UuOjBv7tIa218VcBWCa0WQI0XS8SqaM/bHgXmPovmVpURg0H8mF0/UcNIKlAEB4/H/XkL8gCvv5WGIrXceZnYXCL1qYFBd7zP6NPft2dGZd4eEUxfHmu6MZ/MgIib7JsuyNdHLjr/tSHXiRPBwZnS1W9Q+nn8en2KCHDhhHXRMOSbBIu69d0SOEBe8qpGD2M3U3S82xT1p+wantHCMO/x9JW9tEQvUN9SxNMbOZU6JVTVQn4OxF4mqq2d9tcjf8MdrCoABAePx/165cbuSfXKJBNGC3Y7ZKEbpRnWnkzDgZhQZd3mwctxXOgXK8L6tfBAL8nUDeh3lO4j+eT+SKT8MHp1UFrEDkV7coLL1f6KTWYPZkwhy9a1lazPI3Ydb9oV3mlW4hBEgndTGZpk0L37rMQaUhequ3xoNZtHHRyePAXe07dIKeAHj8f9e3nSet/F/WPP9/dnGWXLP6Ur03+i5BKEYsDOGrZV56ddNFv17sFQMznGxszCIo+pLGVmRZzanTk1z98SMiOX9sRbdyZpiFd6Gi3R0G3qGZAgbH+3ArmmoneJKlfAB1ESBDIVS39SrYlAumkMPQnnkjs03zw==\"}]},\"finishReason\":
         \"STOP\"}],\"usageMetadata\": {\"promptTokenCount\": 79,\"candidatesTokenCount\":
-        18,\"totalTokenCount\": 267,\"trafficType\": \"ON_DEMAND\",\"promptTokensDetails\":
+        18,\"totalTokenCount\": 228,\"trafficType\": \"ON_DEMAND\",\"promptTokensDetails\":
         [{\"modality\": \"TEXT\",\"tokenCount\": 79}],\"candidatesTokensDetails\":
-        [{\"modality\": \"TEXT\",\"tokenCount\": 18}],\"thoughtsTokenCount\": 170},\"modelVersion\":
-        \"gemini-2.5-flash\",\"createTime\": \"2025-11-04T16:00:09.183509Z\",\"responseId\":
-        \"CSMKadWZC7G36MEP1Yfl-Ag\"}\r\n\r\n"
+        [{\"modality\": \"TEXT\",\"tokenCount\": 18}],\"thoughtsTokenCount\": 131},\"modelVersion\":
+        \"gemini-2.5-flash\",\"createTime\": \"2025-11-11T11:44:06.023997Z\",\"responseId\":
+        \"hiETab27AZ_kmLAPi5S32QI\"}\r\n\r\n"
     headers:
       Alt-Svc:
       - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
@@ -41,7 +43,7 @@ interactions:
       Content-Type:
       - text/event-stream
       Date:
-      - Tue, 04 Nov 2025 16:00:11 GMT
+      - Tue, 11 Nov 2025 11:44:08 GMT
       Server:
       - scaffolding on HTTPServer2
       Transfer-Encoding:

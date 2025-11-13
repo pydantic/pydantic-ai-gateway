@@ -10,11 +10,19 @@ export class ConfigDB extends KeysDbD1 {
     const project = config.projects[keyInfo.project]!
     const user = keyInfo.user ? project.users[keyInfo.user] : undefined
 
-    let providers: ProviderProxy[]
+    let providersWithKeys: (ProviderProxy & { key: string })[]
     if (keyInfo.providers === '__all__') {
-      providers = Object.values(config.providers)
+      providersWithKeys = Object.entries(config.providers).map(([key, provider]) => ({ ...provider, key }))
     } else {
-      providers = keyInfo.providers.map((name) => config.providers[name])
+      providersWithKeys = keyInfo.providers.map((key) => ({ ...config.providers[key], key }))
+    }
+
+    // Transform routes to routingGroups
+    const routingGroups: Record<string, { key: string }[]> = {}
+    if (config.routes) {
+      for (const [routeName, routeProviderKeys] of Object.entries(config.routes)) {
+        routingGroups[routeName] = routeProviderKeys.map((providerKey) => ({ key: providerKey }))
+      }
     }
 
     // if keyInfo.id is unset, hash the API key to give something unique without explicitly using the key directly
@@ -49,7 +57,8 @@ export class ConfigDB extends KeysDbD1 {
       userSpendingLimitDaily: user?.spendingLimitDaily,
       userSpendingLimitWeekly: user?.spendingLimitWeekly,
       userSpendingLimitMonthly: user?.spendingLimitMonthly,
-      providers,
+      providers: providersWithKeys,
+      routingGroups,
       otelSettings: user?.otel ?? project.otel,
     }
   }

@@ -11,5 +11,10 @@ dependencies = [
     "mypy-boto3-bedrock-runtime",
 ]
 
+# Install pydantic ai from git
+[tool.uv.sources]
+# Please don't remove this line, it's useful to test branches.
+pydantic-ai = { git = "https://github.com/pydantic/pydantic-ai.git", rev = '395cbe73' }
+
 [tool.uv]
 package = false

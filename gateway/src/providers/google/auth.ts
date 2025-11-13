@@ -1,41 +1,46 @@
-import { ResponseError } from '../../utils'
+import type { ProxyInvalidRequest } from '../default'
 
-export async function authToken(credentials: string, kv: KVNamespace, subFetch: typeof fetch): Promise<string> {
+export async function authToken(
+  credentials: string,
+  kv: KVNamespace,
+  subFetch: typeof fetch,
+): Promise<{ token: string } | ProxyInvalidRequest> {
   const serviceAccountHash = await hash(credentials)
   const cacheKey = `gcp-auth:${serviceAccountHash}`
   const cachedToken = await kv.get(cacheKey, { cacheTtl: 300 })
   if (cachedToken) {
-    return cachedToken
+    return { token: cachedToken }
   }
-  const serviceAccount = getServiceAccount(credentials)
-  const jwt = await jwtSign(serviceAccount)
-  const token = await getAccessToken(jwt, subFetch)
-  await kv.put(cacheKey, token, { expirationTtl: 3000 })
-  return token
+  const serviceAccountResult = getServiceAccount(credentials)
+  if ('error' in serviceAccountResult) {
+    return serviceAccountResult
+  }
+  const jwt = await jwtSign(serviceAccountResult)
+  const tokenResult = await getAccessToken(jwt, subFetch)
+  if ('error' in tokenResult) {
+    return tokenResult
+  }
+  await kv.put(cacheKey, tokenResult.token, { expirationTtl: 3000 })
+  return tokenResult
 }
 
-function getServiceAccount(credentials: string): ServiceAccount {
+export function getServiceAccount(credentials: string): ServiceAccount | ProxyInvalidRequest {
   let sa: ServiceAccount
   try {
     sa = JSON.parse(credentials)
   } catch (error) {
-    throw new ResponseError(400, `provider credentials are not valid JSON: ${error as Error}`)
+    return { error: `provider credentials are not valid JSON: ${error as Error}` }
   }
   if (typeof sa.client_email !== 'string') {
-    throw new ResponseError(400, `"client_email" should be a string, not ${typeof sa.client_email}`)
+    return { error: `"client_email" should be a string, not ${typeof sa.client_email}` }
   }
   if (typeof sa.private_key !== 'string') {
-    throw new ResponseError(400, `"private_key" should be a string, not ${typeof sa.private_key}`)
+    return { error: `"private_key" should be a string, not ${typeof sa.private_key}` }
   }
   if (typeof sa.project_id !== 'string') {
-    throw new ResponseError(400, `"project_id" should be a string, not ${typeof sa.project_id}`)
+    return { error: `"project_id" should be a string, not ${typeof sa.project_id}` }
   }
   return { client_email: sa.client_email, private_key: sa.private_key, project_id: sa.project_id }
-}
-
-export function getProjectId(credentials: string): string {
-  const sa = getServiceAccount(credentials)
-  return sa.project_id
 }
 
 interface ServiceAccount {
@@ -80,7 +85,7 @@ async function jwtSign(serviceAccount: ServiceAccount): Promise<string> {
   return `${signingInput}.${b64UrlEncodeArray(signature)}`
 }
 
-async function getAccessToken(jwt: string, subFetch: typeof fetch): Promise<string> {
+async function getAccessToken(jwt: string, subFetch: typeof fetch): Promise<{ token: string } | ProxyInvalidRequest> {
   const body = new URLSearchParams({ grant_type: 'urn:ietf:params:oauth:grant-type:jwt-bearer', assertion: jwt })
 
   const response = await subFetch(tokenUrl, {
@@ -92,10 +97,10 @@ async function getAccessToken(jwt: string, subFetch: typeof fetch): Promise<stri
 
   if (response.ok) {
     const responseData: TokenResponse = await response.json()
-    return responseData.access_token
+    return { token: responseData.access_token }
   } else {
     const text = await response.text()
-    throw new ResponseError(400, `Failed to get GCP access token, response:\n${response.status}: ${text}`)
+    return { error: `Failed to get GCP access token, response:\n${response.status}: ${text}` }
   }
 }
 

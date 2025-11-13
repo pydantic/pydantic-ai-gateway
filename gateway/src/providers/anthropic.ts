@@ -1,6 +1,6 @@
 import type { ModelAPI } from '../api'
 import { AnthropicAPI } from '../api/anthropic'
-import { DefaultProviderProxy } from './default'
+import { DefaultProviderProxy, type ProxyInvalidRequest } from './default'
 
 export class AnthropicProvider extends DefaultProviderProxy {
   protected isWhitelistedEndpoint(): boolean {
@@ -15,8 +15,9 @@ export class AnthropicProvider extends DefaultProviderProxy {
   }
 
   // biome-ignore lint/suspicious/useAwait: required by google auth
-  protected async requestHeaders(headers: Headers): Promise<void> {
+  protected async requestHeaders(headers: Headers): Promise<ProxyInvalidRequest | null> {
     headers.set('x-api-key', this.providerProxy.credentials)
+    return null
   }
 
   protected responseHeaders(headers: Headers): Headers {

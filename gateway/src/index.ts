@@ -21,7 +21,7 @@ import type { DefaultProviderProxy, Middleware, Next } from './providers/default
 import type { RateLimiter } from './rateLimiter'
 import { refreshGenaiPrices } from './refreshGenaiPrices'
 import type { SubFetch } from './types'
-import { ctHeader, ResponseError, response405, textResponse } from './utils'
+import { ctHeader, response405, runAfter, textResponse } from './utils'
 
 export { changeProjectState as setProjectState, deleteApiKeyCache, setApiKeyCache } from './auth'
 export type { DefaultProviderProxy, Middleware, Next }
@@ -58,15 +58,13 @@ export async function gatewayFetch(
     if (proxyPath === '/') {
       return index(request, options)
     } else {
-      return await gateway(request, `${proxyPath}${queryString}`, ctx, options)
+      const gatewayPromise = gateway(request, `${proxyPath}${queryString}`, ctx, options)
+      runAfter(ctx, 'gatewayPromise', gatewayPromise)
+      return await gatewayPromise
     }
   } catch (error) {
-    if (error instanceof ResponseError) {
-      logfire.reportError('ResponseError', error)
-      return error.response()
-    } else {
-      throw error
-    }
+    logfire.reportError('ResponseError', error as Error)
+    throw error
   }
 }
 

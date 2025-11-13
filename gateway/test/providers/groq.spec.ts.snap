@@ -13,27 +13,27 @@ exports[`groq > should call groq via gateway > llm 1`] = `
       },
     },
   ],
-  "created": 1761823220,
-  "id": "chatcmpl-d912623a-1d43-449e-92fe-d8d850b2555d",
+  "created": 1762861586,
+  "id": "chatcmpl-76ad250c-4931-4f14-ad71-b0b078b9dd61",
   "model": "llama-3.3-70b-versatile",
   "object": "chat.completion",
   "service_tier": "on_demand",
-  "system_fingerprint": "fp_21854da540",
+  "system_fingerprint": "fp_d2caa7d820",
   "usage": {
-    "completion_time": 0.0127032,
+    "completion_time": 0.011266627,
     "completion_tokens": 8,
-    "prompt_time": 0.002274325,
+    "prompt_time": 0.001158202,
     "prompt_tokens": 42,
     "pydantic_ai_gateway": {
       "cost_estimate": 0.0000311,
     },
-    "queue_time": 0.150119133,
-    "total_time": 0.014977525,
+    "queue_time": 0.042379014,
+    "total_time": 0.012424829,
     "total_tokens": 50,
   },
   "usage_breakdown": null,
   "x_groq": {
-    "id": "req_01k8tdhr6ke5hah7e5e3dfq95a",
+    "id": "req_01k9sbt62qfpqafw18ct72j5jc",
   },
 }
 `;
@@ -87,7 +87,7 @@ exports[`groq > should call groq via gateway > span 1`] = `
       "gen_ai.response.finish_reasons": [
         "stop",
       ],
-      "gen_ai.response.id": "chatcmpl-d912623a-1d43-449e-92fe-d8d850b2555d",
+      "gen_ai.response.id": "chatcmpl-76ad250c-4931-4f14-ad71-b0b078b9dd61",
       "gen_ai.response.model": "llama-3.3-70b-versatile",
       "gen_ai.system": "groq",
       "gen_ai.system_instructions": {},
@@ -117,7 +117,7 @@ exports[`groq > should call groq via gateway > span 1`] = `
   ],
   "max_completion_tokens": 1024
 }",
-      "http.response.body.text": "{"id":"chatcmpl-d912623a-1d43-449e-92fe-d8d850b2555d","object":"chat.completion","created":1761823220,"model":"llama-3.3-70b-versatile","choices":[{"index":0,"message":{"role":"assistant","content":"The capital of France is Paris."},"logprobs":null,"finish_reason":"stop"}],"usage":{"queue_time":0.150119133,"prompt_tokens":42,"prompt_time":0.002274325,"completion_tokens":8,"completion_time":0.0127032,"total_tokens":50,"total_time":0.014977525,"pydantic_ai_gateway":{"cost_estimate":0.0000311}},"usage_breakdown":null,"system_fingerprint":"fp_21854da540","x_groq":{"id":"req_01k8tdhr6ke5hah7e5e3dfq95a"},"service_tier":"on_demand"}",
+      "http.response.body.text": "{"id":"chatcmpl-76ad250c-4931-4f14-ad71-b0b078b9dd61","object":"chat.completion","created":1762861586,"model":"llama-3.3-70b-versatile","choices":[{"index":0,"message":{"role":"assistant","content":"The capital of France is Paris."},"logprobs":null,"finish_reason":"stop"}],"usage":{"queue_time":0.042379014,"prompt_tokens":42,"prompt_time":0.001158202,"completion_tokens":8,"completion_time":0.011266627,"total_tokens":50,"total_time":0.012424829,"pydantic_ai_gateway":{"cost_estimate":0.0000311}},"usage_breakdown":null,"system_fingerprint":"fp_d2caa7d820","x_groq":{"id":"req_01k9sbt62qfpqafw18ct72j5jc"},"service_tier":"on_demand"}",
       "http.response.status_code": 200,
       "logfire.json_schema": "{"type":"object","properties":{"gen_ai.operation.name":{"type":"string"},"gen_ai.request.model":{"type":"string"},"gen_ai.system":{"type":"string"},"gen_ai.request.max_tokens":{"type":"number"},"gen_ai.request.top_k":{},"gen_ai.request.top_p":{"type":"number"},"gen_ai.request.temperature":{"type":"number"},"gen_ai.request.stop_sequences":{},"gen_ai.request.seed":{},"gen_ai.response.finish_reasons":{},"gen_ai.response.id":{"type":"string"},"gen_ai.input.messages":{},"gen_ai.output.messages":{},"gen_ai.system_instructions":{},"http.response.status_code":{"type":"number"},"http.request.body.text":{"type":"string"},"http.response.body.text":{"type":"string"},"gen_ai.response.model":{"type":"string"},"gen_ai.usage.input_tokens":{"type":"number"},"gen_ai.usage.cache_read_tokens":{},"gen_ai.usage.cache_write_tokens":{},"gen_ai.usage.output_tokens":{"type":"number"},"gen_ai.usage.input_audio_tokens":{},"gen_ai.usage.cache_audio_read_tokens":{},"gen_ai.usage.output_audio_tokens":{}}}",
       "logfire.level_num": 9,

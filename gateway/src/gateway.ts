@@ -204,7 +204,8 @@ export async function gatewayWithLimiter(
 }
 
 async function blockApiKey(apiKey: ApiKeyInfo, options: GatewayOptions, reason: string): Promise<void> {
-  await disableApiKey(apiKey, options, reason, 'blocked')
+  const expirationTtl = 300 // block for 5 minutes
+  await disableApiKey(apiKey, options, reason, 'blocked', expirationTtl)
 }
 
 export async function disableApiKey(

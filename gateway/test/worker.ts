@@ -95,6 +95,7 @@ class TestKeysDB extends KeysDbD1 {
         providerId: 'anthropic',
         injectCost: true,
         credentials: env.ANTHROPIC_API_KEY,
+        blockOnError: true,
       },
       {
         key: 'bedrock',
@@ -109,6 +110,7 @@ class TestKeysDB extends KeysDbD1 {
         providerId: 'google-vertex',
         injectCost: true,
         credentials: env.GOOGLE_SERVICE_ACCOUNT_KEY,
+        blockOnError: true,
       },
     ]
   }

@@ -11,27 +11,13 @@ export async function apiKeyAuth(
   options: GatewayOptions,
   rateLimiter: RateLimiter,
 ): Promise<ApiKeyInfo | Response> {
-  const authorization = request.headers.get('authorization')
-  const xApiKey = request.headers.get('x-api-key')
-
-  if (authorization && xApiKey) {
-    return textResponse(401, 'Unauthorized - Both Authorization and X-API-Key headers are present, use only one')
+  const keyResult = getApiKey(request)
+  if (keyResult instanceof Response) {
+    return keyResult
   }
-
-  const authHeader = authorization || xApiKey
-
-  let key: string
-  if (authHeader) {
-    if (authHeader.toLowerCase().startsWith('bearer ')) {
-      key = authHeader.substring(7)
-    } else {
-      key = authHeader
-    }
-  } else {
-    return textResponse(401, 'Unauthorized - Missing Authorization Header')
-  }
+  const key = keyResult
   // avoid very long queries to the DB
-  if (key.length > 100) {
+  if (key.length > 200) {
     return textResponse(401, 'Unauthorized - Key too long')
   }
 
@@ -99,6 +85,36 @@ export async function deleteApiKeyCache(
 export async function changeProjectState(project: number, options: Pick<GatewayOptions, 'kv' | 'kvVersion'>) {
   const cacheKey = projectStateCacheKey(project, options.kvVersion)
   await options.kv.put(cacheKey, crypto.randomUUID(), { expirationTtl: CACHE_TTL })
+}
+
+function getApiKey(request: Request): Response | string {
+  const authorization = getHeaderKey(request, 'authorization')
+  const xApiKey = getHeaderKey(request, 'x-api-key')
+
+  if (authorization?.startsWith('paig_') && xApiKey?.startsWith('paig_')) {
+    return textResponse(401, 'Unauthorized - Both Authorization and X-API-Key headers are set, use only one')
+  }
+
+  if (authorization?.startsWith('paig_')) {
+    return authorization
+  } else if (xApiKey?.startsWith('paig_')) {
+    return xApiKey
+  }
+  const key = authorization || xApiKey
+  if (key) {
+    return key
+  } else {
+    return textResponse(401, 'Unauthorized - Missing Authorization Header')
+  }
+}
+
+function getHeaderKey(request: Request, headerName: string): string | null {
+  const header = request.headers.get(headerName)
+  if (header) {
+    return header.toLowerCase().startsWith('bearer ') ? header.substring(7) : header
+  } else {
+    return null
+  }
 }
 
 const apiKeyCacheKey = (key: string, kvVersion: string) => `apiKeyAuth:${kvVersion}:${key}`

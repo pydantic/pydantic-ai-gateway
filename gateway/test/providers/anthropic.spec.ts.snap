@@ -590,6 +590,8 @@ exports[`anthropic > should call anthropic via gateway with stream > span 1`] = 
 ]
 `;
 
+exports[`anthropic > should return 404 for unsupported model 1`] = `[Error: 404 PAIG does not support the model \`unsupported-model-xyz\` yet. We're working on it!]`;
+
 exports[`anthropic > should whitelist /v1/messages/count_tokens endpoint > count_tokens 1`] = `
 {
   "input_tokens": 14,

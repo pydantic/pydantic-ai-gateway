@@ -5,6 +5,7 @@ import { describe, expect, it } from 'vitest'
 import type {
   DefaultProviderProxy,
   ProxyInvalidRequest,
+  ProxyRequestModelNotFound,
   ProxyStreamingSuccess,
   ProxySuccess,
   ProxyUnexpectedResponse,
@@ -244,6 +245,7 @@ describe('custom middleware', () => {
       | ProxyUnexpectedResponse
       | ProxyStreamingSuccess
       | ProxyWhitelistedEndpoint
+      | ProxyRequestModelNotFound
     )[] = []
 
     const ctx = createExecutionContext()

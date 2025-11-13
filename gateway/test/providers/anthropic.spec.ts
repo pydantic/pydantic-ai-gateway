@@ -79,4 +79,20 @@ describe('anthropic', () => {
     expect(otelBatch, 'otelBatch should be empty for whitelisted endpoint').toHaveLength(1)
     expect(deserializeRequest(otelBatch[0]!)).toMatchSnapshot('span')
   })
+
+  test('should return 404 for unsupported model', async ({ gateway }) => {
+    const { fetch } = gateway
+
+    const client = new Anthropic({ authToken: 'healthy', baseURL: 'https://example.com/anthropic', fetch })
+
+    await expect(async () => {
+      await client.messages.create({
+        model: 'unsupported-model-xyz',
+        max_tokens: 1024,
+        messages: [{ role: 'user', content: 'What is the capital of France?' }],
+      })
+    }).rejects.toThrowErrorMatchingInlineSnapshot(
+      `[Error: 404 PAIG does not support the model \`unsupported-model-xyz\` yet. We're working on it!]`,
+    )
+  })
 })

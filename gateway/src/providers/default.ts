@@ -52,6 +52,11 @@ export interface ProxyInvalidRequest {
   requestModel?: string
 }
 
+export interface ProxyRequestModelNotFound {
+  modelNotFound: true
+  requestModel?: string
+}
+
 export interface ProxyUnexpectedResponse {
   requestModel?: string
   requestBody: string
@@ -78,7 +83,12 @@ interface ProcessResponse {
 export type Next = (
   proxy: DefaultProviderProxy,
 ) => Promise<
-  ProxyStreamingSuccess | ProxySuccess | ProxyInvalidRequest | ProxyUnexpectedResponse | ProxyWhitelistedEndpoint
+  | ProxyStreamingSuccess
+  | ProxySuccess
+  | ProxyInvalidRequest
+  | ProxyUnexpectedResponse
+  | ProxyWhitelistedEndpoint
+  | ProxyRequestModelNotFound
 >
 
 export interface Middleware {
@@ -263,7 +273,12 @@ export class DefaultProviderProxy {
   }
 
   async dispatch(): Promise<
-    ProxyStreamingSuccess | ProxySuccess | ProxyInvalidRequest | ProxyUnexpectedResponse | ProxyWhitelistedEndpoint
+    | ProxyStreamingSuccess
+    | ProxySuccess
+    | ProxyInvalidRequest
+    | ProxyUnexpectedResponse
+    | ProxyWhitelistedEndpoint
+    | ProxyRequestModelNotFound
   > {
     const layers = this.middlewares.reduceRight(
       (next, middleware) => middleware.dispatch(next),
@@ -273,23 +288,23 @@ export class DefaultProviderProxy {
   }
 
   protected async dispatchInner(): Promise<
-    ProxyStreamingSuccess | ProxySuccess | ProxyInvalidRequest | ProxyUnexpectedResponse | ProxyWhitelistedEndpoint
+    | ProxyStreamingSuccess
+    | ProxySuccess
+    | ProxyInvalidRequest
+    | ProxyUnexpectedResponse
+    | ProxyWhitelistedEndpoint
+    | ProxyRequestModelNotFound
   > {
     const checkResult = this.check()
     if (checkResult) {
       return checkResult
     }
 
-    const method = this.method()
-    const url = this.url()
-    if (typeof url === 'object') {
-      return url
-    }
-
     const requestHeaders = new Headers(this.request.headers)
     requestHeaders.set('user-agent', this.userAgent())
     // authorization header was used by the gateway auth, it definitely should not be forwarded to the target api
     requestHeaders.delete('authorization')
+
     const requestHeadersError = await this.requestHeaders(requestHeaders)
     if (requestHeadersError) {
       return requestHeadersError
@@ -300,6 +315,21 @@ export class DefaultProviderProxy {
       return prepResult
     }
     const { requestBodyText, requestBodyData, requestModel } = prepResult
+
+    // Validate that it's possible to calculate the price for the request model.
+    if (requestModel) {
+      const price = calcPrice({ input_tokens: 0, output_tokens: 0 }, requestModel, { provider: this.usageProvider() })
+      if (!price) {
+        return { modelNotFound: true, requestModel }
+      }
+    }
+
+    const method = this.method()
+    const url = this.url()
+    if (typeof url === 'object') {
+      return url
+    }
+
     const response = await this.fetch(url, { method, headers: requestHeaders, body: requestBodyText })
 
     if (this.isWhitelistedEndpoint()) {

@@ -116,7 +116,10 @@ class TestKeysDB extends KeysDbD1 {
   }
 
   async getApiKey(key: string): Promise<ApiKeyInfo | null> {
-    switch (key) {
+    // Strip paig_ prefix if present (keys are stored without prefix in DB)
+    const normalizedKey = key.startsWith('paig_') ? key.substring(5) : key
+
+    switch (normalizedKey) {
       case 'healthy':
         return {
           id: IDS.keyHealthy,

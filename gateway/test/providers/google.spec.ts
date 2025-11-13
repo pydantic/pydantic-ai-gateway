@@ -79,4 +79,17 @@ describe('google', () => {
     expect(otelBatch, 'otelBatch length not 1').toHaveLength(1)
     expect(deserializeRequest(otelBatch[0]!)).toMatchSnapshot('span')
   })
+
+  test('should return 404 for unsupported model inferred from URL', async ({ gateway }) => {
+    const { fetch } = gateway
+
+    const response = await fetch(
+      'https://example.com/gemini/v1beta1/projects/pydantic-ai/locations/global/publishers/google/models/unsupported-model-xyz:generateContent',
+      { method: 'POST', headers, body },
+    )
+
+    expect(response.status).toBe(404)
+    const text = await response.text()
+    expect(text).toMatchInlineSnapshot(`"PAIG does not support the model \`unsupported-model-xyz\` yet. We're working on it!"`)
+  })
 })

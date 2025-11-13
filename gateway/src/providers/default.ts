@@ -316,18 +316,18 @@ export class DefaultProviderProxy {
     }
     const { requestBodyText, requestBodyData, requestModel } = prepResult
 
+    const method = this.method()
+    const url = this.url()
+    if (typeof url === 'object') {
+      return url
+    }
+
     // Validate that it's possible to calculate the price for the request model.
     if (requestModel) {
       const price = calcPrice({ input_tokens: 0, output_tokens: 0 }, requestModel, { provider: this.usageProvider() })
       if (!price) {
         return { modelNotFound: true, requestModel }
       }
-    }
-
-    const method = this.method()
-    const url = this.url()
-    if (typeof url === 'object') {
-      return url
     }
 
     const response = await this.fetch(url, { method, headers: requestHeaders, body: requestBodyText })

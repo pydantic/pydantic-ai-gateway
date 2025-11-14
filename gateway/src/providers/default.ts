@@ -117,6 +117,7 @@ export class DefaultProviderProxy {
   protected middlewares: Middleware[]
   protected otelSpan: OtelSpan
 
+  protected requestModel: string | null = null
   // NOTE: Those fields are used only for streaming responses for the time being.
   protected usage: Usage | null = null
   protected responseModel: string | null = null

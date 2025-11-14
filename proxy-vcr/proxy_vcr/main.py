@@ -42,7 +42,7 @@ async def lifespan(_: Starlette):
 
 async def proxy(request: Request) -> Response:
     auth_header = request.headers.get('authorization', '')
-    body = await request.body()
+    body: bytes = await request.body()
 
     # We should cache based on request body content, so we should make a hash of the request body.
     vcr_suffix = request.headers.get('x-vcr-filename', hashlib.sha256(body).hexdigest())

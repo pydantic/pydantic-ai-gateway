@@ -1,6 +1,6 @@
 import { createExecutionContext, env, waitOnExecutionContext } from 'cloudflare:test'
 import { gatewayFetch } from '@pydantic/ai-gateway'
-import { test as baseTest, beforeAll, beforeEach, expect } from 'vitest'
+import { test as baseTest, beforeAll, beforeEach, expect, vi } from 'vitest'
 import SQL from '../limits-schema.sql?raw'
 import { buildGatewayEnv, type DisableEvent } from './worker'
 
@@ -9,6 +9,8 @@ declare module 'vitest' {
     gateway: TestGateway
   }
 }
+
+vi.mock('../src/refreshGenaiPrices', () => ({ refreshGenaiPrices: vi.fn(() => Promise.resolve()) }))
 
 beforeAll(async () => {
   try {

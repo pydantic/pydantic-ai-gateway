@@ -47,11 +47,13 @@ const getProviderProxies = (
   providerProxyMapping: Record<string, ProviderProxy>,
   routingGroups: ApiKeyInfo['routingGroups'],
 ): ProviderProxy[] | { status: number; message: string } => {
-  if (route in providerProxyMapping) {
-    return [providerProxyMapping[route]!]
-  }
+  // If there is a routingGroup with the same route as a provider, prefer the routingGroup
   const routingGroup = routingGroups?.[route]
   if (!routingGroup) {
+    if (route in providerProxyMapping) {
+      // In this case, check for the existence of a provider with this route
+      return [providerProxyMapping[route]!]
+    }
     const supportedValues = [...new Set([...Object.keys(providerProxyMapping), ...Object.keys(routingGroups ?? {})])]
       .sort()
       .join(', ')

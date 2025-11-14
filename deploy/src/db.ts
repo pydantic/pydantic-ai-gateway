@@ -17,11 +17,27 @@ export class ConfigDB extends KeysDbD1 {
       providersWithKeys = keyInfo.providers.map((key) => ({ ...config.providers[key], key }))
     }
 
-    // Transform routes to routingGroups
-    const routingGroups: Record<string, { key: string }[]> = {}
+    // Transform routes/routingGroups to the ApiKeyInfo format
+    const routingGroups: Record<string, { key: string; priority?: number; weight?: number }[]> = {}
+
+    // First, use the new routingGroups if available
+    if (config.routingGroups) {
+      for (const [routeName, routeItems] of Object.entries(config.routingGroups)) {
+        routingGroups[routeName] = routeItems.map((item) => ({
+          key: item.key,
+          priority: item.priority,
+          weight: item.weight,
+        }))
+      }
+    }
+
+    // Then, fall back to the old routes format (backward compatibility)
     if (config.routes) {
       for (const [routeName, routeProviderKeys] of Object.entries(config.routes)) {
-        routingGroups[routeName] = routeProviderKeys.map((providerKey) => ({ key: providerKey }))
+        // Only use routes if not already defined in routingGroups
+        if (!routingGroups[routeName]) {
+          routingGroups[routeName] = routeProviderKeys.map((providerKey) => ({ key: providerKey }))
+        }
       }
     }
 

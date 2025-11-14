@@ -190,7 +190,6 @@ class TestKeysDB extends KeysDbD1 {
               providerId: 'test',
               injectCost: true,
               credentials: 'test1',
-              priority: 100,
             },
             {
               key: 'test2',
@@ -198,7 +197,6 @@ class TestKeysDB extends KeysDbD1 {
               providerId: 'test',
               injectCost: true,
               credentials: 'test2',
-              priority: 50,
             },
           ],
           routingGroups: { test: [{ key: 'test1' }, { key: 'test2' }] },

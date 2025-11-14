@@ -42,7 +42,56 @@ export async function gateway(
   }
 }
 
-const getProviderProxies = (
+/**
+ * Performs weighted random sampling without replacement.
+ * The probability of being in position N is proportionate to the item's weight
+ * relative to the other items that haven't already been selected.
+ *
+ * Items with zero weight always come after items with positive weight,
+ * but are randomly ordered among themselves.
+ */
+export function weightedRandomSample<T extends { weight: number }>(items: T[]): T[] {
+  if (items.length === 0) return []
+  if (items.length === 1) return [...items]
+
+  // Separate items with positive weight from items with zero weight
+  const positiveWeightItems = items.filter((item) => item.weight > 0)
+  const zeroWeightItems = items.filter((item) => item.weight === 0)
+
+  const result: T[] = []
+
+  // First, do weighted random sampling for positive weight items
+  const remaining = [...positiveWeightItems]
+  while (remaining.length > 0) {
+    const totalWeight = remaining.reduce((sum, item) => sum + item.weight, 0)
+    const random = Math.random() * totalWeight
+
+    let cumulative = 0
+    for (let i = 0; i < remaining.length; i++) {
+      const item = remaining[i]!
+      cumulative += item.weight
+      if (random < cumulative) {
+        result.push(item)
+        remaining.splice(i, 1)
+        break
+      }
+    }
+  }
+
+  // Then, add zero weight items in random order (Fisher-Yates shuffle)
+  const shuffledZeroWeight = [...zeroWeightItems]
+  for (let i = shuffledZeroWeight.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1))
+    const temp = shuffledZeroWeight[i]!
+    shuffledZeroWeight[i] = shuffledZeroWeight[j]!
+    shuffledZeroWeight[j] = temp
+  }
+  result.push(...shuffledZeroWeight)
+
+  return result
+}
+
+export const getProviderProxies = (
   route: string,
   providerProxyMapping: Record<string, ProviderProxy>,
   routingGroups: ApiKeyInfo['routingGroups'],
@@ -57,7 +106,35 @@ const getProviderProxies = (
       .join(', ')
     return { status: 404, message: `Route not found: ${route}. Supported values: ${supportedValues}` }
   }
-  const providerProxies = routingGroup
+
+  // Step 1: Copy routingGroup and, if unset, set the priority for each item to the negative of the index of the item, and the weight to 1
+  // Negative weights are normalized to 0
+  const normalizedItems = routingGroup.map((item, index) => ({
+    ...item,
+    priority: item.priority ?? -index,
+    weight: Math.max(0, item.weight ?? 1),
+  }))
+
+  // Step 2: Group items by priority, and within priority groups, randomize based on weight
+  const priorityGroups = new Map<number, typeof normalizedItems>()
+  for (const item of normalizedItems) {
+    const group = priorityGroups.get(item.priority) ?? []
+    group.push(item)
+    priorityGroups.set(item.priority, group)
+  }
+
+  // Sort priority groups by priority (descending, so higher priority comes first)
+  const sortedPriorities = Array.from(priorityGroups.keys()).sort((a, b) => b - a)
+
+  // Step 3: Flatten the full list of items so that higher-priority items come before lower-priority items,
+  // but the randomized within-priority-group order is preserved
+  const orderedItems: typeof normalizedItems = []
+  for (const priority of sortedPriorities) {
+    const group = priorityGroups.get(priority)!
+    orderedItems.push(...weightedRandomSample(group))
+  }
+
+  const providerProxies = orderedItems
     .map(({ key }) => providerProxyMapping[key])
     .filter((x): x is ProviderProxy & { key: string } => !!x)
   if (providerProxies.length === 0) {

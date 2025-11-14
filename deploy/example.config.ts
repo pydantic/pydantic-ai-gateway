@@ -68,6 +68,22 @@ export const config: Config<ProviderKeys> = {
       credentials: env.AWS_BEARER_TOKEN_BEDROCK,
     },
   },
+  // routing groups for load balancing and fallback
+  routingGroups: {
+    // Example routing group with priority and weight
+    // Higher priority providers are tried first; within same priority, weight controls probability
+    'openai-with-fallback': [
+      { key: 'a', priority: 10, weight: 1 }, // Try OpenAI first
+      { key: 'b', priority: 5, weight: 1 }, // Fall back to Groq if OpenAI fails
+    ],
+    // Example routing group with weighted load balancing (same priority, different weights)
+    'balanced-llm': [
+      { key: 'a', weight: 3 }, // OpenAI gets 3x the traffic
+      { key: 'b', weight: 1 }, // Groq gets 1x the traffic
+    ],
+    // Example simple routing group (backward compatible - no priority/weight specified)
+    'all-providers': [{ key: 'a' }, { key: 'b' }, { key: 'c' }, { key: 'd' }],
+  },
   // individual apiKeys
   apiKeys: {
     'REPLACE ME! run `npm run generate-api-key` and copy the output here': {

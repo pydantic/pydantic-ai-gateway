@@ -219,6 +219,29 @@ describe('openai', () => {
     )
   })
 
+  test('ignore injecting stream_options when stream is false', async ({ gateway }) => {
+    const { fetch, otelBatch } = gateway
+
+    const client = new OpenAI({ apiKey: 'healthy', baseURL: 'https://example.com/openai', fetch })
+
+    const _completion = await client.chat.completions.create(
+      {
+        model: 'gpt-5',
+        messages: [
+          { role: 'developer', content: 'You are a helpful assistant.' },
+          { role: 'user', content: 'What is the capital of France?' },
+        ],
+        max_completion_tokens: 1024,
+        stream: false,
+      },
+      { headers: { 'x-vcr-filename': 'stream-options-stream-false' } },
+    )
+
+    expect(_completion).toMatchSnapshot('llm')
+    expect(otelBatch, 'otelBatch length not 1').toHaveLength(1)
+    expect(deserializeRequest(otelBatch[0]!)).toMatchSnapshot('span')
+  })
+
   test('openai responses stream', async ({ gateway }) => {
     const { fetch, otelBatch } = gateway
 

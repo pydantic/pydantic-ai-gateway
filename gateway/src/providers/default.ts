@@ -242,6 +242,7 @@ export class DefaultProviderProxy {
         }
       }
       const price = calcPrice(usage, responseModel, { provider })
+      // return {error: 'Unable to calculate spend'}
       if (price) {
         return { responseBody, responseModel, usage, cost: price.total_price }
       } else {

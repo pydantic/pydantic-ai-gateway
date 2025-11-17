@@ -199,7 +199,7 @@ describe('openai', () => {
   })
 
   test('stream injects stream_options with user-defined stream_options', async ({ gateway }) => {
-    const { fetch, otelBatch } = gateway
+    const { fetch } = gateway
 
     const client = new OpenAI({ apiKey: 'healthy', baseURL: 'https://example.com/openai', fetch })
 

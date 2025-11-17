@@ -140,9 +140,10 @@ class TestKeysDB extends KeysDbD1 {
             test: [{ key: 'test' }],
             openai: [{ key: 'openai' }],
             groq: [{ key: 'groq' }],
-            anthropic: [{ key: 'anthropic' }],
+            anthropic: [{ key: 'anthropic' }, { key: 'google-vertex' }],
             converse: [{ key: 'bedrock' }],
             gemini: [{ key: 'google-vertex' }],
+            'google-vertex': [{ key: 'google-vertex' }],
           },
           otelSettings: {
             writeToken: 'write-token',

@@ -51,4 +51,7 @@ const handler = {
   },
 } satisfies ExportedHandler<Env>
 
-export default instrument(handler, { service: { name: 'gateway', version: env.GITHUB_SHA.substring(0, 7) } })
+export default instrument(handler, {
+  service: { name: 'gateway', version: env.GITHUB_SHA.substring(0, 7) },
+  scrubbing: { extraPatterns: ['writeToken'] },
+})

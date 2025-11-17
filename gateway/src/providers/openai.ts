@@ -13,7 +13,7 @@ export class OpenAIProvider extends DefaultProviderProxy {
     } else if (this.restOfPath === 'responses') {
       this.flavor = 'responses'
     } else if (this.restOfPath !== 'chat/completions') {
-      return { error: 'invalid url, not chat/completions or responses endpoint' }
+      return { error: 'invalid url, not chat/completions or responses endpoint', disableKey: false }
     }
   }
 

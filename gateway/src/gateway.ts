@@ -153,7 +153,7 @@ export async function gatewayWithLimiter(
   if ('response' in result) {
     response = result.response
   } else if ('responseStream' in result) {
-    const { successStatus: status, responseHeaders: headers, responseStream, disableKey, onStreamComplete } = result
+    const { successStatus: status, responseHeaders: headers, responseStream, onStreamComplete } = result
     runAfter(
       ctx,
       'recordSpend',
@@ -162,6 +162,7 @@ export async function gatewayWithLimiter(
         if ('cost' in complete && complete.cost) {
           await recordSpend(apiKeyInfo, complete.cost, options)
         } else if ('error' in complete) {
+          const { disableKey } = complete
           const { key: _key, ...context } = apiKeyInfo
           if (disableKey) {
             logfire.reportError('api key blocked', complete.error, { context })

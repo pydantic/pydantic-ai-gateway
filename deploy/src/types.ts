@@ -3,8 +3,6 @@ import type { OtelSettings, ProviderProxy } from '@pydantic/ai-gateway'
 export interface Config<ProviderKey extends string = string> {
   /** @param project: record keys are the project ids */
   projects: Record<number, Project>
-  /** @deprecated Use routingGroups instead */
-  routes?: Record<string, ProviderKey[]>
   routingGroups?: Record<string, { key: ProviderKey; priority?: number; weight?: number }[]>
   providers: Record<ProviderKey, ProviderProxy>
   apiKeys: Record<string, ApiKey<ProviderKey>>

@@ -31,16 +31,6 @@ export class ConfigDB extends KeysDbD1 {
       }
     }
 
-    // Then, fall back to the old routes format (backward compatibility)
-    if (config.routes) {
-      for (const [routeName, routeProviderKeys] of Object.entries(config.routes)) {
-        // Only use routes if not already defined in routingGroups
-        if (!routingGroups[routeName]) {
-          routingGroups[routeName] = routeProviderKeys.map((providerKey) => ({ key: providerKey }))
-        }
-      }
-    }
-
     // if keyInfo.id is unset, hash the API key to give something unique without explicitly using the key directly
     const keyId = keyInfo.id
 

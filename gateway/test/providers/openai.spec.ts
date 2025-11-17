@@ -198,6 +198,27 @@ describe('openai', () => {
     expect(deserializeRequest(otelBatch[0]!)).toMatchSnapshot('span')
   })
 
+  test('stream injects stream_options with user-defined stream_options', async ({ gateway }) => {
+    const { fetch, otelBatch } = gateway
+
+    const client = new OpenAI({ apiKey: 'healthy', baseURL: 'https://example.com/openai', fetch })
+
+    await expect(async () => {
+      await client.chat.completions.create({
+        stream: true,
+        model: 'gpt-5',
+        messages: [
+          { role: 'developer', content: 'You are a super helpful assistant.' },
+          { role: 'user', content: 'What is the capital of France?' },
+        ],
+        max_completion_tokens: 1024,
+        stream_options: { include_usage: false },
+      })
+    }).rejects.toThrowErrorMatchingInlineSnapshot(
+      `[Error: 400 You cannot disable \`include_usage\` in \`stream_options\`.]`,
+    )
+  })
+
   test('openai responses stream', async ({ gateway }) => {
     const { fetch, otelBatch } = gateway
 

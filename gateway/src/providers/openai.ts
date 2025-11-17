@@ -43,15 +43,21 @@ export class OpenAIProvider extends DefaultProviderProxy {
       return result
     }
 
-    // If it's a stream request, we need to inject the `stream_options` key if it's not present.
-    const requestBodyDataClone = { ...(requestBodyData as Record<string, unknown>) }
-    const streamOptions = (requestBodyDataClone?.stream_options || {}) as Record<string, unknown>
-
-    if (!('include_usage' in streamOptions)) {
-      streamOptions.include_usage = true
+    // If include_usage is already there, we don't need to inject it.
+    let streamOptions = {}
+    if ('stream_options' in requestBodyData) {
+      streamOptions = requestBodyData.stream_options as Record<string, unknown>
+    }
+    if ('include_usage' in streamOptions) {
+      if (streamOptions.include_usage === true) {
+        return result
+      } else {
+        // The user intentionally disabled `include_usage`.
+        return { error: 'You cannot disable `include_usage` in `stream_options`.' }
+      }
     }
 
-    requestBodyDataClone.stream_options = streamOptions
+    const requestBodyDataClone = { ...requestBodyData, stream_options: { ...streamOptions, include_usage: true } }
 
     return {
       requestBodyText: JSON.stringify(requestBodyDataClone),

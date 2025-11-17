@@ -1,5 +1,142 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
+exports[`openai > ignore injecting stream_options when stream is false > llm 1`] = `
+{
+  "choices": [
+    {
+      "finish_reason": "stop",
+      "index": 0,
+      "message": {
+        "annotations": [],
+        "content": "Paris.",
+        "refusal": null,
+        "role": "assistant",
+      },
+    },
+  ],
+  "created": 1763400816,
+  "id": "chatcmpl-CcxOaX4niuX1cZ9L0WPgYQ8KkSqlA",
+  "model": "gpt-5-2025-08-07",
+  "object": "chat.completion",
+  "service_tier": "default",
+  "system_fingerprint": null,
+  "usage": {
+    "completion_tokens": 11,
+    "completion_tokens_details": {
+      "accepted_prediction_tokens": 0,
+      "audio_tokens": 0,
+      "reasoning_tokens": 0,
+      "rejected_prediction_tokens": 0,
+    },
+    "prompt_tokens": 23,
+    "prompt_tokens_details": {
+      "audio_tokens": 0,
+      "cached_tokens": 0,
+    },
+    "pydantic_ai_gateway": {
+      "cost_estimate": 0.00013875,
+    },
+    "total_tokens": 34,
+  },
+}
+`;
+
+exports[`openai > ignore injecting stream_options when stream is false > span 1`] = `
+[
+  {
+    "attributes": {
+      "gen_ai.input.messages": [
+        {
+          "parts": [
+            {
+              "content": "You are a helpful assistant.",
+              "type": "text",
+            },
+          ],
+          "role": "system",
+        },
+        {
+          "parts": [
+            {
+              "content": "What is the capital of France?",
+              "type": "text",
+            },
+          ],
+          "role": "user",
+        },
+      ],
+      "gen_ai.operation.name": "chat",
+      "gen_ai.output.messages": [
+        {
+          "finish_reason": "stop",
+          "parts": [
+            {
+              "content": "Paris.",
+              "type": "text",
+            },
+          ],
+          "role": "assistant",
+        },
+      ],
+      "gen_ai.request.max_tokens": 1024,
+      "gen_ai.request.model": "gpt-5",
+      "gen_ai.request.seed": {},
+      "gen_ai.request.stop_sequences": {},
+      "gen_ai.request.temperature": {},
+      "gen_ai.request.top_k": {},
+      "gen_ai.request.top_p": {},
+      "gen_ai.response.finish_reasons": [
+        "stop",
+      ],
+      "gen_ai.response.id": "chatcmpl-CcxOaX4niuX1cZ9L0WPgYQ8KkSqlA",
+      "gen_ai.response.model": "gpt-5-2025-08-07",
+      "gen_ai.system": "openai",
+      "gen_ai.system_instructions": {},
+      "gen_ai.usage.cache_audio_read_tokens": {},
+      "gen_ai.usage.cache_read_tokens": 0,
+      "gen_ai.usage.cache_write_tokens": {},
+      "gen_ai.usage.input_audio_tokens": 0,
+      "gen_ai.usage.input_tokens": 23,
+      "gen_ai.usage.output_audio_tokens": 0,
+      "gen_ai.usage.output_tokens": 11,
+      "http.request.body.text": "{
+  "model": "gpt-5",
+  "messages": [
+    {
+      "role": "developer",
+      "content": "You are a helpful assistant."
+    },
+    {
+      "role": "user",
+      "content": "What is the capital of France?"
+    }
+  ],
+  "max_completion_tokens": 1024,
+  "stream": false
+}",
+      "http.response.body.text": "{"id":"chatcmpl-CcxOaX4niuX1cZ9L0WPgYQ8KkSqlA","object":"chat.completion","created":1763400816,"model":"gpt-5-2025-08-07","choices":[{"index":0,"message":{"role":"assistant","content":"Paris.","refusal":null,"annotations":[]},"finish_reason":"stop"}],"usage":{"prompt_tokens":23,"completion_tokens":11,"total_tokens":34,"prompt_tokens_details":{"cached_tokens":0,"audio_tokens":0},"completion_tokens_details":{"reasoning_tokens":0,"audio_tokens":0,"accepted_prediction_tokens":0,"rejected_prediction_tokens":0},"pydantic_ai_gateway":{"cost_estimate":0.00013875}},"service_tier":"default","system_fingerprint":null}",
+      "http.response.status_code": 200,
+      "logfire.json_schema": "{"type":"object","properties":{"gen_ai.operation.name":{"type":"string"},"gen_ai.request.model":{"type":"string"},"gen_ai.system":{"type":"string"},"gen_ai.request.max_tokens":{"type":"number"},"gen_ai.request.top_k":{},"gen_ai.request.top_p":{},"gen_ai.request.temperature":{},"gen_ai.request.stop_sequences":{},"gen_ai.request.seed":{},"gen_ai.response.finish_reasons":{},"gen_ai.response.id":{"type":"string"},"gen_ai.input.messages":{},"gen_ai.output.messages":{},"gen_ai.system_instructions":{},"http.response.status_code":{"type":"number"},"http.request.body.text":{"type":"string"},"http.response.body.text":{"type":"string"},"gen_ai.response.model":{"type":"string"},"gen_ai.usage.input_tokens":{"type":"number"},"gen_ai.usage.cache_read_tokens":{"type":"number"},"gen_ai.usage.cache_write_tokens":{},"gen_ai.usage.output_tokens":{"type":"number"},"gen_ai.usage.input_audio_tokens":{"type":"number"},"gen_ai.usage.cache_audio_read_tokens":{},"gen_ai.usage.output_audio_tokens":{"type":"number"}}}",
+      "logfire.level_num": 9,
+      "logfire.msg": "chat gpt-5-2025-08-07",
+    },
+    "events": [],
+    "kind": 1,
+    "links": [],
+    "name": "chat gpt-5-2025-08-07",
+    "parentSpanId": undefined,
+    "resource": {
+      "service.name": "PAIG",
+      "service.version": "test",
+    },
+    "scope": "pydantic-ai-gateway",
+    "status": {
+      "code": 1,
+    },
+  },
+]
+`;
+
 exports[`openai > openai chat > llm 1`] = `
 {
   "choices": [

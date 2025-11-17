@@ -1,0 +1,94 @@
+interactions:
+- request:
+    body: "{\n  \"model\": \"gpt-5\",\n  \"messages\": [\n    {\n      \"role\": \"developer\",\n
+      \     \"content\": \"You are a helpful assistant.\"\n    },\n    {\n      \"role\":
+      \"user\",\n      \"content\": \"What is the capital of France?\"\n    }\n  ],\n
+      \ \"max_completion_tokens\": 1024,\n  \"stream\": false\n}"
+    headers:
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '267'
+      content-type:
+      - application/json
+      host:
+      - api.openai.com
+      user-agent:
+      - python-httpx/0.28.1
+    method: POST
+    uri: https://api.openai.com/v1/chat/completions
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAAA4ySy07DMBBF9/kKy+ukSvqmO8QSJIpYUEBVZOxpaurYxp6goqr/juw+EkSR2Hgx
+        Z+bq3vHsEkKoFHRGKF8z5LVV2Q3f3rPFUMtmUfCXq7v8aV49P0xvN48f6pqmYcK8vQPH01SPm9oq
+        QGn0AXMHDCGoFpPxYJjn02IcQW0EqDBWWcxGWT/vj7J8muWT49zaSA6ezshrQgghu/gGh1rAls5I
+        np4qNXjPKqCzcxMh1BkVKpR5Lz0yjTRtITcaQUfTc+ak73Whg1XjWbCmG6U6gGltkIVo0dbySPZn
+        IyuppV+XDpg3Ooh7NJZGuk8IWcZgzQ+v1DpTWyzRbCDK9gcHOdousoVFcYRokKm2PhimF9RKAcik
+        8p3FUM74GkQ72W6RNUKaDkg62X6buaR9yC119R/5FnAOFkGU1oGQ/Gfgts1BOLO/2s47joapB/cp
+        OZQowYV/ELBijTqcAPVfHqEuV1JX4KyT8Q7CVyf75BsAAP//AwCSOP0dBAMAAA==
+    headers:
+      CF-RAY:
+      - 9a00f95dbbe25910-LIS
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json
+      Date:
+      - Mon, 17 Nov 2025 17:33:37 GMT
+      Server:
+      - cloudflare
+      Set-Cookie:
+      - __cf_bm=z6xvHF0XcgfYk9csgjcidkmGNPMsoLq2Dxc_qwyBcYY-1763400817-1.0.1.1-7Xmi0cTmIz6pZiIkp20DGffgPyGtjsdGbKKAfgEYkS4NX0r7rF5QQl21RSdYM_d7wrbdqmNDY9SyRAPHXvs0dTFZF1pQ7xXSqfGLoyoAg2Q;
+        path=/; expires=Mon, 17-Nov-25 18:03:37 GMT; domain=.api.openai.com; HttpOnly;
+        Secure; SameSite=None
+      - _cfuvid=cNYqtjiQW0QcBtaXr.wfNvqNvT8.7Y2fxNvb9tE77iI-1763400817893-0.0.1.1-604800000;
+        path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains; preload
+      Transfer-Encoding:
+      - chunked
+      X-Content-Type-Options:
+      - nosniff
+      access-control-expose-headers:
+      - X-Request-ID
+      alt-svc:
+      - h3=":443"; ma=86400
+      cf-cache-status:
+      - DYNAMIC
+      openai-organization:
+      - pydantic-28gund
+      openai-processing-ms:
+      - '1108'
+      openai-project:
+      - proj_dKobscVY9YJxeEaDJen54e3d
+      openai-version:
+      - '2020-10-01'
+      x-envoy-upstream-service-time:
+      - '1215'
+      x-openai-proxy-wasm:
+      - v0.1
+      x-ratelimit-limit-requests:
+      - '15000'
+      x-ratelimit-limit-tokens:
+      - '40000000'
+      x-ratelimit-remaining-requests:
+      - '14999'
+      x-ratelimit-remaining-tokens:
+      - '39999982'
+      x-ratelimit-reset-requests:
+      - 4ms
+      x-ratelimit-reset-tokens:
+      - 0s
+      x-request-id:
+      - req_4715e31a930a40399d39313fe48bea61
+    status:
+      code: 200
+      message: OK
+version: 1

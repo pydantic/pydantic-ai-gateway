@@ -39,7 +39,8 @@ export class OpenAIProvider extends DefaultProviderProxy {
 
     const { requestBodyData, requestModel } = result
 
-    if (!('stream' in requestBodyData)) {
+    const isStreaming = 'stream' in requestBodyData ? requestBodyData.stream : false
+    if (!isStreaming) {
       return result
     }
 

@@ -3699,3 +3699,165 @@ root.quantize(q, rounding=ROUND_HALF_UP)",
   },
 ]
 `;
+
+exports[`openai > stream injects stream_options > chunks 1`] = `
+[
+  {
+    "choices": [
+      {
+        "delta": {
+          "content": "",
+          "refusal": null,
+          "role": "assistant",
+        },
+        "finish_reason": null,
+        "index": 0,
+      },
+    ],
+    "created": 1763396489,
+    "id": "chatcmpl-CcwGn8eQvSVhzNcfy3XDX9pIUHIQB",
+    "model": "gpt-5-2025-08-07",
+    "obfuscation": "FX1cL5NIsg",
+    "object": "chat.completion.chunk",
+    "service_tier": "default",
+    "system_fingerprint": null,
+    "usage": null,
+  },
+  {
+    "choices": [
+      {
+        "delta": {
+          "content": "Paris",
+        },
+        "finish_reason": null,
+        "index": 0,
+      },
+    ],
+    "created": 1763396489,
+    "id": "chatcmpl-CcwGn8eQvSVhzNcfy3XDX9pIUHIQB",
+    "model": "gpt-5-2025-08-07",
+    "obfuscation": "JQTpWms",
+    "object": "chat.completion.chunk",
+    "service_tier": "default",
+    "system_fingerprint": null,
+    "usage": null,
+  },
+  {
+    "choices": [
+      {
+        "delta": {
+          "content": ".",
+        },
+        "finish_reason": null,
+        "index": 0,
+      },
+    ],
+    "created": 1763396489,
+    "id": "chatcmpl-CcwGn8eQvSVhzNcfy3XDX9pIUHIQB",
+    "model": "gpt-5-2025-08-07",
+    "obfuscation": "qmHSFd5moKd",
+    "object": "chat.completion.chunk",
+    "service_tier": "default",
+    "system_fingerprint": null,
+    "usage": null,
+  },
+  {
+    "choices": [
+      {
+        "delta": {},
+        "finish_reason": "stop",
+        "index": 0,
+      },
+    ],
+    "created": 1763396489,
+    "id": "chatcmpl-CcwGn8eQvSVhzNcfy3XDX9pIUHIQB",
+    "model": "gpt-5-2025-08-07",
+    "obfuscation": "rgCyCI",
+    "object": "chat.completion.chunk",
+    "service_tier": "default",
+    "system_fingerprint": null,
+    "usage": null,
+  },
+  {
+    "choices": [],
+    "created": 1763396489,
+    "id": "chatcmpl-CcwGn8eQvSVhzNcfy3XDX9pIUHIQB",
+    "model": "gpt-5-2025-08-07",
+    "obfuscation": "DW2I5ikClYm",
+    "object": "chat.completion.chunk",
+    "service_tier": "default",
+    "system_fingerprint": null,
+    "usage": {
+      "completion_tokens": 11,
+      "completion_tokens_details": {
+        "accepted_prediction_tokens": 0,
+        "audio_tokens": 0,
+        "reasoning_tokens": 0,
+        "rejected_prediction_tokens": 0,
+      },
+      "prompt_tokens": 23,
+      "prompt_tokens_details": {
+        "audio_tokens": 0,
+        "cached_tokens": 0,
+      },
+      "total_tokens": 34,
+    },
+  },
+]
+`;
+
+exports[`openai > stream injects stream_options > span 1`] = `
+[
+  {
+    "attributes": {
+      "gen_ai.operation.name": "chat",
+      "gen_ai.request.max_tokens": 1024,
+      "gen_ai.request.model": "gpt-5",
+      "gen_ai.response.id": "chatcmpl-CcwGn8eQvSVhzNcfy3XDX9pIUHIQB",
+      "gen_ai.response.model": "gpt-5-2025-08-07",
+      "gen_ai.system": "openai",
+      "gen_ai.usage.cache_read_tokens": 0,
+      "gen_ai.usage.input_audio_tokens": 0,
+      "gen_ai.usage.input_tokens": 23,
+      "gen_ai.usage.output_audio_tokens": 0,
+      "gen_ai.usage.output_tokens": 11,
+      "http.request.header.accept": "application/json",
+      "http.request.header.authorization": "Bearer healthy",
+      "http.request.header.content-length": "266",
+      "http.request.header.content-type": "application/json",
+      "http.request.header.user-agent": "OpenAI/JS 4.104.0",
+      "http.request.header.x-stainless-arch": "unknown",
+      "http.request.header.x-stainless-lang": "js",
+      "http.request.header.x-stainless-os": "Unknown",
+      "http.request.header.x-stainless-package-version": "4.104.0",
+      "http.request.header.x-stainless-retry-count": "0",
+      "http.request.header.x-stainless-runtime": "unknown",
+      "http.request.header.x-stainless-runtime-version": "unknown",
+      "http.request.header.x-stainless-timeout": "600",
+      "http.request.header.x-vcr-filename": "stream-options",
+      "http.request.method": "POST",
+      "http.response.header.content-type": "text/event-stream; charset=utf-8",
+      "http.response.header.server": "uvicorn",
+      "http.response.header.transfer-encoding": "chunked",
+      "http.response.status_code": 200,
+      "logfire.json_schema": "{"type":"object","properties":{"gen_ai.system":{"type":"string"},"gen_ai.operation.name":{"type":"string"},"gen_ai.request.model":{"type":"string"},"gen_ai.request.max_tokens":{"type":"number"},"gen_ai.response.model":{"type":"string"},"gen_ai.response.id":{"type":"string"},"gen_ai.usage.input_tokens":{"type":"number"},"gen_ai.usage.cache_read_tokens":{"type":"number"},"gen_ai.usage.output_tokens":{"type":"number"},"gen_ai.usage.input_audio_tokens":{"type":"number"},"gen_ai.usage.output_audio_tokens":{"type":"number"},"http.request.method":{"type":"string"},"url.full":{"type":"string"},"http.request.header.accept":{"type":"string"},"http.request.header.authorization":{"type":"string"},"http.request.header.content-length":{"type":"string"},"http.request.header.content-type":{"type":"string"},"http.request.header.user-agent":{"type":"string"},"http.request.header.x-stainless-arch":{"type":"string"},"http.request.header.x-stainless-lang":{"type":"string"},"http.request.header.x-stainless-os":{"type":"string"},"http.request.header.x-stainless-package-version":{"type":"string"},"http.request.header.x-stainless-retry-count":{"type":"string"},"http.request.header.x-stainless-runtime":{"type":"string"},"http.request.header.x-stainless-runtime-version":{"type":"string"},"http.request.header.x-stainless-timeout":{"type":"string"},"http.request.header.x-vcr-filename":{"type":"string"},"http.response.status_code":{"type":"number"},"http.response.header.content-type":{"type":"string"},"http.response.header.server":{"type":"string"},"http.response.header.transfer-encoding":{"type":"string"}}}",
+      "logfire.level_num": 9,
+      "logfire.msg": "chat gpt-5",
+      "url.full": "https://example.com/openai/chat/completions",
+    },
+    "events": [],
+    "kind": 1,
+    "links": [],
+    "name": "chat gpt-5",
+    "parentSpanId": undefined,
+    "resource": {
+      "service.name": "PAIG",
+      "service.version": "test",
+    },
+    "scope": "pydantic-ai-gateway",
+    "status": {
+      "code": 1,
+    },
+  },
+]
+`;

@@ -2,7 +2,7 @@ import type { ModelAPI } from '../api'
 import { ChatCompletionAPI } from '../api/chat'
 import { EmbeddingsAPI } from '../api/embeddings'
 import { ResponsesAPI } from '../api/responses'
-import { DefaultProviderProxy } from './default'
+import { DefaultProviderProxy, type Prepare, type ProxyInvalidRequest } from './default'
 
 export class OpenAIProvider extends DefaultProviderProxy {
   flavor: 'chat' | 'responses' | 'embeddings' = 'chat'
@@ -28,6 +28,35 @@ export class OpenAIProvider extends DefaultProviderProxy {
       return new ResponsesAPI('openai')
     } else {
       return new ChatCompletionAPI('openai')
+    }
+  }
+
+  protected async prepRequest(): Promise<ProxyInvalidRequest | Prepare> {
+    const result = await super.prepRequest()
+    if ('error' in result || this.flavor !== 'chat') {
+      return result
+    }
+
+    const { requestBodyData, requestModel } = result
+
+    if (!('stream' in requestBodyData)) {
+      return result
+    }
+
+    // If it's a stream request, we need to inject the `stream_options` key if it's not present.
+    const requestBodyDataClone = { ...(requestBodyData as Record<string, unknown>) }
+    const streamOptions = (requestBodyDataClone?.stream_options || {}) as Record<string, unknown>
+
+    if (!('include_usage' in streamOptions)) {
+      streamOptions.include_usage = true
+    }
+
+    requestBodyDataClone.stream_options = streamOptions
+
+    return {
+      requestBodyText: JSON.stringify(requestBodyDataClone),
+      requestBodyData: requestBodyDataClone,
+      requestModel,
     }
   }
 

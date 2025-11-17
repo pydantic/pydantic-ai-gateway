@@ -63,7 +63,7 @@ export interface ProxyUnexpectedResponse {
   responseBody: string
 }
 
-interface Prepare {
+export interface Prepare {
   requestBodyText: string
   requestBodyData: JsonData
   requestModel?: string

@@ -172,6 +172,32 @@ describe('openai', () => {
     expect(deserializeRequest(otelBatch[0]!)).toMatchSnapshot('span')
   })
 
+  test('stream injects stream_options', async ({ gateway }) => {
+    const { fetch, otelBatch } = gateway
+
+    const client = new OpenAI({ apiKey: 'healthy', baseURL: 'https://example.com/openai', fetch })
+
+    const stream = await client.chat.completions.create(
+      {
+        stream: true,
+        model: 'gpt-5',
+        messages: [
+          { role: 'developer', content: 'You are a helpful assistant.' },
+          { role: 'user', content: 'What is the capital of France?' },
+        ],
+        max_completion_tokens: 1024,
+      },
+      { headers: { 'x-vcr-filename': 'stream-options' } },
+    )
+    const chunks: object[] = []
+    for await (const chunk of stream) {
+      chunks.push(chunk)
+    }
+    expect(chunks).toMatchSnapshot('chunks')
+    expect(otelBatch, 'otelBatch length not 1').toHaveLength(1)
+    expect(deserializeRequest(otelBatch[0]!)).toMatchSnapshot('span')
+  })
+
   test('openai responses stream', async ({ gateway }) => {
     const { fetch, otelBatch } = gateway
 

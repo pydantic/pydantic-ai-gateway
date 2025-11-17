@@ -1,13 +1,16 @@
 import type { ModelAPI } from '../api'
 import { ChatCompletionAPI } from '../api/chat'
+import { EmbeddingsAPI } from '../api/embeddings'
 import { ResponsesAPI } from '../api/responses'
 import { DefaultProviderProxy } from './default'
 
 export class OpenAIProvider extends DefaultProviderProxy {
-  flavor: 'chat' | 'responses' = 'chat'
+  flavor: 'chat' | 'responses' | 'embeddings' = 'chat'
 
   check() {
-    if (this.restOfPath === 'responses') {
+    if (this.restOfPath === 'embeddings') {
+      this.flavor = 'embeddings'
+    } else if (this.restOfPath === 'responses') {
       this.flavor = 'responses'
     } else if (this.restOfPath !== 'chat/completions') {
       return { error: 'invalid url, not chat/completions or responses endpoint' }
@@ -19,7 +22,9 @@ export class OpenAIProvider extends DefaultProviderProxy {
   }
 
   protected modelAPI(): ModelAPI {
-    if (this.flavor === 'responses') {
+    if (this.flavor === 'embeddings') {
+      return new EmbeddingsAPI('openai')
+    } else if (this.flavor === 'responses') {
       return new ResponsesAPI('openai')
     } else {
       return new ChatCompletionAPI('openai')

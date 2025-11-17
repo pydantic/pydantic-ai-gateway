@@ -40,9 +40,7 @@ export interface ProxyStreamingSuccess {
   responseHeaders: Headers
   responseStream: ReadableStream
   otelAttributes?: GenAIAttributes
-  onStreamComplete: Promise<{ cost?: number } | { error: Error }>
-  // In case we get to the end of the response, and we are unable to calculate the cost, we need to know if we can disable the key.
-  disableKey?: boolean
+  onStreamComplete: Promise<{ cost?: number } | { error: Error; disableKey: boolean }>
 }
 
 export interface ProxyInvalidRequest {
@@ -470,7 +468,7 @@ export class DefaultProviderProxy {
   private async processChunks<T>(
     modelAPI: BaseAPI<unknown, unknown, T>,
     events: AsyncIterable<T>,
-  ): Promise<{ cost?: number } | { error: Error }> {
+  ): Promise<{ cost?: number } | { error: Error; disableKey: boolean }> {
     for await (const chunk of events) {
       modelAPI.processChunk(chunk)
     }
@@ -480,14 +478,17 @@ export class DefaultProviderProxy {
     const responseModel = modelAPI.extractedResponse.responseModel
 
     if (!provider || !usage || !responseModel) {
-      return { error: new Error(`Unable to calculate cost for model ${responseModel}`) }
+      return { error: new Error(`Unable to calculate cost for model ${responseModel}`), disableKey: this.disableKey() }
     }
 
     const price = calcPrice(usage, responseModel, { provider })
     if (price) {
       return { cost: price.total_price }
     } else {
-      return { error: new Error(`Unable to calculate cost for model ${responseModel} and provider ${provider.name}`) }
+      return {
+        error: new Error(`Unable to calculate cost for model ${responseModel} and provider ${provider.name}`),
+        disableKey: this.disableKey(),
+      }
     }
   }
 

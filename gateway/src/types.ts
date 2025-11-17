@@ -31,7 +31,10 @@ export interface ApiKeyInfo<ProviderKey extends string = string> {
   userSpendingLimitWeekly?: number
   userSpendingLimitMonthly?: number
   providers: (ProviderProxy & { key: ProviderKey })[]
-  routingGroups: Record<string, { key: ProviderKey }[]>
+  // TODO(DavidM): Eventually, make the priority _required_. Not sure if weight should be required or not
+  // higher priority are preferred; if missing, use the negative index of the item (i.e., 0, then -1, then -2, etc.)
+  // among values with same priority, use weight for randomized load balancing; if missing, treat as 1
+  routingGroups: Record<string, { key: ProviderKey; priority?: number; weight?: number }[]>
   otelSettings?: OtelSettings
 }
 
@@ -69,10 +72,6 @@ export interface ProviderProxy {
 
   /** Profile let's you select a provider when multiple providers with the same ProviderID are allowed */
   profile?: string
-
-  /** Higher priority providers will be used first */
-  // TODO(Marcelo): Remove now - this should live in the routingGroups.
-  priority?: number
 
   /** Whether to disable the key in case of error, if missing defaults to True. */
   disableKey?: boolean

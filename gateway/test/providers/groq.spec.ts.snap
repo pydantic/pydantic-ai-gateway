@@ -1,5 +1,241 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
+exports[`groq > groq chat stream > chunks 1`] = `
+[
+  {
+    "choices": [
+      {
+        "delta": {
+          "content": "",
+          "role": "assistant",
+        },
+        "finish_reason": null,
+        "index": 0,
+        "logprobs": null,
+      },
+    ],
+    "created": 1763372317,
+    "id": "chatcmpl-9184b615-00b6-49b2-8ecd-d7cf214f45cd",
+    "model": "llama-3.3-70b-versatile",
+    "object": "chat.completion.chunk",
+    "system_fingerprint": "fp_297b22ece7",
+    "x_groq": {
+      "id": "req_01ka8jweznermardf187810cd8",
+    },
+  },
+  {
+    "choices": [
+      {
+        "delta": {
+          "content": "The",
+        },
+        "finish_reason": null,
+        "index": 0,
+        "logprobs": null,
+      },
+    ],
+    "created": 1763372317,
+    "id": "chatcmpl-9184b615-00b6-49b2-8ecd-d7cf214f45cd",
+    "model": "llama-3.3-70b-versatile",
+    "object": "chat.completion.chunk",
+    "system_fingerprint": "fp_297b22ece7",
+  },
+  {
+    "choices": [
+      {
+        "delta": {
+          "content": " capital",
+        },
+        "finish_reason": null,
+        "index": 0,
+        "logprobs": null,
+      },
+    ],
+    "created": 1763372317,
+    "id": "chatcmpl-9184b615-00b6-49b2-8ecd-d7cf214f45cd",
+    "model": "llama-3.3-70b-versatile",
+    "object": "chat.completion.chunk",
+    "system_fingerprint": "fp_297b22ece7",
+  },
+  {
+    "choices": [
+      {
+        "delta": {
+          "content": " of",
+        },
+        "finish_reason": null,
+        "index": 0,
+        "logprobs": null,
+      },
+    ],
+    "created": 1763372317,
+    "id": "chatcmpl-9184b615-00b6-49b2-8ecd-d7cf214f45cd",
+    "model": "llama-3.3-70b-versatile",
+    "object": "chat.completion.chunk",
+    "system_fingerprint": "fp_297b22ece7",
+  },
+  {
+    "choices": [
+      {
+        "delta": {
+          "content": " France",
+        },
+        "finish_reason": null,
+        "index": 0,
+        "logprobs": null,
+      },
+    ],
+    "created": 1763372317,
+    "id": "chatcmpl-9184b615-00b6-49b2-8ecd-d7cf214f45cd",
+    "model": "llama-3.3-70b-versatile",
+    "object": "chat.completion.chunk",
+    "system_fingerprint": "fp_297b22ece7",
+  },
+  {
+    "choices": [
+      {
+        "delta": {
+          "content": " is",
+        },
+        "finish_reason": null,
+        "index": 0,
+        "logprobs": null,
+      },
+    ],
+    "created": 1763372317,
+    "id": "chatcmpl-9184b615-00b6-49b2-8ecd-d7cf214f45cd",
+    "model": "llama-3.3-70b-versatile",
+    "object": "chat.completion.chunk",
+    "system_fingerprint": "fp_297b22ece7",
+  },
+  {
+    "choices": [
+      {
+        "delta": {
+          "content": " Paris",
+        },
+        "finish_reason": null,
+        "index": 0,
+        "logprobs": null,
+      },
+    ],
+    "created": 1763372317,
+    "id": "chatcmpl-9184b615-00b6-49b2-8ecd-d7cf214f45cd",
+    "model": "llama-3.3-70b-versatile",
+    "object": "chat.completion.chunk",
+    "system_fingerprint": "fp_297b22ece7",
+  },
+  {
+    "choices": [
+      {
+        "delta": {
+          "content": ".",
+        },
+        "finish_reason": null,
+        "index": 0,
+        "logprobs": null,
+      },
+    ],
+    "created": 1763372317,
+    "id": "chatcmpl-9184b615-00b6-49b2-8ecd-d7cf214f45cd",
+    "model": "llama-3.3-70b-versatile",
+    "object": "chat.completion.chunk",
+    "system_fingerprint": "fp_297b22ece7",
+  },
+  {
+    "choices": [
+      {
+        "delta": {},
+        "finish_reason": "stop",
+        "index": 0,
+        "logprobs": null,
+      },
+    ],
+    "created": 1763372317,
+    "id": "chatcmpl-9184b615-00b6-49b2-8ecd-d7cf214f45cd",
+    "model": "llama-3.3-70b-versatile",
+    "object": "chat.completion.chunk",
+    "system_fingerprint": "fp_297b22ece7",
+    "usage": {
+      "completion_time": 0.011625324,
+      "completion_tokens": 8,
+      "prompt_time": 0.002118451,
+      "prompt_tokens": 42,
+      "queue_time": 0.283710522,
+      "total_time": 0.013743775,
+      "total_tokens": 50,
+    },
+    "x_groq": {
+      "id": "req_01ka8jweznermardf187810cd8",
+      "usage": {
+        "completion_time": 0.011625324,
+        "completion_tokens": 8,
+        "prompt_time": 0.002118451,
+        "prompt_tokens": 42,
+        "queue_time": 0.283710522,
+        "total_time": 0.013743775,
+        "total_tokens": 50,
+      },
+    },
+  },
+]
+`;
+
+exports[`groq > groq chat stream > span 1`] = `
+[
+  {
+    "attributes": {
+      "gen_ai.operation.name": "chat",
+      "gen_ai.request.max_tokens": 1024,
+      "gen_ai.request.model": "llama-3.3-70b-versatile",
+      "gen_ai.response.finish_reasons": [
+        "stop",
+      ],
+      "gen_ai.response.id": "chatcmpl-9184b615-00b6-49b2-8ecd-d7cf214f45cd",
+      "gen_ai.response.model": "llama-3.3-70b-versatile",
+      "gen_ai.system": "groq",
+      "gen_ai.usage.input_tokens": 42,
+      "gen_ai.usage.output_tokens": 8,
+      "http.request.header.accept": "application/json",
+      "http.request.header.authorization": "Bearer healthy",
+      "http.request.header.content-length": "284",
+      "http.request.header.content-type": "application/json",
+      "http.request.header.user-agent": "Groq/JS 0.30.0",
+      "http.request.header.x-stainless-arch": "unknown",
+      "http.request.header.x-stainless-lang": "js",
+      "http.request.header.x-stainless-os": "Unknown",
+      "http.request.header.x-stainless-package-version": "0.30.0",
+      "http.request.header.x-stainless-retry-count": "0",
+      "http.request.header.x-stainless-runtime": "unknown",
+      "http.request.header.x-stainless-runtime-version": "unknown",
+      "http.request.header.x-stainless-timeout": "60",
+      "http.request.method": "POST",
+      "http.response.header.content-type": "text/event-stream",
+      "http.response.header.server": "uvicorn",
+      "http.response.header.transfer-encoding": "chunked",
+      "http.response.status_code": 200,
+      "logfire.json_schema": "{"type":"object","properties":{"gen_ai.system":{"type":"string"},"gen_ai.operation.name":{"type":"string"},"gen_ai.request.model":{"type":"string"},"gen_ai.request.max_tokens":{"type":"number"},"gen_ai.response.model":{"type":"string"},"gen_ai.response.id":{"type":"string"},"gen_ai.response.finish_reasons":{},"gen_ai.usage.input_tokens":{"type":"number"},"gen_ai.usage.output_tokens":{"type":"number"},"http.request.method":{"type":"string"},"url.full":{"type":"string"},"http.request.header.accept":{"type":"string"},"http.request.header.authorization":{"type":"string"},"http.request.header.content-length":{"type":"string"},"http.request.header.content-type":{"type":"string"},"http.request.header.user-agent":{"type":"string"},"http.request.header.x-stainless-arch":{"type":"string"},"http.request.header.x-stainless-lang":{"type":"string"},"http.request.header.x-stainless-os":{"type":"string"},"http.request.header.x-stainless-package-version":{"type":"string"},"http.request.header.x-stainless-retry-count":{"type":"string"},"http.request.header.x-stainless-runtime":{"type":"string"},"http.request.header.x-stainless-runtime-version":{"type":"string"},"http.request.header.x-stainless-timeout":{"type":"string"},"http.response.status_code":{"type":"number"},"http.response.header.content-type":{"type":"string"},"http.response.header.server":{"type":"string"},"http.response.header.transfer-encoding":{"type":"string"}}}",
+      "logfire.level_num": 9,
+      "logfire.msg": "chat llama-3.3-70b-versatile",
+      "url.full": "https://example.com/groq/openai/v1/chat/completions",
+    },
+    "events": [],
+    "kind": 1,
+    "links": [],
+    "name": "chat llama-3.3-70b-versatile",
+    "parentSpanId": undefined,
+    "resource": {
+      "service.name": "PAIG",
+      "service.version": "test",
+    },
+    "scope": "pydantic-ai-gateway",
+    "status": {
+      "code": 1,
+    },
+  },
+]
+`;
+
 exports[`groq > should call groq via gateway > llm 1`] = `
 {
   "choices": [

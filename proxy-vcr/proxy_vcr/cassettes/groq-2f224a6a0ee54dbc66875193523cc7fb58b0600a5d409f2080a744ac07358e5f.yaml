@@ -1,0 +1,108 @@
+interactions:
+- request:
+    body: "{\n  \"stream\": true,\n  \"model\": \"llama-3.3-70b-versatile\",\n  \"messages\":
+      [\n    {\n      \"role\": \"developer\",\n      \"content\": \"You are a helpful
+      assistant.\"\n    },\n    {\n      \"role\": \"user\",\n      \"content\": \"What
+      is the capital of France?\"\n    }\n  ],\n  \"max_completion_tokens\": 1024\n}"
+    headers:
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '284'
+      content-type:
+      - application/json
+      host:
+      - api.groq.com
+      user-agent:
+      - python-httpx/0.28.1
+    method: POST
+    uri: https://api.groq.com/openai/v1/chat/completions
+  response:
+    body:
+      string: 'data: {"id":"chatcmpl-9184b615-00b6-49b2-8ecd-d7cf214f45cd","object":"chat.completion.chunk","created":1763372317,"model":"llama-3.3-70b-versatile","system_fingerprint":"fp_297b22ece7","choices":[{"index":0,"delta":{"role":"assistant","content":""},"logprobs":null,"finish_reason":null}],"x_groq":{"id":"req_01ka8jweznermardf187810cd8"}}
+
+
+        data: {"id":"chatcmpl-9184b615-00b6-49b2-8ecd-d7cf214f45cd","object":"chat.completion.chunk","created":1763372317,"model":"llama-3.3-70b-versatile","system_fingerprint":"fp_297b22ece7","choices":[{"index":0,"delta":{"content":"The"},"logprobs":null,"finish_reason":null}]}
+
+
+        data: {"id":"chatcmpl-9184b615-00b6-49b2-8ecd-d7cf214f45cd","object":"chat.completion.chunk","created":1763372317,"model":"llama-3.3-70b-versatile","system_fingerprint":"fp_297b22ece7","choices":[{"index":0,"delta":{"content":"
+        capital"},"logprobs":null,"finish_reason":null}]}
+
+
+        data: {"id":"chatcmpl-9184b615-00b6-49b2-8ecd-d7cf214f45cd","object":"chat.completion.chunk","created":1763372317,"model":"llama-3.3-70b-versatile","system_fingerprint":"fp_297b22ece7","choices":[{"index":0,"delta":{"content":"
+        of"},"logprobs":null,"finish_reason":null}]}
+
+
+        data: {"id":"chatcmpl-9184b615-00b6-49b2-8ecd-d7cf214f45cd","object":"chat.completion.chunk","created":1763372317,"model":"llama-3.3-70b-versatile","system_fingerprint":"fp_297b22ece7","choices":[{"index":0,"delta":{"content":"
+        France"},"logprobs":null,"finish_reason":null}]}
+
+
+        data: {"id":"chatcmpl-9184b615-00b6-49b2-8ecd-d7cf214f45cd","object":"chat.completion.chunk","created":1763372317,"model":"llama-3.3-70b-versatile","system_fingerprint":"fp_297b22ece7","choices":[{"index":0,"delta":{"content":"
+        is"},"logprobs":null,"finish_reason":null}]}
+
+
+        data: {"id":"chatcmpl-9184b615-00b6-49b2-8ecd-d7cf214f45cd","object":"chat.completion.chunk","created":1763372317,"model":"llama-3.3-70b-versatile","system_fingerprint":"fp_297b22ece7","choices":[{"index":0,"delta":{"content":"
+        Paris"},"logprobs":null,"finish_reason":null}]}
+
+
+        data: {"id":"chatcmpl-9184b615-00b6-49b2-8ecd-d7cf214f45cd","object":"chat.completion.chunk","created":1763372317,"model":"llama-3.3-70b-versatile","system_fingerprint":"fp_297b22ece7","choices":[{"index":0,"delta":{"content":"."},"logprobs":null,"finish_reason":null}]}
+
+
+        data: {"id":"chatcmpl-9184b615-00b6-49b2-8ecd-d7cf214f45cd","object":"chat.completion.chunk","created":1763372317,"model":"llama-3.3-70b-versatile","system_fingerprint":"fp_297b22ece7","choices":[{"index":0,"delta":{},"logprobs":null,"finish_reason":"stop"}],"x_groq":{"id":"req_01ka8jweznermardf187810cd8","usage":{"queue_time":0.283710522,"prompt_tokens":42,"prompt_time":0.002118451,"completion_tokens":8,"completion_time":0.011625324,"total_tokens":50,"total_time":0.013743775}},"usage":{"queue_time":0.283710522,"prompt_tokens":42,"prompt_time":0.002118451,"completion_tokens":8,"completion_time":0.011625324,"total_tokens":50,"total_time":0.013743775}}
+
+
+        data: [DONE]
+
+
+        '
+    headers:
+      CF-RAY:
+      - 99fe419959a8a10f-LIS
+      Cache-Control:
+      - no-cache
+      Connection:
+      - keep-alive
+      Content-Type:
+      - text/event-stream
+      Date:
+      - Mon, 17 Nov 2025 09:38:37 GMT
+      Server:
+      - cloudflare
+      Set-Cookie:
+      - __cf_bm=lha4g8SfEDLuOkHdEQX_Q.0GTPh2fyxBtk6UAJWzi1o-1763372317.6524296-1.0.1.1-4QLYcTU6lRLERULH4xTr2G08BZhVLZavmVCCtij8Af3hlOCtgA_uwwrElQTp1zgfIXwhc6bb1_dga3kYjrI3E8McWy0miK5IuvHajVoKse8qEZOQ3vfVqBpYE8GoJfbF;
+        HttpOnly; Secure; Path=/; Domain=groq.com; Expires=Mon, 17 Nov 2025 10:08:37
+        GMT
+      Transfer-Encoding:
+      - chunked
+      alt-svc:
+      - h3=":443"; ma=86400
+      cf-cache-status:
+      - DYNAMIC
+      vary:
+      - Origin
+      via:
+      - 1.1 google
+      x-groq-region:
+      - fra
+      x-ratelimit-limit-requests:
+      - '500000'
+      x-ratelimit-limit-tokens:
+      - '300000'
+      x-ratelimit-remaining-requests:
+      - '499999'
+      x-ratelimit-remaining-tokens:
+      - '299957'
+      x-ratelimit-reset-requests:
+      - 172.799999ms
+      x-ratelimit-reset-tokens:
+      - 8.6ms
+      x-request-id:
+      - req_01ka8jweznermardf187810cd8
+    status:
+      code: 200
+      message: OK
+version: 1

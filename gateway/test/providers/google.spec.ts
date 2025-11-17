@@ -94,4 +94,32 @@ describe('google', () => {
       `"PAIG does not support the model \`unsupported-model-xyz\` yet. We're working on it!"`,
     )
   })
+
+  test('google-vertex/anthropic-client', async ({ gateway }) => {
+    const { fetch, otelBatch } = gateway
+
+    const anthropicBody = JSON.stringify({
+      model: 'claude-sonnet-4',
+      max_tokens: 1024,
+      messages: [{ role: 'user', content: 'What is the capital of Brazil?' }],
+      anthropic_version: 'vertex-2023-10-16',
+    })
+
+    const response = await fetch('https://example.com/google-vertex/v1/messages', {
+      method: 'POST',
+      headers: {
+        Authorization: 'healthy',
+        'content-type': 'application/json',
+        'content-length': anthropicBody.length.toString(),
+        'x-vcr-filename': 'anthropic-client',
+      },
+      body: anthropicBody,
+    })
+
+    const content = await response.text()
+
+    expect(content).toMatchSnapshot('llm')
+    expect(otelBatch, 'otelBatch length not 1').toHaveLength(1)
+    expect(deserializeRequest(otelBatch[0]!)).toMatchSnapshot('span')
+  })
 })

@@ -116,7 +116,10 @@ class TestKeysDB extends KeysDbD1 {
   }
 
   async getApiKey(key: string): Promise<ApiKeyInfo | null> {
-    switch (key) {
+    // Strip paig_ prefix if present (keys are stored without prefix in DB)
+    const normalizedKey = key.startsWith('paig_') ? key.substring(5) : key
+
+    switch (normalizedKey) {
       case 'healthy':
         return {
           id: IDS.keyHealthy,
@@ -137,9 +140,10 @@ class TestKeysDB extends KeysDbD1 {
             test: [{ key: 'test' }],
             openai: [{ key: 'openai' }],
             groq: [{ key: 'groq' }],
-            anthropic: [{ key: 'anthropic' }],
+            anthropic: [{ key: 'anthropic' }, { key: 'google-vertex' }],
             converse: [{ key: 'bedrock' }],
             gemini: [{ key: 'google-vertex' }],
+            'google-vertex': [{ key: 'google-vertex' }],
           },
           otelSettings: {
             writeToken: 'write-token',

@@ -1,5 +1,80 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
+exports[`google > google-vertex/anthropic-client > llm 1`] = `"{"model":"claude-sonnet-4-20250514","id":"msg_vrtx_016ZyMYdeE4zqcEvAaY4khCv","type":"message","role":"assistant","content":[{"type":"text","text":"The capital of Brazil is Brasília. It became the country's capital in 1960, replacing Rio de Janeiro, and was specifically designed and built to serve as the new capital city."}],"stop_reason":"end_turn","stop_sequence":null,"usage":{"input_tokens":14,"cache_creation_input_tokens":0,"cache_read_input_tokens":0,"cache_creation":{"ephemeral_5m_input_tokens":0,"ephemeral_1h_input_tokens":0},"output_tokens":42}}"`;
+
+exports[`google > google-vertex/anthropic-client > span 1`] = `
+[
+  {
+    "attributes": {
+      "gen_ai.input.messages": [
+        {
+          "parts": [
+            {
+              "content": "What is the capital of Brazil?",
+              "type": "text",
+            },
+          ],
+          "role": "user",
+        },
+      ],
+      "gen_ai.operation.name": "chat",
+      "gen_ai.output.messages": [
+        {
+          "finish_reason": "end_turn",
+          "parts": [
+            {
+              "content": "The capital of Brazil is Brasília. It became the country's capital in 1960, replacing Rio de Janeiro, and was specifically designed and built to serve as the new capital city.",
+              "type": "text",
+            },
+          ],
+          "role": "assistant",
+        },
+      ],
+      "gen_ai.request.max_tokens": 1024,
+      "gen_ai.request.model": "claude-sonnet-4",
+      "gen_ai.request.seed": {},
+      "gen_ai.request.stop_sequences": {},
+      "gen_ai.request.temperature": {},
+      "gen_ai.request.top_k": {},
+      "gen_ai.request.top_p": {},
+      "gen_ai.response.finish_reasons": [
+        "end_turn",
+      ],
+      "gen_ai.response.id": "msg_vrtx_016ZyMYdeE4zqcEvAaY4khCv",
+      "gen_ai.response.model": "claude-sonnet-4-20250514",
+      "gen_ai.system": "google-vertex",
+      "gen_ai.system_instructions": {},
+      "gen_ai.usage.cache_audio_read_tokens": {},
+      "gen_ai.usage.cache_read_tokens": 0,
+      "gen_ai.usage.cache_write_tokens": 0,
+      "gen_ai.usage.input_audio_tokens": {},
+      "gen_ai.usage.input_tokens": 14,
+      "gen_ai.usage.output_audio_tokens": {},
+      "gen_ai.usage.output_tokens": 42,
+      "http.request.body.text": "{"max_tokens":1024,"messages":[{"role":"user","content":"What is the capital of Brazil?"}],"anthropic_version":"vertex-2023-10-16"}",
+      "http.response.body.text": "{"model":"claude-sonnet-4-20250514","id":"msg_vrtx_016ZyMYdeE4zqcEvAaY4khCv","type":"message","role":"assistant","content":[{"type":"text","text":"The capital of Brazil is Brasília. It became the country's capital in 1960, replacing Rio de Janeiro, and was specifically designed and built to serve as the new capital city."}],"stop_reason":"end_turn","stop_sequence":null,"usage":{"input_tokens":14,"cache_creation_input_tokens":0,"cache_read_input_tokens":0,"cache_creation":{"ephemeral_5m_input_tokens":0,"ephemeral_1h_input_tokens":0},"output_tokens":42}}",
+      "http.response.status_code": 200,
+      "logfire.json_schema": "{"type":"object","properties":{"gen_ai.operation.name":{"type":"string"},"gen_ai.request.model":{"type":"string"},"gen_ai.system":{"type":"string"},"gen_ai.request.max_tokens":{"type":"number"},"gen_ai.request.top_k":{},"gen_ai.request.top_p":{},"gen_ai.request.temperature":{},"gen_ai.request.stop_sequences":{},"gen_ai.request.seed":{},"gen_ai.response.finish_reasons":{},"gen_ai.response.id":{"type":"string"},"gen_ai.input.messages":{},"gen_ai.output.messages":{},"gen_ai.system_instructions":{},"http.response.status_code":{"type":"number"},"http.request.body.text":{"type":"string"},"http.response.body.text":{"type":"string"},"gen_ai.response.model":{"type":"string"},"gen_ai.usage.input_tokens":{"type":"number"},"gen_ai.usage.cache_read_tokens":{"type":"number"},"gen_ai.usage.cache_write_tokens":{"type":"number"},"gen_ai.usage.output_tokens":{"type":"number"},"gen_ai.usage.input_audio_tokens":{},"gen_ai.usage.cache_audio_read_tokens":{},"gen_ai.usage.output_audio_tokens":{}}}",
+      "logfire.level_num": 9,
+      "logfire.msg": "chat claude-sonnet-4-20250514",
+    },
+    "events": [],
+    "kind": 1,
+    "links": [],
+    "name": "chat claude-sonnet-4-20250514",
+    "parentSpanId": undefined,
+    "resource": {
+      "service.name": "PAIG",
+      "service.version": "test",
+    },
+    "scope": "pydantic-ai-gateway",
+    "status": {
+      "code": 1,
+    },
+  },
+]
+`;
+
 exports[`google > google-vertex/default > llm 1`] = `
 "data: {"candidates": [{"content": {"role": "model","parts": [{"functionCall": {"name": "final_result","args": {"dob": "1987-01-28","city": "London","name": "Samuel"}},"thoughtSignature": "Cv8DAePx/15NPXivPq2qwHSM/UINgrfX0lK5LFzFdj5Mjrk4L/kSOfdjv9N9A0ZvoBO/F1xwsqaMgLziYOk3cKk+6+oCcdyxjGbg8YkxRQqD+rx8TsGh6OhTNVjQpxAeWNUNvNkCa7E0oMbyFTtJIShIH0VudUMG2fkK+OFYFor9AoEdOidktBnebO439tkMBRq5XLPBF1STpo/+1V57oO+ioaLF8j3VbYGMHad/b3+eamMM1sfm2y4gwSeAVz9rIDLs7PlDoaYVxLSQsxX+bkNY9Jgk9o/CSZuM4G3ScuoDB45bOFncjJM9aTByuHFJbGThUAaFpsYfl1rq+FdjmxUWOa25lEA8SAMk977hstUpcTMwdKxQ3f3OOpnrYZAqmA0bpEIwqC+UwWETZ5bye0GBG6WxpbYdWX/UyD3cUTjym7YX59pTU5sZxOXRZ6+OM3eMq4fri8MqANj+dZtIDsglcVhK+Tu0NG5vGFDszApNByUpgn2JWGh2DRvYEFPrqEMXkZQRs71/udbwlFuJvqtSP6ZdZ1QpSPDvDqxFK1YQH61ZjEi54rK8nLDPHEPnKguk8G3binWoO9a1M6NygjmRicHP27OUMJvq8/VfwS73J5/Hz22TRKIuCmbE2jYvYhm2dYsClDzEOkg243L9EuCiJgzFb6lEdLe0Zub/wyku9g=="}]},"finishReason": "STOP","avgLogprobs": -0.67329925960964632}],"usageMetadata": {"promptTokenCount": 79,"candidatesTokenCount": 18,"totalTokenCount": 248,"trafficType": "ON_DEMAND","promptTokensDetails": [{"modality": "TEXT","tokenCount": 79}],"candidatesTokensDetails": [{"modality": "TEXT","tokenCount": 18}],"thoughtsTokenCount": 151},"modelVersion": "gemini-2.5-flash","createTime": "2025-11-11T11:44:04.295950Z","responseId": "hCETaY6IEtqemLAPtq7I8QE"}
 

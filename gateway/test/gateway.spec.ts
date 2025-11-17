@@ -390,3 +390,200 @@ describe('routing group fallback', () => {
     expect(attemptCount).toBe(2)
   })
 })
+
+describe('authentication', () => {
+  describe('header extraction', () => {
+    test('should reject when both Authorization and X-API-Key headers have paig_ prefix', async ({ gateway }) => {
+      const response = await gateway.fetch('https://example.com/openai/gpt-5', {
+        headers: { Authorization: 'paig_test_key', 'X-API-Key': 'paig_another_key' },
+      })
+      const text = await response.text()
+      expect(response.status).toBe(401)
+      expect(text).toMatchInlineSnapshot(
+        `"Unauthorized - Both Authorization and X-API-Key headers are set, use only one"`,
+      )
+    })
+
+    test('should accept Authorization header with paig_ prefix', async ({ gateway }) => {
+      const response = await gateway.fetch('https://example.com/test/chat/completions', {
+        method: 'POST',
+        headers: { Authorization: 'paig_healthy' },
+        body: JSON.stringify({ model: 'gpt-5', messages: [{ role: 'user', content: 'Hello' }] }),
+      })
+      expect(response.status).toBe(200)
+    })
+
+    test('should accept Authorization header with paig_ prefix with X-API-Key also present', async ({ gateway }) => {
+      const response = await gateway.fetch('https://example.com/test/chat/completions', {
+        method: 'POST',
+        headers: { Authorization: 'paig_healthy', 'X-API-Key': 'not_paig_healthy' },
+        body: JSON.stringify({ model: 'gpt-5', messages: [{ role: 'user', content: 'Hello' }] }),
+      })
+      expect(response.status).toBe(200)
+    })
+
+    test('should accept X-API-Key header with paig_ prefix', async ({ gateway }) => {
+      const response = await gateway.fetch('https://example.com/test/chat/completions', {
+        method: 'POST',
+        headers: { 'X-API-Key': 'paig_healthy' },
+        body: JSON.stringify({ model: 'gpt-5', messages: [{ role: 'user', content: 'Hello' }] }),
+      })
+      expect(response.status).toBe(200)
+    })
+
+    test('should strip Bearer prefix from Authorization header', async ({ gateway }) => {
+      const response = await gateway.fetch('https://example.com/test/chat/completions', {
+        method: 'POST',
+        headers: { Authorization: 'Bearer healthy' },
+        body: JSON.stringify({ model: 'gpt-5', messages: [{ role: 'user', content: 'Hello' }] }),
+      })
+      expect(response.status).toBe(200)
+    })
+
+    test('should strip Bearer prefix from X-API-Key header', async ({ gateway }) => {
+      const response = await gateway.fetch('https://example.com/test/chat/completions', {
+        method: 'POST',
+        headers: { 'X-API-Key': 'Bearer healthy' },
+        body: JSON.stringify({ model: 'gpt-5', messages: [{ role: 'user', content: 'Hello' }] }),
+      })
+      expect(response.status).toBe(200)
+    })
+
+    test('should reject key that is too long', async ({ gateway }) => {
+      const longKey = 'a'.repeat(201)
+      const response = await gateway.fetch('https://example.com/openai/gpt-5', { headers: { Authorization: longKey } })
+      const text = await response.text()
+      expect(response.status).toBe(401)
+      expect(text).toBe('Unauthorized - Key too long')
+    })
+  })
+})
+
+describe('cache behavior', () => {
+  test('should use cached API key when project state matches', async ({ gateway }) => {
+    const { fetch } = gateway
+    const client = new OpenAI({ apiKey: 'healthy', baseURL: 'https://example.com/test', fetch })
+
+    // First request - cache miss
+    await client.chat.completions.create({ model: 'gpt-5', messages: [{ role: 'user', content: 'Hello' }] })
+
+    // Verify cache was set
+    const cachedValue = await env.KV.get('apiKeyAuth:test:healthy')
+    expect(cachedValue).toBeTypeOf('string')
+    const cachedApiKey = JSON.parse(cachedValue!)
+    expect(cachedApiKey.key).toBe('healthy')
+
+    // Second request - should use cache
+    await client.chat.completions.create({ model: 'gpt-5', messages: [{ role: 'user', content: 'Hello again' }] })
+  })
+
+  test('should refetch from DB when project state changes', async ({ gateway }) => {
+    const { fetch } = gateway
+    const client = new OpenAI({ apiKey: 'healthy', baseURL: 'https://example.com/test', fetch })
+
+    // First request to populate cache
+    await client.chat.completions.create({ model: 'gpt-5', messages: [{ role: 'user', content: 'Hello' }] })
+
+    // Change project state to invalidate cache
+    const projectStateCacheKey = `projectState:test:${IDS.projectDefault}`
+    await env.KV.put(projectStateCacheKey, 'new-state')
+
+    // Second request - should refetch from DB due to state mismatch
+    await client.chat.completions.create({ model: 'gpt-5', messages: [{ role: 'user', content: 'Hello again' }] })
+  })
+
+  test('should use cache when project state is null (first deployment)', async ({ gateway }) => {
+    const { fetch } = gateway
+
+    // First request to populate cache
+    const client = new OpenAI({ apiKey: 'healthy', baseURL: 'https://example.com/test', fetch })
+    await client.chat.completions.create({ model: 'gpt-5', messages: [{ role: 'user', content: 'Hello' }] })
+
+    // Verify cache was set
+    const cachedValue = await env.KV.get('apiKeyAuth:test:healthy')
+    expect(cachedValue).toBeTypeOf('string')
+
+    // Delete project state to simulate first deployment (null project state)
+    const projectStateCacheKey = `projectState:test:${IDS.projectDefault}`
+    await env.KV.delete(projectStateCacheKey)
+
+    // Second request should still use cache when project state is null
+    await client.chat.completions.create({ model: 'gpt-5', messages: [{ role: 'user', content: 'Hello again' }] })
+  })
+
+  test('should cache API key after DB fetch', async ({ gateway }) => {
+    const { fetch } = gateway
+
+    // Ensure cache is empty
+    await env.KV.delete('apiKeyAuth:test:healthy')
+
+    const client = new OpenAI({ apiKey: 'healthy', baseURL: 'https://example.com/test', fetch })
+    await client.chat.completions.create({ model: 'gpt-5', messages: [{ role: 'user', content: 'Hello' }] })
+
+    // Verify cache was populated
+    const cachedValue = await env.KV.get('apiKeyAuth:test:healthy')
+    expect(cachedValue).toBeTypeOf('string')
+    const cachedApiKey = JSON.parse(cachedValue!)
+    expect(cachedApiKey.key).toBe('healthy')
+    expect(cachedApiKey.id).toBe(IDS.keyHealthy)
+  })
+})
+
+describe('cache management', () => {
+  test('should delete API key from cache', async ({ gateway }) => {
+    const { fetch } = gateway
+
+    // First populate the cache
+    const client = new OpenAI({ apiKey: 'healthy', baseURL: 'https://example.com/test', fetch })
+    await client.chat.completions.create({ model: 'gpt-5', messages: [{ role: 'user', content: 'Hello' }] })
+
+    // Verify cache exists
+    let cachedValue = await env.KV.get('apiKeyAuth:test:healthy')
+    expect(cachedValue).toBeTypeOf('string')
+
+    // Delete cache (this would typically be called via deleteApiKeyCache function)
+    await env.KV.delete('apiKeyAuth:test:healthy')
+
+    // Verify cache is deleted
+    cachedValue = await env.KV.get('apiKeyAuth:test:healthy')
+    expect(cachedValue).toBeNull()
+  })
+
+  describe('rate limiter integration', () => {
+    test('should check rate limiter before allowing request', async ({ gateway }) => {
+      // This is tested in the 'key status' describe block with 'tiny-limit' key
+      // but we can add an explicit test here
+      const { fetch } = gateway
+      const client = new OpenAI({ apiKey: 'tiny-limit', baseURL: 'https://example.com/test', fetch })
+
+      // First request should succeed
+      await client.chat.completions.create({ model: 'gpt-5', messages: [{ role: 'user', content: 'Hello' }] })
+
+      // Second request should fail due to rate limit
+      const response = await fetch('https://example.com/test/chat/completions', {
+        method: 'POST',
+        headers: { Authorization: 'tiny-limit' },
+        body: JSON.stringify({ model: 'gpt-5', messages: [{ role: 'user', content: 'Hello' }] }),
+      })
+
+      expect(response.status).toBe(403)
+      const text = await response.text()
+      expect(text).toContain('limit-exceeded')
+    })
+
+    test('should start rate limiter for cached keys', async ({ gateway }) => {
+      const { fetch } = gateway
+
+      // First request to populate cache
+      const client = new OpenAI({ apiKey: 'healthy', baseURL: 'https://example.com/test', fetch })
+      await client.chat.completions.create({ model: 'gpt-5', messages: [{ role: 'user', content: 'Hello' }] })
+
+      // Second request should use cache and still check rate limiter
+      await client.chat.completions.create({ model: 'gpt-5', messages: [{ role: 'user', content: 'Hello again' }] })
+
+      // Verify spend was tracked
+      const spends = await env.limitsDB.prepare('SELECT * FROM spend').all()
+      expect(spends.results.length).toBeGreaterThan(0)
+    })
+  })
+})

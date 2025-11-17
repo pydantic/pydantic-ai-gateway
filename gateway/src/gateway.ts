@@ -96,11 +96,13 @@ export const getProviderProxies = (
   providerProxyMapping: Record<string, ProviderProxy>,
   routingGroups: ApiKeyInfo['routingGroups'],
 ): ProviderProxy[] | { status: number; message: string } => {
-  if (route in providerProxyMapping) {
-    return [providerProxyMapping[route]!]
-  }
+  // If there is a routingGroup with the same route as a provider, prefer the routingGroup
   const routingGroup = routingGroups?.[route]
   if (!routingGroup) {
+    if (route in providerProxyMapping) {
+      // In this case, check for the existence of a provider with this route
+      return [providerProxyMapping[route]!]
+    }
     const supportedValues = [...new Set([...Object.keys(providerProxyMapping), ...Object.keys(routingGroups ?? {})])]
       .sort()
       .join(', ')
@@ -228,7 +230,7 @@ export async function gatewayWithLimiter(
   if ('response' in result) {
     response = result.response
   } else if ('responseStream' in result) {
-    const { successStatus: status, responseHeaders: headers, responseStream, disableKey, onStreamComplete } = result
+    const { successStatus: status, responseHeaders: headers, responseStream, onStreamComplete } = result
     runAfter(
       ctx,
       'recordSpend',
@@ -237,6 +239,7 @@ export async function gatewayWithLimiter(
         if ('cost' in complete && complete.cost) {
           await recordSpend(apiKeyInfo, complete.cost, options)
         } else if ('error' in complete) {
+          const { disableKey } = complete
           const { key: _key, ...context } = apiKeyInfo
           if (disableKey) {
             logfire.reportError('api key blocked', complete.error, { context })

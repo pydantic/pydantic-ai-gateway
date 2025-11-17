@@ -229,4 +229,19 @@ describe('openai', () => {
     expect(otelBatch, 'otelBatch length not 1').toHaveLength(1)
     expect(deserializeRequest(otelBatch[0]!)).toMatchSnapshot('span')
   })
+
+  test('openai embeddings', async ({ gateway }) => {
+    const { fetch, otelBatch } = gateway
+
+    const client = new OpenAI({ apiKey: 'healthy', baseURL: 'https://example.com/openai', fetch })
+
+    const completion = await client.embeddings.create({
+      model: 'text-embedding-3-small',
+      input: 'What is the capital of France?',
+    })
+
+    expect(completion).toMatchSnapshot('embeddings')
+    expect(otelBatch, 'otelBatch length not 1').toHaveLength(1)
+    expect(deserializeRequest(otelBatch[0]!)).toMatchSnapshot('span')
+  })
 })

@@ -23,4 +23,27 @@ describe('groq', () => {
     expect(otelBatch, 'otelBatch length not 1').toHaveLength(1)
     expect(deserializeRequest(otelBatch[0]!)).toMatchSnapshot('span')
   })
+
+  test('groq chat stream', async ({ gateway }) => {
+    const { fetch, otelBatch } = gateway
+
+    const client = new Groq({ apiKey: 'healthy', baseURL: 'https://example.com/groq', fetch })
+
+    const stream = await client.chat.completions.create({
+      stream: true,
+      model: 'llama-3.3-70b-versatile',
+      messages: [
+        { role: 'developer', content: 'You are a helpful assistant.' },
+        { role: 'user', content: 'What is the capital of France?' },
+      ],
+      max_completion_tokens: 1024,
+    })
+    const chunks: object[] = []
+    for await (const chunk of stream) {
+      chunks.push(chunk)
+    }
+    expect(chunks).toMatchSnapshot('chunks')
+    expect(otelBatch, 'otelBatch length not 1').toHaveLength(1)
+    expect(deserializeRequest(otelBatch[0]!)).toMatchSnapshot('span')
+  })
 })

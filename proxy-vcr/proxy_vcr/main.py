@@ -15,7 +15,7 @@ from starlette.routing import Route
 from vcr import VCR  # type: ignore[reportMissingTypeStubs]
 from vcr.record_mode import RecordMode  # type: ignore[reportMissingTypeStubs]
 
-OPENAI_BASE_URL = 'https://api.openai.com/v1/'
+OPENAI_BASE_URL = 'https://api.openai.com/v1'
 GROQ_BASE_URL = 'https://api.groq.com'
 ANTHROPIC_BASE_URL = 'https://api.anthropic.com'
 BEDROCK_BASE_URL = 'https://bedrock-runtime.us-east-1.amazonaws.com'
@@ -42,7 +42,7 @@ async def lifespan(_: Starlette):
 
 async def proxy(request: Request) -> Response:
     auth_header = request.headers.get('authorization', '')
-    body = await request.body()
+    body: bytes = await request.body()
 
     # We should cache based on request body content, so we should make a hash of the request body.
     vcr_suffix = request.headers.get('x-vcr-filename', hashlib.sha256(body).hexdigest())
@@ -51,7 +51,7 @@ async def proxy(request: Request) -> Response:
 
     if provider == 'openai':
         client = cast(httpx.AsyncClient, request.scope['state']['httpx_client'])
-        url = OPENAI_BASE_URL + request.url.path.strip('/openai')
+        url = OPENAI_BASE_URL + request.url.path[len('/openai') :]
         with vcr.use_cassette(cassette_name('openai', vcr_suffix)):  # type: ignore[reportUnknownReturnType]
             headers = {'Authorization': auth_header, 'content-type': 'application/json'}
             response = await client.post(url, content=body, headers=headers)

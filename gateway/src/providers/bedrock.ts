@@ -26,11 +26,22 @@ export class BedrockProvider extends DefaultProviderProxy {
     } catch (_error) {
       return { error: 'invalid request JSON' }
     }
-    const model = this.inferModel(this.restOfPath)
-    if (model) {
-      return { requestBodyText, requestBodyData, requestModel: model }
+
+    let requestModel: string | null = null
+    const pathWithoutQuery = this.restOfPath.split('?')[0]
+    if (pathWithoutQuery === 'v1/messages') {
+      this.flavor = 'anthropic'
+      if (!('model' in requestBodyData)) {
+        return { error: 'model not found in Anthropic request body' }
+      }
+      requestModel = requestBodyData.model as string
+    } else {
+      requestModel = this.inferModel(this.restOfPath)
+      if (!requestModel) {
+        return { error: 'unable to find model in path' }
+      }
     }
-    return { error: 'unable to find model in path' }
+    return { requestBodyText, requestBodyData, requestModel }
   }
 
   /**

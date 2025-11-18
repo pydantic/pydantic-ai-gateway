@@ -381,5 +381,5 @@ function calculateExpirationTtl(ex: ExceededScope[]): number | undefined {
 }
 
 function isRetryableError(status: number): boolean {
-  return status === 429 || (status >= 500 && status <= 599)
+  return status === 403 || status === 429 || (status >= 500 && status <= 599)
 }

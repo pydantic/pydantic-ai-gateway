@@ -320,6 +320,56 @@ describe('routing group fallback', () => {
     )
   })
 
+  test('should fallback to next provider on 403 error', async () => {
+    let attemptCount = 0
+    const providerAttempts: string[] = []
+
+    class Fail403FirstMiddleware implements Middleware {
+      dispatch(next: Next): Next {
+        return async (proxy: DefaultProviderProxy) => {
+          attemptCount++
+          const baseUrl = (proxy as unknown as { providerProxy: { baseUrl: string } }).providerProxy.baseUrl
+          providerAttempts.push(baseUrl)
+
+          // First provider should fail with 403
+          if (baseUrl.includes('provider1')) {
+            return {
+              requestModel: 'gpt-5',
+              requestBody: '{}',
+              unexpectedStatus: 403,
+              responseHeaders: new Headers(),
+              responseBody: JSON.stringify({ error: 'Forbidden' }),
+            }
+          }
+
+          // Second provider should succeed
+          return await next(proxy)
+        }
+      }
+    }
+
+    const ctx = createExecutionContext()
+    const request = new Request<unknown, IncomingRequestCfProperties>('https://example.com/test/chat/completions', {
+      method: 'POST',
+      headers: { Authorization: 'fallback-test' },
+      body: JSON.stringify({ model: 'gpt-5', messages: [{ role: 'user', content: 'Hello' }] }),
+    })
+
+    const gatewayEnv = buildGatewayEnv(env, [], fetch, undefined, [new Fail403FirstMiddleware()])
+    const response = await gatewayFetch(request, new URL(request.url), ctx, gatewayEnv)
+    await waitOnExecutionContext(ctx)
+
+    expect(response.status).toBe(200)
+    expect(attemptCount).toBe(2)
+    expect(providerAttempts).toEqual(['http://test.example.com/provider1', 'http://test.example.com/provider2'])
+
+    // Verify the response came from the second provider
+    const content = (await response.json()) as { choices: [{ message: { content: string } }] }
+    expect(content.choices[0].message.content).toMatchInlineSnapshot(
+      `"request URL: http://test.example.com/provider2/chat/completions"`,
+    )
+  })
+
   test('should not fallback on non-retryable error', async () => {
     let attemptCount = 0
 

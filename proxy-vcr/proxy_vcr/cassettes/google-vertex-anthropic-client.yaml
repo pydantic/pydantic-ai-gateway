@@ -18,24 +18,24 @@ interactions:
       user-agent:
       - python-httpx/0.28.1
     method: POST
-    uri: https://aiplatform.googleapis.com/v1/projects/pydantic-ai/locations/global/publishers/anthropic/models/claude-sonnet-4:streamRawPredict
+    uri: https://aiplatform.googleapis.com/v1/projects/pydantic-ai/locations/global/publishers/anthropic/models/claude-sonnet-4:rawPredict
   response:
     body:
       string: !!binary |
-        H4sIAAAAAAAC/3SQwW7bMAyGX4XQZRensAOnwHxbhx42YJeil24YDFZiY6Iy5UpUWjfII+0p9mKT
-        g6VdN+wk4v8+iiD3ZgyOvOmM9ZgdrVIQIV21q3W93tSbpjWVYVf4mLb9LupTXzfnX+cvN44u2+cH
-        e7n7gDft/fBxV0SdJ1pUSgm3VIIY/BJgSpwURUtkgyiVqvu2P/lKTws5Pp25HggsTqzoIdzBRcRn
-        9sBpqdLPH57xDD4p3JLFkUAXO2TROL9LL30s0Lw/ryuINHm0LFu44gCO4DMKcQwVoDh4xARpIst3
-        bNH7uQiJt0LuSG8zewUNkCjuCIq7DBN6fBljWeczc/hemaRh6iNhOV9ZgcT1mqOY3yDRQyaxZVfJ
-        3lcmH8/T7Q3LlLXXcE+STNe05TxoB+pt+Uo5SP9WqE+8YPc/dupd/qdpoJEi+n4z/uu/0mb4mx4q
-        E7L+GbXrw+EXAAAA//8DACam41cvAgAA
+        H4sIAAAAAAAC/3WQwU4bQQyGX8WaC5cN2o2SFPZYiQMVrUQFh6qqVmbGJFNmPduxB5JGeSSeoi/W
+        2YgALeI0lr/P88vemj46CqY1NmB2NJHITDqZTab1dF7Pm5mpjHeF97Ls7pOuu7r5cNK4b5frxeXZ
+        9cWX6eef2iz62BdRNwONKongkkojxTA2UMSLImtp2chKpWq/bw++0nok+6c1VysCi4NXDBBv4WPC
+        3z6Al7GSP4/B4zGcK9yQxZ5ARztm1rQ5kuc5z9CcLuoKEg0BreclfPURHMEnZPIpVoDs4AEFZCDr
+        b73FEDZFEL9kcnt6k31Q0AhC6Z6guGMYo/rIJeMp69jsflRGNA5dIiznKysQu05zYvMEhH5lYlt2
+        5RxCZfL+PO3WeB6ydhrviMW0zaycB+2KOlu+GmO6f4X6wAt277HD7Pg/DSvqKWHo5v1b/4U2q//p
+        rjIx6+vWrNnt/gLkvmJbLwIAAA==
     headers:
       Alt-Svc:
       - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
       Content-Encoding:
       - gzip
-      Content-Type:
-      - application/json
+      Server:
+      - scaffolding on HTTPServer2
       Transfer-Encoding:
       - chunked
       Vary:
@@ -48,26 +48,22 @@ interactions:
       - SAMEORIGIN
       X-XSS-Protection:
       - '0'
+      content-type:
+      - application/json
       date:
-      - Fri, 14 Nov 2025 13:00:58 GMT
-      request-id:
-      - req_vrtx_011CV7pnGByfrLq5LgdgKRkF
-      server:
-      - hypercorn-h11
-      x-vertex-ai-cache-creation-ephemeral-1h-input-tokens:
-      - '0'
-      x-vertex-ai-cache-creation-ephemeral-5m-input-tokens:
-      - '0'
-      x-vertex-ai-cache-creation-input-tokens:
-      - '0'
-      x-vertex-ai-cache-read-input-tokens:
-      - '0'
-      x-vertex-ai-input-tokens:
+      - Tue, 18 Nov 2025 17:03:36 GMT
+      internal-input-tokens:
       - '14'
-      x-vertex-ai-output-tokens:
-      - '42'
-      x-vertex-ai-received-request-id:
-      - d8090674-e846-4991-ba28-bc7aaf843b79
+      internal-output-tokens:
+      - '41'
+      pinnacle-error-category:
+      - no_error
+      request-id:
+      - req_vrtx_011CVFiWzt97M6tKh3ELKXsC
+      stream-reported-http-code:
+      - '200'
+      x-vertex-ai-internal-prediction-backend:
+      - harpoon
     status:
       code: 200
       message: OK

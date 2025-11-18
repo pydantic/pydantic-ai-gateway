@@ -66,7 +66,7 @@ export class GoogleVertexProvider extends DefaultProviderProxy {
     // Handle Anthropic client format: /v1/messages
     if (pathWithoutQuery === 'v1/messages' && this.requestModel) {
       // Always use streamRawPredict for Anthropic on Vertex (it handles both streaming and non-streaming)
-      const action = 'streamRawPredict'
+      const action = this.shouldStream ? 'streamRawPredict' : 'rawPredict'
       return `/v1/projects/${projectId}/locations/${region}/publishers/anthropic/models/${this.requestModel}:${action}`
     }
 
@@ -94,7 +94,7 @@ export class GoogleVertexProvider extends DefaultProviderProxy {
 
   async prepRequest() {
     const requestBodyText = await this.request.text()
-    let requestBodyData: GoogleRequest
+    let requestBodyData: GoogleRequest & { anthropic_version?: string }
     try {
       requestBodyData = JSON.parse(requestBodyText)
     } catch (_error) {
@@ -109,6 +109,10 @@ export class GoogleVertexProvider extends DefaultProviderProxy {
       }
       const model = requestBodyData.model as string
       this.requestModel = model
+
+      if (!('anthropic_version' in requestBodyData)) {
+        requestBodyData.anthropic_version = 'vertex-2023-10-16'
+      }
 
       // Remove the model from the request body since Google Vertex doesn't expect it
       delete requestBodyData.model

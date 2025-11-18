@@ -381,5 +381,8 @@ function calculateExpirationTtl(ex: ExceededScope[]): number | undefined {
 }
 
 function isRetryableError(status: number): boolean {
+  // TODO(DavidM): Need to think harder about which status codes we should fall back on, and how
+  //  we notify users if providers are generally falling back. Maybe tracking error rate and
+  //  temporarily disabling providers if they exceed some threshold.
   return status === 403 || status === 429 || (status >= 500 && status <= 599)
 }

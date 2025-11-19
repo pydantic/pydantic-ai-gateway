@@ -111,7 +111,8 @@ export class GoogleVertexProvider extends DefaultProviderProxy {
         return { error: 'model not found in Anthropic request body' }
       }
       const model = requestBodyData.model as string
-      this.requestModel = model
+      const replacedModel = this.replaceModel(model)
+      this.requestModel = replacedModel
 
       if (!('anthropic_version' in requestBodyData)) {
         requestBodyData.anthropic_version = 'vertex-2023-10-16'
@@ -123,7 +124,7 @@ export class GoogleVertexProvider extends DefaultProviderProxy {
       // Update requestBodyText without the model field
       const updatedRequestBodyText = JSON.stringify(requestBodyData)
 
-      return { requestBodyText: updatedRequestBodyText, requestBodyData, requestModel: model }
+      return { requestBodyText: updatedRequestBodyText, requestBodyData, requestModel: replacedModel }
     }
 
     const m = /\/models\/(.+?):/.exec(this.restOfPath)
@@ -136,7 +137,16 @@ export class GoogleVertexProvider extends DefaultProviderProxy {
   }
 
   protected getModelNameRemappings(): { searchValue: string; replaceValue: string }[] {
-    return []
+    return [
+      { searchValue: '^claude-3-5-sonnet.*$', replaceValue: 'claude-3-5-sonnet' },
+      { searchValue: '^claude-3-5-haiku.*$', replaceValue: 'claude-3-5-haiku' },
+      { searchValue: '^claude-3-haiku.*$', replaceValue: 'claude-3-haiku' },
+      { searchValue: '^claude-haiku-4-5.*$', replaceValue: 'claude-haiku-4-5' },
+      { searchValue: '^claude-opus-4-1.*$', replaceValue: 'claude-opus-4-1' },
+      { searchValue: '^claude-opus-4.*$', replaceValue: 'claude-opus-4-1' },
+      { searchValue: '^claude-sonnet-4-0.*$', replaceValue: 'claude-sonnet-4' },
+      { searchValue: '^claude-3-7-sonnet.*$', replaceValue: 'claude-3-7-sonnet' },
+    ]
   }
 
   protected isStreaming(responseHeaders: Headers, requestBodyData: object): boolean {

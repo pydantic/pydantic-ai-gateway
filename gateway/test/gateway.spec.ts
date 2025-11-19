@@ -439,6 +439,68 @@ describe('routing group fallback', () => {
     expect(response.status).toBe(503)
     expect(attemptCount).toBe(2)
   })
+
+  test('should fallback from anthropic to google-vertex with model name replacement', async () => {
+    let attemptCount = 0
+    const providerAttempts: string[] = []
+    const modelAttempts: string[] = []
+
+    class FailAnthropicMiddleware implements Middleware {
+      dispatch(next: Next): Next {
+        return async (proxy: DefaultProviderProxy) => {
+          attemptCount++
+          const providerId = (proxy as unknown as { providerProxy: { providerId: string } }).providerProxy.providerId
+          providerAttempts.push(providerId)
+
+          // Extract model from request
+          const requestBody = await proxy.request.clone().text()
+          const body = JSON.parse(requestBody)
+          if ('model' in body) {
+            modelAttempts.push(body.model as string)
+          }
+
+          // First provider (anthropic) should fail with 503
+          if (providerId === 'anthropic') {
+            return {
+              requestModel: 'claude-sonnet-4-0',
+              requestBody: '{}',
+              unexpectedStatus: 503,
+              responseHeaders: new Headers(),
+              responseBody: JSON.stringify({ error: 'Service unavailable' }),
+            }
+          }
+
+          // Second provider (google-vertex) should succeed
+          return await next(proxy)
+        }
+      }
+    }
+
+    const ctx = createExecutionContext()
+    const request = new Request<unknown, IncomingRequestCfProperties>('https://example.com/anthropic/v1/messages', {
+      method: 'POST',
+      headers: { Authorization: 'healthy' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-0',
+        max_tokens: 1024,
+        messages: [{ role: 'user', content: 'Hello' }],
+      }),
+    })
+
+    const gatewayEnv = buildGatewayEnv(env, [], fetch, undefined, [new FailAnthropicMiddleware()])
+    const response = await gatewayFetch(request, new URL(request.url), ctx, gatewayEnv)
+    await waitOnExecutionContext(ctx)
+
+    expect(response.status).toBe(200)
+    expect(attemptCount).toBe(2)
+    expect(providerAttempts).toEqual(['anthropic', 'google-vertex'])
+    expect(modelAttempts).toEqual(['claude-sonnet-4-0', 'claude-sonnet-4-0'])
+
+    // Verify the response came from google-vertex and model was replaced
+    const content = await response.json()
+    expect(content).toHaveProperty('id')
+    expect(content).toHaveProperty('model')
+  })
 })
 
 describe('authentication', () => {

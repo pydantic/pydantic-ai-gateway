@@ -491,13 +491,14 @@ describe('routing group fallback', () => {
     const response = await gatewayFetch(request, new URL(request.url), ctx, gatewayEnv)
     await waitOnExecutionContext(ctx)
 
-    expect(response.status).toBe(200)
+    const text = await response.text()
+    expect(response.status, `got ${response.status} response: ${text}`).toBe(200)
     expect(attemptCount).toBe(2)
     expect(providerAttempts).toEqual(['anthropic', 'google-vertex'])
     expect(modelAttempts).toEqual(['claude-sonnet-4-0', 'claude-sonnet-4-0'])
 
     // Verify the response came from google-vertex and model was replaced
-    const content = await response.json()
+    const content = JSON.parse(text)
     expect(content).toHaveProperty('id')
     expect(content).toHaveProperty('model')
   })

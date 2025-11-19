@@ -73,7 +73,7 @@ export class GoogleVertexProvider extends DefaultProviderProxy {
     // Regex with capture groups: version (optional), publisher (optional), model
     // Path may or may not start with / and may or may not have version
     const regex =
-      /^\/?(?:(v\d+(?:beta\d*)?)\/)?(?:projects\/[^/]+\/locations\/[^/]+\/)?(?:publishers\/([^/]+)\/)?models\/(.+)$/
+      /^\/?(?:(v\d+(?:beta\d*)?)\/)?(?:projects\/[^/]+\/locations\/[^/]+\/)?(?:publishers\/([^/]+)\/)?models\/(.+):(.*)$/
     const match = regex.exec(this.restOfPath)
 
     if (!match) {
@@ -82,13 +82,16 @@ export class GoogleVertexProvider extends DefaultProviderProxy {
 
     const version = match[1] || 'v1'
     const publisher = match[2] || 'google'
-    const modelAndApi = match[3]
+    const model = match[3]
+    const api = match[4]
+
+    const replacedModel = model && this.replaceModel(model)
 
     if (publisher === 'anthropic') {
       this.flavor = 'anthropic'
     }
 
-    const path = `/${version}/projects/${projectId}/locations/${region}/publishers/${publisher}/models/${modelAndApi}`
+    const path = `/${version}/projects/${projectId}/locations/${region}/publishers/${publisher}/models/${replacedModel}:${api}`
     return path
   }
 
@@ -125,10 +128,15 @@ export class GoogleVertexProvider extends DefaultProviderProxy {
 
     const m = /\/models\/(.+?):/.exec(this.restOfPath)
     if (m) {
-      return { requestBodyText, requestBodyData, requestModel: m[1] }
+      const model = m[1] && this.replaceModel(m[1])
+      return { requestBodyText, requestBodyData, requestModel: model }
     } else {
       return { error: 'unable to find model in path' }
     }
+  }
+
+  protected getModelNameRemappings(): { searchValue: string; replaceValue: string }[] {
+    return []
   }
 
   protected isStreaming(responseHeaders: Headers, requestBodyData: object): boolean {

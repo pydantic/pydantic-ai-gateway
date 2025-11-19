@@ -10,6 +10,26 @@ export class BedrockProvider extends DefaultProviderProxy {
   // between others like Chat Completions API.
   flavor: 'default' | 'anthropic' = 'default'
 
+  // NOTE: This should be moved to the `DefaultProviderProxy` class.
+  protected shouldStream: boolean = false
+
+  url() {
+    if (this.providerProxy.baseUrl) {
+      const pathWithoutQuery = this.restOfPath.split('?')[0]
+      if (pathWithoutQuery === 'v1/messages' && this.requestModel) {
+        // TODO(Marcelo): This should be replaced by David's work on model name replacement.
+        const model =
+          this.requestModel === 'claude-sonnet-4' ? 'us.anthropic.claude-sonnet-4-5-20250929-v1:0' : this.requestModel
+        // TODO(Marcelo): We need to test this!
+        const path = `model/${model}/${this.shouldStream ? 'invoke-with-response-stream' : 'invoke'}`
+        return `${this.providerProxy.baseUrl}/${path}`
+      }
+      return `${this.providerProxy.baseUrl}/${this.restOfPath}`
+    } else {
+      return { error: 'baseUrl is required for Bedrock Provider' }
+    }
+  }
+
   protected modelAPI(): ModelAPI {
     // TODO(Marcelo): We need to add test for this when `genai-prices` supports Anthropic through Bedrock.
     if (this.flavor === 'anthropic') {
@@ -20,28 +40,47 @@ export class BedrockProvider extends DefaultProviderProxy {
 
   async prepRequest() {
     const requestBodyText = await this.request.text()
-    let requestBodyData: JsonData
+    let requestBodyData: JsonData & { anthropic_version?: string }
     try {
       requestBodyData = JSON.parse(requestBodyText)
     } catch (_error) {
       return { error: 'invalid request JSON' }
     }
 
-    let requestModel: string | null = null
     const pathWithoutQuery = this.restOfPath.split('?')[0]
     if (pathWithoutQuery === 'v1/messages') {
       this.flavor = 'anthropic'
       if (!('model' in requestBodyData)) {
         return { error: 'model not found in Anthropic request body' }
       }
-      requestModel = requestBodyData.model as string
+      this.requestModel = requestBodyData.model as string
+
+      if (!('anthropic_version' in requestBodyData)) {
+        requestBodyData.anthropic_version = 'bedrock-2023-05-31'
+      }
+
+      // TODO(Marcelo): Add a test for streaming.
+      if ('stream' in requestBodyData) {
+        if (requestBodyData.stream === true) {
+          this.shouldStream = true
+        }
+        delete requestBodyData.stream
+      }
+
+      // Remove the model from the request body since Bedrock doesn't expect it
+      delete requestBodyData.model
+
+      // Update requestBodyText without the model field
+      const updatedRequestBodyText = JSON.stringify(requestBodyData)
+
+      return { requestBodyText: updatedRequestBodyText, requestBodyData, requestModel: this.requestModel }
     } else {
-      requestModel = this.inferModel(this.restOfPath)
-      if (!requestModel) {
+      this.requestModel = this.inferModel(this.restOfPath)
+      if (!this.requestModel) {
         return { error: 'unable to find model in path' }
       }
+      return { requestBodyText, requestBodyData, requestModel: this.requestModel }
     }
-    return { requestBodyText, requestBodyData, requestModel }
   }
 
   /**

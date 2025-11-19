@@ -31,7 +31,7 @@ api_key = os.getenv('PYDANTIC_AI_GATEWAY_API_KEY')
 assert api_key is not None
 
 model = AnthropicModel(
-    'claude-sonnet-4-0',
+    'claude-sonnet-4',
     provider=gateway_provider('anthropic', route='bedrock', base_url='http://localhost:8787/', api_key=api_key),
 )
 person_agent = Agent(

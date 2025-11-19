@@ -249,6 +249,7 @@ export class DefaultProviderProxy {
         return { error: 'Unable to calculate spend' }
       }
     } catch (error) {
+      console.error('Error extracting usage from response', error)
       logfire.reportError('Error extracting usage from response', error as Error, { bodyText })
       return { error: 'invalid response, unable to extract usage' }
     }

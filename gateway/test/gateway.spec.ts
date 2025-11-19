@@ -479,7 +479,7 @@ describe('routing group fallback', () => {
     const ctx = createExecutionContext()
     const request = new Request<unknown, IncomingRequestCfProperties>('https://example.com/anthropic/v1/messages', {
       method: 'POST',
-      headers: { Authorization: 'healthy' },
+      headers: { Authorization: 'healthy', 'x-vcr-filename': 'fallback' },
       body: JSON.stringify({
         model: 'claude-sonnet-4-0',
         max_tokens: 1024,

@@ -1,0 +1,68 @@
+interactions:
+- request:
+    body: '{"max_tokens":1024,"messages":[{"role":"user","content":"Hello"}],"anthropic_version":"vertex-2023-10-16"}'
+    headers:
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      anthropic-version:
+      - vertex-2023-10-16
+      connection:
+      - keep-alive
+      content-length:
+      - '106'
+      host:
+      - aiplatform.googleapis.com
+      user-agent:
+      - python-httpx/0.28.1
+    method: POST
+    uri: https://aiplatform.googleapis.com/v1/projects/pydantic-ai/locations/global/publishers/anthropic/models/claude-sonnet-4:rawPredict
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAC/3WPy2rDMBBFf0XV2gHbtUPxJosQmqwL3ZQiVGuITOQZ1RolMcH/Xjk09EVXEvcc
+        Xa4usicDTjaydToaWARCBF5UizIv67wuKpnJziTeh706DnxWebFcVkdaw+H++W1T+Xrty+Lp8ZhE
+        Hj3MKoSg95CCgdwc6BC6wBo5RS0hQ7o1L5ebz3CeyfVo5BacozuxpZPQA4iRojDU4V4wGT2uxC4I
+        tpCIxpHtDHai1SgsOH+1Tx3blZxeMxmYvBpAp0+lYkCjOA4oP0GA9wjYpgUYnctkvI5uLrJDH1kx
+        HQCDbB7SZt1aUG1q4o5Q/eT5jSds/mO3t3M9eAs9DNqpuv/rf9HC/qZTJiny96jMp+kDHaodjcQB
+        AAA=
+    headers:
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+      Content-Encoding:
+      - gzip
+      Server:
+      - scaffolding on HTTPServer2
+      Transfer-Encoding:
+      - chunked
+      Vary:
+      - Origin
+      - X-Origin
+      - Referer
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-XSS-Protection:
+      - '0'
+      content-type:
+      - application/json
+      date:
+      - Wed, 19 Nov 2025 19:18:25 GMT
+      internal-input-tokens:
+      - '8'
+      internal-output-tokens:
+      - '20'
+      pinnacle-error-category:
+      - no_error
+      request-id:
+      - req_vrtx_011CVHncEbWRjroKWi1DtDZ8
+      stream-reported-http-code:
+      - '200'
+      x-vertex-ai-internal-prediction-backend:
+      - harpoon
+    status:
+      code: 200
+      message: OK
+version: 1

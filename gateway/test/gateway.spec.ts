@@ -449,7 +449,7 @@ describe('routing group fallback', () => {
       dispatch(next: Next): Next {
         return async (proxy: DefaultProviderProxy) => {
           attemptCount++
-          const providerId = (proxy as unknown as { providerProxy: { providerId: string } }).providerProxy.providerId
+          const providerId = proxy.providerId()
           providerAttempts.push(providerId)
 
           // Extract model from request

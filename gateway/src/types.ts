@@ -38,8 +38,8 @@ export interface ApiKeyInfo<ProviderKey extends string = string> {
   otelSettings?: OtelSettings
 }
 
-export type ProviderID = 'groq' | 'openai' | 'google-vertex' | 'anthropic' | 'test' | 'bedrock'
-// TODO | 'azure' | 'fireworks' | 'mistral' | 'cohere'
+export type ProviderID = 'groq' | 'openai' | 'google-vertex' | 'anthropic' | 'test' | 'bedrock' | 'azure'
+// TODO | 'fireworks' | 'mistral' | 'cohere'
 
 const providerIds: Record<ProviderID, boolean> = {
   groq: true,
@@ -48,6 +48,7 @@ const providerIds: Record<ProviderID, boolean> = {
   anthropic: true,
   test: true,
   bedrock: true,
+  azure: true,
 }
 
 export const providerIdsArray = Object.keys(providerIds) as ProviderID[]

@@ -440,7 +440,8 @@ describe('routing group fallback', () => {
     expect(attemptCount).toBe(2)
   })
 
-  test('should fallback from anthropic to google-vertex with model name replacement', async () => {
+  test('should fallback from anthropic to google-vertex with model name replacement', async ({ gateway }) => {
+    const { fetch } = gateway
     let attemptCount = 0
     const providerAttempts: string[] = []
     const modelAttempts: string[] = []

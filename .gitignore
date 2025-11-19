@@ -11,6 +11,7 @@ deploy/.env.local
 
 # config
 deploy/src/config.ts
+deploy/src/config.ts.backup.*
 deploy/worker-configuration.d.ts
 
 # misc

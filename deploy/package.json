@@ -4,9 +4,9 @@
   "private": true,
   "license": "AGPL-3.0",
   "scripts": {
-    "typecheck": "./check_config.sh && tsgo --noEmit && cd test && tsgo --noEmit",
+    "typecheck": "./ensure_config.sh && tsgo --noEmit && cd test && tsgo --noEmit",
     "deploy": "wrangler deploy --var GITHUB_SHA:`git rev-parse HEAD`",
-    "dev": "wrangler dev",
+    "dev": "./ensure_config.sh && wrangler dev",
     "test": "vitest",
     "limits-local-db": "wrangler d1 execute pydantic-ai-gateway-limits --local --file ../gateway/limits-schema.sql",
     "limits-remote-db": "wrangler d1 execute pydantic-ai-gateway-limits --remote --file ../gateway/limits-schema.sql",

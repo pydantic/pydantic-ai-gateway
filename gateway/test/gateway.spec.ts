@@ -441,7 +441,7 @@ describe('routing group fallback', () => {
   })
 
   test('should fallback from anthropic to google-vertex with model name replacement', async ({ gateway }) => {
-    const { fetch } = gateway
+    const { subFetch } = gateway
     let attemptCount = 0
     const providerAttempts: string[] = []
     const modelAttempts: string[] = []
@@ -480,7 +480,7 @@ describe('routing group fallback', () => {
     const ctx = createExecutionContext()
     const request = new Request<unknown, IncomingRequestCfProperties>('https://example.com/anthropic/v1/messages', {
       method: 'POST',
-      headers: { Authorization: 'healthy', 'x-vcr-filename': 'fallback' },
+      headers: { Authorization: 'fallback-anthropic-google-vertex', 'x-vcr-filename': 'fallback' },
       body: JSON.stringify({
         model: 'claude-sonnet-4-0',
         max_tokens: 1024,
@@ -488,7 +488,7 @@ describe('routing group fallback', () => {
       }),
     })
 
-    const gatewayEnv = buildGatewayEnv(env, [], fetch, undefined, [new FailAnthropicMiddleware()])
+    const gatewayEnv = buildGatewayEnv(env, [], subFetch, undefined, [new FailAnthropicMiddleware()])
     const response = await gatewayFetch(request, new URL(request.url), ctx, gatewayEnv)
     await waitOnExecutionContext(ctx)
 

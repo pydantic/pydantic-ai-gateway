@@ -33,6 +33,7 @@ beforeEach(async () => {
 
 interface TestGateway {
   fetch: (url: RequestInfo | URL, init?: RequestInit) => Promise<Response>
+  subFetch: (url: RequestInfo | URL, init?: RequestInit) => Promise<Response>
   ctx: ExecutionContext
   otelBatch: string[]
   disableEvents: DisableEvent[]
@@ -73,7 +74,7 @@ function testGateway(): TestGateway {
     await waitOnExecutionContext(ctx)
     return response
   }
-  return { fetch: mockFetch, ctx, otelBatch, disableEvents }
+  return { fetch: mockFetch, subFetch, ctx, otelBatch, disableEvents }
 }
 
 export const test = baseTest.extend<{ gateway: TestGateway }>({

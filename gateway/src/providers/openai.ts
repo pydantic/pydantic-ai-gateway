@@ -63,8 +63,12 @@ export class OpenAIProvider extends DefaultProviderProxy {
     return {
       requestBodyText: JSON.stringify(requestBodyDataClone),
       requestBodyData: requestBodyDataClone,
-      requestModel,
+      requestModel: requestModel && this.replaceModel(requestModel),
     }
+  }
+
+  protected getModelNameRemappings(): { searchValue: string; replaceValue: string }[] {
+    return []
   }
 
   protected responseHeaders(headers: Headers): Headers {

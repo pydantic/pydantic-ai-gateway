@@ -78,9 +78,13 @@ export class GoogleAPI extends BaseAPI<GoogleRequest, GenerateContentResponse, G
 
   chunkExtractors: ExtractorConfig<GenerateContentResponse, ExtractedResponse> = {
     usage: (chunk: GenerateContentResponse) => {
-      if (chunk.usageMetadata) {
-        // TODO(Marcelo): This is likely to be wrong, since we are not summing the usage.
-        this.extractedResponse.usage = this.extractUsage(chunk)
+      if ('usageMetadata' in chunk && chunk.usageMetadata) {
+        // Vertex may send a single {"usageMetadata": {"trafficType": "ON_DEMAND"}} instead of the full `usageMetadata` object on each chunk.
+        // At the end of the stream, it will send the full `usageMetadata` object.
+        const onlyTrafficTypeKey = Object.keys(chunk.usageMetadata).filter((key) => key !== 'trafficType')
+        if (onlyTrafficTypeKey.length > 0) {
+          this.extractedResponse.usage = this.extractUsage(chunk)
+        }
       }
     },
     responseModel: (chunk: GenerateContentResponse) => {

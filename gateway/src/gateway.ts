@@ -156,6 +156,9 @@ export async function gatewayWithLimiter(
   ctx: ExecutionContext,
   options: GatewayOptions,
 ): Promise<Response> {
+  const { org, user, project } = apiKeyInfo
+  logfire.info('request received', { org, user, project, route, restOfPath })
+
   if (apiKeyInfo.status !== 'active') {
     return textResponse(403, `Unauthorized - Key ${apiKeyInfo.status}`)
   }

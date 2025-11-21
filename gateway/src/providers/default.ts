@@ -5,9 +5,9 @@ import {
   type Usage,
   type Provider as UsageProvider,
 } from '@pydantic/genai-prices'
-import * as logfire from '@pydantic/logfire-api'
 import { EventStreamCodec } from '@smithy/eventstream-codec'
 import { createParser, type EventSourceMessage } from 'eventsource-parser'
+import logfire from 'logfire'
 
 import type { GatewayOptions } from '..'
 import type { ModelAPI } from '../api'

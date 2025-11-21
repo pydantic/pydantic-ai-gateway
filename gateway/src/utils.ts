@@ -1,4 +1,4 @@
-import * as logfire from '@pydantic/logfire-api'
+import logfire from 'logfire'
 
 export function ctHeader(contentType: string) {
   return { 'Content-Type': contentType }

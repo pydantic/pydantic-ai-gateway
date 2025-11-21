@@ -2,7 +2,7 @@
  * @see https://platform.openai.com/docs/api-reference/chat
  */
 
-import * as logfire from '@pydantic/logfire-api'
+import logfire from 'logfire'
 import mime from 'mime-types'
 import type {
   ChatCompletion,

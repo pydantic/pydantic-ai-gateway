@@ -1,4 +1,4 @@
-import * as logfire from '@pydantic/logfire-api'
+import logfire from 'logfire'
 import { type GatewayOptions, noopLimiter } from '.'
 import { apiKeyAuth, setApiKeyCache } from './auth'
 import { currentScopeIntervals, type ExceededScope, endOfMonth, endOfWeek, type SpendScope } from './db'

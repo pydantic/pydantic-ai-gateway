@@ -8,7 +8,7 @@ import type {
   Tool,
   ToolConfig,
 } from '@google/genai'
-import * as logfire from '@pydantic/logfire-api'
+import logfire from 'logfire'
 import type {
   ChatMessage,
   InputMessages,

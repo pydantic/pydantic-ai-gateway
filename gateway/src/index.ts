@@ -14,7 +14,7 @@ GNU Affero General Public License for more details.
 You should have received a copy of the GNU Affero General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
-import * as logfire from '@pydantic/logfire-api'
+import logfire from 'logfire'
 import type { KeysDb, LimitDb } from './db'
 import { gateway } from './gateway'
 import type { DefaultProviderProxy, Middleware, Next } from './providers/default'

@@ -17,8 +17,8 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 import { env } from 'cloudflare:workers'
 import { type GatewayOptions, gatewayFetch, LimitDbD1 } from '@pydantic/ai-gateway'
-import * as logfire from '@pydantic/logfire-api'
 import { instrument } from '@pydantic/logfire-cf-workers'
+import logfire from 'logfire'
 import { config } from './config'
 import { ConfigDB, hash } from './db'
 import { status } from './status'

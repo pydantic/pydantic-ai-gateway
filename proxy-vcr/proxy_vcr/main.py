@@ -81,10 +81,11 @@ async def proxy(request: Request) -> Response:
                 anthropic_beta_headers = {'anthropic-beta': anthropic_beta}
 
             headers = {
-                'x-api-key': api_key,
                 'content-type': 'application/json',
                 'anthropic-version': request.headers.get('anthropic-version', '2023-06-01'),
+                'accept-encoding': request.headers.get('accept-encoding', 'deflate'),
                 **anthropic_beta_headers,
+                **({'authorization': auth_header} if url.endswith('chat/completions') else {'x-api-key': api_key}),
             }
             response = await client.post(url, content=body, headers=headers)
     elif provider == 'google-vertex':

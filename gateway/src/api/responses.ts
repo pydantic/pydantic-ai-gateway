@@ -2,7 +2,7 @@
  * @see https://platform.openai.com/docs/api-reference/responses
  */
 
-import * as logfire from '@pydantic/logfire-api'
+import logfire from 'logfire'
 import type {
   Response,
   ResponseCreateParams,

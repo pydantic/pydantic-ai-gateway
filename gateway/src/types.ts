@@ -79,6 +79,13 @@ export interface ProviderProxy {
 
   /** Whether the provider is managed by the platform and not by the user. */
   isBuiltIn?: boolean
+
+  // TODO(DavidM): Use or remove this
+  // /** Regex-based model name remappings specific to this provider.
+  //  * If present, each searchValue is tried in sequence until hitting a match according to the `string.match` method,
+  //  * at which point we break out of the loop and apply the replaceValue using the JavaScript `string.replace` method.
+  //  * If there is no match, the value is not modified. */
+  // modelNameReplacements?: { searchValue: string; replaceValue: string }[]
 }
 
 export interface OtelSettings {

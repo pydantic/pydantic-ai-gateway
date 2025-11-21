@@ -35,6 +35,30 @@ export const config: Config<ProviderKeys> = {
       spendingLimitMonthly: 100,
     },
   },
+  // routing groups for load balancing and fallback
+  routingGroups: {
+    anthropic: [{ key: 'anthropic' }, { key: 'google-vertex' }, { key: 'bedrock' }],
+    gemini: [{ key: 'google-vertex' }],
+    // Example routing group with priority and weight
+    // Higher priority providers are tried first; within same priority, weight controls probability
+    'openai-with-fallback': [
+      { key: 'openai', priority: 10, weight: 1 }, // Try OpenAI first
+      { key: 'groq', priority: 5, weight: 1 }, // Fall back to Groq if OpenAI fails
+    ],
+    // Example routing group with weighted load balancing (same priority, different weights)
+    'balanced-llm': [
+      { key: 'openai', weight: 3 }, // OpenAI gets 3x the traffic
+      { key: 'groq', weight: 1 }, // Groq gets 1x the traffic
+    ],
+    // Example simple routing group (backward compatible - no priority/weight specified)
+    'all-providers': [
+      { key: 'openai' },
+      { key: 'groq' },
+      { key: 'google-vertex' },
+      { key: 'anthropic' },
+      { key: 'bedrock' },
+    ],
+  },
   // providers
   providers: {
     // you would use this provider by using the model id `gateway/openai-chat:gpt-5` in Pydantic AI
@@ -73,22 +97,6 @@ export const config: Config<ProviderKeys> = {
       injectCost: true,
       credentials: env.AWS_BEARER_TOKEN_BEDROCK,
     },
-  },
-  // routing groups for load balancing and fallback
-  routingGroups: {
-    // Example routing group with priority and weight
-    // Higher priority providers are tried first; within same priority, weight controls probability
-    'openai-with-fallback': [
-      { key: 'openai', priority: 10, weight: 1 }, // Try OpenAI first
-      { key: 'azure', priority: 5, weight: 1 }, // Fall back to Azure if OpenAI fails
-    ],
-    // Example routing group with weighted load balancing (same priority, different weights)
-    'balanced-llm': [
-      { key: 'openai', weight: 3 }, // OpenAI gets 3x the traffic
-      { key: 'azure', weight: 1 }, // Azure gets 1x the traffic
-    ],
-    // Example simple routing group (backward compatible - no priority/weight specified)
-    'all-providers': [{ key: 'openai' }, { key: 'azure' }, { key: 'groq' }, { key: 'anthropic' }, { key: 'bedrock' }],
   },
   // individual apiKeys
   apiKeys: {

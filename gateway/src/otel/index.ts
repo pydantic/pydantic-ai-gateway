@@ -16,7 +16,7 @@ import {
 } from '@opentelemetry/otlp-transformer'
 import { resourceFromAttributes } from '@opentelemetry/resources'
 import type { ReadableSpan } from '@opentelemetry/sdk-trace-base/build/src/export/ReadableSpan'
-import * as logfire from '@pydantic/logfire-api'
+import logfire from 'logfire'
 
 import type { GatewayOptions } from '../index'
 import type { OtelSettings, SubFetch } from '../types'

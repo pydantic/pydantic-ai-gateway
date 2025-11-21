@@ -2,7 +2,7 @@ import { env } from 'cloudflare:workers'
 import type { Config } from '@deploy/types'
 
 // can be whatever you want, just used to make linking apiKeys to providers typesafe.
-type ProviderKeys = 'openai' | 'groq' | 'google-vertex' | 'anthropic' | 'bedrock'
+type ProviderKeys = 'openai' | 'anthropic' | 'google-vertex' | 'bedrock' | 'groq' | 'azure'
 
 // projects, users and keys must have numeric keys, using constants here to make it easier to understand
 // of course, keys must be unique within a type (e.g. project ids must be unique) but users and projects can have the same id
@@ -71,6 +71,13 @@ export const config: Config<ProviderKeys> = {
       injectCost: true,
       // credentials are used by the ProviderProxy to authenticate the forwarded request
       credentials: env.OPENAI_API_KEY,
+    },
+    azure: {
+      providerId: 'azure',
+      // NOTE: For now, you need to specify the family of models you want to use.
+      baseUrl: 'https://marcelo-0665-resource.openai.azure.com/openai/v1',
+      injectCost: true,
+      credentials: env.AZURE_API_KEY,
     },
     groq: { providerId: 'groq', baseUrl: 'https://api.groq.com', injectCost: true, credentials: env.GROQ_API_KEY },
     'google-vertex': {

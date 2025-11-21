@@ -1,4 +1,4 @@
-import * as logfire from '@pydantic/logfire-api'
+import logfire from 'logfire'
 import type { ModelAPI } from '../api'
 import { AnthropicAPI } from '../api/anthropic'
 import { ConverseAPI } from '../api/bedrock'

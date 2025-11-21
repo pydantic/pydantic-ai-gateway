@@ -1,0 +1,68 @@
+interactions:
+- request:
+    body: "{\n  \"model\": \"claude-sonnet-4-5\",\n  \"messages\": [\n    {\n      \"role\":
+      \"user\",\n      \"content\": \"What is the capital of France?\"\n    }\n  ]\n}"
+    headers:
+      accept:
+      - '*/*'
+      accept-encoding:
+      - deflate
+      anthropic-version:
+      - '2023-06-01'
+      connection:
+      - keep-alive
+      content-length:
+      - '139'
+      content-type:
+      - application/json
+      host:
+      - api.anthropic.com
+      user-agent:
+      - python-httpx/0.28.1
+    method: POST
+    uri: https://api.anthropic.com/v1/chat/completions
+  response:
+    body:
+      string: '{"id":"msg_013FVXvpG2mDBkofKaYBkWMm","choices":[{"finish_reason":"stop","index":0,"message":{"role":"assistant","content":"The
+        capital of France is Paris."}}],"created":1763739185,"model":"claude-sonnet-4-5-20250929","object":"chat.completion","usage":{"completion_tokens":10,"prompt_tokens":14,"total_tokens":24}}'
+    headers:
+      CF-RAY:
+      - 9a213e3d3997693b-LIS
+      Connection:
+      - keep-alive
+      Content-Type:
+      - application/json
+      Date:
+      - Fri, 21 Nov 2025 15:33:05 GMT
+      Server:
+      - cloudflare
+      Transfer-Encoding:
+      - chunked
+      X-Robots-Tag:
+      - none
+      cf-cache-status:
+      - DYNAMIC
+      retry-after:
+      - '62'
+      strict-transport-security:
+      - max-age=31536000; includeSubDomains; preload
+      x-envoy-upstream-service-time:
+      - '3599'
+      x-ratelimit-remaining-requests:
+      - '3999'
+      x-ratelimit-remaining-tokens:
+      - '2400000'
+      x-ratelimit-requests:
+      - '4000'
+      x-ratelimit-reset-requests:
+      - 0s
+      x-ratelimit-reset-tokens:
+      - 0s
+      x-ratelimit-tokens:
+      - '2400000'
+      x-request-id:
+      - req_011CVMH3FnQgymnReT8342KU
+    status:
+      code: 200
+      message: OK
+version: 1

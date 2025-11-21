@@ -1,4 +1,5 @@
 import Anthropic from '@anthropic-ai/sdk'
+import OpenAI from 'openai'
 import { describe, expect } from 'vitest'
 import { deserializeRequest } from '../otel'
 import { test } from '../setup'
@@ -94,5 +95,19 @@ describe('anthropic', () => {
     }).rejects.toThrowErrorMatchingInlineSnapshot(
       `[Error: 404 PAIG does not support the model \`unsupported-model-xyz\` yet. We're working on it!]`,
     )
+  })
+
+  test('should call anthropic via gateway with chat completion', async ({ gateway }) => {
+    const { fetch, otelBatch } = gateway
+
+    const client = new OpenAI({ apiKey: 'healthy', baseURL: 'https://example.com/anthropic/v1', fetch })
+
+    const completion = await client.chat.completions.create(
+      { model: 'claude-sonnet-4-5', messages: [{ role: 'user', content: 'What is the capital of France?' }] },
+      { headers: { 'x-vcr-filename': 'anthropic-chat-completion', 'accept-encoding': 'deflate' } },
+    )
+    expect(completion).toMatchSnapshot('llm')
+    expect(otelBatch, 'otelBatch length not 1').toHaveLength(1)
+    expect(deserializeRequest(otelBatch[0]!)).toMatchSnapshot('span')
   })
 })

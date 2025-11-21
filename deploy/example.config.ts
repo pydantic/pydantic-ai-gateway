@@ -74,7 +74,8 @@ export const config: Config<ProviderKeys> = {
     },
     azure: {
       providerId: 'azure',
-      baseUrl: 'https://potato-swedencentral.cognitiveservices.azure.com/',
+      // NOTE: For now, you need to specify the family of models you want to use.
+      baseUrl: 'https://marcelo-0665-resource.openai.azure.com/openai/v1',
       injectCost: true,
       credentials: env.AZURE_API_KEY,
     },

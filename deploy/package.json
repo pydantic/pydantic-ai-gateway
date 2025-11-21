@@ -15,7 +15,7 @@
     "typegen": "wrangler types --strict-vars false --include-runtime false"
   },
   "dependencies": {
-    "@pydantic/logfire-cf-workers": "^0.9.0",
+    "@pydantic/logfire-cf-workers": "^0.11.0",
     "logfire": "^0.11.0"
   },
   "devDependencies": {

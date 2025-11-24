@@ -15,7 +15,7 @@ export class AnthropicProvider extends DefaultProviderProxy {
     // If there is a query string, drop the query string from the path.
     const path = this.restOfPath.split('?')[0]
     // This endpoint is used by Claude Code.
-    return path === 'v1/messages/count_tokens'
+    return path === 'v1/messages/count_tokens' || path === 'v1/files'
   }
 
   protected modelAPI(): ModelAPI {

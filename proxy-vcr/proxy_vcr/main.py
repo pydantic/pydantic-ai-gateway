@@ -89,7 +89,7 @@ async def proxy(request: Request) -> Response:
                 anthropic_beta_headers = {'anthropic-beta': anthropic_beta}
 
             headers = {
-                'content-type': 'application/json',
+                'content-type': 'application/json' if not url.endswith('files') else 'multipart/form-data',
                 'anthropic-version': request.headers.get('anthropic-version', '2023-06-01'),
                 'accept-encoding': request.headers.get('accept-encoding', 'deflate'),
                 **anthropic_beta_headers,

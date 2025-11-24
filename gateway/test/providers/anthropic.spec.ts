@@ -110,4 +110,16 @@ describe('anthropic', () => {
     expect(otelBatch, 'otelBatch length not 1').toHaveLength(1)
     expect(deserializeRequest(otelBatch[0]!)).toMatchSnapshot('span')
   })
+
+  // TODO(Marcelo): We should add this test.
+  // test('should call anthropic via gateway with files', async ({ gateway }) => {
+  //   const { fetch, otelBatch } = gateway
+
+  //   const client = new Anthropic({ authToken: 'healthy', baseURL: 'https://example.com/anthropic', fetch })
+
+  //   const result = await client.beta.files.upload({ file })
+  //   expect(result).toMatchSnapshot('files')
+  //   expect(otelBatch, 'otelBatch length not 1').toHaveLength(1)
+  //   expect(deserializeRequest(otelBatch[0]!)).toMatchSnapshot('span')
+  // })
 })

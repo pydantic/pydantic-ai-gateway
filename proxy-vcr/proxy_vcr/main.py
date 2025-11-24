@@ -60,7 +60,6 @@ async def proxy(request: Request) -> Response:
     elif provider == 'azure':
         client = cast(httpx.AsyncClient, request.scope['state']['httpx_client'])
         url = AZURE_BASE_URL + request.url.path[len('/azure') :]
-        print(url)
         with vcr.use_cassette(cassette_name('azure', vcr_suffix)):  # type: ignore[reportUnknownReturnType]
             headers = {'Authorization': auth_header, 'content-type': 'application/json'}
             response = await client.post(url, content=body, headers=headers)

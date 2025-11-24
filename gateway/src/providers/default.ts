@@ -326,6 +326,10 @@ export class DefaultProviderProxy {
       return requestHeadersError
     }
 
+    if (this.isWhitelistedEndpoint()) {
+      return await this.handleWhitelistedEndpoint(requestHeaders)
+    }
+
     const prepResult = await this.prepRequest()
     if ('error' in prepResult) {
       return prepResult
@@ -347,19 +351,6 @@ export class DefaultProviderProxy {
     }
 
     const response = await this.fetch(url, { method, headers: requestHeaders, body: requestBodyText })
-
-    if (this.isWhitelistedEndpoint()) {
-      this.otelSpan.end(
-        `${this.request.method} ${this.restOfPath}`,
-        {
-          ...attributesFromRequest(this.request),
-          ...attributesFromResponse(response),
-          'http.request.body.text': requestBodyText,
-        },
-        { level: 'info' },
-      )
-      return { response }
-    }
 
     // Each provider should be able to modify the response headers, e.g. remove openai org
     const responseHeaders = this.responseHeaders(response.headers)
@@ -576,6 +567,23 @@ export class DefaultProviderProxy {
 
   protected isWhitelistedEndpoint(): boolean {
     return false
+  }
+
+  protected async handleWhitelistedEndpoint(
+    headers: Headers,
+  ): Promise<ProxyWhitelistedEndpoint | ProxyInvalidRequest> {
+    const url = this.url()
+    if (typeof url === 'object') {
+      return url
+    }
+    const response = await this.fetch(url, { method: this.method(), headers, body: this.request.body })
+    this.otelSpan.end(
+      `${this.request.method} ${this.restOfPath}`,
+      { ...attributesFromRequest(this.request), ...attributesFromResponse(response) },
+      { level: 'info' },
+    )
+    // TODO(Marcelo): Should we call `responseHeaders` here to filter some headers?
+    return { response }
   }
 
   protected otelAttributes(requestBody: JsonData, responseBody: JsonData): GenAIAttributes {

@@ -73,6 +73,13 @@ class TestKeysDB extends KeysDbD1 {
         credentials: 'test',
       },
       {
+        key: 'azure',
+        baseUrl: 'http://localhost:8005/azure',
+        providerId: 'azure',
+        injectCost: true,
+        credentials: env.AZURE_API_KEY,
+      },
+      {
         key: 'openai',
         // baseUrl decides what URL the request will be forwarded to
         baseUrl: 'http://localhost:8005/openai',
@@ -219,14 +226,14 @@ class TestKeysDB extends KeysDbD1 {
               baseUrl: 'http://localhost:8005/anthropic',
               providerId: 'anthropic',
               injectCost: true,
-              credentials: this.allProviders[3]!.credentials,
+              credentials: this.allProviders[4]!.credentials,
             },
             {
               key: 'google-vertex',
               baseUrl: 'http://localhost:8005/google-vertex',
               providerId: 'google-vertex',
               injectCost: true,
-              credentials: this.allProviders[5]!.credentials,
+              credentials: this.allProviders[6]!.credentials,
             },
           ],
           routingGroups: { anthropic: [{ key: 'anthropic' }, { key: 'google-vertex' }] },

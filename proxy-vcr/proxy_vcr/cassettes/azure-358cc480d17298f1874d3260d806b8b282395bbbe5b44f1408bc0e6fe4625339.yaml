@@ -1,0 +1,68 @@
+interactions:
+- request:
+    body: "{\n  \"model\": \"gpt-4.1\",\n  \"messages\": [\n    {\n      \"role\":
+      \"developer\",\n      \"content\": \"You are a helpful assistant.\"\n    },\n
+      \   {\n      \"role\": \"user\",\n      \"content\": \"What is the capital of
+      France?\"\n    }\n  ],\n  \"max_completion_tokens\": 1024\n}"
+    headers:
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '250'
+      content-type:
+      - application/json
+      host:
+      - marcelo-0665-resource.openai.azure.com
+      user-agent:
+      - python-httpx/0.28.1
+    method: POST
+    uri: https://marcelo-0665-resource.openai.azure.com/openai/v1/chat/completions
+  response:
+    body:
+      string: '{"choices":[{"content_filter_results":{"hate":{"filtered":false,"severity":"safe"},"protected_material_code":{"filtered":false,"detected":false},"protected_material_text":{"filtered":false,"detected":false},"self_harm":{"filtered":false,"severity":"safe"},"sexual":{"filtered":false,"severity":"safe"},"violence":{"filtered":false,"severity":"safe"}},"finish_reason":"stop","index":0,"logprobs":null,"message":{"annotations":[],"content":"The
+        capital of France is Paris.","refusal":null,"role":"assistant"}}],"created":1763971680,"id":"chatcmpl-CfLu4vonOKFA67K411wDbi8LbkEJf","model":"gpt-4.1-2025-04-14","object":"chat.completion","prompt_filter_results":[{"prompt_index":0,"content_filter_results":{"hate":{"filtered":false,"severity":"safe"},"jailbreak":{"filtered":false,"detected":false},"self_harm":{"filtered":false,"severity":"safe"},"sexual":{"filtered":false,"severity":"safe"},"violence":{"filtered":false,"severity":"safe"}}}],"system_fingerprint":"fp_f99638a8d7","usage":{"completion_tokens":8,"completion_tokens_details":{"accepted_prediction_tokens":0,"audio_tokens":0,"reasoning_tokens":0,"rejected_prediction_tokens":0},"prompt_tokens":24,"prompt_tokens_details":{"audio_tokens":0,"cached_tokens":0},"total_tokens":32}}
+
+        '
+    headers:
+      Content-Length:
+      - '1237'
+      Content-Type:
+      - application/json
+      Date:
+      - Mon, 24 Nov 2025 08:08:00 GMT
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains; preload
+      apim-request-id:
+      - 2e417e9e-8f9f-4ac9-8686-4702d6d2effa
+      azureml-model-session:
+      - d085-20251105033551
+      x-accel-buffering:
+      - 'no'
+      x-content-type-options:
+      - nosniff
+      x-ms-client-request-id:
+      - Not-Set
+      x-ms-deployment-name:
+      - gpt-4.1
+      x-ms-rai-invoked:
+      - 'true'
+      x-ms-region:
+      - Sweden Central
+      x-ratelimit-limit-requests:
+      - '50'
+      x-ratelimit-limit-tokens:
+      - '50000'
+      x-ratelimit-remaining-requests:
+      - '49'
+      x-ratelimit-remaining-tokens:
+      - '49984'
+      x-request-id:
+      - ba909b14-db02-4651-ae41-7fe4d83d06c8
+    status:
+      code: 200
+      message: OK
+version: 1

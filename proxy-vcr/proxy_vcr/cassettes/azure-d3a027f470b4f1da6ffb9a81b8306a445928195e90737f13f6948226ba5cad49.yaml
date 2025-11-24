@@ -1,0 +1,80 @@
+interactions:
+- request:
+    body: "{\n  \"model\": \"gpt-4.1\",\n  \"instructions\": \"reply concisely\",\n
+      \ \"input\": \"what color is the sky?\"\n}"
+    headers:
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '98'
+      content-type:
+      - application/json
+      host:
+      - marcelo-0665-resource.openai.azure.com
+      user-agent:
+      - python-httpx/0.28.1
+    method: POST
+    uri: https://marcelo-0665-resource.openai.azure.com/openai/v1/responses
+  response:
+    body:
+      string: "{\n  \"id\": \"resp_0eeed6a040a8611b0069241260f58c81948cd87299c4d31154\",\n
+        \ \"object\": \"response\",\n  \"created_at\": 1763971680,\n  \"status\":
+        \"completed\",\n  \"background\": false,\n  \"content_filters\": null,\n  \"error\":
+        null,\n  \"incomplete_details\": null,\n  \"instructions\": \"reply concisely\",\n
+        \ \"max_output_tokens\": null,\n  \"max_tool_calls\": null,\n  \"model\":
+        \"gpt-4.1\",\n  \"output\": [\n    {\n      \"id\": \"msg_0eeed6a040a8611b006924126129cc819495f20c3473dd468d\",\n
+        \     \"type\": \"message\",\n      \"status\": \"completed\",\n      \"content\":
+        [\n        {\n          \"type\": \"output_text\",\n          \"annotations\":
+        [],\n          \"logprobs\": [],\n          \"text\": \"The sky is usually
+        blue during the day, but it can appear red, orange, pink, or purple at sunrise
+        and sunset, and black at night.\"\n        }\n      ],\n      \"role\": \"assistant\"\n
+        \   }\n  ],\n  \"parallel_tool_calls\": true,\n  \"previous_response_id\":
+        null,\n  \"prompt_cache_key\": null,\n  \"reasoning\": {\n    \"effort\":
+        null,\n    \"summary\": null\n  },\n  \"safety_identifier\": null,\n  \"service_tier\":
+        \"default\",\n  \"store\": true,\n  \"temperature\": 1.0,\n  \"text\": {\n
+        \   \"format\": {\n      \"type\": \"text\"\n    },\n    \"verbosity\": \"medium\"\n
+        \ },\n  \"tool_choice\": \"auto\",\n  \"tools\": [],\n  \"top_logprobs\":
+        0,\n  \"top_p\": 1.0,\n  \"truncation\": \"disabled\",\n  \"usage\": {\n    \"input_tokens\":
+        21,\n    \"input_tokens_details\": {\n      \"cached_tokens\": 0\n    },\n
+        \   \"output_tokens\": 32,\n    \"output_tokens_details\": {\n      \"reasoning_tokens\":
+        0\n    },\n    \"total_tokens\": 53\n  },\n  \"user\": null,\n  \"metadata\":
+        {}\n}"
+    headers:
+      Content-Length:
+      - '1518'
+      Content-Type:
+      - application/json
+      Date:
+      - Mon, 24 Nov 2025 08:08:01 GMT
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains; preload
+      apim-request-id:
+      - 05ae1647-c7fb-4da0-ae37-120544ff3501
+      azureai-processed-tier:
+      - default
+      azureai-requested-tier:
+      - default
+      skip-error-remapping:
+      - 'true'
+      x-content-type-options:
+      - nosniff
+      x-ms-client-request-id:
+      - Not-Set
+      x-ms-region:
+      - Sweden Central
+      x-ratelimit-limit-tokens:
+      - '-1'
+      x-ratelimit-remaining-tokens:
+      - '-1'
+      x-ratelimit-reset-tokens:
+      - '0'
+      x-request-id:
+      - da702ab3-476c-4acd-b69f-a1e6fedbaaaa
+    status:
+      code: 200
+      message: OK
+version: 1

@@ -49,6 +49,7 @@ export default defineWorkersConfig({
         wrangler: { configPath: './test/wrangler.jsonc' },
         miniflare: {
           bindings: {
+            AZURE_API_KEY: process.env.AZURE_API_KEY ?? 'AZURE_API_KEY-unset',
             OPENAI_API_KEY: process.env.OPENAI_API_KEY ?? 'OPENAI_API_KEY-unset',
             GROQ_API_KEY: process.env.GROQ_API_KEY ?? 'GROQ_API_KEY-unset',
             ANTHROPIC_API_KEY: process.env.ANTHROPIC_API_KEY ?? 'ANTHROPIC_API_KEY-unset',

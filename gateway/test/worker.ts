@@ -73,6 +73,13 @@ class TestKeysDB extends KeysDbD1 {
         credentials: 'test',
       },
       {
+        key: 'azure',
+        baseUrl: 'http://localhost:8005/azure',
+        providerId: 'azure',
+        injectCost: true,
+        credentials: env.AZURE_API_KEY,
+      },
+      {
         key: 'openai',
         // baseUrl decides what URL the request will be forwarded to
         baseUrl: 'http://localhost:8005/openai',

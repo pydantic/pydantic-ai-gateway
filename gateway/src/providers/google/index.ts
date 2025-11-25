@@ -73,7 +73,7 @@ export class GoogleVertexProvider extends DefaultProviderProxy {
     // Regex with capture groups: version (optional), publisher (optional), model
     // Path may or may not start with / and may or may not have version
     const regex =
-      /^\/?(?:(v\d+(?:beta\d*)?)\/)?(?:projects\/[^/]+\/locations\/[^/]+\/)?(?:publishers\/([^/]+)\/)?models\/(.+)$/
+      /^\/?(?:(v\d+(?:beta\d*)?)\/)?(?:projects\/[^/]+\/locations\/[^/]+\/)?(?:publishers\/([^/]+)\/)?models\/(.+):(.*)$/
     const match = regex.exec(this.restOfPath)
 
     if (!match) {
@@ -82,13 +82,16 @@ export class GoogleVertexProvider extends DefaultProviderProxy {
 
     const version = match[1] || 'v1'
     const publisher = match[2] || 'google'
-    const modelAndApi = match[3]
+    const model = match[3]
+    const api = match[4]
+
+    const replacedModel = model && this.replaceModel(model)
 
     if (publisher === 'anthropic') {
       this.flavor = 'anthropic'
     }
 
-    const path = `/${version}/projects/${projectId}/locations/${region}/publishers/${publisher}/models/${modelAndApi}`
+    const path = `/${version}/projects/${projectId}/locations/${region}/publishers/${publisher}/models/${replacedModel}:${api}`
     return path
   }
 
@@ -108,7 +111,8 @@ export class GoogleVertexProvider extends DefaultProviderProxy {
         return { error: 'model not found in Anthropic request body' }
       }
       const model = requestBodyData.model as string
-      this.requestModel = model
+      const replacedModel = this.replaceModel(model)
+      this.requestModel = replacedModel
 
       if (!('anthropic_version' in requestBodyData)) {
         requestBodyData.anthropic_version = 'vertex-2023-10-16'
@@ -120,15 +124,29 @@ export class GoogleVertexProvider extends DefaultProviderProxy {
       // Update requestBodyText without the model field
       const updatedRequestBodyText = JSON.stringify(requestBodyData)
 
-      return { requestBodyText: updatedRequestBodyText, requestBodyData, requestModel: model }
+      return { requestBodyText: updatedRequestBodyText, requestBodyData, requestModel: replacedModel }
     }
 
     const m = /\/models\/(.+?):/.exec(this.restOfPath)
     if (m) {
-      return { requestBodyText, requestBodyData, requestModel: m[1] }
+      const model = m[1] && this.replaceModel(m[1])
+      return { requestBodyText, requestBodyData, requestModel: model }
     } else {
       return { error: 'unable to find model in path' }
     }
+  }
+
+  protected getModelNameRemappings(): { searchValue: string; replaceValue: string }[] {
+    return [
+      { searchValue: '^claude-3-5-sonnet.*$', replaceValue: 'claude-3-5-sonnet' },
+      { searchValue: '^claude-3-5-haiku.*$', replaceValue: 'claude-3-5-haiku' },
+      { searchValue: '^claude-3-haiku.*$', replaceValue: 'claude-3-haiku' },
+      { searchValue: '^claude-haiku-4-5.*$', replaceValue: 'claude-haiku-4-5' },
+      { searchValue: '^claude-opus-4-1.*$', replaceValue: 'claude-opus-4-1' },
+      { searchValue: '^claude-opus-4.*$', replaceValue: 'claude-opus-4-1' },
+      { searchValue: '^claude-sonnet-4-0.*$', replaceValue: 'claude-sonnet-4' },
+      { searchValue: '^claude-3-7-sonnet.*$', replaceValue: 'claude-3-7-sonnet' },
+    ]
   }
 
   protected isStreaming(responseHeaders: Headers, requestBodyData: object): boolean {

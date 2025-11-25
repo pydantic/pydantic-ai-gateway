@@ -1,0 +1,336 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`azure > chat > llm 1`] = `
+{
+  "choices": [
+    {
+      "content_filter_results": {
+        "hate": {
+          "filtered": false,
+          "severity": "safe",
+        },
+        "protected_material_code": {
+          "detected": false,
+          "filtered": false,
+        },
+        "protected_material_text": {
+          "detected": false,
+          "filtered": false,
+        },
+        "self_harm": {
+          "filtered": false,
+          "severity": "safe",
+        },
+        "sexual": {
+          "filtered": false,
+          "severity": "safe",
+        },
+        "violence": {
+          "filtered": false,
+          "severity": "safe",
+        },
+      },
+      "finish_reason": "stop",
+      "index": 0,
+      "logprobs": null,
+      "message": {
+        "annotations": [],
+        "content": "The capital of France is Paris.",
+        "refusal": null,
+        "role": "assistant",
+      },
+    },
+  ],
+  "created": 1763971680,
+  "id": "chatcmpl-CfLu4vonOKFA67K411wDbi8LbkEJf",
+  "model": "gpt-4.1-2025-04-14",
+  "object": "chat.completion",
+  "prompt_filter_results": [
+    {
+      "content_filter_results": {
+        "hate": {
+          "filtered": false,
+          "severity": "safe",
+        },
+        "jailbreak": {
+          "detected": false,
+          "filtered": false,
+        },
+        "self_harm": {
+          "filtered": false,
+          "severity": "safe",
+        },
+        "sexual": {
+          "filtered": false,
+          "severity": "safe",
+        },
+        "violence": {
+          "filtered": false,
+          "severity": "safe",
+        },
+      },
+      "prompt_index": 0,
+    },
+  ],
+  "system_fingerprint": "fp_f99638a8d7",
+  "usage": {
+    "completion_tokens": 8,
+    "completion_tokens_details": {
+      "accepted_prediction_tokens": 0,
+      "audio_tokens": 0,
+      "reasoning_tokens": 0,
+      "rejected_prediction_tokens": 0,
+    },
+    "prompt_tokens": 24,
+    "prompt_tokens_details": {
+      "audio_tokens": 0,
+      "cached_tokens": 0,
+    },
+    "pydantic_ai_gateway": {
+      "cost_estimate": 0.000112,
+    },
+    "total_tokens": 32,
+  },
+}
+`;
+
+exports[`azure > chat > span 1`] = `
+[
+  {
+    "attributes": {
+      "gen_ai.input.messages": [
+        {
+          "parts": [
+            {
+              "content": "You are a helpful assistant.",
+              "type": "text",
+            },
+          ],
+          "role": "system",
+        },
+        {
+          "parts": [
+            {
+              "content": "What is the capital of France?",
+              "type": "text",
+            },
+          ],
+          "role": "user",
+        },
+      ],
+      "gen_ai.operation.name": "chat",
+      "gen_ai.output.messages": [
+        {
+          "finish_reason": "stop",
+          "parts": [
+            {
+              "content": "The capital of France is Paris.",
+              "type": "text",
+            },
+          ],
+          "role": "assistant",
+        },
+      ],
+      "gen_ai.request.max_tokens": 1024,
+      "gen_ai.request.model": "gpt-4.1",
+      "gen_ai.request.seed": {},
+      "gen_ai.request.stop_sequences": {},
+      "gen_ai.request.temperature": {},
+      "gen_ai.request.top_k": {},
+      "gen_ai.request.top_p": {},
+      "gen_ai.response.finish_reasons": [
+        "stop",
+      ],
+      "gen_ai.response.id": "chatcmpl-CfLu4vonOKFA67K411wDbi8LbkEJf",
+      "gen_ai.response.model": "gpt-4.1-2025-04-14",
+      "gen_ai.system": "openai",
+      "gen_ai.system_instructions": {},
+      "gen_ai.usage.cache_audio_read_tokens": {},
+      "gen_ai.usage.cache_read_tokens": 0,
+      "gen_ai.usage.cache_write_tokens": {},
+      "gen_ai.usage.input_audio_tokens": 0,
+      "gen_ai.usage.input_tokens": 24,
+      "gen_ai.usage.output_audio_tokens": 0,
+      "gen_ai.usage.output_tokens": 8,
+      "http.request.body.text": "{
+  "model": "gpt-4.1",
+  "messages": [
+    {
+      "role": "developer",
+      "content": "You are a helpful assistant."
+    },
+    {
+      "role": "user",
+      "content": "What is the capital of France?"
+    }
+  ],
+  "max_completion_tokens": 1024
+}",
+      "http.response.body.text": "{"choices":[{"content_filter_results":{"hate":{"filtered":false,"severity":"safe"},"protected_material_code":{"filtered":false,"detected":false},"protected_material_text":{"filtered":false,"detected":false},"self_harm":{"filtered":false,"severity":"safe"},"sexual":{"filtered":false,"severity":"safe"},"violence":{"filtered":false,"severity":"safe"}},"finish_reason":"stop","index":0,"logprobs":null,"message":{"annotations":[],"content":"The capital of France is Paris.","refusal":null,"role":"assistant"}}],"created":1763971680,"id":"chatcmpl-CfLu4vonOKFA67K411wDbi8LbkEJf","model":"gpt-4.1-2025-04-14","object":"chat.completion","prompt_filter_results":[{"prompt_index":0,"content_filter_results":{"hate":{"filtered":false,"severity":"safe"},"jailbreak":{"filtered":false,"detected":false},"self_harm":{"filtered":false,"severity":"safe"},"sexual":{"filtered":false,"severity":"safe"},"violence":{"filtered":false,"severity":"safe"}}}],"system_fingerprint":"fp_f99638a8d7","usage":{"completion_tokens":8,"completion_tokens_details":{"accepted_prediction_tokens":0,"audio_tokens":0,"reasoning_tokens":0,"rejected_prediction_tokens":0},"prompt_tokens":24,"prompt_tokens_details":{"audio_tokens":0,"cached_tokens":0},"total_tokens":32,"pydantic_ai_gateway":{"cost_estimate":0.000112}}}",
+      "http.response.status_code": 200,
+      "logfire.json_schema": "{"type":"object","properties":{"gen_ai.operation.name":{"type":"string"},"gen_ai.request.model":{"type":"string"},"gen_ai.system":{"type":"string"},"gen_ai.request.max_tokens":{"type":"number"},"gen_ai.request.top_k":{},"gen_ai.request.top_p":{},"gen_ai.request.temperature":{},"gen_ai.request.stop_sequences":{},"gen_ai.request.seed":{},"gen_ai.response.finish_reasons":{},"gen_ai.response.id":{"type":"string"},"gen_ai.input.messages":{},"gen_ai.output.messages":{},"gen_ai.system_instructions":{},"http.response.status_code":{"type":"number"},"http.request.body.text":{"type":"string"},"http.response.body.text":{"type":"string"},"gen_ai.response.model":{"type":"string"},"gen_ai.usage.input_tokens":{"type":"number"},"gen_ai.usage.cache_read_tokens":{"type":"number"},"gen_ai.usage.cache_write_tokens":{},"gen_ai.usage.output_tokens":{"type":"number"},"gen_ai.usage.input_audio_tokens":{"type":"number"},"gen_ai.usage.cache_audio_read_tokens":{},"gen_ai.usage.output_audio_tokens":{"type":"number"}}}",
+      "logfire.level_num": 9,
+      "logfire.msg": "chat gpt-4.1-2025-04-14",
+    },
+    "events": [],
+    "kind": 1,
+    "links": [],
+    "name": "chat gpt-4.1-2025-04-14",
+    "parentSpanId": undefined,
+    "resource": {
+      "service.name": "PAIG",
+      "service.version": "test",
+    },
+    "scope": "pydantic-ai-gateway",
+    "status": {
+      "code": 1,
+    },
+  },
+]
+`;
+
+exports[`azure > responses > llm 1`] = `
+{
+  "background": false,
+  "content_filters": null,
+  "created_at": 1763971680,
+  "error": null,
+  "id": "resp_0eeed6a040a8611b0069241260f58c81948cd87299c4d31154",
+  "incomplete_details": null,
+  "instructions": "reply concisely",
+  "max_output_tokens": null,
+  "max_tool_calls": null,
+  "metadata": {},
+  "model": "gpt-4.1",
+  "object": "response",
+  "output": [
+    {
+      "content": [
+        {
+          "annotations": [],
+          "logprobs": [],
+          "text": "The sky is usually blue during the day, but it can appear red, orange, pink, or purple at sunrise and sunset, and black at night.",
+          "type": "output_text",
+        },
+      ],
+      "id": "msg_0eeed6a040a8611b006924126129cc819495f20c3473dd468d",
+      "role": "assistant",
+      "status": "completed",
+      "type": "message",
+    },
+  ],
+  "output_text": "The sky is usually blue during the day, but it can appear red, orange, pink, or purple at sunrise and sunset, and black at night.",
+  "parallel_tool_calls": true,
+  "previous_response_id": null,
+  "prompt_cache_key": null,
+  "reasoning": {
+    "effort": null,
+    "summary": null,
+  },
+  "safety_identifier": null,
+  "service_tier": "default",
+  "status": "completed",
+  "store": true,
+  "temperature": 1,
+  "text": {
+    "format": {
+      "type": "text",
+    },
+    "verbosity": "medium",
+  },
+  "tool_choice": "auto",
+  "tools": [],
+  "top_logprobs": 0,
+  "top_p": 1,
+  "truncation": "disabled",
+  "usage": {
+    "input_tokens": 21,
+    "input_tokens_details": {
+      "cached_tokens": 0,
+    },
+    "output_tokens": 32,
+    "output_tokens_details": {
+      "reasoning_tokens": 0,
+    },
+    "pydantic_ai_gateway": {
+      "cost_estimate": 0.000298,
+    },
+    "total_tokens": 53,
+  },
+  "user": null,
+}
+`;
+
+exports[`azure > responses > span 1`] = `
+[
+  {
+    "attributes": {
+      "gen_ai.input.messages": [
+        {
+          "parts": [
+            {
+              "content": "what color is the sky?",
+              "type": "text",
+            },
+          ],
+          "role": "user",
+        },
+      ],
+      "gen_ai.operation.name": "chat",
+      "gen_ai.output.messages": [
+        {
+          "parts": [
+            {
+              "content": "The sky is usually blue during the day, but it can appear red, orange, pink, or purple at sunrise and sunset, and black at night.",
+              "type": "text",
+            },
+          ],
+          "role": "assistant",
+        },
+      ],
+      "gen_ai.request.max_tokens": {},
+      "gen_ai.request.model": "gpt-4.1",
+      "gen_ai.request.seed": {},
+      "gen_ai.request.stop_sequences": {},
+      "gen_ai.request.temperature": {},
+      "gen_ai.request.top_k": {},
+      "gen_ai.request.top_p": {},
+      "gen_ai.response.finish_reasons": {},
+      "gen_ai.response.id": "resp_0eeed6a040a8611b0069241260f58c81948cd87299c4d31154",
+      "gen_ai.response.model": "gpt-4.1",
+      "gen_ai.system": "openai",
+      "gen_ai.system_instructions": {},
+      "gen_ai.usage.cache_audio_read_tokens": {},
+      "gen_ai.usage.cache_read_tokens": 0,
+      "gen_ai.usage.cache_write_tokens": {},
+      "gen_ai.usage.input_audio_tokens": {},
+      "gen_ai.usage.input_tokens": 21,
+      "gen_ai.usage.output_audio_tokens": {},
+      "gen_ai.usage.output_tokens": 32,
+      "http.request.body.text": "{
+  "model": "gpt-4.1",
+  "instructions": "reply concisely",
+  "input": "what color is the sky?"
+}",
+      "http.response.body.text": "{"id":"resp_0eeed6a040a8611b0069241260f58c81948cd87299c4d31154","object":"response","created_at":1763971680,"status":"completed","background":false,"content_filters":null,"error":null,"incomplete_details":null,"instructions":"reply concisely","max_output_tokens":null,"max_tool_calls":null,"model":"gpt-4.1","output":[{"id":"msg_0eeed6a040a8611b006924126129cc819495f20c3473dd468d","type":"message","status":"completed","content":[{"type":"output_text","annotations":[],"logprobs":[],"text":"The sky is usually blue during the day, but it can appear red, orange, pink, or purple at sunrise and sunset, and black at night."}],"role":"assistant"}],"parallel_tool_calls":true,"previous_response_id":null,"prompt_cache_key":null,"reasoning":{"effort":null,"summary":null},"safety_identifier":null,"service_tier":"default","store":true,"temperature":1,"text":{"format":{"type":"text"},"verbosity":"medium"},"tool_choice":"auto","tools":[],"top_logprobs":0,"top_p":1,"truncation":"disabled","usage":{"input_tokens":21,"input_tokens_details":{"cached_tokens":0},"output_tokens":32,"output_tokens_details":{"reasoning_tokens":0},"total_tokens":53,"pydantic_ai_gateway":{"cost_estimate":0.000298}},"user":null,"metadata":{}}",
+      "http.response.status_code": 200,
+      "logfire.json_schema": "{"type":"object","properties":{"gen_ai.operation.name":{"type":"string"},"gen_ai.request.model":{"type":"string"},"gen_ai.system":{"type":"string"},"gen_ai.request.max_tokens":{},"gen_ai.request.top_k":{},"gen_ai.request.top_p":{},"gen_ai.request.temperature":{},"gen_ai.request.stop_sequences":{},"gen_ai.request.seed":{},"gen_ai.response.finish_reasons":{},"gen_ai.response.id":{"type":"string"},"gen_ai.input.messages":{},"gen_ai.output.messages":{},"gen_ai.system_instructions":{},"http.response.status_code":{"type":"number"},"http.request.body.text":{"type":"string"},"http.response.body.text":{"type":"string"},"gen_ai.response.model":{"type":"string"},"gen_ai.usage.input_tokens":{"type":"number"},"gen_ai.usage.cache_read_tokens":{"type":"number"},"gen_ai.usage.cache_write_tokens":{},"gen_ai.usage.output_tokens":{"type":"number"},"gen_ai.usage.input_audio_tokens":{},"gen_ai.usage.cache_audio_read_tokens":{},"gen_ai.usage.output_audio_tokens":{}}}",
+      "logfire.level_num": 9,
+      "logfire.msg": "chat gpt-4.1",
+    },
+    "events": [],
+    "kind": 1,
+    "links": [],
+    "name": "chat gpt-4.1",
+    "parentSpanId": undefined,
+    "resource": {
+      "service.name": "PAIG",
+      "service.version": "test",
+    },
+    "scope": "pydantic-ai-gateway",
+    "status": {
+      "code": 1,
+    },
+  },
+]
+`;

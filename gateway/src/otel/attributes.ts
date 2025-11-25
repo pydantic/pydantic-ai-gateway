@@ -43,12 +43,16 @@ export function genAiOtelAttributes(
   return [spanName, attributes, level]
 }
 
+const SENSITIVE_HEADERS = new Set(['authorization', 'x-api-key'])
+
 export function attributesFromRequest(request: Request): Attributes {
   return {
     'http.request.method': request.method,
     'url.full': request.url,
     ...Object.fromEntries(
-      Array.from(request.headers.entries()).map(([name, value]) => [`http.request.header.${name}`, value]),
+      Array.from(request.headers.entries())
+        .filter(([name]) => !SENSITIVE_HEADERS.has(name.toLowerCase()))
+        .map(([name, value]) => [`http.request.header.${name}`, value]),
     ),
   }
 }

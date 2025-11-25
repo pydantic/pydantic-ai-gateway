@@ -1,4 +1,4 @@
-import * as logfire from '@pydantic/logfire-api'
+import logfire from 'logfire'
 import type { ModelAPI } from '../api'
 import { AnthropicAPI } from '../api/anthropic'
 import { ConverseAPI } from '../api/bedrock'
@@ -17,17 +17,29 @@ export class BedrockProvider extends DefaultProviderProxy {
     if (this.providerProxy.baseUrl) {
       const pathWithoutQuery = this.restOfPath.split('?')[0]
       if (pathWithoutQuery === 'v1/messages' && this.requestModel) {
-        // TODO(Marcelo): This should be replaced by David's work on model name replacement.
-        const model =
-          this.requestModel === 'claude-sonnet-4' ? 'us.anthropic.claude-sonnet-4-5-20250929-v1:0' : this.requestModel
+        const model = this.replaceModel(this.requestModel)
         // TODO(Marcelo): We need to test this!
         const path = `model/${model}/${this.shouldStream ? 'invoke-with-response-stream' : 'invoke'}`
         return `${this.providerProxy.baseUrl}/${path}`
+      } else {
+        // Extract model and API endpoint from path, apply replacement, and rebuild URL
+        const m = this.restOfPath.match(/model\/(.+?)\/(converse|invoke)/)
+        if (m) {
+          const model = m[1]
+          const api = m[2]
+          const replacedModel = model && this.replaceModel(model)
+          const newPath = this.restOfPath.replace(/model\/(.+?)\/(converse|invoke)/, `model/${replacedModel}/${api}`)
+          return `${this.providerProxy.baseUrl}/${newPath}`
+        }
+        return `${this.providerProxy.baseUrl}/${this.restOfPath}`
       }
-      return `${this.providerProxy.baseUrl}/${this.restOfPath}`
     } else {
       return { error: 'baseUrl is required for Bedrock Provider' }
     }
+  }
+
+  protected getModelNameRemappings(): { searchValue: string; replaceValue: string }[] {
+    return []
   }
 
   protected modelAPI(): ModelAPI {
@@ -91,8 +103,13 @@ export class BedrockProvider extends DefaultProviderProxy {
    */
   protected inferModel(url: string): string | null {
     const m = url.match(/model\/(.+?)\/(converse|invoke)/)
-    const model = m?.[1]
+    let model = m?.[1]
     const api = m?.[2]
+
+    if (typeof model === 'string') {
+      // Do the substitution first here so that we can insert the `anthropic.` that we look for below if we want to
+      model = this.replaceModel(model)
+    }
 
     if (api === 'invoke' && model?.startsWith('anthropic.')) {
       this.flavor = 'anthropic'

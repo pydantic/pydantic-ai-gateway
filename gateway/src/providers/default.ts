@@ -5,9 +5,9 @@ import {
   type Usage,
   type Provider as UsageProvider,
 } from '@pydantic/genai-prices'
-import * as logfire from '@pydantic/logfire-api'
 import { EventStreamCodec } from '@smithy/eventstream-codec'
 import { createParser, type EventSourceMessage } from 'eventsource-parser'
+import logfire from 'logfire'
 
 import type { GatewayOptions } from '..'
 import type { ModelAPI } from '../api'
@@ -203,20 +203,37 @@ export class DefaultProviderProxy {
   protected async prepRequest(): Promise<Prepare | ProxyInvalidRequest> {
     const requestBodyText = await this.request.text()
     let requestBodyData: JsonData
-    let requestModel: string | undefined
+    let requestModel: unknown
     try {
       requestBodyData = JSON.parse(requestBodyText) as JsonData
       if ('model' in requestBodyData) {
-        requestModel = requestBodyData.model as string
+        requestModel = requestBodyData.model
       }
     } catch {
       return { error: 'invalid request JSON' }
     }
-    if (!requestModel || typeof requestModel === 'string') {
-      return { requestBodyText, requestBodyData, requestModel }
+    if (requestModel === undefined || typeof requestModel === 'string') {
+      return { requestBodyText, requestBodyData, requestModel: requestModel && this.replaceModel(requestModel) }
     } else {
       return { error: 'invalid request, "model" should be a string' }
     }
+  }
+
+  protected replaceModel(model: string): string {
+    for (const replacement of this.getModelNameRemappings()) {
+      const regexp = new RegExp(replacement.searchValue)
+      if (model.match(regexp)) {
+        model = model.replace(regexp, replacement.replaceValue)
+        break // stop trying to replace after the first match
+      }
+    }
+    return model
+  }
+
+  protected getModelNameRemappings(): { searchValue: string; replaceValue: string }[] {
+    // if we put an attribute on the providerProxy, we could do:
+    // return this.providerProxy.modelNameReplacements ?? []
+    return []
   }
 
   protected fetch(url: string, init: RequestInit): Promise<Response> {
@@ -309,6 +326,10 @@ export class DefaultProviderProxy {
       return requestHeadersError
     }
 
+    if (this.isWhitelistedEndpoint()) {
+      return await this.handleWhitelistedEndpoint(requestHeaders)
+    }
+
     const prepResult = await this.prepRequest()
     if ('error' in prepResult) {
       return prepResult
@@ -330,19 +351,6 @@ export class DefaultProviderProxy {
     }
 
     const response = await this.fetch(url, { method, headers: requestHeaders, body: requestBodyText })
-
-    if (this.isWhitelistedEndpoint()) {
-      this.otelSpan.end(
-        `${this.request.method} ${this.restOfPath}`,
-        {
-          ...attributesFromRequest(this.request),
-          ...attributesFromResponse(response),
-          'http.request.body.text': requestBodyText,
-        },
-        { level: 'info' },
-      )
-      return { response }
-    }
 
     // Each provider should be able to modify the response headers, e.g. remove openai org
     const responseHeaders = this.responseHeaders(response.headers)
@@ -559,6 +567,23 @@ export class DefaultProviderProxy {
 
   protected isWhitelistedEndpoint(): boolean {
     return false
+  }
+
+  protected async handleWhitelistedEndpoint(
+    headers: Headers,
+  ): Promise<ProxyWhitelistedEndpoint | ProxyInvalidRequest> {
+    const url = this.url()
+    if (typeof url === 'object') {
+      return url
+    }
+    const response = await this.fetch(url, { method: this.method(), headers, body: this.request.body })
+    this.otelSpan.end(
+      `${this.request.method} ${this.restOfPath}`,
+      { ...attributesFromRequest(this.request), ...attributesFromResponse(response) },
+      { level: 'info' },
+    )
+    // TODO(Marcelo): Should we call `responseHeaders` here to filter some headers?
+    return { response }
   }
 
   protected otelAttributes(requestBody: JsonData, responseBody: JsonData): GenAIAttributes {

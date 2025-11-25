@@ -20,6 +20,8 @@ GROQ_BASE_URL = 'https://api.groq.com'
 ANTHROPIC_BASE_URL = 'https://api.anthropic.com'
 BEDROCK_BASE_URL = 'https://bedrock-runtime.us-east-1.amazonaws.com'
 GOOGLE_BASE_URL = 'https://aiplatform.googleapis.com'
+# The Azure URL is not a secret, we can commit it.
+AZURE_BASE_URL = 'https://marcelo-0665-resource.openai.azure.com/openai/v1'
 
 current_file_dir = pathlib.Path(__file__).parent
 
@@ -55,6 +57,12 @@ async def proxy(request: Request) -> Response:
         with vcr.use_cassette(cassette_name('openai', vcr_suffix)):  # type: ignore[reportUnknownReturnType]
             headers = {'Authorization': auth_header, 'content-type': 'application/json'}
             response = await client.post(url, content=body, headers=headers)
+    elif provider == 'azure':
+        client = cast(httpx.AsyncClient, request.scope['state']['httpx_client'])
+        url = AZURE_BASE_URL + request.url.path[len('/azure') :]
+        with vcr.use_cassette(cassette_name('azure', vcr_suffix)):  # type: ignore[reportUnknownReturnType]
+            headers = {'Authorization': auth_header, 'content-type': 'application/json'}
+            response = await client.post(url, content=body, headers=headers)
     elif provider == 'groq':
         client = cast(httpx.AsyncClient, request.scope['state']['httpx_client'])
         url = GROQ_BASE_URL + request.url.path[len('/groq') :]
@@ -81,10 +89,11 @@ async def proxy(request: Request) -> Response:
                 anthropic_beta_headers = {'anthropic-beta': anthropic_beta}
 
             headers = {
-                'x-api-key': api_key,
-                'content-type': 'application/json',
+                'content-type': 'application/json' if not url.endswith('files') else 'multipart/form-data',
                 'anthropic-version': request.headers.get('anthropic-version', '2023-06-01'),
+                'accept-encoding': request.headers.get('accept-encoding', 'deflate'),
                 **anthropic_beta_headers,
+                **({'authorization': auth_header} if url.endswith('chat/completions') else {'x-api-key': api_key}),
             }
             response = await client.post(url, content=body, headers=headers)
     elif provider == 'google-vertex':
@@ -159,5 +168,7 @@ def select_provider(request: Request) -> str:
         return 'anthropic'
     elif request.url.path.startswith('/google-vertex'):
         return 'google-vertex'
+    elif request.url.path.startswith('/azure'):
+        return 'azure'
     else:
         raise HTTPException(status_code=404, detail=f'Path {request.url.path} not supported')

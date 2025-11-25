@@ -472,6 +472,114 @@ The calculation shows that the values in this dataset deviate from the mean by a
 ]
 `;
 
+exports[`anthropic > should call anthropic via gateway with chat completion > llm 1`] = `
+{
+  "choices": [
+    {
+      "finish_reason": "stop",
+      "index": 0,
+      "message": {
+        "content": "The capital of France is Paris.",
+        "role": "assistant",
+      },
+    },
+  ],
+  "created": 1763739185,
+  "id": "msg_013FVXvpG2mDBkofKaYBkWMm",
+  "model": "claude-sonnet-4-5-20250929",
+  "object": "chat.completion",
+  "usage": {
+    "completion_tokens": 10,
+    "prompt_tokens": 14,
+    "pydantic_ai_gateway": {
+      "cost_estimate": 0.00019199999999999998,
+    },
+    "total_tokens": 24,
+  },
+}
+`;
+
+exports[`anthropic > should call anthropic via gateway with chat completion > span 1`] = `
+[
+  {
+    "attributes": {
+      "gen_ai.input.messages": [
+        {
+          "parts": [
+            {
+              "content": "What is the capital of France?",
+              "type": "text",
+            },
+          ],
+          "role": "user",
+        },
+      ],
+      "gen_ai.operation.name": "chat",
+      "gen_ai.output.messages": [
+        {
+          "finish_reason": "stop",
+          "parts": [
+            {
+              "content": "The capital of France is Paris.",
+              "type": "text",
+            },
+          ],
+          "role": "assistant",
+        },
+      ],
+      "gen_ai.request.max_tokens": {},
+      "gen_ai.request.model": "claude-sonnet-4-5",
+      "gen_ai.request.seed": {},
+      "gen_ai.request.stop_sequences": {},
+      "gen_ai.request.temperature": {},
+      "gen_ai.request.top_k": {},
+      "gen_ai.request.top_p": {},
+      "gen_ai.response.finish_reasons": [
+        "stop",
+      ],
+      "gen_ai.response.id": "msg_013FVXvpG2mDBkofKaYBkWMm",
+      "gen_ai.response.model": "claude-sonnet-4-5-20250929",
+      "gen_ai.system": "anthropic",
+      "gen_ai.system_instructions": {},
+      "gen_ai.usage.cache_audio_read_tokens": {},
+      "gen_ai.usage.cache_read_tokens": {},
+      "gen_ai.usage.cache_write_tokens": {},
+      "gen_ai.usage.input_audio_tokens": {},
+      "gen_ai.usage.input_tokens": 14,
+      "gen_ai.usage.output_audio_tokens": {},
+      "gen_ai.usage.output_tokens": 10,
+      "http.request.body.text": "{
+  "model": "claude-sonnet-4-5",
+  "messages": [
+    {
+      "role": "user",
+      "content": "What is the capital of France?"
+    }
+  ]
+}",
+      "http.response.body.text": "{"id":"msg_013FVXvpG2mDBkofKaYBkWMm","choices":[{"finish_reason":"stop","index":0,"message":{"role":"assistant","content":"The capital of France is Paris."}}],"created":1763739185,"model":"claude-sonnet-4-5-20250929","object":"chat.completion","usage":{"completion_tokens":10,"prompt_tokens":14,"total_tokens":24,"pydantic_ai_gateway":{"cost_estimate":0.00019199999999999998}}}",
+      "http.response.status_code": 200,
+      "logfire.json_schema": "{"type":"object","properties":{"gen_ai.operation.name":{"type":"string"},"gen_ai.request.model":{"type":"string"},"gen_ai.system":{"type":"string"},"gen_ai.request.max_tokens":{},"gen_ai.request.top_k":{},"gen_ai.request.top_p":{},"gen_ai.request.temperature":{},"gen_ai.request.stop_sequences":{},"gen_ai.request.seed":{},"gen_ai.response.finish_reasons":{},"gen_ai.response.id":{"type":"string"},"gen_ai.input.messages":{},"gen_ai.output.messages":{},"gen_ai.system_instructions":{},"http.response.status_code":{"type":"number"},"http.request.body.text":{"type":"string"},"http.response.body.text":{"type":"string"},"gen_ai.response.model":{"type":"string"},"gen_ai.usage.input_tokens":{"type":"number"},"gen_ai.usage.cache_read_tokens":{},"gen_ai.usage.cache_write_tokens":{},"gen_ai.usage.output_tokens":{"type":"number"},"gen_ai.usage.input_audio_tokens":{},"gen_ai.usage.cache_audio_read_tokens":{},"gen_ai.usage.output_audio_tokens":{}}}",
+      "logfire.level_num": 9,
+      "logfire.msg": "chat claude-sonnet-4-5-20250929",
+    },
+    "events": [],
+    "kind": 1,
+    "links": [],
+    "name": "chat claude-sonnet-4-5-20250929",
+    "parentSpanId": undefined,
+    "resource": {
+      "service.name": "PAIG",
+      "service.version": "test",
+    },
+    "scope": "pydantic-ai-gateway",
+    "status": {
+      "code": 1,
+    },
+  },
+]
+`;
+
 exports[`anthropic > should call anthropic via gateway with stream > chunks 1`] = `
 [
   {
@@ -552,7 +660,6 @@ exports[`anthropic > should call anthropic via gateway with stream > span 1`] = 
       "gen_ai.usage.output_tokens": 10,
       "http.request.header.accept": "application/json",
       "http.request.header.anthropic-version": "2023-06-01",
-      "http.request.header.authorization": "Bearer healthy",
       "http.request.header.content-type": "application/json",
       "http.request.header.user-agent": "Anthropic/JS 0.62.0",
       "http.request.header.x-stainless-arch": "unknown",
@@ -568,7 +675,7 @@ exports[`anthropic > should call anthropic via gateway with stream > span 1`] = 
       "http.response.header.server": "uvicorn",
       "http.response.header.transfer-encoding": "chunked",
       "http.response.status_code": 200,
-      "logfire.json_schema": "{"type":"object","properties":{"gen_ai.system":{"type":"string"},"gen_ai.operation.name":{"type":"string"},"gen_ai.request.model":{"type":"string"},"gen_ai.request.max_tokens":{"type":"number"},"gen_ai.response.model":{"type":"string"},"gen_ai.response.id":{"type":"string"},"gen_ai.usage.input_tokens":{"type":"number"},"gen_ai.usage.cache_read_tokens":{"type":"number"},"gen_ai.usage.cache_write_tokens":{"type":"number"},"gen_ai.usage.output_tokens":{"type":"number"},"http.request.method":{"type":"string"},"url.full":{"type":"string"},"http.request.header.accept":{"type":"string"},"http.request.header.anthropic-version":{"type":"string"},"http.request.header.authorization":{"type":"string"},"http.request.header.content-type":{"type":"string"},"http.request.header.user-agent":{"type":"string"},"http.request.header.x-stainless-arch":{"type":"string"},"http.request.header.x-stainless-lang":{"type":"string"},"http.request.header.x-stainless-os":{"type":"string"},"http.request.header.x-stainless-package-version":{"type":"string"},"http.request.header.x-stainless-retry-count":{"type":"string"},"http.request.header.x-stainless-runtime":{"type":"string"},"http.request.header.x-stainless-runtime-version":{"type":"string"},"http.request.header.x-stainless-timeout":{"type":"string"},"http.response.status_code":{"type":"number"},"http.response.header.content-type":{"type":"string"},"http.response.header.server":{"type":"string"},"http.response.header.transfer-encoding":{"type":"string"}}}",
+      "logfire.json_schema": "{"type":"object","properties":{"gen_ai.system":{"type":"string"},"gen_ai.operation.name":{"type":"string"},"gen_ai.request.model":{"type":"string"},"gen_ai.request.max_tokens":{"type":"number"},"gen_ai.response.model":{"type":"string"},"gen_ai.response.id":{"type":"string"},"gen_ai.usage.input_tokens":{"type":"number"},"gen_ai.usage.cache_read_tokens":{"type":"number"},"gen_ai.usage.cache_write_tokens":{"type":"number"},"gen_ai.usage.output_tokens":{"type":"number"},"http.request.method":{"type":"string"},"url.full":{"type":"string"},"http.request.header.accept":{"type":"string"},"http.request.header.anthropic-version":{"type":"string"},"http.request.header.content-type":{"type":"string"},"http.request.header.user-agent":{"type":"string"},"http.request.header.x-stainless-arch":{"type":"string"},"http.request.header.x-stainless-lang":{"type":"string"},"http.request.header.x-stainless-os":{"type":"string"},"http.request.header.x-stainless-package-version":{"type":"string"},"http.request.header.x-stainless-retry-count":{"type":"string"},"http.request.header.x-stainless-runtime":{"type":"string"},"http.request.header.x-stainless-runtime-version":{"type":"string"},"http.request.header.x-stainless-timeout":{"type":"string"},"http.response.status_code":{"type":"number"},"http.response.header.content-type":{"type":"string"},"http.response.header.server":{"type":"string"},"http.response.header.transfer-encoding":{"type":"string"}}}",
       "logfire.level_num": 9,
       "logfire.msg": "chat claude-opus-4-1-20250805",
       "url.full": "https://example.com/anthropic/v1/messages?beta=true",
@@ -600,11 +707,9 @@ exports[`anthropic > should whitelist /v1/messages/count_tokens endpoint > span 
 [
   {
     "attributes": {
-      "http.request.body.text": "{"model":"claude-sonnet-4-20250514","messages":[{"role":"user","content":"What is the capital of France?"}]}",
       "http.request.header.accept": "application/json",
       "http.request.header.anthropic-beta": "token-counting-2024-11-01",
       "http.request.header.anthropic-version": "2023-06-01",
-      "http.request.header.authorization": "Bearer healthy",
       "http.request.header.content-type": "application/json",
       "http.request.header.user-agent": "Anthropic/JS 0.62.0",
       "http.request.header.x-stainless-arch": "unknown",
@@ -619,7 +724,7 @@ exports[`anthropic > should whitelist /v1/messages/count_tokens endpoint > span 
       "http.response.header.content-type": "application/json",
       "http.response.header.server": "uvicorn",
       "http.response.status_code": 200,
-      "logfire.json_schema": "{"type":"object","properties":{"http.request.method":{"type":"string"},"url.full":{"type":"string"},"http.request.header.accept":{"type":"string"},"http.request.header.anthropic-beta":{"type":"string"},"http.request.header.anthropic-version":{"type":"string"},"http.request.header.authorization":{"type":"string"},"http.request.header.content-type":{"type":"string"},"http.request.header.user-agent":{"type":"string"},"http.request.header.x-stainless-arch":{"type":"string"},"http.request.header.x-stainless-lang":{"type":"string"},"http.request.header.x-stainless-os":{"type":"string"},"http.request.header.x-stainless-package-version":{"type":"string"},"http.request.header.x-stainless-retry-count":{"type":"string"},"http.request.header.x-stainless-runtime":{"type":"string"},"http.request.header.x-stainless-runtime-version":{"type":"string"},"http.response.status_code":{"type":"number"},"http.response.header.content-length":{"type":"string"},"http.response.header.content-type":{"type":"string"},"http.response.header.server":{"type":"string"},"http.request.body.text":{"type":"string"}}}",
+      "logfire.json_schema": "{"type":"object","properties":{"http.request.method":{"type":"string"},"url.full":{"type":"string"},"http.request.header.accept":{"type":"string"},"http.request.header.anthropic-beta":{"type":"string"},"http.request.header.anthropic-version":{"type":"string"},"http.request.header.content-type":{"type":"string"},"http.request.header.user-agent":{"type":"string"},"http.request.header.x-stainless-arch":{"type":"string"},"http.request.header.x-stainless-lang":{"type":"string"},"http.request.header.x-stainless-os":{"type":"string"},"http.request.header.x-stainless-package-version":{"type":"string"},"http.request.header.x-stainless-retry-count":{"type":"string"},"http.request.header.x-stainless-runtime":{"type":"string"},"http.request.header.x-stainless-runtime-version":{"type":"string"},"http.response.status_code":{"type":"number"},"http.response.header.content-length":{"type":"string"},"http.response.header.content-type":{"type":"string"},"http.response.header.server":{"type":"string"}}}",
       "logfire.level_num": 9,
       "logfire.msg": "POST v1/messages/count_tokens?beta=true",
       "url.full": "https://example.com/anthropic/v1/messages/count_tokens?beta=true",

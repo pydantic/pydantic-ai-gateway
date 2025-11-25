@@ -54,6 +54,7 @@ export namespace IDS {
   export const keyDisabled = 5
   export const keyTinyLimit = 6
   export const keyFallbackTest = 7
+  export const keyFallbackAnthropicGoogleVertex = 8
 }
 
 class TestKeysDB extends KeysDbD1 {
@@ -70,6 +71,13 @@ class TestKeysDB extends KeysDbD1 {
         providerId: 'test',
         injectCost: true,
         credentials: 'test',
+      },
+      {
+        key: 'azure',
+        baseUrl: 'http://localhost:8005/azure',
+        providerId: 'azure',
+        injectCost: true,
+        credentials: env.AZURE_API_KEY,
       },
       {
         key: 'openai',
@@ -204,6 +212,31 @@ class TestKeysDB extends KeysDbD1 {
             },
           ],
           routingGroups: { test: [{ key: 'test1' }, { key: 'test2' }] },
+        }
+      case 'fallback-anthropic-google-vertex':
+        return {
+          id: IDS.keyFallbackAnthropicGoogleVertex,
+          project: IDS.projectDefault,
+          org: IDS.orgDefault,
+          key,
+          status: 'active',
+          providers: [
+            {
+              key: 'anthropic',
+              baseUrl: 'http://localhost:8005/anthropic',
+              providerId: 'anthropic',
+              injectCost: true,
+              credentials: this.allProviders[4]!.credentials,
+            },
+            {
+              key: 'google-vertex',
+              baseUrl: 'http://localhost:8005/google-vertex',
+              providerId: 'google-vertex',
+              injectCost: true,
+              credentials: this.allProviders[6]!.credentials,
+            },
+          ],
+          routingGroups: { anthropic: [{ key: 'anthropic' }, { key: 'google-vertex' }] },
         }
       default:
         return null

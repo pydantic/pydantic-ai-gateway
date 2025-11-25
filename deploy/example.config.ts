@@ -2,7 +2,7 @@ import { env } from 'cloudflare:workers'
 import type { Config } from '@deploy/types'
 
 // can be whatever you want, just used to make linking apiKeys to providers typesafe.
-type ProviderKeys = 'a' | 'b' | 'c' | 'd' | 'e' | 'huggingface'
+type ProviderKeys = 'openai' | 'anthropic' | 'google-vertex' | 'bedrock' | 'groq' | 'azure' | 'huggingface'
 
 // projects, users and keys must have numeric keys, using constants here to make it easier to understand
 // of course, keys must be unique within a type (e.g. project ids must be unique) but users and projects can have the same id
@@ -35,10 +35,34 @@ export const config: Config<ProviderKeys> = {
       spendingLimitMonthly: 100,
     },
   },
+  // routing groups for load balancing and fallback
+  routingGroups: {
+    anthropic: [{ key: 'anthropic' }, { key: 'google-vertex' }, { key: 'bedrock' }],
+    gemini: [{ key: 'google-vertex' }],
+    // Example routing group with priority and weight
+    // Higher priority providers are tried first; within same priority, weight controls probability
+    'openai-with-fallback': [
+      { key: 'openai', priority: 10, weight: 1 }, // Try OpenAI first
+      { key: 'groq', priority: 5, weight: 1 }, // Fall back to Groq if OpenAI fails
+    ],
+    // Example routing group with weighted load balancing (same priority, different weights)
+    'balanced-llm': [
+      { key: 'openai', weight: 3 }, // OpenAI gets 3x the traffic
+      { key: 'groq', weight: 1 }, // Groq gets 1x the traffic
+    ],
+    // Example simple routing group (backward compatible - no priority/weight specified)
+    'all-providers': [
+      { key: 'openai' },
+      { key: 'groq' },
+      { key: 'google-vertex' },
+      { key: 'anthropic' },
+      { key: 'bedrock' },
+    ],
+  },
   // providers
   providers: {
     // you would use this provider by using the model id `gateway/openai-chat:gpt-5` in Pydantic AI
-    a: {
+    openai: {
       // providerId decides on the logic used to process the request and response
       providerId: 'openai',
       // baseUrl decides what URL the request will be forwarded to
@@ -48,20 +72,27 @@ export const config: Config<ProviderKeys> = {
       // credentials are used by the ProviderProxy to authenticate the forwarded request
       credentials: env.OPENAI_API_KEY,
     },
-    b: { providerId: 'groq', baseUrl: 'https://api.groq.com', injectCost: true, credentials: env.GROQ_API_KEY },
-    c: {
+    azure: {
+      providerId: 'azure',
+      // NOTE: For now, you need to specify the family of models you want to use.
+      baseUrl: 'https://marcelo-0665-resource.openai.azure.com/openai/v1',
+      injectCost: true,
+      credentials: env.AZURE_API_KEY,
+    },
+    groq: { providerId: 'groq', baseUrl: 'https://api.groq.com', injectCost: true, credentials: env.GROQ_API_KEY },
+    'google-vertex': {
       providerId: 'google-vertex',
       baseUrl: 'https://us-central1-aiplatform.googleapis.com',
       injectCost: true,
       credentials: env.GOOGLE_SERVICE_ACCOUNT_KEY,
     },
-    d: {
+    anthropic: {
       providerId: 'anthropic',
       baseUrl: 'https://api.anthropic.com',
       injectCost: true,
       credentials: env.ANTHROPIC_API_KEY,
     },
-    e: {
+    bedrock: {
       providerId: 'bedrock',
       baseUrl: 'https://bedrock-runtime.us-east-1.amazonaws.com',
       injectCost: true,
@@ -69,26 +100,10 @@ export const config: Config<ProviderKeys> = {
     },
     huggingface: {
       providerId: 'huggingface',
-      baseUrl: 'https://api-inference.huggingface.co',
+      baseUrl: 'https://router.huggingface.co/v1',
       injectCost: true,
       credentials: env.HF_TOKEN,
     },
-  },
-  // routing groups for load balancing and fallback
-  routingGroups: {
-    // Example routing group with priority and weight
-    // Higher priority providers are tried first; within same priority, weight controls probability
-    'openai-with-fallback': [
-      { key: 'a', priority: 10, weight: 1 }, // Try OpenAI first
-      { key: 'b', priority: 5, weight: 1 }, // Fall back to Groq if OpenAI fails
-    ],
-    // Example routing group with weighted load balancing (same priority, different weights)
-    'balanced-llm': [
-      { key: 'a', weight: 3 }, // OpenAI gets 3x the traffic
-      { key: 'b', weight: 1 }, // Groq gets 1x the traffic
-    ],
-    // Example simple routing group (backward compatible - no priority/weight specified)
-    'all-providers': [{ key: 'a' }, { key: 'b' }, { key: 'c' }, { key: 'd' }],
   },
   // individual apiKeys
   apiKeys: {
@@ -99,7 +114,7 @@ export const config: Config<ProviderKeys> = {
       // user is optional
       user: USER_SAMUEL_ID,
       // providers is required and identifies which providers this apiKey is allowed to use
-      providers: ['a', 'b'],
+      providers: ['openai', 'groq'],
       // you can also optionally add limits to a single key here
       spendingLimitDaily: 1,
       spendingLimitWeekly: 5,

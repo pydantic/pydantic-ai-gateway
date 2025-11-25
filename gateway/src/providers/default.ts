@@ -173,7 +173,10 @@ export class DefaultProviderProxy {
   }
 
   protected usageProvider(): UsageProvider | undefined {
-    return findProvider({ providerId: this.providerId() })
+    console.log('this.request.url', this.request.url)
+    const provider = findProvider({ providerId: this.providerId(), providerApiUrl: this.request.url })
+    console.log('provider', provider)
+    return provider
   }
 
   protected method(): string {
@@ -204,6 +207,7 @@ export class DefaultProviderProxy {
     const requestBodyText = await this.request.text()
     let requestBodyData: JsonData
     let requestModel: unknown
+    console.log('requestBodyText', requestBodyText)
     try {
       requestBodyData = JSON.parse(requestBodyText) as JsonData
       if ('model' in requestBodyData) {

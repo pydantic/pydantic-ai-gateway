@@ -13,28 +13,24 @@ export class BedrockProvider extends DefaultProviderProxy {
   // NOTE: This should be moved to the `DefaultProviderProxy` class.
   protected shouldStream: boolean = false
 
-  url() {
-    if (this.providerProxy.baseUrl) {
-      const pathWithoutQuery = this.restOfPath.split('?')[0]
-      if (pathWithoutQuery === 'v1/messages' && this.requestModel) {
-        const model = this.replaceModel(this.requestModel)
-        // TODO(Marcelo): We need to test this!
-        const path = `model/${model}/${this.shouldStream ? 'invoke-with-response-stream' : 'invoke'}`
-        return `${this.providerProxy.baseUrl}/${path}`
-      } else {
-        // Extract model and API endpoint from path, apply replacement, and rebuild URL
-        const m = this.restOfPath.match(/model\/(.+?)\/(converse|invoke)/)
-        if (m) {
-          const model = m[1]
-          const api = m[2]
-          const replacedModel = model && this.replaceModel(model)
-          const newPath = this.restOfPath.replace(/model\/(.+?)\/(converse|invoke)/, `model/${replacedModel}/${api}`)
-          return `${this.providerProxy.baseUrl}/${newPath}`
-        }
-        return `${this.providerProxy.baseUrl}/${this.restOfPath}`
-      }
+  protected url() {
+    const pathWithoutQuery = this.restOfPath.split('?')[0]
+    if (pathWithoutQuery === 'v1/messages' && this.requestModel) {
+      const model = this.replaceModel(this.requestModel)
+      // TODO(Marcelo): We need to test this!
+      const path = `model/${model}/${this.shouldStream ? 'invoke-with-response-stream' : 'invoke'}`
+      return `${this.providerProxy.baseUrl}/${path}`
     } else {
-      return { error: 'baseUrl is required for Bedrock Provider' }
+      // Extract model and API endpoint from path, apply replacement, and rebuild URL
+      const m = this.restOfPath.match(/model\/(.+?)\/(converse|invoke)/)
+      if (m) {
+        const model = m[1]
+        const api = m[2]
+        const replacedModel = model && this.replaceModel(model)
+        const newPath = this.restOfPath.replace(/model\/(.+?)\/(converse|invoke)/, `model/${replacedModel}/${api}`)
+        return `${this.providerProxy.baseUrl}/${newPath}`
+      }
+      return `${this.providerProxy.baseUrl}/${this.restOfPath}`
     }
   }
 

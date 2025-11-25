@@ -6,8 +6,6 @@ import type { ConverseRequest, ConverseResponse, ConverseStreamOutput } from '@a
 import { BaseAPI, type ExtractedRequest, type ExtractedResponse, type ExtractorConfig } from './base'
 
 export class ConverseAPI extends BaseAPI<ConverseRequest, ConverseResponse, ConverseStreamOutput> {
-  defaultBaseUrl = 'https://bedrock-runtime.us-east-1.amazonaws.com'
-
   requestStopSequences = (requestBody: ConverseRequest): string[] | undefined => {
     return requestBody.inferenceConfig?.stopSequences
   }

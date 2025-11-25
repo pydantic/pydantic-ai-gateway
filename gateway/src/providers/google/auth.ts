@@ -43,7 +43,7 @@ export function getServiceAccount(credentials: string): ServiceAccount | ProxyIn
   return { client_email: sa.client_email, private_key: sa.private_key, project_id: sa.project_id }
 }
 
-interface ServiceAccount {
+export interface ServiceAccount {
   client_email: string
   private_key: string
   project_id: string

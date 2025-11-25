@@ -4,32 +4,56 @@ import { GoogleAPI, type GoogleRequest } from '../../api/google'
 import { DefaultProviderProxy, type ProxyInvalidRequest } from '../default'
 import { authToken, getServiceAccount } from './auth'
 
+// Regex with capture groups: version (optional), publisher (optional), model
+// Path may or may not start with / and may or may not have version
+const GOOGLE_PATH_REGEX =
+  /^\/?(?:(v\d+(?:beta\d*)?)\/)?(?:projects\/[^/]+\/locations\/[^/]+\/)?(?:publishers\/([^/]+)\/)?models\/(.+):(.*)$/
+
 export class GoogleVertexProvider extends DefaultProviderProxy {
-  protected usageField = 'usageMetadata'
   flavor: 'default' | 'anthropic' = 'default'
+
+  protected projectId: string | null = null
+  protected region: string | null = null
+  protected extractedPath: Partial<{ version: string; publisher: string; model: string; api: string }> = {}
 
   // NOTE: This should be moved to the `DefaultProviderProxy` class.
   protected shouldStream: boolean = false
 
-  url() {
-    if (this.providerProxy.baseUrl) {
-      const serviceAccountResult = getServiceAccount(this.providerProxy.credentials)
-      if ('error' in serviceAccountResult) {
-        return serviceAccountResult
-      }
-      const projectId = serviceAccountResult.project_id
-      const region = regionFromUrl(this.providerProxy.baseUrl)
-      if (!region) {
-        return { error: 'Unable to extract region from URL' }
-      }
-      const path = this.replacePath(projectId, region)
-      if (!path) {
+  // NOTE: This should be moved to a constructor.
+  protected check(): ProxyInvalidRequest | undefined {
+    const serviceAccountResult = getServiceAccount(this.providerProxy.credentials)
+    if ('error' in serviceAccountResult) {
+      return serviceAccountResult
+    }
+    const projectId = serviceAccountResult.project_id
+    const region = regionFromUrl(this.providerProxy.baseUrl)
+    if (!region) {
+      return { error: 'Unable to extract region from URL' }
+    }
+    this.projectId = projectId
+    this.region = region
+
+    const pathWithoutQuery = this.restOfPath.split('?')[0]
+    if (pathWithoutQuery && pathWithoutQuery !== 'v1/messages') {
+      const extracted = this.extractFromPath()
+      if (!extracted) {
         return { error: 'Unable to parse path' }
       }
-      return `${stripTrailingSlash(this.providerProxy.baseUrl)}/${stripLeadingSlash(path)}`
-    } else {
-      return { error: 'baseUrl is required for the Google Provider' }
+      const { version, publisher, model, api } = extracted
+      if (publisher === 'anthropic') {
+        this.flavor = 'anthropic'
+      }
+      this.extractedPath.version = version
+      this.extractedPath.publisher = publisher
+      this.extractedPath.model = model && this.replaceModel(model)
+      this.extractedPath.api = api
     }
+  }
+
+  protected url(): string {
+    // The path can't ever be null because the check() method sets it.
+    const path = this.replacePath(this.projectId!, this.region!)
+    return `${stripTrailingSlash(this.providerProxy.baseUrl)}/${stripLeadingSlash(path)}`
   }
 
   apiFlavor(): string | undefined {
@@ -60,21 +84,30 @@ export class GoogleVertexProvider extends DefaultProviderProxy {
    * @param projectId - The projectId to replace in the path.
    * @param region - The region to replace in the path.
    */
-  private replacePath(projectId: string, region: string): null | string {
+  private replacePath(projectId: string, region: string): string {
     const pathWithoutQuery = this.restOfPath.split('?')[0]
 
     // Handle Anthropic client format: /v1/messages
     if (pathWithoutQuery === 'v1/messages' && this.requestModel) {
       // Always use streamRawPredict for Anthropic on Vertex (it handles both streaming and non-streaming)
       const action = this.shouldStream ? 'streamRawPredict' : 'rawPredict'
-      return `/v1/projects/${projectId}/locations/${region}/publishers/anthropic/models/${this.requestModel}:${action}`
+      const model = this.replaceModel(this.requestModel)
+      return `/v1/projects/${projectId}/locations/${region}/publishers/anthropic/models/${model}:${action}`
     }
 
-    // Regex with capture groups: version (optional), publisher (optional), model
-    // Path may or may not start with / and may or may not have version
-    const regex =
-      /^\/?(?:(v\d+(?:beta\d*)?)\/)?(?:projects\/[^/]+\/locations\/[^/]+\/)?(?:publishers\/([^/]+)\/)?models\/(.+):(.*)$/
-    const match = regex.exec(this.restOfPath)
+    // At this point, we know that the path is not a Anthropic client format.
+    const { version, publisher, model, api } = this.extractedPath
+    const path = `/${version}/projects/${projectId}/locations/${region}/publishers/${publisher}/models/${model}:${api}`
+    return path
+  }
+
+  protected extractFromPath(): {
+    version: string
+    publisher: string
+    model: string | undefined
+    api: string | undefined
+  } | null {
+    const match = GOOGLE_PATH_REGEX.exec(this.restOfPath)
 
     if (!match) {
       return null
@@ -85,14 +118,7 @@ export class GoogleVertexProvider extends DefaultProviderProxy {
     const model = match[3]
     const api = match[4]
 
-    const replacedModel = model && this.replaceModel(model)
-
-    if (publisher === 'anthropic') {
-      this.flavor = 'anthropic'
-    }
-
-    const path = `/${version}/projects/${projectId}/locations/${region}/publishers/${publisher}/models/${replacedModel}:${api}`
-    return path
+    return { version, publisher, model, api }
   }
 
   async prepRequest() {

@@ -110,7 +110,6 @@ export class DefaultProviderProxy {
   readonly ctx: ExecutionContext
   protected providerProxy: ProviderProxy
   protected restOfPath: string
-  protected defaultBaseUrl: string | null = null
   protected usageField: string | null = 'usage'
   protected middlewares: Middleware[]
   protected otelSpan: OtelSpan
@@ -180,13 +179,8 @@ export class DefaultProviderProxy {
     return this.request.method
   }
 
-  protected url(): ProxyInvalidRequest | string {
-    const baseUrl = this.providerProxy.baseUrl ?? this.defaultBaseUrl
-    if (baseUrl) {
-      return `${baseUrl}/${this.restOfPath}`
-    } else {
-      return { error: "Provider baseUrl is required unless you're using a known provider" }
-    }
+  protected url(): string {
+    return `${this.providerProxy.baseUrl}/${this.restOfPath}`
   }
 
   protected userAgent(): string {
@@ -338,9 +332,6 @@ export class DefaultProviderProxy {
 
     const method = this.method()
     const url = this.url()
-    if (typeof url === 'object') {
-      return url
-    }
 
     // Validate that it's possible to calculate the price for the request model.
     if (requestModel && this.providerProxy.disableKey) {
@@ -572,11 +563,7 @@ export class DefaultProviderProxy {
   protected async handleWhitelistedEndpoint(
     headers: Headers,
   ): Promise<ProxyWhitelistedEndpoint | ProxyInvalidRequest> {
-    const url = this.url()
-    if (typeof url === 'object') {
-      return url
-    }
-    const response = await this.fetch(url, { method: this.method(), headers, body: this.request.body })
+    const response = await this.fetch(this.url(), { method: this.method(), headers, body: this.request.body })
     this.otelSpan.end(
       `${this.request.method} ${this.restOfPath}`,
       { ...attributesFromRequest(this.request), ...attributesFromResponse(response) },

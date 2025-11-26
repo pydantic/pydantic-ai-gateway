@@ -120,6 +120,14 @@ class TestKeysDB extends KeysDbD1 {
         credentials: env.GOOGLE_SERVICE_ACCOUNT_KEY,
         disableKey: true,
       },
+      {
+        key: 'huggingface',
+        baseUrl: 'http://localhost:8005/huggingface',
+        providerId: 'huggingface',
+        injectCost: true,
+        credentials: env.HF_TOKEN,
+        disableKey: true,
+      },
     ]
   }
 
@@ -152,6 +160,7 @@ class TestKeysDB extends KeysDbD1 {
             converse: [{ key: 'bedrock' }],
             gemini: [{ key: 'google-vertex' }],
             'google-vertex': [{ key: 'google-vertex' }],
+            huggingface: [{ key: 'huggingface' }],
           },
           otelSettings: {
             writeToken: 'write-token',

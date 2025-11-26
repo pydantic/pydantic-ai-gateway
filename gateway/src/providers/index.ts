@@ -23,6 +23,7 @@ import { BedrockProvider } from './bedrock'
 import { DefaultProviderProxy, type ProviderOptions } from './default'
 import { GoogleVertexProvider } from './google'
 import { GroqProvider } from './groq'
+import { HuggingFaceProvider } from './huggingface'
 import { OpenAIProvider } from './openai'
 import { TestProvider } from './test'
 
@@ -42,6 +43,8 @@ export function getProvider(providerId: ProviderID): ProviderSig {
       return AnthropicProvider
     case 'bedrock':
       return BedrockProvider
+    case 'huggingface':
+      return HuggingFaceProvider
     case 'test':
       return TestProvider
     default:

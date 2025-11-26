@@ -55,6 +55,7 @@ export default defineWorkersConfig({
             ANTHROPIC_API_KEY: process.env.ANTHROPIC_API_KEY ?? 'ANTHROPIC_API_KEY-unset',
             AWS_BEARER_TOKEN_BEDROCK: process.env.AWS_BEARER_TOKEN_BEDROCK ?? 'AWS_BEARER_TOKEN_BEDROCK-unset',
             GOOGLE_SERVICE_ACCOUNT_KEY: process.env.GOOGLE_SERVICE_ACCOUNT_KEY ?? FAKE_SERVICE_ACCOUNT_KEY,
+            HF_TOKEN: process.env.HF_TOKEN ?? 'HF_TOKEN-unset',
           },
         },
       },

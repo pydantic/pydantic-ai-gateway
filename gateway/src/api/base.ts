@@ -1,3 +1,4 @@
+import type { Provider as UsageProvider } from '@pydantic/genai-prices'
 import { extractUsage, findProvider, type Usage } from '@pydantic/genai-prices'
 import type { GenAIAttributes, GenAIAttributesExtractor } from '../otel/attributes'
 import type { InputMessages, OutputMessages, TextPart } from '../otel/genai'
@@ -48,6 +49,8 @@ export interface SafeExtractor<RequestBody, ResponseBody, StreamChunk> {
 export abstract class BaseAPI<RequestBody, ResponseBody, StreamChunk = JsonData>
   implements GenAIAttributesExtractor<RequestBody, ResponseBody>, SafeExtractor<RequestBody, ResponseBody, StreamChunk>
 {
+  private usageProvider: UsageProvider | undefined
+
   /** @apiFlavor: the flavor of the API, used to determine the response model and usage */
   apiFlavor: string | undefined = undefined
 
@@ -57,9 +60,10 @@ export abstract class BaseAPI<RequestBody, ResponseBody, StreamChunk = JsonData>
   extractedRequest: ExtractedRequest = {}
   extractedResponse: Partial<ExtractedResponse> = {}
 
-  constructor(providerId: ProviderID, requestModel?: string) {
+  constructor(providerId: ProviderID, requestModel?: string, options?: { usageProvider?: UsageProvider }) {
     this.providerId = providerId
     this.requestModel = requestModel
+    this.usageProvider = options?.usageProvider
   }
 
   requestExtractors: ExtractorConfig<RequestBody, ExtractedRequest> = {}
@@ -86,7 +90,7 @@ export abstract class BaseAPI<RequestBody, ResponseBody, StreamChunk = JsonData>
   }
 
   extractUsage(responseBody: ResponseBody | StreamChunk): Usage | undefined {
-    const provider = findProvider({ providerId: this.providerId })
+    const provider = this.usageProvider ?? findProvider({ providerId: this.providerId })
     // This should never happen because we know the provider ID is valid, but we will throw an error to be safe.
     if (!provider) throw new Error(`Provider not found for provider ID: ${this.providerId}`)
     const { usage } = extractUsage(provider, responseBody, this.apiFlavor)

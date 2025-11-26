@@ -34,7 +34,7 @@ describe('invalid request', () => {
     const text = await response.text()
     expect(response.status, `got ${response.status} response: ${text}`).toBe(404)
     expect(text).toMatchInlineSnapshot(
-      `"Route not found: wrong. Supported values: anthropic, azure, bedrock, converse, gemini, google-vertex, groq, openai, test"`,
+      `"Route not found: wrong. Supported values: anthropic, azure, bedrock, converse, gemini, google-vertex, groq, huggingface, openai, test"`,
     )
   })
 })

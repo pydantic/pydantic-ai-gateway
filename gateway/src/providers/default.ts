@@ -334,7 +334,8 @@ export class DefaultProviderProxy {
     const url = this.url()
 
     // Validate that it's possible to calculate the price for the request model.
-    if (requestModel && this.providerProxy.disableKey) {
+    // HuggingFace is an exception because we will only know the real provider in the response headers.
+    if (requestModel && this.providerProxy.disableKey && this.providerId() !== 'huggingface') {
       const price = calcPrice({ input_tokens: 0, output_tokens: 0 }, requestModel, { provider: this.usageProvider() })
       if (!price) {
         return { modelNotFound: true, requestModel }

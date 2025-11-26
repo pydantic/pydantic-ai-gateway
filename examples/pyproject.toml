@@ -4,9 +4,10 @@ version = "0.1.0"
 dependencies = [
     "boto3>=1.40.28",
     "devtools>=0.12.2",
-    "logfire[httpx]>=4.3.3",
+    "logfire[httpx,aiohttp]>=4.3.3",
     "opentelemetry-instrumentation-botocore>=0.57b0",
-    "pydantic-ai>=1.10.0",
+    "pydantic-ai[huggingface]>=1.10.0",
+    "huggingface-hub<1.0",
     "types-boto3[bedrock-runtime]",
     "mypy-boto3-bedrock-runtime",
 ]

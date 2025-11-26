@@ -2,7 +2,7 @@ import { env } from 'cloudflare:workers'
 import type { Config } from '@deploy/types'
 
 // can be whatever you want, just used to make linking apiKeys to providers typesafe.
-type ProviderKeys = 'openai' | 'anthropic' | 'google-vertex' | 'bedrock' | 'groq' | 'azure'
+type ProviderKeys = 'openai' | 'anthropic' | 'google-vertex' | 'bedrock' | 'groq' | 'azure' | 'huggingface'
 
 // projects, users and keys must have numeric keys, using constants here to make it easier to understand
 // of course, keys must be unique within a type (e.g. project ids must be unique) but users and projects can have the same id
@@ -97,6 +97,12 @@ export const config: Config<ProviderKeys> = {
       baseUrl: 'https://bedrock-runtime.us-east-1.amazonaws.com',
       injectCost: true,
       credentials: env.AWS_BEARER_TOKEN_BEDROCK,
+    },
+    huggingface: {
+      providerId: 'huggingface',
+      baseUrl: 'https://router.huggingface.co/v1',
+      injectCost: true,
+      credentials: env.HF_TOKEN,
     },
   },
   // individual apiKeys

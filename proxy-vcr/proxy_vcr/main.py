@@ -8,6 +8,7 @@ from typing import cast
 import httpx
 import uvicorn
 from starlette.applications import Starlette
+from starlette.datastructures import MutableHeaders
 from starlette.exceptions import HTTPException
 from starlette.requests import Request
 from starlette.responses import JSONResponse, Response, StreamingResponse
@@ -22,6 +23,7 @@ BEDROCK_BASE_URL = 'https://bedrock-runtime.us-east-1.amazonaws.com'
 GOOGLE_BASE_URL = 'https://aiplatform.googleapis.com'
 # The Azure URL is not a secret, we can commit it.
 AZURE_BASE_URL = 'https://marcelo-0665-resource.openai.azure.com/openai/v1'
+HF_BASE_URL = 'https://router.huggingface.co/v1'
 
 current_file_dir = pathlib.Path(__file__).parent
 
@@ -51,6 +53,7 @@ async def proxy(request: Request) -> Response:
 
     provider = select_provider(request)
 
+    extra_headers = MutableHeaders()
     if provider == 'openai':
         client = cast(httpx.AsyncClient, request.scope['state']['httpx_client'])
         url = OPENAI_BASE_URL + request.url.path[len('/openai') :]
@@ -63,6 +66,13 @@ async def proxy(request: Request) -> Response:
         with vcr.use_cassette(cassette_name('azure', vcr_suffix)):  # type: ignore[reportUnknownReturnType]
             headers = {'Authorization': auth_header, 'content-type': 'application/json'}
             response = await client.post(url, content=body, headers=headers)
+    elif provider == 'huggingface':
+        client = cast(httpx.AsyncClient, request.scope['state']['httpx_client'])
+        url = HF_BASE_URL + request.url.path[len('/huggingface') :]
+        with vcr.use_cassette(cassette_name('huggingface', vcr_suffix)):  # type: ignore[reportUnknownReturnType]
+            headers = {'Authorization': auth_header, 'content-type': 'application/json'}
+            response = await client.post(url, content=body, headers=headers)
+            extra_headers['x-inference-provider'] = response.headers.get('x-inference-provider', '')
     elif provider == 'groq':
         client = cast(httpx.AsyncClient, request.scope['state']['httpx_client'])
         url = GROQ_BASE_URL + request.url.path[len('/groq') :]
@@ -113,15 +123,16 @@ async def proxy(request: Request) -> Response:
             response = await client.post(url, content=body, headers=headers)
     else:
         raise HTTPException(status_code=404, detail=f'Path {request.url.path} not supported')
-    content_type = cast(str | None, response.headers.get('content-type'))
-    if content_type and content_type.startswith(('text/event-stream', 'application/vnd.amazon.eventstream')):
+    content_type = cast(str, response.headers.get('content-type'))
+    headers = {'content-type': content_type, **extra_headers}
+    if content_type.startswith(('text/event-stream', 'application/vnd.amazon.eventstream')):
 
         async def generator():
             async for chunk in response.aiter_bytes():
                 yield chunk
 
-        return StreamingResponse(generator(), status_code=response.status_code, headers={'content-type': content_type})
-    return JSONResponse(response.json(), status_code=response.status_code)
+        return StreamingResponse(generator(), status_code=response.status_code, headers=headers)
+    return JSONResponse(response.json(), status_code=response.status_code, headers=headers)
 
 
 async def health_check(_: Request) -> Response:
@@ -160,6 +171,8 @@ def select_provider(request: Request) -> str:
 
     if request.url.path.startswith('/openai'):
         return 'openai'
+    if request.url.path.startswith('/huggingface'):
+        return 'huggingface'
     elif request.url.path.startswith('/groq'):
         return 'groq'
     elif request.url.path.startswith('/bedrock'):

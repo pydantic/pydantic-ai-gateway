@@ -1,0 +1,2124 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`huggingface > huggingface chat stream > chunks 1`] = `
+[
+  {
+    "choices": [
+      {
+        "delta": {
+          "content": "",
+          "reasoning": null,
+          "role": "assistant",
+          "token_id": null,
+        },
+        "finish_reason": null,
+        "index": 0,
+        "logprobs": null,
+        "text": "",
+      },
+    ],
+    "created": 1764156077,
+    "id": "oLoS2VE-zqrih-9a49005a38273b05",
+    "model": "moonshotai/Kimi-K2-Thinking",
+    "object": "chat.completion.chunk",
+    "usage": null,
+  },
+  {
+    "choices": [
+      {
+        "delta": {
+          "content": "",
+          "reasoning": " ",
+          "role": "assistant",
+          "token_id": null,
+        },
+        "finish_reason": null,
+        "index": 0,
+        "logprobs": null,
+        "text": "",
+      },
+    ],
+    "created": 1764156077,
+    "id": "oLoS2VE-zqrih-9a49005a38273b05",
+    "model": "moonshotai/Kimi-K2-Thinking",
+    "object": "chat.completion.chunk",
+    "usage": null,
+  },
+  {
+    "choices": [
+      {
+        "delta": {
+          "content": "",
+          "reasoning": " The",
+          "role": "assistant",
+          "token_id": null,
+        },
+        "finish_reason": null,
+        "index": 0,
+        "logprobs": null,
+        "text": "",
+      },
+    ],
+    "created": 1764156077,
+    "id": "oLoS2VE-zqrih-9a49005a38273b05",
+    "model": "moonshotai/Kimi-K2-Thinking",
+    "object": "chat.completion.chunk",
+    "usage": null,
+  },
+  {
+    "choices": [
+      {
+        "delta": {
+          "content": "",
+          "reasoning": " user",
+          "role": "assistant",
+          "token_id": null,
+        },
+        "finish_reason": null,
+        "index": 0,
+        "logprobs": null,
+        "text": "",
+      },
+    ],
+    "created": 1764156077,
+    "id": "oLoS2VE-zqrih-9a49005a38273b05",
+    "model": "moonshotai/Kimi-K2-Thinking",
+    "object": "chat.completion.chunk",
+    "usage": null,
+  },
+  {
+    "choices": [
+      {
+        "delta": {
+          "content": "",
+          "reasoning": " asks",
+          "role": "assistant",
+          "token_id": null,
+        },
+        "finish_reason": null,
+        "index": 0,
+        "logprobs": null,
+        "text": "",
+      },
+    ],
+    "created": 1764156077,
+    "id": "oLoS2VE-zqrih-9a49005a38273b05",
+    "model": "moonshotai/Kimi-K2-Thinking",
+    "object": "chat.completion.chunk",
+    "usage": null,
+  },
+  {
+    "choices": [
+      {
+        "delta": {
+          "content": "",
+          "reasoning": ":",
+          "role": "assistant",
+          "token_id": null,
+        },
+        "finish_reason": null,
+        "index": 0,
+        "logprobs": null,
+        "text": "",
+      },
+    ],
+    "created": 1764156077,
+    "id": "oLoS2VE-zqrih-9a49005a38273b05",
+    "model": "moonshotai/Kimi-K2-Thinking",
+    "object": "chat.completion.chunk",
+    "usage": null,
+  },
+  {
+    "choices": [
+      {
+        "delta": {
+          "content": "",
+          "reasoning": " "",
+          "role": "assistant",
+          "token_id": null,
+        },
+        "finish_reason": null,
+        "index": 0,
+        "logprobs": null,
+        "text": "",
+      },
+    ],
+    "created": 1764156077,
+    "id": "oLoS2VE-zqrih-9a49005a38273b05",
+    "model": "moonshotai/Kimi-K2-Thinking",
+    "object": "chat.completion.chunk",
+    "usage": null,
+  },
+  {
+    "choices": [
+      {
+        "delta": {
+          "content": "",
+          "reasoning": "What",
+          "role": "assistant",
+          "token_id": null,
+        },
+        "finish_reason": null,
+        "index": 0,
+        "logprobs": null,
+        "text": "",
+      },
+    ],
+    "created": 1764156077,
+    "id": "oLoS2VE-zqrih-9a49005a38273b05",
+    "model": "moonshotai/Kimi-K2-Thinking",
+    "object": "chat.completion.chunk",
+    "usage": null,
+  },
+  {
+    "choices": [
+      {
+        "delta": {
+          "content": "",
+          "reasoning": " is",
+          "role": "assistant",
+          "token_id": null,
+        },
+        "finish_reason": null,
+        "index": 0,
+        "logprobs": null,
+        "text": "",
+      },
+    ],
+    "created": 1764156077,
+    "id": "oLoS2VE-zqrih-9a49005a38273b05",
+    "model": "moonshotai/Kimi-K2-Thinking",
+    "object": "chat.completion.chunk",
+    "usage": null,
+  },
+  {
+    "choices": [
+      {
+        "delta": {
+          "content": "",
+          "reasoning": " the",
+          "role": "assistant",
+          "token_id": null,
+        },
+        "finish_reason": null,
+        "index": 0,
+        "logprobs": null,
+        "text": "",
+      },
+    ],
+    "created": 1764156077,
+    "id": "oLoS2VE-zqrih-9a49005a38273b05",
+    "model": "moonshotai/Kimi-K2-Thinking",
+    "object": "chat.completion.chunk",
+    "usage": null,
+  },
+  {
+    "choices": [
+      {
+        "delta": {
+          "content": "",
+          "reasoning": " capital",
+          "role": "assistant",
+          "token_id": null,
+        },
+        "finish_reason": null,
+        "index": 0,
+        "logprobs": null,
+        "text": "",
+      },
+    ],
+    "created": 1764156077,
+    "id": "oLoS2VE-zqrih-9a49005a38273b05",
+    "model": "moonshotai/Kimi-K2-Thinking",
+    "object": "chat.completion.chunk",
+    "usage": null,
+  },
+  {
+    "choices": [
+      {
+        "delta": {
+          "content": "",
+          "reasoning": " of",
+          "role": "assistant",
+          "token_id": null,
+        },
+        "finish_reason": null,
+        "index": 0,
+        "logprobs": null,
+        "text": "",
+      },
+    ],
+    "created": 1764156077,
+    "id": "oLoS2VE-zqrih-9a49005a38273b05",
+    "model": "moonshotai/Kimi-K2-Thinking",
+    "object": "chat.completion.chunk",
+    "usage": null,
+  },
+  {
+    "choices": [
+      {
+        "delta": {
+          "content": "",
+          "reasoning": " France",
+          "role": "assistant",
+          "token_id": null,
+        },
+        "finish_reason": null,
+        "index": 0,
+        "logprobs": null,
+        "text": "",
+      },
+    ],
+    "created": 1764156077,
+    "id": "oLoS2VE-zqrih-9a49005a38273b05",
+    "model": "moonshotai/Kimi-K2-Thinking",
+    "object": "chat.completion.chunk",
+    "usage": null,
+  },
+  {
+    "choices": [
+      {
+        "delta": {
+          "content": "",
+          "reasoning": "?",
+          "role": "assistant",
+          "token_id": null,
+        },
+        "finish_reason": null,
+        "index": 0,
+        "logprobs": null,
+        "text": "",
+      },
+    ],
+    "created": 1764156077,
+    "id": "oLoS2VE-zqrih-9a49005a38273b05",
+    "model": "moonshotai/Kimi-K2-Thinking",
+    "object": "chat.completion.chunk",
+    "usage": null,
+  },
+  {
+    "choices": [
+      {
+        "delta": {
+          "content": "",
+          "reasoning": ""
+
+",
+          "role": "assistant",
+          "token_id": null,
+        },
+        "finish_reason": null,
+        "index": 0,
+        "logprobs": null,
+        "text": "",
+      },
+    ],
+    "created": 1764156077,
+    "id": "oLoS2VE-zqrih-9a49005a38273b05",
+    "model": "moonshotai/Kimi-K2-Thinking",
+    "object": "chat.completion.chunk",
+    "usage": null,
+  },
+  {
+    "choices": [
+      {
+        "delta": {
+          "content": "",
+          "reasoning": "This",
+          "role": "assistant",
+          "token_id": null,
+        },
+        "finish_reason": null,
+        "index": 0,
+        "logprobs": null,
+        "text": "",
+      },
+    ],
+    "created": 1764156077,
+    "id": "oLoS2VE-zqrih-9a49005a38273b05",
+    "model": "moonshotai/Kimi-K2-Thinking",
+    "object": "chat.completion.chunk",
+    "usage": null,
+  },
+  {
+    "choices": [
+      {
+        "delta": {
+          "content": "",
+          "reasoning": " is",
+          "role": "assistant",
+          "token_id": null,
+        },
+        "finish_reason": null,
+        "index": 0,
+        "logprobs": null,
+        "text": "",
+      },
+    ],
+    "created": 1764156077,
+    "id": "oLoS2VE-zqrih-9a49005a38273b05",
+    "model": "moonshotai/Kimi-K2-Thinking",
+    "object": "chat.completion.chunk",
+    "usage": null,
+  },
+  {
+    "choices": [
+      {
+        "delta": {
+          "content": "",
+          "reasoning": " a",
+          "role": "assistant",
+          "token_id": null,
+        },
+        "finish_reason": null,
+        "index": 0,
+        "logprobs": null,
+        "text": "",
+      },
+    ],
+    "created": 1764156077,
+    "id": "oLoS2VE-zqrih-9a49005a38273b05",
+    "model": "moonshotai/Kimi-K2-Thinking",
+    "object": "chat.completion.chunk",
+    "usage": null,
+  },
+  {
+    "choices": [
+      {
+        "delta": {
+          "content": "",
+          "reasoning": " straightforward",
+          "role": "assistant",
+          "token_id": null,
+        },
+        "finish_reason": null,
+        "index": 0,
+        "logprobs": null,
+        "text": "",
+      },
+    ],
+    "created": 1764156077,
+    "id": "oLoS2VE-zqrih-9a49005a38273b05",
+    "model": "moonshotai/Kimi-K2-Thinking",
+    "object": "chat.completion.chunk",
+    "usage": null,
+  },
+  {
+    "choices": [
+      {
+        "delta": {
+          "content": "",
+          "reasoning": " factual",
+          "role": "assistant",
+          "token_id": null,
+        },
+        "finish_reason": null,
+        "index": 0,
+        "logprobs": null,
+        "text": "",
+      },
+    ],
+    "created": 1764156077,
+    "id": "oLoS2VE-zqrih-9a49005a38273b05",
+    "model": "moonshotai/Kimi-K2-Thinking",
+    "object": "chat.completion.chunk",
+    "usage": null,
+  },
+  {
+    "choices": [
+      {
+        "delta": {
+          "content": "",
+          "reasoning": " question",
+          "role": "assistant",
+          "token_id": null,
+        },
+        "finish_reason": null,
+        "index": 0,
+        "logprobs": null,
+        "text": "",
+      },
+    ],
+    "created": 1764156077,
+    "id": "oLoS2VE-zqrih-9a49005a38273b05",
+    "model": "moonshotai/Kimi-K2-Thinking",
+    "object": "chat.completion.chunk",
+    "usage": null,
+  },
+  {
+    "choices": [
+      {
+        "delta": {
+          "content": "",
+          "reasoning": ".",
+          "role": "assistant",
+          "token_id": null,
+        },
+        "finish_reason": null,
+        "index": 0,
+        "logprobs": null,
+        "text": "",
+      },
+    ],
+    "created": 1764156077,
+    "id": "oLoS2VE-zqrih-9a49005a38273b05",
+    "model": "moonshotai/Kimi-K2-Thinking",
+    "object": "chat.completion.chunk",
+    "usage": null,
+  },
+  {
+    "choices": [
+      {
+        "delta": {
+          "content": "",
+          "reasoning": " The",
+          "role": "assistant",
+          "token_id": null,
+        },
+        "finish_reason": null,
+        "index": 0,
+        "logprobs": null,
+        "text": "",
+      },
+    ],
+    "created": 1764156077,
+    "id": "oLoS2VE-zqrih-9a49005a38273b05",
+    "model": "moonshotai/Kimi-K2-Thinking",
+    "object": "chat.completion.chunk",
+    "usage": null,
+  },
+  {
+    "choices": [
+      {
+        "delta": {
+          "content": "",
+          "reasoning": " capital",
+          "role": "assistant",
+          "token_id": null,
+        },
+        "finish_reason": null,
+        "index": 0,
+        "logprobs": null,
+        "text": "",
+      },
+    ],
+    "created": 1764156077,
+    "id": "oLoS2VE-zqrih-9a49005a38273b05",
+    "model": "moonshotai/Kimi-K2-Thinking",
+    "object": "chat.completion.chunk",
+    "usage": null,
+  },
+  {
+    "choices": [
+      {
+        "delta": {
+          "content": "",
+          "reasoning": " of",
+          "role": "assistant",
+          "token_id": null,
+        },
+        "finish_reason": null,
+        "index": 0,
+        "logprobs": null,
+        "text": "",
+      },
+    ],
+    "created": 1764156077,
+    "id": "oLoS2VE-zqrih-9a49005a38273b05",
+    "model": "moonshotai/Kimi-K2-Thinking",
+    "object": "chat.completion.chunk",
+    "usage": null,
+  },
+  {
+    "choices": [
+      {
+        "delta": {
+          "content": "",
+          "reasoning": " France",
+          "role": "assistant",
+          "token_id": null,
+        },
+        "finish_reason": null,
+        "index": 0,
+        "logprobs": null,
+        "text": "",
+      },
+    ],
+    "created": 1764156077,
+    "id": "oLoS2VE-zqrih-9a49005a38273b05",
+    "model": "moonshotai/Kimi-K2-Thinking",
+    "object": "chat.completion.chunk",
+    "usage": null,
+  },
+  {
+    "choices": [
+      {
+        "delta": {
+          "content": "",
+          "reasoning": " is",
+          "role": "assistant",
+          "token_id": null,
+        },
+        "finish_reason": null,
+        "index": 0,
+        "logprobs": null,
+        "text": "",
+      },
+    ],
+    "created": 1764156077,
+    "id": "oLoS2VE-zqrih-9a49005a38273b05",
+    "model": "moonshotai/Kimi-K2-Thinking",
+    "object": "chat.completion.chunk",
+    "usage": null,
+  },
+  {
+    "choices": [
+      {
+        "delta": {
+          "content": "",
+          "reasoning": " Paris",
+          "role": "assistant",
+          "token_id": null,
+        },
+        "finish_reason": null,
+        "index": 0,
+        "logprobs": null,
+        "text": "",
+      },
+    ],
+    "created": 1764156077,
+    "id": "oLoS2VE-zqrih-9a49005a38273b05",
+    "model": "moonshotai/Kimi-K2-Thinking",
+    "object": "chat.completion.chunk",
+    "usage": null,
+  },
+  {
+    "choices": [
+      {
+        "delta": {
+          "content": "",
+          "reasoning": ".
+
+",
+          "role": "assistant",
+          "token_id": null,
+        },
+        "finish_reason": null,
+        "index": 0,
+        "logprobs": null,
+        "text": "",
+      },
+    ],
+    "created": 1764156077,
+    "id": "oLoS2VE-zqrih-9a49005a38273b05",
+    "model": "moonshotai/Kimi-K2-Thinking",
+    "object": "chat.completion.chunk",
+    "usage": null,
+  },
+  {
+    "choices": [
+      {
+        "delta": {
+          "content": "",
+          "reasoning": "I",
+          "role": "assistant",
+          "token_id": null,
+        },
+        "finish_reason": null,
+        "index": 0,
+        "logprobs": null,
+        "text": "",
+      },
+    ],
+    "created": 1764156077,
+    "id": "oLoS2VE-zqrih-9a49005a38273b05",
+    "model": "moonshotai/Kimi-K2-Thinking",
+    "object": "chat.completion.chunk",
+    "usage": null,
+  },
+  {
+    "choices": [
+      {
+        "delta": {
+          "content": "",
+          "reasoning": " should",
+          "role": "assistant",
+          "token_id": null,
+        },
+        "finish_reason": null,
+        "index": 0,
+        "logprobs": null,
+        "text": "",
+      },
+    ],
+    "created": 1764156077,
+    "id": "oLoS2VE-zqrih-9a49005a38273b05",
+    "model": "moonshotai/Kimi-K2-Thinking",
+    "object": "chat.completion.chunk",
+    "usage": null,
+  },
+  {
+    "choices": [
+      {
+        "delta": {
+          "content": "",
+          "reasoning": " provide",
+          "role": "assistant",
+          "token_id": null,
+        },
+        "finish_reason": null,
+        "index": 0,
+        "logprobs": null,
+        "text": "",
+      },
+    ],
+    "created": 1764156077,
+    "id": "oLoS2VE-zqrih-9a49005a38273b05",
+    "model": "moonshotai/Kimi-K2-Thinking",
+    "object": "chat.completion.chunk",
+    "usage": null,
+  },
+  {
+    "choices": [
+      {
+        "delta": {
+          "content": "",
+          "reasoning": " a",
+          "role": "assistant",
+          "token_id": null,
+        },
+        "finish_reason": null,
+        "index": 0,
+        "logprobs": null,
+        "text": "",
+      },
+    ],
+    "created": 1764156077,
+    "id": "oLoS2VE-zqrih-9a49005a38273b05",
+    "model": "moonshotai/Kimi-K2-Thinking",
+    "object": "chat.completion.chunk",
+    "usage": null,
+  },
+  {
+    "choices": [
+      {
+        "delta": {
+          "content": "",
+          "reasoning": " clear",
+          "role": "assistant",
+          "token_id": null,
+        },
+        "finish_reason": null,
+        "index": 0,
+        "logprobs": null,
+        "text": "",
+      },
+    ],
+    "created": 1764156077,
+    "id": "oLoS2VE-zqrih-9a49005a38273b05",
+    "model": "moonshotai/Kimi-K2-Thinking",
+    "object": "chat.completion.chunk",
+    "usage": null,
+  },
+  {
+    "choices": [
+      {
+        "delta": {
+          "content": "",
+          "reasoning": ",",
+          "role": "assistant",
+          "token_id": null,
+        },
+        "finish_reason": null,
+        "index": 0,
+        "logprobs": null,
+        "text": "",
+      },
+    ],
+    "created": 1764156077,
+    "id": "oLoS2VE-zqrih-9a49005a38273b05",
+    "model": "moonshotai/Kimi-K2-Thinking",
+    "object": "chat.completion.chunk",
+    "usage": null,
+  },
+  {
+    "choices": [
+      {
+        "delta": {
+          "content": "",
+          "reasoning": " direct",
+          "role": "assistant",
+          "token_id": null,
+        },
+        "finish_reason": null,
+        "index": 0,
+        "logprobs": null,
+        "text": "",
+      },
+    ],
+    "created": 1764156077,
+    "id": "oLoS2VE-zqrih-9a49005a38273b05",
+    "model": "moonshotai/Kimi-K2-Thinking",
+    "object": "chat.completion.chunk",
+    "usage": null,
+  },
+  {
+    "choices": [
+      {
+        "delta": {
+          "content": "",
+          "reasoning": " answer",
+          "role": "assistant",
+          "token_id": null,
+        },
+        "finish_reason": null,
+        "index": 0,
+        "logprobs": null,
+        "text": "",
+      },
+    ],
+    "created": 1764156077,
+    "id": "oLoS2VE-zqrih-9a49005a38273b05",
+    "model": "moonshotai/Kimi-K2-Thinking",
+    "object": "chat.completion.chunk",
+    "usage": null,
+  },
+  {
+    "choices": [
+      {
+        "delta": {
+          "content": "",
+          "reasoning": ".",
+          "role": "assistant",
+          "token_id": null,
+        },
+        "finish_reason": null,
+        "index": 0,
+        "logprobs": null,
+        "text": "",
+      },
+    ],
+    "created": 1764156077,
+    "id": "oLoS2VE-zqrih-9a49005a38273b05",
+    "model": "moonshotai/Kimi-K2-Thinking",
+    "object": "chat.completion.chunk",
+    "usage": null,
+  },
+  {
+    "choices": [
+      {
+        "delta": {
+          "content": "",
+          "reasoning": " I",
+          "role": "assistant",
+          "token_id": null,
+        },
+        "finish_reason": null,
+        "index": 0,
+        "logprobs": null,
+        "text": "",
+      },
+    ],
+    "created": 1764156077,
+    "id": "oLoS2VE-zqrih-9a49005a38273b05",
+    "model": "moonshotai/Kimi-K2-Thinking",
+    "object": "chat.completion.chunk",
+    "usage": null,
+  },
+  {
+    "choices": [
+      {
+        "delta": {
+          "content": "",
+          "reasoning": " can",
+          "role": "assistant",
+          "token_id": null,
+        },
+        "finish_reason": null,
+        "index": 0,
+        "logprobs": null,
+        "text": "",
+      },
+    ],
+    "created": 1764156077,
+    "id": "oLoS2VE-zqrih-9a49005a38273b05",
+    "model": "moonshotai/Kimi-K2-Thinking",
+    "object": "chat.completion.chunk",
+    "usage": null,
+  },
+  {
+    "choices": [
+      {
+        "delta": {
+          "content": "",
+          "reasoning": " also",
+          "role": "assistant",
+          "token_id": null,
+        },
+        "finish_reason": null,
+        "index": 0,
+        "logprobs": null,
+        "text": "",
+      },
+    ],
+    "created": 1764156077,
+    "id": "oLoS2VE-zqrih-9a49005a38273b05",
+    "model": "moonshotai/Kimi-K2-Thinking",
+    "object": "chat.completion.chunk",
+    "usage": null,
+  },
+  {
+    "choices": [
+      {
+        "delta": {
+          "content": "",
+          "reasoning": " add",
+          "role": "assistant",
+          "token_id": null,
+        },
+        "finish_reason": null,
+        "index": 0,
+        "logprobs": null,
+        "text": "",
+      },
+    ],
+    "created": 1764156077,
+    "id": "oLoS2VE-zqrih-9a49005a38273b05",
+    "model": "moonshotai/Kimi-K2-Thinking",
+    "object": "chat.completion.chunk",
+    "usage": null,
+  },
+  {
+    "choices": [
+      {
+        "delta": {
+          "content": "",
+          "reasoning": " a",
+          "role": "assistant",
+          "token_id": null,
+        },
+        "finish_reason": null,
+        "index": 0,
+        "logprobs": null,
+        "text": "",
+      },
+    ],
+    "created": 1764156077,
+    "id": "oLoS2VE-zqrih-9a49005a38273b05",
+    "model": "moonshotai/Kimi-K2-Thinking",
+    "object": "chat.completion.chunk",
+    "usage": null,
+  },
+  {
+    "choices": [
+      {
+        "delta": {
+          "content": "",
+          "reasoning": " little",
+          "role": "assistant",
+          "token_id": null,
+        },
+        "finish_reason": null,
+        "index": 0,
+        "logprobs": null,
+        "text": "",
+      },
+    ],
+    "created": 1764156077,
+    "id": "oLoS2VE-zqrih-9a49005a38273b05",
+    "model": "moonshotai/Kimi-K2-Thinking",
+    "object": "chat.completion.chunk",
+    "usage": null,
+  },
+  {
+    "choices": [
+      {
+        "delta": {
+          "content": "",
+          "reasoning": " bit",
+          "role": "assistant",
+          "token_id": null,
+        },
+        "finish_reason": null,
+        "index": 0,
+        "logprobs": null,
+        "text": "",
+      },
+    ],
+    "created": 1764156077,
+    "id": "oLoS2VE-zqrih-9a49005a38273b05",
+    "model": "moonshotai/Kimi-K2-Thinking",
+    "object": "chat.completion.chunk",
+    "usage": null,
+  },
+  {
+    "choices": [
+      {
+        "delta": {
+          "content": "",
+          "reasoning": " of",
+          "role": "assistant",
+          "token_id": null,
+        },
+        "finish_reason": null,
+        "index": 0,
+        "logprobs": null,
+        "text": "",
+      },
+    ],
+    "created": 1764156077,
+    "id": "oLoS2VE-zqrih-9a49005a38273b05",
+    "model": "moonshotai/Kimi-K2-Thinking",
+    "object": "chat.completion.chunk",
+    "usage": null,
+  },
+  {
+    "choices": [
+      {
+        "delta": {
+          "content": "",
+          "reasoning": " helpful",
+          "role": "assistant",
+          "token_id": null,
+        },
+        "finish_reason": null,
+        "index": 0,
+        "logprobs": null,
+        "text": "",
+      },
+    ],
+    "created": 1764156077,
+    "id": "oLoS2VE-zqrih-9a49005a38273b05",
+    "model": "moonshotai/Kimi-K2-Thinking",
+    "object": "chat.completion.chunk",
+    "usage": null,
+  },
+  {
+    "choices": [
+      {
+        "delta": {
+          "content": "",
+          "reasoning": " context",
+          "role": "assistant",
+          "token_id": null,
+        },
+        "finish_reason": null,
+        "index": 0,
+        "logprobs": null,
+        "text": "",
+      },
+    ],
+    "created": 1764156077,
+    "id": "oLoS2VE-zqrih-9a49005a38273b05",
+    "model": "moonshotai/Kimi-K2-Thinking",
+    "object": "chat.completion.chunk",
+    "usage": null,
+  },
+  {
+    "choices": [
+      {
+        "delta": {
+          "content": "",
+          "reasoning": " if",
+          "role": "assistant",
+          "token_id": null,
+        },
+        "finish_reason": null,
+        "index": 0,
+        "logprobs": null,
+        "text": "",
+      },
+    ],
+    "created": 1764156077,
+    "id": "oLoS2VE-zqrih-9a49005a38273b05",
+    "model": "moonshotai/Kimi-K2-Thinking",
+    "object": "chat.completion.chunk",
+    "usage": null,
+  },
+  {
+    "choices": [
+      {
+        "delta": {
+          "content": "",
+          "reasoning": " appropriate",
+          "role": "assistant",
+          "token_id": null,
+        },
+        "finish_reason": null,
+        "index": 0,
+        "logprobs": null,
+        "text": "",
+      },
+    ],
+    "created": 1764156077,
+    "id": "oLoS2VE-zqrih-9a49005a38273b05",
+    "model": "moonshotai/Kimi-K2-Thinking",
+    "object": "chat.completion.chunk",
+    "usage": null,
+  },
+  {
+    "choices": [
+      {
+        "delta": {
+          "content": "",
+          "reasoning": ",",
+          "role": "assistant",
+          "token_id": null,
+        },
+        "finish_reason": null,
+        "index": 0,
+        "logprobs": null,
+        "text": "",
+      },
+    ],
+    "created": 1764156077,
+    "id": "oLoS2VE-zqrih-9a49005a38273b05",
+    "model": "moonshotai/Kimi-K2-Thinking",
+    "object": "chat.completion.chunk",
+    "usage": null,
+  },
+  {
+    "choices": [
+      {
+        "delta": {
+          "content": "",
+          "reasoning": " but",
+          "role": "assistant",
+          "token_id": null,
+        },
+        "finish_reason": null,
+        "index": 0,
+        "logprobs": null,
+        "text": "",
+      },
+    ],
+    "created": 1764156077,
+    "id": "oLoS2VE-zqrih-9a49005a38273b05",
+    "model": "moonshotai/Kimi-K2-Thinking",
+    "object": "chat.completion.chunk",
+    "usage": null,
+  },
+  {
+    "choices": [
+      {
+        "delta": {
+          "content": "",
+          "reasoning": " the",
+          "role": "assistant",
+          "token_id": null,
+        },
+        "finish_reason": null,
+        "index": 0,
+        "logprobs": null,
+        "text": "",
+      },
+    ],
+    "created": 1764156077,
+    "id": "oLoS2VE-zqrih-9a49005a38273b05",
+    "model": "moonshotai/Kimi-K2-Thinking",
+    "object": "chat.completion.chunk",
+    "usage": null,
+  },
+  {
+    "choices": [
+      {
+        "delta": {
+          "content": "",
+          "reasoning": " main",
+          "role": "assistant",
+          "token_id": null,
+        },
+        "finish_reason": null,
+        "index": 0,
+        "logprobs": null,
+        "text": "",
+      },
+    ],
+    "created": 1764156077,
+    "id": "oLoS2VE-zqrih-9a49005a38273b05",
+    "model": "moonshotai/Kimi-K2-Thinking",
+    "object": "chat.completion.chunk",
+    "usage": null,
+  },
+  {
+    "choices": [
+      {
+        "delta": {
+          "content": "",
+          "reasoning": " thing",
+          "role": "assistant",
+          "token_id": null,
+        },
+        "finish_reason": null,
+        "index": 0,
+        "logprobs": null,
+        "text": "",
+      },
+    ],
+    "created": 1764156077,
+    "id": "oLoS2VE-zqrih-9a49005a38273b05",
+    "model": "moonshotai/Kimi-K2-Thinking",
+    "object": "chat.completion.chunk",
+    "usage": null,
+  },
+  {
+    "choices": [
+      {
+        "delta": {
+          "content": "",
+          "reasoning": " is",
+          "role": "assistant",
+          "token_id": null,
+        },
+        "finish_reason": null,
+        "index": 0,
+        "logprobs": null,
+        "text": "",
+      },
+    ],
+    "created": 1764156077,
+    "id": "oLoS2VE-zqrih-9a49005a38273b05",
+    "model": "moonshotai/Kimi-K2-Thinking",
+    "object": "chat.completion.chunk",
+    "usage": null,
+  },
+  {
+    "choices": [
+      {
+        "delta": {
+          "content": "",
+          "reasoning": " to",
+          "role": "assistant",
+          "token_id": null,
+        },
+        "finish_reason": null,
+        "index": 0,
+        "logprobs": null,
+        "text": "",
+      },
+    ],
+    "created": 1764156077,
+    "id": "oLoS2VE-zqrih-9a49005a38273b05",
+    "model": "moonshotai/Kimi-K2-Thinking",
+    "object": "chat.completion.chunk",
+    "usage": null,
+  },
+  {
+    "choices": [
+      {
+        "delta": {
+          "content": "",
+          "reasoning": " answer",
+          "role": "assistant",
+          "token_id": null,
+        },
+        "finish_reason": null,
+        "index": 0,
+        "logprobs": null,
+        "text": "",
+      },
+    ],
+    "created": 1764156077,
+    "id": "oLoS2VE-zqrih-9a49005a38273b05",
+    "model": "moonshotai/Kimi-K2-Thinking",
+    "object": "chat.completion.chunk",
+    "usage": null,
+  },
+  {
+    "choices": [
+      {
+        "delta": {
+          "content": "",
+          "reasoning": " the",
+          "role": "assistant",
+          "token_id": null,
+        },
+        "finish_reason": null,
+        "index": 0,
+        "logprobs": null,
+        "text": "",
+      },
+    ],
+    "created": 1764156077,
+    "id": "oLoS2VE-zqrih-9a49005a38273b05",
+    "model": "moonshotai/Kimi-K2-Thinking",
+    "object": "chat.completion.chunk",
+    "usage": null,
+  },
+  {
+    "choices": [
+      {
+        "delta": {
+          "content": "",
+          "reasoning": " question",
+          "role": "assistant",
+          "token_id": null,
+        },
+        "finish_reason": null,
+        "index": 0,
+        "logprobs": null,
+        "text": "",
+      },
+    ],
+    "created": 1764156077,
+    "id": "oLoS2VE-zqrih-9a49005a38273b05",
+    "model": "moonshotai/Kimi-K2-Thinking",
+    "object": "chat.completion.chunk",
+    "usage": null,
+  },
+  {
+    "choices": [
+      {
+        "delta": {
+          "content": "",
+          "reasoning": " accurately",
+          "role": "assistant",
+          "token_id": null,
+        },
+        "finish_reason": null,
+        "index": 0,
+        "logprobs": null,
+        "text": "",
+      },
+    ],
+    "created": 1764156077,
+    "id": "oLoS2VE-zqrih-9a49005a38273b05",
+    "model": "moonshotai/Kimi-K2-Thinking",
+    "object": "chat.completion.chunk",
+    "usage": null,
+  },
+  {
+    "choices": [
+      {
+        "delta": {
+          "content": "",
+          "reasoning": " and",
+          "role": "assistant",
+          "token_id": null,
+        },
+        "finish_reason": null,
+        "index": 0,
+        "logprobs": null,
+        "text": "",
+      },
+    ],
+    "created": 1764156077,
+    "id": "oLoS2VE-zqrih-9a49005a38273b05",
+    "model": "moonshotai/Kimi-K2-Thinking",
+    "object": "chat.completion.chunk",
+    "usage": null,
+  },
+  {
+    "choices": [
+      {
+        "delta": {
+          "content": "",
+          "reasoning": " conc",
+          "role": "assistant",
+          "token_id": null,
+        },
+        "finish_reason": null,
+        "index": 0,
+        "logprobs": null,
+        "text": "",
+      },
+    ],
+    "created": 1764156077,
+    "id": "oLoS2VE-zqrih-9a49005a38273b05",
+    "model": "moonshotai/Kimi-K2-Thinking",
+    "object": "chat.completion.chunk",
+    "usage": null,
+  },
+  {
+    "choices": [
+      {
+        "delta": {
+          "content": "",
+          "reasoning": "isely",
+          "role": "assistant",
+          "token_id": null,
+        },
+        "finish_reason": null,
+        "index": 0,
+        "logprobs": null,
+        "text": "",
+      },
+    ],
+    "created": 1764156077,
+    "id": "oLoS2VE-zqrih-9a49005a38273b05",
+    "model": "moonshotai/Kimi-K2-Thinking",
+    "object": "chat.completion.chunk",
+    "usage": null,
+  },
+  {
+    "choices": [
+      {
+        "delta": {
+          "content": "",
+          "reasoning": ".
+
+",
+          "role": "assistant",
+          "token_id": null,
+        },
+        "finish_reason": null,
+        "index": 0,
+        "logprobs": null,
+        "text": "",
+      },
+    ],
+    "created": 1764156077,
+    "id": "oLoS2VE-zqrih-9a49005a38273b05",
+    "model": "moonshotai/Kimi-K2-Thinking",
+    "object": "chat.completion.chunk",
+    "usage": null,
+  },
+  {
+    "choices": [
+      {
+        "delta": {
+          "content": "",
+          "reasoning": "Answer",
+          "role": "assistant",
+          "token_id": null,
+        },
+        "finish_reason": null,
+        "index": 0,
+        "logprobs": null,
+        "text": "",
+      },
+    ],
+    "created": 1764156077,
+    "id": "oLoS2VE-zqrih-9a49005a38273b05",
+    "model": "moonshotai/Kimi-K2-Thinking",
+    "object": "chat.completion.chunk",
+    "usage": null,
+  },
+  {
+    "choices": [
+      {
+        "delta": {
+          "content": "",
+          "reasoning": ":",
+          "role": "assistant",
+          "token_id": null,
+        },
+        "finish_reason": null,
+        "index": 0,
+        "logprobs": null,
+        "text": "",
+      },
+    ],
+    "created": 1764156077,
+    "id": "oLoS2VE-zqrih-9a49005a38273b05",
+    "model": "moonshotai/Kimi-K2-Thinking",
+    "object": "chat.completion.chunk",
+    "usage": null,
+  },
+  {
+    "choices": [
+      {
+        "delta": {
+          "content": "",
+          "reasoning": " Paris",
+          "role": "assistant",
+          "token_id": null,
+        },
+        "finish_reason": null,
+        "index": 0,
+        "logprobs": null,
+        "text": "",
+      },
+    ],
+    "created": 1764156077,
+    "id": "oLoS2VE-zqrih-9a49005a38273b05",
+    "model": "moonshotai/Kimi-K2-Thinking",
+    "object": "chat.completion.chunk",
+    "usage": null,
+  },
+  {
+    "choices": [
+      {
+        "delta": {
+          "content": "",
+          "reasoning": "
+
+",
+          "role": "assistant",
+          "token_id": null,
+        },
+        "finish_reason": null,
+        "index": 0,
+        "logprobs": null,
+        "text": "",
+      },
+    ],
+    "created": 1764156077,
+    "id": "oLoS2VE-zqrih-9a49005a38273b05",
+    "model": "moonshotai/Kimi-K2-Thinking",
+    "object": "chat.completion.chunk",
+    "usage": null,
+  },
+  {
+    "choices": [
+      {
+        "delta": {
+          "content": "",
+          "reasoning": "I",
+          "role": "assistant",
+          "token_id": null,
+        },
+        "finish_reason": null,
+        "index": 0,
+        "logprobs": null,
+        "text": "",
+      },
+    ],
+    "created": 1764156077,
+    "id": "oLoS2VE-zqrih-9a49005a38273b05",
+    "model": "moonshotai/Kimi-K2-Thinking",
+    "object": "chat.completion.chunk",
+    "usage": null,
+  },
+  {
+    "choices": [
+      {
+        "delta": {
+          "content": "",
+          "reasoning": " can",
+          "role": "assistant",
+          "token_id": null,
+        },
+        "finish_reason": null,
+        "index": 0,
+        "logprobs": null,
+        "text": "",
+      },
+    ],
+    "created": 1764156077,
+    "id": "oLoS2VE-zqrih-9a49005a38273b05",
+    "model": "moonshotai/Kimi-K2-Thinking",
+    "object": "chat.completion.chunk",
+    "usage": null,
+  },
+  {
+    "choices": [
+      {
+        "delta": {
+          "content": "",
+          "reasoning": " keep",
+          "role": "assistant",
+          "token_id": null,
+        },
+        "finish_reason": null,
+        "index": 0,
+        "logprobs": null,
+        "text": "",
+      },
+    ],
+    "created": 1764156077,
+    "id": "oLoS2VE-zqrih-9a49005a38273b05",
+    "model": "moonshotai/Kimi-K2-Thinking",
+    "object": "chat.completion.chunk",
+    "usage": null,
+  },
+  {
+    "choices": [
+      {
+        "delta": {
+          "content": "",
+          "reasoning": " it",
+          "role": "assistant",
+          "token_id": null,
+        },
+        "finish_reason": null,
+        "index": 0,
+        "logprobs": null,
+        "text": "",
+      },
+    ],
+    "created": 1764156077,
+    "id": "oLoS2VE-zqrih-9a49005a38273b05",
+    "model": "moonshotai/Kimi-K2-Thinking",
+    "object": "chat.completion.chunk",
+    "usage": null,
+  },
+  {
+    "choices": [
+      {
+        "delta": {
+          "content": "",
+          "reasoning": " simple",
+          "role": "assistant",
+          "token_id": null,
+        },
+        "finish_reason": null,
+        "index": 0,
+        "logprobs": null,
+        "text": "",
+      },
+    ],
+    "created": 1764156077,
+    "id": "oLoS2VE-zqrih-9a49005a38273b05",
+    "model": "moonshotai/Kimi-K2-Thinking",
+    "object": "chat.completion.chunk",
+    "usage": null,
+  },
+  {
+    "choices": [
+      {
+        "delta": {
+          "content": "",
+          "reasoning": " and",
+          "role": "assistant",
+          "token_id": null,
+        },
+        "finish_reason": null,
+        "index": 0,
+        "logprobs": null,
+        "text": "",
+      },
+    ],
+    "created": 1764156077,
+    "id": "oLoS2VE-zqrih-9a49005a38273b05",
+    "model": "moonshotai/Kimi-K2-Thinking",
+    "object": "chat.completion.chunk",
+    "usage": null,
+  },
+  {
+    "choices": [
+      {
+        "delta": {
+          "content": "",
+          "reasoning": " just",
+          "role": "assistant",
+          "token_id": null,
+        },
+        "finish_reason": null,
+        "index": 0,
+        "logprobs": null,
+        "text": "",
+      },
+    ],
+    "created": 1764156077,
+    "id": "oLoS2VE-zqrih-9a49005a38273b05",
+    "model": "moonshotai/Kimi-K2-Thinking",
+    "object": "chat.completion.chunk",
+    "usage": null,
+  },
+  {
+    "choices": [
+      {
+        "delta": {
+          "content": "",
+          "reasoning": " state",
+          "role": "assistant",
+          "token_id": null,
+        },
+        "finish_reason": null,
+        "index": 0,
+        "logprobs": null,
+        "text": "",
+      },
+    ],
+    "created": 1764156077,
+    "id": "oLoS2VE-zqrih-9a49005a38273b05",
+    "model": "moonshotai/Kimi-K2-Thinking",
+    "object": "chat.completion.chunk",
+    "usage": null,
+  },
+  {
+    "choices": [
+      {
+        "delta": {
+          "content": "",
+          "reasoning": " the",
+          "role": "assistant",
+          "token_id": null,
+        },
+        "finish_reason": null,
+        "index": 0,
+        "logprobs": null,
+        "text": "",
+      },
+    ],
+    "created": 1764156077,
+    "id": "oLoS2VE-zqrih-9a49005a38273b05",
+    "model": "moonshotai/Kimi-K2-Thinking",
+    "object": "chat.completion.chunk",
+    "usage": null,
+  },
+  {
+    "choices": [
+      {
+        "delta": {
+          "content": "",
+          "reasoning": " answer",
+          "role": "assistant",
+          "token_id": null,
+        },
+        "finish_reason": null,
+        "index": 0,
+        "logprobs": null,
+        "text": "",
+      },
+    ],
+    "created": 1764156077,
+    "id": "oLoS2VE-zqrih-9a49005a38273b05",
+    "model": "moonshotai/Kimi-K2-Thinking",
+    "object": "chat.completion.chunk",
+    "usage": null,
+  },
+  {
+    "choices": [
+      {
+        "delta": {
+          "content": "",
+          "reasoning": ".",
+          "role": "assistant",
+          "token_id": null,
+        },
+        "finish_reason": null,
+        "index": 0,
+        "logprobs": null,
+        "text": "",
+      },
+    ],
+    "created": 1764156077,
+    "id": "oLoS2VE-zqrih-9a49005a38273b05",
+    "model": "moonshotai/Kimi-K2-Thinking",
+    "object": "chat.completion.chunk",
+    "usage": null,
+  },
+  {
+    "choices": [
+      {
+        "delta": {
+          "content": " The",
+          "reasoning": null,
+          "role": "assistant",
+          "token_id": null,
+        },
+        "finish_reason": null,
+        "index": 0,
+        "logprobs": null,
+        "text": " The",
+      },
+    ],
+    "created": 1764156077,
+    "id": "oLoS2VE-zqrih-9a49005a38273b05",
+    "model": "moonshotai/Kimi-K2-Thinking",
+    "object": "chat.completion.chunk",
+    "usage": null,
+  },
+  {
+    "choices": [
+      {
+        "delta": {
+          "content": " capital",
+          "reasoning": null,
+          "role": "assistant",
+          "token_id": null,
+        },
+        "finish_reason": null,
+        "index": 0,
+        "logprobs": null,
+        "text": " capital",
+      },
+    ],
+    "created": 1764156077,
+    "id": "oLoS2VE-zqrih-9a49005a38273b05",
+    "model": "moonshotai/Kimi-K2-Thinking",
+    "object": "chat.completion.chunk",
+    "usage": null,
+  },
+  {
+    "choices": [
+      {
+        "delta": {
+          "content": " of",
+          "reasoning": null,
+          "role": "assistant",
+          "token_id": null,
+        },
+        "finish_reason": null,
+        "index": 0,
+        "logprobs": null,
+        "text": " of",
+      },
+    ],
+    "created": 1764156077,
+    "id": "oLoS2VE-zqrih-9a49005a38273b05",
+    "model": "moonshotai/Kimi-K2-Thinking",
+    "object": "chat.completion.chunk",
+    "usage": null,
+  },
+  {
+    "choices": [
+      {
+        "delta": {
+          "content": " France",
+          "reasoning": null,
+          "role": "assistant",
+          "token_id": null,
+        },
+        "finish_reason": null,
+        "index": 0,
+        "logprobs": null,
+        "text": " France",
+      },
+    ],
+    "created": 1764156077,
+    "id": "oLoS2VE-zqrih-9a49005a38273b05",
+    "model": "moonshotai/Kimi-K2-Thinking",
+    "object": "chat.completion.chunk",
+    "usage": null,
+  },
+  {
+    "choices": [
+      {
+        "delta": {
+          "content": " is",
+          "reasoning": null,
+          "role": "assistant",
+          "token_id": null,
+        },
+        "finish_reason": null,
+        "index": 0,
+        "logprobs": null,
+        "text": " is",
+      },
+    ],
+    "created": 1764156077,
+    "id": "oLoS2VE-zqrih-9a49005a38273b05",
+    "model": "moonshotai/Kimi-K2-Thinking",
+    "object": "chat.completion.chunk",
+    "usage": null,
+  },
+  {
+    "choices": [
+      {
+        "delta": {
+          "content": " **",
+          "reasoning": null,
+          "role": "assistant",
+          "token_id": null,
+        },
+        "finish_reason": null,
+        "index": 0,
+        "logprobs": null,
+        "text": " **",
+      },
+    ],
+    "created": 1764156077,
+    "id": "oLoS2VE-zqrih-9a49005a38273b05",
+    "model": "moonshotai/Kimi-K2-Thinking",
+    "object": "chat.completion.chunk",
+    "usage": null,
+  },
+  {
+    "choices": [
+      {
+        "delta": {
+          "content": "Paris",
+          "reasoning": null,
+          "role": "assistant",
+          "token_id": null,
+        },
+        "finish_reason": null,
+        "index": 0,
+        "logprobs": null,
+        "text": "Paris",
+      },
+    ],
+    "created": 1764156077,
+    "id": "oLoS2VE-zqrih-9a49005a38273b05",
+    "model": "moonshotai/Kimi-K2-Thinking",
+    "object": "chat.completion.chunk",
+    "usage": null,
+  },
+  {
+    "choices": [
+      {
+        "delta": {
+          "content": "**.",
+          "reasoning": null,
+          "role": "assistant",
+          "token_id": null,
+        },
+        "finish_reason": null,
+        "index": 0,
+        "logprobs": null,
+        "text": "**.",
+      },
+    ],
+    "created": 1764156077,
+    "id": "oLoS2VE-zqrih-9a49005a38273b05",
+    "model": "moonshotai/Kimi-K2-Thinking",
+    "object": "chat.completion.chunk",
+    "usage": null,
+  },
+  {
+    "choices": [
+      {
+        "delta": {
+          "content": "",
+          "reasoning": null,
+          "role": "assistant",
+          "token_id": null,
+        },
+        "finish_reason": "stop",
+        "index": 0,
+        "logprobs": null,
+        "text": "",
+      },
+    ],
+    "created": 1764156077,
+    "id": "oLoS2VE-zqrih-9a49005a38273b05",
+    "model": "moonshotai/Kimi-K2-Thinking",
+    "object": "chat.completion.chunk",
+    "usage": null,
+  },
+  {
+    "choices": [],
+    "created": 1764156077,
+    "id": "oLoS2VE-zqrih-9a49005a38273b05",
+    "model": "moonshotai/Kimi-K2-Thinking",
+    "object": "chat.completion.chunk",
+    "usage": {
+      "completion_tokens": 89,
+      "prompt_tokens": 24,
+      "prompt_tokens_details": null,
+      "reasoning_tokens": 0,
+      "total_tokens": 113,
+    },
+  },
+]
+`;
+
+exports[`huggingface > huggingface chat stream > span 1`] = `
+[
+  {
+    "attributes": {
+      "gen_ai.operation.name": "chat",
+      "gen_ai.request.max_tokens": 1024,
+      "gen_ai.request.model": "moonshotai/Kimi-K2-Thinking",
+      "gen_ai.response.id": "oLoS2VE-zqrih-9a49005a38273b05",
+      "gen_ai.response.model": "moonshotai/Kimi-K2-Thinking",
+      "gen_ai.system": "huggingface",
+      "gen_ai.usage.input_tokens": 24,
+      "gen_ai.usage.output_tokens": 89,
+      "http.request.header.accept": "application/json",
+      "http.request.header.content-length": "285",
+      "http.request.header.content-type": "application/json",
+      "http.request.header.user-agent": "OpenAI/JS 4.104.0",
+      "http.request.header.x-stainless-arch": "unknown",
+      "http.request.header.x-stainless-lang": "js",
+      "http.request.header.x-stainless-os": "Unknown",
+      "http.request.header.x-stainless-package-version": "4.104.0",
+      "http.request.header.x-stainless-retry-count": "0",
+      "http.request.header.x-stainless-runtime": "unknown",
+      "http.request.header.x-stainless-runtime-version": "unknown",
+      "http.request.header.x-stainless-timeout": "600",
+      "http.request.method": "POST",
+      "http.response.header.access-control-allow-origin": "*",
+      "http.response.header.access-control-expose-headers": "X-Repo-Commit,X-Request-Id,X-Error-Code,X-Error-Message,X-Total-Count,ETag,Link,Accept-Ranges,Content-Range,X-Linked-Size,X-Linked-ETag,X-Xet-Hash",
+      "http.response.header.cache-control": "no-cache, no-transform",
+      "http.response.header.cf-cache-status": "DYNAMIC",
+      "http.response.header.cf-ray": "9a49005a38273b05-IAD",
+      "http.response.header.connection": "keep-alive",
+      "http.response.header.content-length": "27101",
+      "http.response.header.content-type": "text/event-stream;charset=utf-8",
+      "http.response.header.cross-origin-opener-policy": "same-origin",
+      "http.response.header.date": "Wed, 26 Nov 2025 11:21:17 GMT",
+      "http.response.header.referrer-policy": "strict-origin-when-cross-origin",
+      "http.response.header.retry-after": "0",
+      "http.response.header.server": "uvicorn, cloudflare",
+      "http.response.header.strict-transport-security": "max-age=15552000; includeSubDomains",
+      "http.response.header.transfer-encoding": "chunked",
+      "http.response.header.vary": "Accept-Encoding",
+      "http.response.header.via": "1.1 8aadc8635b9ead1f8a0c393f17634d32.cloudfront.net (CloudFront)",
+      "http.response.header.x-amz-cf-id": "9OU_NE1buPNTNS_pK2J1ed_NYYI7DI2qhfKE1Sj903V9G3QP0t16Dw==",
+      "http.response.header.x-amz-cf-pop": "MAD53-P3",
+      "http.response.header.x-api-call-start": "2025-11-26T11:21:17.245Z",
+      "http.response.header.x-api-received": "2025-11-26T11:21:17.233Z",
+      "http.response.header.x-cache": "Miss from cloudfront",
+      "http.response.header.x-inference-provider": "together",
+      "http.response.header.x-inference-version": "v2",
+      "http.response.header.x-powered-by": "huggingface-moon",
+      "http.response.header.x-ratelimit": "false",
+      "http.response.header.x-ratelimit-limit": "100",
+      "http.response.header.x-ratelimit-limit-tokens": "33333",
+      "http.response.header.x-ratelimit-remaining": "198",
+      "http.response.header.x-ratelimit-remaining-tokens": "33333",
+      "http.response.header.x-ratelimit-reset": "0",
+      "http.response.header.x-request-id": "oLoS2VE-zqrih-9a49005a38273b05",
+      "http.response.header.x-robots-tag": "none",
+      "http.response.status_code": 200,
+      "logfire.json_schema": "{"type":"object","properties":{"gen_ai.system":{"type":"string"},"gen_ai.operation.name":{"type":"string"},"gen_ai.request.model":{"type":"string"},"gen_ai.request.max_tokens":{"type":"number"},"gen_ai.response.model":{"type":"string"},"gen_ai.response.id":{"type":"string"},"gen_ai.usage.input_tokens":{"type":"number"},"gen_ai.usage.output_tokens":{"type":"number"},"http.request.method":{"type":"string"},"url.full":{"type":"string"},"http.request.header.accept":{"type":"string"},"http.request.header.content-length":{"type":"string"},"http.request.header.content-type":{"type":"string"},"http.request.header.user-agent":{"type":"string"},"http.request.header.x-stainless-arch":{"type":"string"},"http.request.header.x-stainless-lang":{"type":"string"},"http.request.header.x-stainless-os":{"type":"string"},"http.request.header.x-stainless-package-version":{"type":"string"},"http.request.header.x-stainless-retry-count":{"type":"string"},"http.request.header.x-stainless-runtime":{"type":"string"},"http.request.header.x-stainless-runtime-version":{"type":"string"},"http.request.header.x-stainless-timeout":{"type":"string"},"http.response.status_code":{"type":"number"},"http.response.header.access-control-allow-origin":{"type":"string"},"http.response.header.access-control-expose-headers":{"type":"string"},"http.response.header.cache-control":{"type":"string"},"http.response.header.cf-cache-status":{"type":"string"},"http.response.header.cf-ray":{"type":"string"},"http.response.header.connection":{"type":"string"},"http.response.header.content-length":{"type":"string"},"http.response.header.content-type":{"type":"string"},"http.response.header.cross-origin-opener-policy":{"type":"string"},"http.response.header.date":{"type":"string"},"http.response.header.referrer-policy":{"type":"string"},"http.response.header.retry-after":{"type":"string"},"http.response.header.server":{"type":"string"},"http.response.header.strict-transport-security":{"type":"string"},"http.response.header.transfer-encoding":{"type":"string"},"http.response.header.vary":{"type":"string"},"http.response.header.via":{"type":"string"},"http.response.header.x-amz-cf-id":{"type":"string"},"http.response.header.x-amz-cf-pop":{"type":"string"},"http.response.header.x-api-call-start":{"type":"string"},"http.response.header.x-api-received":{"type":"string"},"http.response.header.x-cache":{"type":"string"},"http.response.header.x-inference-provider":{"type":"string"},"http.response.header.x-inference-version":{"type":"string"},"http.response.header.x-powered-by":{"type":"string"},"http.response.header.x-ratelimit":{"type":"string"},"http.response.header.x-ratelimit-limit":{"type":"string"},"http.response.header.x-ratelimit-limit-tokens":{"type":"string"},"http.response.header.x-ratelimit-remaining":{"type":"string"},"http.response.header.x-ratelimit-remaining-tokens":{"type":"string"},"http.response.header.x-ratelimit-reset":{"type":"string"},"http.response.header.x-request-id":{"type":"string"},"http.response.header.x-robots-tag":{"type":"string"}}}",
+      "logfire.level_num": 9,
+      "logfire.msg": "chat moonshotai/Kimi-K2-Thinking",
+      "url.full": "https://example.com/huggingface/chat/completions",
+    },
+    "events": [],
+    "kind": 1,
+    "links": [],
+    "name": "chat moonshotai/Kimi-K2-Thinking",
+    "parentSpanId": undefined,
+    "resource": {
+      "service.name": "PAIG",
+      "service.version": "test",
+    },
+    "scope": "pydantic-ai-gateway",
+    "status": {
+      "code": 1,
+    },
+  },
+]
+`;
+
+exports[`huggingface > should call huggingface via gateway > llm 1`] = `
+{
+  "choices": [
+    {
+      "finish_reason": "stop",
+      "index": 0,
+      "logprobs": null,
+      "message": {
+        "content": "The capital of France is **Paris**.",
+        "reasoning": "The user is asking a straightforward factual question: "What is the capital of France?"
+
+This is a simple geography question. The capital of France is Paris. I should provide a clear, direct answer.
+
+I should:
+1. State the answer clearly: Paris
+2. Keep it concise since it's a simple question
+3. Optionally add a tiny bit of helpful context (like that it's also the largest city) but keep it brief
+
+No need for complex explanations or caveats. The user just wants the name of the capital. ",
+        "role": "assistant",
+        "tool_calls": [],
+      },
+      "seed": null,
+    },
+  ],
+  "created": 1764156076,
+  "id": "oLoS21F-zqrih-9a4900502a1532a5",
+  "metadata": {
+    "weight_version": "default",
+  },
+  "model": "moonshotai/Kimi-K2-Thinking",
+  "object": "chat.completion",
+  "prompt": [],
+  "usage": {
+    "completion_tokens": 118,
+    "prompt_tokens": 24,
+    "pydantic_ai_gateway": {
+      "cost_estimate": 0.0005008,
+    },
+    "total_tokens": 142,
+  },
+}
+`;
+
+exports[`huggingface > should call huggingface via gateway > span 1`] = `
+[
+  {
+    "attributes": {
+      "gen_ai.input.messages": [
+        {
+          "parts": [
+            {
+              "content": "You are a helpful assistant.",
+              "type": "text",
+            },
+          ],
+          "role": "system",
+        },
+        {
+          "parts": [
+            {
+              "content": "What is the capital of France?",
+              "type": "text",
+            },
+          ],
+          "role": "user",
+        },
+      ],
+      "gen_ai.operation.name": "chat",
+      "gen_ai.output.messages": [
+        {
+          "finish_reason": "stop",
+          "parts": [
+            {
+              "content": "The capital of France is **Paris**.",
+              "type": "text",
+            },
+          ],
+          "role": "assistant",
+        },
+      ],
+      "gen_ai.request.max_tokens": 1024,
+      "gen_ai.request.model": "moonshotai/Kimi-K2-Thinking",
+      "gen_ai.request.seed": {},
+      "gen_ai.request.stop_sequences": [
+        "potato",
+      ],
+      "gen_ai.request.temperature": 0.5,
+      "gen_ai.request.top_k": {},
+      "gen_ai.request.top_p": 0.95,
+      "gen_ai.response.finish_reasons": [
+        "stop",
+      ],
+      "gen_ai.response.id": "oLoS21F-zqrih-9a4900502a1532a5",
+      "gen_ai.response.model": "moonshotai/Kimi-K2-Thinking",
+      "gen_ai.system": "huggingface",
+      "gen_ai.system_instructions": {},
+      "gen_ai.usage.cache_audio_read_tokens": {},
+      "gen_ai.usage.cache_read_tokens": {},
+      "gen_ai.usage.cache_write_tokens": {},
+      "gen_ai.usage.input_audio_tokens": {},
+      "gen_ai.usage.input_tokens": 24,
+      "gen_ai.usage.output_audio_tokens": {},
+      "gen_ai.usage.output_tokens": 118,
+      "http.request.body.text": "{
+  "model": "moonshotai/Kimi-K2-Thinking",
+  "messages": [
+    {
+      "role": "system",
+      "content": "You are a helpful assistant."
+    },
+    {
+      "role": "user",
+      "content": "What is the capital of France?"
+    }
+  ],
+  "top_p": 0.95,
+  "temperature": 0.5,
+  "stop": [
+    "potato"
+  ],
+  "max_completion_tokens": 1024
+}",
+      "http.response.body.text": "{"id":"oLoS21F-zqrih-9a4900502a1532a5","object":"chat.completion","created":1764156076,"model":"moonshotai/Kimi-K2-Thinking","metadata":{"weight_version":"default"},"prompt":[],"choices":[{"index":0,"message":{"role":"assistant","content":"The capital of France is **Paris**.","tool_calls":[],"reasoning":"The user is asking a straightforward factual question: \\"What is the capital of France?\\"\\n\\nThis is a simple geography question. The capital of France is Paris. I should provide a clear, direct answer.\\n\\nI should:\\n1. State the answer clearly: Paris\\n2. Keep it concise since it's a simple question\\n3. Optionally add a tiny bit of helpful context (like that it's also the largest city) but keep it brief\\n\\nNo need for complex explanations or caveats. The user just wants the name of the capital. "},"logprobs":null,"finish_reason":"stop","seed":null}],"usage":{"prompt_tokens":24,"total_tokens":142,"completion_tokens":118,"pydantic_ai_gateway":{"cost_estimate":0.0005008}}}",
+      "http.response.status_code": 200,
+      "logfire.json_schema": "{"type":"object","properties":{"gen_ai.operation.name":{"type":"string"},"gen_ai.request.model":{"type":"string"},"gen_ai.system":{"type":"string"},"gen_ai.request.max_tokens":{"type":"number"},"gen_ai.request.top_k":{},"gen_ai.request.top_p":{"type":"number"},"gen_ai.request.temperature":{"type":"number"},"gen_ai.request.stop_sequences":{},"gen_ai.request.seed":{},"gen_ai.response.finish_reasons":{},"gen_ai.response.id":{"type":"string"},"gen_ai.input.messages":{},"gen_ai.output.messages":{},"gen_ai.system_instructions":{},"http.response.status_code":{"type":"number"},"http.request.body.text":{"type":"string"},"http.response.body.text":{"type":"string"},"gen_ai.response.model":{"type":"string"},"gen_ai.usage.input_tokens":{"type":"number"},"gen_ai.usage.cache_read_tokens":{},"gen_ai.usage.cache_write_tokens":{},"gen_ai.usage.output_tokens":{"type":"number"},"gen_ai.usage.input_audio_tokens":{},"gen_ai.usage.cache_audio_read_tokens":{},"gen_ai.usage.output_audio_tokens":{}}}",
+      "logfire.level_num": 9,
+      "logfire.msg": "chat moonshotai/Kimi-K2-Thinking",
+    },
+    "events": [],
+    "kind": 1,
+    "links": [],
+    "name": "chat moonshotai/Kimi-K2-Thinking",
+    "parentSpanId": undefined,
+    "resource": {
+      "service.name": "PAIG",
+      "service.version": "test",
+    },
+    "scope": "pydantic-ai-gateway",
+    "status": {
+      "code": 1,
+    },
+  },
+]
+`;

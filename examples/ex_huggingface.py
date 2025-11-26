@@ -5,7 +5,7 @@ from openai import OpenAI
 api_key = os.getenv('PYDANTIC_AI_GATEWAY_API_KEY')
 assert api_key is not None
 
-client = OpenAI(api_key=api_key, base_url='http://localhost:8787/huggingface')
+client = OpenAI(api_key=api_key, base_url='http://localhost:8787/huggingface/v1')
 
 completion = client.chat.completions.create(
     model='openai/gpt-oss-20b:hyperbolic',

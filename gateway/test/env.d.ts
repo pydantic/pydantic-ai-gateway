@@ -8,6 +8,7 @@ interface Env {
   ANTHROPIC_API_KEY: string
   AWS_BEARER_TOKEN_BEDROCK: string
   GOOGLE_SERVICE_ACCOUNT_KEY: string
+  HF_TOKEN: string
 }
 
 declare module 'cloudflare:test' {

@@ -22,6 +22,7 @@ BEDROCK_BASE_URL = 'https://bedrock-runtime.us-east-1.amazonaws.com'
 GOOGLE_BASE_URL = 'https://aiplatform.googleapis.com'
 # The Azure URL is not a secret, we can commit it.
 AZURE_BASE_URL = 'https://marcelo-0665-resource.openai.azure.com/openai/v1'
+HF_BASE_URL = 'https://router.huggingface.co/v1'
 
 current_file_dir = pathlib.Path(__file__).parent
 
@@ -61,6 +62,12 @@ async def proxy(request: Request) -> Response:
         client = cast(httpx.AsyncClient, request.scope['state']['httpx_client'])
         url = AZURE_BASE_URL + request.url.path[len('/azure') :]
         with vcr.use_cassette(cassette_name('azure', vcr_suffix)):  # type: ignore[reportUnknownReturnType]
+            headers = {'Authorization': auth_header, 'content-type': 'application/json'}
+            response = await client.post(url, content=body, headers=headers)
+    elif provider == 'huggingface':
+        client = cast(httpx.AsyncClient, request.scope['state']['httpx_client'])
+        url = HF_BASE_URL + request.url.path[len('/huggingface') :]
+        with vcr.use_cassette(cassette_name('huggingface', vcr_suffix)):  # type: ignore[reportUnknownReturnType]
             headers = {'Authorization': auth_header, 'content-type': 'application/json'}
             response = await client.post(url, content=body, headers=headers)
     elif provider == 'groq':
@@ -120,8 +127,9 @@ async def proxy(request: Request) -> Response:
             async for chunk in response.aiter_bytes():
                 yield chunk
 
-        return StreamingResponse(generator(), status_code=response.status_code, headers={'content-type': content_type})
-    return JSONResponse(response.json(), status_code=response.status_code)
+        headers = {**response.headers.copy(), 'content-type': content_type}
+        return StreamingResponse(generator(), status_code=response.status_code, headers=headers)
+    return JSONResponse(response.json(), status_code=response.status_code, headers=response.headers.copy())
 
 
 async def health_check(_: Request) -> Response:
@@ -160,6 +168,8 @@ def select_provider(request: Request) -> str:
 
     if request.url.path.startswith('/openai'):
         return 'openai'
+    if request.url.path.startswith('/huggingface'):
+        return 'huggingface'
     elif request.url.path.startswith('/groq'):
         return 'groq'
     elif request.url.path.startswith('/bedrock'):

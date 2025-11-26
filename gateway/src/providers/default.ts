@@ -172,10 +172,7 @@ export class DefaultProviderProxy {
   }
 
   protected usageProvider(): UsageProvider | undefined {
-    console.log('this.request.url', this.request.url)
-    const provider = findProvider({ providerId: this.providerId(), providerApiUrl: this.request.url })
-    console.log('provider', provider)
-    return provider
+    return findProvider({ providerId: this.providerId() })
   }
 
   protected method(): string {
@@ -201,7 +198,6 @@ export class DefaultProviderProxy {
     const requestBodyText = await this.request.text()
     let requestBodyData: JsonData
     let requestModel: unknown
-    console.log('requestBodyText', requestBodyText)
     try {
       requestBodyData = JSON.parse(requestBodyText) as JsonData
       if ('model' in requestBodyData) {
@@ -338,7 +334,8 @@ export class DefaultProviderProxy {
     const url = this.url()
 
     // Validate that it's possible to calculate the price for the request model.
-    if (requestModel && this.providerProxy.disableKey) {
+    // HuggingFace is an exception because we will only know the real provider in the response headers.
+    if (requestModel && this.providerProxy.disableKey && this.providerId() !== 'huggingface') {
       const price = calcPrice({ input_tokens: 0, output_tokens: 0 }, requestModel, { provider: this.usageProvider() })
       if (!price) {
         return { modelNotFound: true, requestModel }

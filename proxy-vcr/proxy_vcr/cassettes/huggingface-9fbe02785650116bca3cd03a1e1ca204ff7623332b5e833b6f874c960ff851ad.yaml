@@ -1,0 +1,113 @@
+interactions:
+- request:
+    body: "{\n  \"model\": \"moonshotai/Kimi-K2-Thinking\",\n  \"messages\": [\n    {\n
+      \     \"role\": \"system\",\n      \"content\": \"You are a helpful assistant.\"\n
+      \   },\n    {\n      \"role\": \"user\",\n      \"content\": \"What is the capital
+      of France?\"\n    }\n  ],\n  \"top_p\": 0.95,\n  \"temperature\": 0.5,\n  \"stop\":
+      [\n    \"potato\"\n  ],\n  \"max_completion_tokens\": 1024\n}"
+    headers:
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '336'
+      content-type:
+      - application/json
+      host:
+      - router.huggingface.co
+      user-agent:
+      - python-httpx/0.28.1
+    method: POST
+    uri: https://router.huggingface.co/v1/chat/completions
+  response:
+    body:
+      string: "{\n  \"id\": \"oLoS21F-zqrih-9a4900502a1532a5\",\n  \"object\": \"chat.completion\",\n
+        \ \"created\": 1764156076,\n  \"model\": \"moonshotai/Kimi-K2-Thinking\",\n
+        \ \"metadata\": {\n    \"weight_version\": \"default\"\n  },\n  \"prompt\":
+        [],\n  \"choices\": [\n    {\n      \"index\": 0,\n      \"message\": {\n
+        \       \"role\": \"assistant\",\n        \"content\": \"The capital of France
+        is **Paris**.\",\n        \"tool_calls\": [],\n        \"reasoning\": \"The
+        user is asking a straightforward factual question: \\\"What is the capital
+        of France?\\\"\\n\\nThis is a simple geography question. The capital of France
+        is Paris. I should provide a clear, direct answer.\\n\\nI should:\\n1. State
+        the answer clearly: Paris\\n2. Keep it concise since it's a simple question\\n3.
+        Optionally add a tiny bit of helpful context (like that it's also the largest
+        city) but keep it brief\\n\\nNo need for complex explanations or caveats.
+        The user just wants the name of the capital. \"\n      },\n      \"logprobs\":
+        null,\n      \"finish_reason\": \"stop\",\n      \"seed\": null\n    }\n  ],\n
+        \ \"usage\": {\n    \"prompt_tokens\": 24,\n    \"total_tokens\": 142,\n    \"completion_tokens\":
+        118\n  }\n}"
+    headers:
+      Access-Control-Expose-Headers:
+      - X-Repo-Commit,X-Request-Id,X-Error-Code,X-Error-Message,X-Total-Count,ETag,Link,Accept-Ranges,Content-Range,X-Linked-Size,X-Linked-ETag,X-Xet-Hash
+      Connection:
+      - keep-alive
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Wed, 26 Nov 2025 11:21:16 GMT
+      Referrer-Policy:
+      - strict-origin-when-cross-origin
+      Transfer-Encoding:
+      - chunked
+      Via:
+      - 1.1 8aadc8635b9ead1f8a0c393f17634d32.cloudfront.net (CloudFront)
+      X-Amz-Cf-Id:
+      - mTSpR1C5v-U7XcYfdFsfzMJXa4gxtaJ9bKxJtSLGVY01GU8ClCjxDg==
+      X-Amz-Cf-Pop:
+      - MAD53-P3
+      X-Cache:
+      - Miss from cloudfront
+      X-Powered-By:
+      - huggingface-moon
+      X-Robots-Tag:
+      - none
+      access-control-allow-origin:
+      - '*'
+      cf-cache-status:
+      - DYNAMIC
+      cf-ray:
+      - 9a4900502a1532a5-IAD
+      cross-origin-opener-policy:
+      - same-origin
+      etag:
+      - W/"449-kYf5rqo9m67r/56yPs8x3CUSCb0"
+      retry-after:
+      - '2'
+      server:
+      - cloudflare
+      strict-transport-security:
+      - max-age=15552000; includeSubDomains
+      vary:
+      - Accept-Encoding
+      x-api-call-end:
+      - '2025-11-26T11:21:16.873Z'
+      x-api-call-start:
+      - '2025-11-26T11:21:15.622Z'
+      x-api-received:
+      - '2025-11-26T11:21:15.610Z'
+      x-inference-provider:
+      - together
+      x-inference-version:
+      - v2
+      x-ratelimit:
+      - 'false'
+      x-ratelimit-limit:
+      - '100'
+      x-ratelimit-limit-tokens:
+      - '33333'
+      x-ratelimit-remaining:
+      - '199'
+      x-ratelimit-remaining-tokens:
+      - '33333'
+      x-ratelimit-reset:
+      - '2'
+      x-request-id:
+      - oLoS21F-zqrih-9a4900502a1532a5
+    status:
+      code: 200
+      message: OK
+version: 1

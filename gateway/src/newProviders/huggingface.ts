@@ -1,10 +1,18 @@
 import type { ModelAPI } from '../api'
 import { ChatCompletionAPI } from '../api/chat'
 import type { ErrorResponse } from '../handler'
-import { BaseProvider } from './base'
+import { BaseProvider, type ExtractedInfo } from './base'
 
 export class HuggingFaceProvider extends BaseProvider {
-  getModelAPI(): ModelAPI {
+  getRequestModel(extracted: ExtractedInfo): string | undefined {
+    const { requestBodyData } = extracted
+    if ('model' in requestBodyData && typeof requestBodyData.model === 'string') {
+      return requestBodyData.model
+    }
+    return undefined
+  }
+
+  getModelAPI(extracted: ExtractedInfo): ModelAPI {
     return new ChatCompletionAPI('huggingface')
   }
 

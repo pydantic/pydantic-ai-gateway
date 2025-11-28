@@ -2,7 +2,7 @@ import type { ModelAPI } from '../api'
 import { AnthropicAPI } from '../api/anthropic'
 import { GoogleAPI } from '../api/google'
 import type { ErrorResponse } from '../handler'
-import { BaseProvider, type ProviderOptions } from './base'
+import { BaseProvider, type ExtractedInfo, type ProviderOptions } from './base'
 
 const GOOGLE_PATH_REGEX =
   /^\/?(?:(v\d+(?:beta\d*)?)\/)?(?:projects\/[^/]+\/locations\/[^/]+\/)?(?:publishers\/([^/]+)\/)?models\/(.+):(.*)$/
@@ -21,12 +21,8 @@ function stripLeadingSlash(str: string): string {
 }
 
 export class GoogleVertexProvider extends BaseProvider {
-  private flavor: 'default' | 'anthropic' = 'default'
   private projectId: string | null = null
   private region: string | null = null
-  private extractedPath: Partial<{ version: string; publisher: string; model: string; api: string }> = {}
-  private requestModel: string | null = null
-  private shouldStream: boolean = false
 
   constructor(options: ProviderOptions) {
     super(options)
@@ -41,24 +37,6 @@ export class GoogleVertexProvider extends BaseProvider {
 
     // Extract region from baseUrl
     this.region = regionFromUrl(this.providerProxy.baseUrl)
-
-    // Parse path to extract version/publisher/model/api
-    const pathWithoutQuery = this.restOfPath.split('?')[0]
-    if (pathWithoutQuery && pathWithoutQuery !== 'v1/messages') {
-      const extracted = this.extractFromPath()
-      if (extracted) {
-        const { version, publisher, model, api } = extracted
-        if (publisher === 'anthropic') {
-          this.flavor = 'anthropic'
-        }
-        this.extractedPath.version = version
-        this.extractedPath.publisher = publisher
-        this.extractedPath.model = model
-        this.extractedPath.api = api
-      }
-    } else if (pathWithoutQuery === 'v1/messages') {
-      this.flavor = 'anthropic'
-    }
   }
 
   private extractFromPath(): {
@@ -80,10 +58,40 @@ export class GoogleVertexProvider extends BaseProvider {
     return { version, publisher, model, api }
   }
 
-  getModelAPI(): ModelAPI {
-    if (this.flavor === 'anthropic') {
+  getRequestModel(extracted: ExtractedInfo): string | undefined {
+    const { requestBodyData } = extracted
+    const pathWithoutQuery = this.restOfPath.split('?')[0]
+
+    // For v1/messages format, get model from body
+    if (pathWithoutQuery === 'v1/messages') {
+      if ('model' in requestBodyData && typeof requestBodyData.model === 'string') {
+        return requestBodyData.model
+      }
+    } else {
+      // Try to extract model from URL path
+      const pathInfo = this.extractFromPath()
+      if (pathInfo?.model) {
+        return pathInfo.model
+      }
+    }
+
+    return undefined
+  }
+
+  getModelAPI(extracted: ExtractedInfo): ModelAPI {
+    const pathWithoutQuery = this.restOfPath.split('?')[0]
+
+    // Check if it's Anthropic format from path
+    if (pathWithoutQuery === 'v1/messages') {
       return new AnthropicAPI('google-vertex')
     }
+
+    // Check if publisher indicates Anthropic
+    const pathInfo = this.extractFromPath()
+    if (pathInfo?.publisher === 'anthropic') {
+      return new AnthropicAPI('google-vertex')
+    }
+
     return new GoogleAPI('google-vertex')
   }
 
@@ -95,38 +103,38 @@ export class GoogleVertexProvider extends BaseProvider {
     return Promise.resolve(null)
   }
 
-  url(): string {
+  url(extracted: ExtractedInfo): string {
     if (!this.projectId || !this.region) {
-      return super.url()
+      return super.url(extracted)
     }
 
-    const path = this.replacePath(this.projectId, this.region)
+    const path = this.replacePath(extracted, this.projectId, this.region)
     return `${stripTrailingSlash(this.providerProxy.baseUrl)}/${stripLeadingSlash(path)}`
   }
 
-  private replacePath(projectId: string, region: string): string {
+  private replacePath(extracted: ExtractedInfo, projectId: string, region: string): string {
     const pathWithoutQuery = this.restOfPath.split('?')[0]
+    const { requestBodyData } = extracted
 
     // Handle Anthropic client format: /v1/messages
-    if (pathWithoutQuery === 'v1/messages' && this.requestModel) {
-      const action = this.shouldStream ? 'streamRawPredict' : 'rawPredict'
-      return `/v1/projects/${projectId}/locations/${region}/publishers/anthropic/models/${this.requestModel}:${action}`
+    if (pathWithoutQuery === 'v1/messages') {
+      const requestModel = this.getRequestModel(extracted)
+      if (requestModel) {
+        const shouldStream = 'stream' in requestBodyData && requestBodyData.stream === true
+        const action = shouldStream ? 'streamRawPredict' : 'rawPredict'
+        return `/v1/projects/${projectId}/locations/${region}/publishers/anthropic/models/${requestModel}:${action}`
+      }
     }
 
     // Handle native Vertex format
-    const { version, publisher, model, api } = this.extractedPath
-    if (version && publisher && model && api) {
-      return `/${version}/projects/${projectId}/locations/${region}/publishers/${publisher}/models/${model}:${api}`
+    const pathInfo = this.extractFromPath()
+    if (pathInfo) {
+      const { version, publisher, model, api } = pathInfo
+      if (version && publisher && model && api) {
+        return `/${version}/projects/${projectId}/locations/${region}/publishers/${publisher}/models/${model}:${api}`
+      }
     }
 
     return this.restOfPath
-  }
-
-  setRequestModel(model: string) {
-    this.requestModel = model
-  }
-
-  setShouldStream(shouldStream: boolean) {
-    this.shouldStream = shouldStream
   }
 }

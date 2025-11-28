@@ -7,26 +7,31 @@ export interface ProviderOptions {
   providerProxy: ProviderProxy
 }
 
+export type JsonData = object
+
+export interface ExtractedInfo {
+  requestBodyText: string
+  requestBodyData: JsonData
+}
+
 export abstract class BaseProvider {
   readonly restOfPath: string
   readonly providerProxy: ProviderProxy
-  readonly modelAPI: ModelAPI
 
   constructor(options: ProviderOptions) {
     this.restOfPath = options.restOfPath
     this.providerProxy = options.providerProxy
-
-    this.modelAPI = this.getModelAPI()
   }
 
-  abstract getModelAPI(): ModelAPI
+  abstract getRequestModel(extracted: ExtractedInfo): string | undefined
+  abstract getModelAPI(extracted: ExtractedInfo): ModelAPI
   abstract authenticate(headers: Headers): Promise<ErrorResponse | null>
 
-  url(): string {
-    return `${this.providerProxy.baseUrl}/${this.restOfPath}`
+  providerId(): string {
+    return this.providerProxy.providerId
   }
 
-  // Optional methods for providers that need request data for URL construction
-  setRequestModel?(model: string): void
-  setShouldStream?(shouldStream: boolean): void
+  url(_extracted: ExtractedInfo): string {
+    return `${this.providerProxy.baseUrl}/${this.restOfPath}`
+  }
 }

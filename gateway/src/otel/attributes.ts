@@ -1,10 +1,10 @@
-import type { DefaultProviderProxy, ProxyInvalidRequest, ProxySuccess } from '../providers/default'
+import type { ProxyInvalidRequest, ProxySuccess } from '../providers/default'
 import type { Attributes, Level } from '.'
 import type { InputMessages, OutputMessages, TextPart } from './genai'
 
 export function genAiOtelAttributes(
   result: ProxySuccess | ProxyInvalidRequest,
-  provider: DefaultProviderProxy,
+  provider: { providerId: () => string },
 ): [string, Attributes, Level] {
   const { requestModel } = result
   let spanName: string

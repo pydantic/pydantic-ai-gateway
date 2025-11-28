@@ -10,10 +10,11 @@ import { createParser, type EventSourceMessage } from 'eventsource-parser'
 import logfire from 'logfire'
 import { match } from 'ts-pattern'
 import type { ApiKeyInfo, GatewayOptions, ProviderProxy } from '.'
+import type { ModelAPI } from './api'
 import type { BaseAPI } from './api/base'
 import { AnthropicProvider } from './newProviders/anthropic'
 import { AzureProvider } from './newProviders/azure'
-import type { BaseProvider, ProviderOptions } from './newProviders/base'
+import type { BaseProvider, ExtractedInfo, ProviderOptions } from './newProviders/base'
 import { BedrockProvider } from './newProviders/bedrock'
 import { GoogleVertexProvider } from './newProviders/google'
 import { GroqProvider } from './newProviders/groq'
@@ -94,23 +95,21 @@ export class RequestHandler {
       return authError
     }
 
-    // Parse request body
-    const prepResult = await this.prepRequest()
-    if ('error' in prepResult) {
-      return prepResult
-    }
-    const { requestBodyText, requestBodyData, requestModel } = prepResult
+    // Extract request info (generic parsing)
+    const extracted = await this.extractRequestInfo(this.request)
+    if ('error' in extracted) return extracted
 
-    // Update provider with request info before building URL
-    if (requestModel && this.provider.setRequestModel) {
-      this.provider.setRequestModel(requestModel)
-    }
-    if ('stream' in requestBodyData && this.provider.setShouldStream) {
-      this.provider.setShouldStream(requestBodyData.stream === true)
-    }
+    // Get request model from provider (provider-specific interpretation)
+    const requestModel = this.provider.getRequestModel(extracted)
+
+    // Get ModelAPI from provider (provider-specific selection)
+    const modelAPI = this.provider.getModelAPI(extracted)
+
+    // Get URL from provider (provider-specific construction)
+    const url = this.provider.url(extracted)
 
     const method = this.request.method
-    const url = this.provider.url()
+    const { requestBodyText, requestBodyData } = extracted
 
     // Validate that it's possible to calculate the price for the request model
     if (requestModel && this.providerProxy.disableKey && this.providerProxy.providerId !== 'huggingface') {
@@ -150,7 +149,7 @@ export class RequestHandler {
 
     const isStreaming = this.isStreaming(responseHeaders, requestBodyData)
     if (isStreaming) {
-      return this.dispatchStreaming(prepResult, response, responseHeaders)
+      return this.dispatchStreaming(extracted, response, responseHeaders, modelAPI, requestModel)
     }
 
     // Extract usage from response
@@ -166,7 +165,7 @@ export class RequestHandler {
       this.injectCost(responseBody, cost)
     }
 
-    const otelAttributes = this.provider.modelAPI.extractOtelAttributes(requestBodyData, responseBody)
+    const otelAttributes = modelAPI.extractOtelAttributes(requestBodyData, responseBody)
 
     return {
       responseModel,
@@ -186,23 +185,15 @@ export class RequestHandler {
     return `${String(userAgent)} via Pydantic AI Gateway ${this.gatewayOptions.githubSha.substring(0, 7)}, contact engineering@pydantic.dev`
   }
 
-  private async prepRequest(): Promise<PrepareResult | ErrorResponse> {
-    const requestBodyText = await this.request.text()
+  private async extractRequestInfo(request: Request): Promise<ExtractedInfo | ErrorResponse> {
+    const requestBodyText = await request.text()
     let requestBodyData: JsonData
-    let requestModel: unknown
     try {
       requestBodyData = JSON.parse(requestBodyText) as JsonData
-      if ('model' in requestBodyData) {
-        requestModel = requestBodyData.model
-      }
     } catch {
       return { error: 'invalid request JSON' }
     }
-    if (requestModel === undefined || typeof requestModel === 'string') {
-      return { requestBodyText, requestBodyData, requestModel }
-    } else {
-      return { error: 'invalid request, "model" should be a string' }
-    }
+    return { requestBodyText, requestBodyData }
   }
 
   private fetch(url: string, init: RequestInit): Promise<Response> {
@@ -259,18 +250,19 @@ export class RequestHandler {
   }
 
   private dispatchStreaming(
-    { requestBodyText, requestBodyData, requestModel }: PrepareResult,
+    extracted: ExtractedInfo,
     response: Response,
     responseHeaders: Headers,
+    modelAPI: ModelAPI,
+    requestModel?: string,
   ): StreamResponse | ErrorResponse {
     if (!response.body) {
       return { requestModel, error: 'No response body' }
     }
 
     const usageProvider = this.usageProvider()
+    const { requestBodyText, requestBodyData } = extracted
 
-    // Get ModelAPI instance from provider
-    const modelAPI = this.provider.modelAPI
     // @ts-expect-error: requestBodyData is a JsonData, but the `processRequest` receives the proper type.
     modelAPI.processRequest(requestBodyData)
 
@@ -405,12 +397,6 @@ export class RequestHandler {
 }
 
 type JsonData = object
-
-interface PrepareResult {
-  requestBodyText: string
-  requestBodyData: JsonData
-  requestModel?: string
-}
 
 interface ProcessResponse {
   responseBody: JsonData

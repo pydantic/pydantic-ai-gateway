@@ -2,44 +2,43 @@ import type { ModelAPI } from '../api'
 import { AnthropicAPI } from '../api/anthropic'
 import { ConverseAPI } from '../api/bedrock'
 import type { ErrorResponse } from '../handler'
-import { BaseProvider, type ProviderOptions } from './base'
+import { BaseProvider, type ExtractedInfo } from './base'
 
 export class BedrockProvider extends BaseProvider {
-  private flavor: 'default' | 'anthropic' = 'default'
-  private requestModel: string | null = null
-  private shouldStream: boolean = false
-
-  constructor(options: ProviderOptions) {
-    super(options)
-    // Pre-analyze path to determine flavor and extract model
-    this.analyzePath()
-  }
-
-  private analyzePath() {
+  getRequestModel(extracted: ExtractedInfo): string | undefined {
+    const { requestBodyData } = extracted
     const pathWithoutQuery = this.restOfPath.split('?')[0]
 
-    // Check if it's Anthropic format
+    // For v1/messages format, get model from body
     if (pathWithoutQuery === 'v1/messages') {
-      this.flavor = 'anthropic'
+      if ('model' in requestBodyData && typeof requestBodyData.model === 'string') {
+        return requestBodyData.model
+      }
     } else {
-      // Try to extract model from path
+      // Try to extract model from URL path: model/{model}/(converse|invoke)
       const m = this.restOfPath.match(/model\/(.+?)\/(converse|invoke)/)
       if (m) {
-        const model = m[1]
-        const api = m[2]
-
-        // Detect Anthropic flavor from model name
-        if (api === 'invoke' && model?.startsWith('anthropic.')) {
-          this.flavor = 'anthropic'
-        }
+        return m[1]
       }
     }
+
+    return undefined
   }
 
-  getModelAPI(): ModelAPI {
-    if (this.flavor === 'anthropic') {
+  getModelAPI(extracted: ExtractedInfo): ModelAPI {
+    const pathWithoutQuery = this.restOfPath.split('?')[0]
+
+    // Check if it's Anthropic format from path
+    if (pathWithoutQuery === 'v1/messages') {
       return new AnthropicAPI('bedrock')
     }
+
+    // Check if model name indicates Anthropic
+    const requestModel = this.getRequestModel(extracted)
+    if (requestModel?.startsWith('anthropic.')) {
+      return new AnthropicAPI('bedrock')
+    }
+
     return new ConverseAPI('bedrock')
   }
 
@@ -48,17 +47,21 @@ export class BedrockProvider extends BaseProvider {
     return Promise.resolve(null)
   }
 
-  url(): string {
+  url(extracted: ExtractedInfo): string {
     const pathWithoutQuery = this.restOfPath.split('?')[0]
+    const { requestBodyData } = extracted
 
     // Handle Anthropic client format: v1/messages
-    // Note: requestModel needs to be set from request body before calling url()
-    if (pathWithoutQuery === 'v1/messages' && this.requestModel) {
-      const path = `model/${this.requestModel}/${this.shouldStream ? 'invoke-with-response-stream' : 'invoke'}`
-      return `${this.providerProxy.baseUrl}/${path}`
+    if (pathWithoutQuery === 'v1/messages') {
+      const requestModel = this.getRequestModel(extracted)
+      if (requestModel) {
+        const shouldStream = 'stream' in requestBodyData && requestBodyData.stream === true
+        const path = `model/${requestModel}/${shouldStream ? 'invoke-with-response-stream' : 'invoke'}`
+        return `${this.providerProxy.baseUrl}/${path}`
+      }
     }
 
-    // Handle model extraction and replacement in existing paths
+    // Handle model extraction in existing paths
     const m = this.restOfPath.match(/model\/(.+?)\/(converse|invoke)/)
     if (m) {
       const model = m[1]
@@ -67,14 +70,6 @@ export class BedrockProvider extends BaseProvider {
       return `${this.providerProxy.baseUrl}/${newPath}`
     }
 
-    return super.url()
-  }
-
-  setRequestModel(model: string) {
-    this.requestModel = model
-  }
-
-  setShouldStream(shouldStream: boolean) {
-    this.shouldStream = shouldStream
+    return super.url(extracted)
   }
 }

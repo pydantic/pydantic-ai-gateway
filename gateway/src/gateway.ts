@@ -2,6 +2,7 @@ import logfire from 'logfire'
 import { type GatewayOptions, noopLimiter } from '.'
 import { apiKeyAuth, setApiKeyCache } from './auth'
 import { currentScopeIntervals, type ExceededScope, endOfMonth, endOfWeek, type SpendScope } from './db'
+import { RequestHandler } from './handler'
 import { OtelTrace } from './otel'
 import { genAiOtelAttributes } from './otel/attributes'
 import { getProvider } from './providers'
@@ -178,9 +179,24 @@ export async function gatewayWithLimiter(
   let result: Awaited<ReturnType<InstanceType<ReturnType<typeof getProvider>>['dispatch']>> | null = null
 
   for (const providerProxy of providerProxies) {
+    const otelSpan = otel.startSpan()
+
+    const testNewHandler = true
+    if (testNewHandler) {
+      const requestHandler = new RequestHandler({
+        request: request.clone(),
+        providerProxy,
+        ctx,
+        gatewayOptions: options,
+        apiKeyInfo,
+        restOfPath,
+        otelSpan,
+      })
+      console.log(requestHandler)
+    }
+
     const ProxyCls = getProvider(providerProxy.providerId)
 
-    const otelSpan = otel.startSpan()
     const proxy = new ProxyCls({
       // Since the body is consumed by the proxy, we need to clone the request.
       request: request.clone(),

@@ -20,7 +20,7 @@ import type { ProviderID } from '../types'
 import { AnthropicProvider } from './anthropic'
 import { AzureProvider } from './azure'
 import { BedrockProvider } from './bedrock'
-import { DefaultProviderProxy, type ProviderOptions } from './default'
+import type { DefaultProviderProxy, ProviderOptions } from './default'
 import { GoogleVertexProvider } from './google'
 import { GroqProvider } from './groq'
 import { HuggingFaceProvider } from './huggingface'
@@ -48,6 +48,6 @@ export function getProvider(providerId: ProviderID): ProviderSig {
     case 'test':
       return TestProvider
     default:
-      return DefaultProviderProxy
+      throw new Error(`Provider ${providerId} not found`)
   }
 }

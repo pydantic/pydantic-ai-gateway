@@ -2,79 +2,82 @@ import type { ModelAPI } from '../api'
 import { ChatCompletionAPI } from '../api/chat'
 import { EmbeddingsAPI } from '../api/embeddings'
 import { ResponsesAPI } from '../api/responses'
-import { DefaultProviderProxy, type Prepare, type ProxyInvalidRequest } from './default'
+import type { ErrorResponse } from '../handler'
+import { BaseProvider, type ExtractedInfo } from './base'
 
-export class OpenAIProvider extends DefaultProviderProxy {
-  flavor: 'chat' | 'responses' | 'embeddings' = 'chat'
+export class OpenAIProvider extends BaseProvider {
+  getRequestModel(extracted: ExtractedInfo): string | undefined {
+    const { requestBodyData } = extracted
+    if ('model' in requestBodyData && typeof requestBodyData.model === 'string') {
+      return requestBodyData.model
+    }
+    return undefined
+  }
 
-  check() {
-    if (this.restOfPath === 'embeddings') {
-      this.flavor = 'embeddings'
-    } else if (this.restOfPath === 'responses') {
-      this.flavor = 'responses'
-    } else if (this.restOfPath !== 'chat/completions') {
-      return { error: 'invalid url, not chat/completions or responses endpoint' }
+  getModelAPI(_extracted: ExtractedInfo): ModelAPI {
+    switch (this.restOfPath) {
+      case 'embeddings':
+        return new EmbeddingsAPI('openai')
+      case 'responses':
+        return new ResponsesAPI('openai')
+      default:
+        return new ChatCompletionAPI('openai')
     }
   }
 
-  apiFlavor(): string | undefined {
-    return this.flavor
+  authenticate(headers: Headers): Promise<ErrorResponse | null> {
+    headers.set('Authorization', `Bearer ${this.providerProxy.credentials}`)
+    return Promise.resolve(null)
   }
 
-  protected modelAPI(): ModelAPI {
-    if (this.flavor === 'embeddings') {
-      return new EmbeddingsAPI('openai')
-    } else if (this.flavor === 'responses') {
-      return new ResponsesAPI('openai')
-    } else {
-      return new ChatCompletionAPI('openai')
+  protected initializeAPIFlavor(): string | undefined {
+    switch (this.restOfPath) {
+      case 'embeddings':
+        return 'embeddings'
+      case 'responses':
+        return 'responses'
+      default:
+        return 'chat'
     }
   }
 
-  protected async prepRequest(): Promise<ProxyInvalidRequest | Prepare> {
-    const result = await super.prepRequest()
-    if ('error' in result || this.flavor !== 'chat') {
-      return result
+  requestBody(extracted: ExtractedInfo): ExtractedInfo | ErrorResponse {
+    // Only modify for chat completions
+    if (this.restOfPath !== 'chat/completions') {
+      return extracted
     }
 
-    const { requestBodyData, requestModel } = result
+    const { requestBodyData } = extracted
 
-    const isStreaming = 'stream' in requestBodyData ? requestBodyData.stream : false
+    // Only modify if streaming is enabled
+    const isStreaming = 'stream' in requestBodyData && requestBodyData.stream === true
     if (!isStreaming) {
-      return result
+      return extracted
     }
 
-    // If include_usage is already there, we don't need to inject it.
+    // Check if stream_options already exists
     let streamOptions = {}
     if ('stream_options' in requestBodyData) {
       streamOptions = requestBodyData.stream_options as Record<string, unknown>
     }
+
+    // If include_usage is already set, validate it
     if ('include_usage' in streamOptions) {
       if (streamOptions.include_usage === true) {
-        return result
-      } else {
-        // The user intentionally disabled `include_usage`.
-        return { error: 'You cannot disable `include_usage` in `stream_options`.' }
+        return extracted
       }
+      // User tried to disable include_usage
+      return { error: 'You cannot disable `include_usage` in `stream_options`.' }
     }
 
+    // Inject include_usage: true
     const requestBodyDataClone = { ...requestBodyData, stream_options: { ...streamOptions, include_usage: true } }
 
-    return {
-      requestBodyText: JSON.stringify(requestBodyDataClone),
-      requestBodyData: requestBodyDataClone,
-      requestModel: requestModel && this.replaceModel(requestModel),
-    }
+    return { requestBodyText: JSON.stringify(requestBodyDataClone), requestBodyData: requestBodyDataClone }
   }
 
-  protected getModelNameRemappings(): { searchValue: string; replaceValue: string }[] {
-    return []
-  }
-
-  protected responseHeaders(headers: Headers): Headers {
-    const newHeaders = super.responseHeaders(headers)
-    newHeaders.delete('openai-organization')
-    newHeaders.delete('openai-project')
-    return newHeaders
+  filterResponseHeaders(headers: Headers): void {
+    headers.delete('openai-organization')
+    headers.delete('openai-project')
   }
 }

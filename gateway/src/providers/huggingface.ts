@@ -1,28 +1,44 @@
-import { findProvider, type Provider as UsageProvider } from '@pydantic/genai-prices'
 import type { ModelAPI } from '../api'
 import { ChatCompletionAPI } from '../api/chat'
-import { DefaultProviderProxy } from './default'
+import type { ErrorResponse } from '../handler'
+import { BaseProvider, type ExtractedInfo } from './base'
 
-export class HuggingFaceProvider extends DefaultProviderProxy {
-  // This provider refers to the provider that will be used to calculate the price.
-  protected provider: string | null = null
+export class HuggingFaceProvider extends BaseProvider {
+  // HuggingFace routes to different providers (together, openai, etc)
+  // We need to track which one was used to calculate the correct price
+  private inferenceProvider: string | null = null
 
-  protected modelAPI(): ModelAPI {
-    return new ChatCompletionAPI('huggingface', undefined, { usageProvider: this.usageProvider() })
+  getRequestModel(extracted: ExtractedInfo): string | undefined {
+    const { requestBodyData } = extracted
+    if ('model' in requestBodyData && typeof requestBodyData.model === 'string') {
+      return requestBodyData.model
+    }
+    return undefined
   }
 
-  apiFlavor(): string | undefined {
+  getModelAPI(_extracted: ExtractedInfo): ModelAPI {
+    return new ChatCompletionAPI('huggingface')
+  }
+
+  authenticate(headers: Headers): Promise<ErrorResponse | null> {
+    headers.set('Authorization', `Bearer ${this.providerProxy.credentials}`)
+    return Promise.resolve(null)
+  }
+
+  protected initializeAPIFlavor(): string | undefined {
     return 'chat'
   }
 
-  // We need to do this magic, because the `provider` is only set in the response headers.
-  protected usageProvider(): UsageProvider | undefined {
-    return findProvider({ providerId: `${this.providerId()}-${this.provider ?? 'unknown'}` })
+  filterResponseHeaders(headers: Headers): void {
+    // Capture the inference provider for pricing purposes
+    this.inferenceProvider = headers.get('x-inference-provider')
   }
 
-  protected responseHeaders(headers: Headers): Headers {
-    const newHeaders = super.responseHeaders(headers)
-    this.provider = headers.get('x-inference-provider')
-    return newHeaders
+  // Override usageProviderId to return the actual provider used (e.g., huggingface-together)
+  usageProviderId(): string {
+    if (this.inferenceProvider) {
+      return `${this.providerProxy.providerId}-${this.inferenceProvider}`
+    }
+    return this.providerProxy.providerId
   }
 }

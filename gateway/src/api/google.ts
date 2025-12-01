@@ -18,7 +18,7 @@ import type {
   OutputMessages,
   TextPart,
 } from '../otel/genai'
-import { isMapping, type JsonData } from '../providers/default'
+import { isMapping, type JsonData } from '../providers/utils'
 import { BaseAPI, type ExtractedRequest, type ExtractedResponse, type ExtractorConfig } from './base'
 
 export { GenerateContentResponse } from '@google/genai'

@@ -12,17 +12,17 @@ import { match } from 'ts-pattern'
 import type { ApiKeyInfo, GatewayOptions, ProviderProxy } from '.'
 import type { ModelAPI } from './api'
 import type { BaseAPI } from './api/base'
-import { AnthropicProvider } from './newProviders/anthropic'
-import { AzureProvider } from './newProviders/azure'
-import type { BaseProvider, ExtractedInfo, ProviderOptions } from './newProviders/base'
-import { BedrockProvider } from './newProviders/bedrock'
-import { GoogleVertexProvider } from './newProviders/google'
-import { GroqProvider } from './newProviders/groq'
-import { HuggingFaceProvider } from './newProviders/huggingface'
-import { OpenAIProvider } from './newProviders/openai'
-import { TestProvider } from './newProviders/test'
 import type { OtelSpan } from './otel'
 import { attributesFromRequest, attributesFromResponse, type GenAIAttributes } from './otel/attributes'
+import { AnthropicProvider } from './providers/anthropic'
+import { AzureProvider } from './providers/azure'
+import type { BaseProvider, ExtractedInfo, ProviderOptions } from './providers/base'
+import { BedrockProvider } from './providers/bedrock'
+import { GoogleVertexProvider } from './providers/google'
+import { GroqProvider } from './providers/groq'
+import { HuggingFaceProvider } from './providers/huggingface'
+import { OpenAIProvider } from './providers/openai'
+import { TestProvider } from './providers/test'
 import { runAfter } from './utils'
 
 interface RequestHandlerOptions {
@@ -58,7 +58,12 @@ export class RequestHandler {
     this.middlewares = options.middlewares ?? []
 
     // Create provider instance
-    this.provider = RequestHandler.getProvider({ restOfPath: this.restOfPath, providerProxy: this.providerProxy })
+    this.provider = RequestHandler.getProvider({
+      restOfPath: this.restOfPath,
+      providerProxy: this.providerProxy,
+      kv: this.gatewayOptions.kv,
+      subFetch: this.gatewayOptions.subFetch,
+    })
   }
 
   static getProvider(options: ProviderOptions): BaseProvider {

@@ -1,7 +1,7 @@
 import { createExecutionContext, env, waitOnExecutionContext } from 'cloudflare:test'
 import { type ApiKeyInfo, gatewayFetch, type Middleware, type Next, type RateLimiter } from '@pydantic/ai-gateway'
 import { describe, expect } from 'vitest'
-import type { DefaultProviderProxy } from '../src/providers/default'
+import type { RequestHandler } from '../src/handler'
 import { test } from './setup'
 import { buildGatewayEnv } from './worker'
 
@@ -50,7 +50,7 @@ describe('rate limiter', () => {
 
     class FailMiddleware implements Middleware {
       dispatch(_next: Next): Next {
-        return (_proxy: DefaultProviderProxy) => {
+        return (_handler: RequestHandler) => {
           return Promise.resolve({
             requestModel: 'gpt-5',
             requestBody: '{}',

@@ -13,7 +13,7 @@ export class AnthropicProvider extends BaseProvider {
     return undefined
   }
 
-  getModelAPI(extracted: ExtractedInfo): ModelAPI {
+  getModelAPI(_extracted: ExtractedInfo): ModelAPI {
     if (this.restOfPath.split('?')[0] === 'v1/chat/completions') {
       return new ChatCompletionAPI('anthropic')
     } else {
@@ -30,5 +30,25 @@ export class AnthropicProvider extends BaseProvider {
     }
 
     return Promise.resolve(null)
+  }
+
+  protected initializeAPIFlavor(): string | undefined {
+    const pathWithoutQuery = this.restOfPath.split('?')[0]
+    if (pathWithoutQuery === 'v1/chat/completions') {
+      return 'chat'
+    } else {
+      return 'default'
+    }
+  }
+
+  filterResponseHeaders(headers: Headers): void {
+    headers.delete('anthropic-organization-id')
+  }
+
+  isWhitelistedEndpoint(): boolean {
+    // If there is a query string, drop the query string from the path
+    const path = this.restOfPath.split('?')[0]
+    // These endpoints are whitelisted (no usage tracking)
+    return path === 'v1/messages/count_tokens' || path === 'v1/files'
   }
 }

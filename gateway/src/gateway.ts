@@ -1,11 +1,10 @@
 import logfire from 'logfire'
-import { type DefaultProviderProxy, type GatewayOptions, noopLimiter } from '.'
+import { type GatewayOptions, noopLimiter } from '.'
 import { apiKeyAuth, setApiKeyCache } from './auth'
 import { currentScopeIntervals, type ExceededScope, endOfMonth, endOfWeek, type SpendScope } from './db'
 import { type HandlerResponse, RequestHandler } from './handler'
 import { OtelTrace } from './otel'
 import { genAiOtelAttributes } from './otel/attributes'
-import { getProvider } from './providers'
 import type { ApiKeyInfo, ProviderProxy } from './types'
 import { runAfter, textResponse } from './utils'
 
@@ -175,44 +174,24 @@ export async function gatewayWithLimiter(
 
   const otel = new OtelTrace(request, apiKeyInfo.otelSettings, options)
 
-  // The AI did this, but I actually find it nice.
-  let result: HandlerResponse | Awaited<ReturnType<InstanceType<ReturnType<typeof getProvider>>['dispatch']>> | null =
-    null
+  let result: HandlerResponse | null = null
 
   for (const providerProxy of providerProxies) {
     const otelSpan = otel.startSpan()
 
-    const testNewHandler = true
-    // This object has a dispatch method:
-    let toRun: RequestHandler | DefaultProviderProxy | null = null
-    if (testNewHandler) {
-      toRun = new RequestHandler({
-        request: request.clone(),
-        providerProxy,
-        ctx,
-        gatewayOptions: options,
-        apiKeyInfo,
-        restOfPath,
-        otelSpan,
-      })
-    } else {
-      const ProxyCls = getProvider(providerProxy.providerId)
-
-      toRun = new ProxyCls({
-        // Since the body is consumed by the proxy, we need to clone the request.
-        request: request.clone(),
-        gatewayOptions: options,
-        apiKeyInfo,
-        providerProxy,
-        restOfPath,
-        ctx,
-        middlewares: options.proxyMiddlewares,
-        otelSpan,
-      })
-    }
+    const handler = new RequestHandler({
+      request: request.clone(),
+      providerProxy,
+      ctx,
+      gatewayOptions: options,
+      apiKeyInfo,
+      restOfPath,
+      otelSpan,
+      middlewares: options.proxyMiddlewares,
+    })
 
     try {
-      result = await toRun.dispatch()
+      result = await handler.dispatch()
     } catch (error) {
       logfire.reportError('Connection error', error as Error, { providerId: providerProxy.providerId, route })
       continue
@@ -225,18 +204,9 @@ export async function gatewayWithLimiter(
       !('unexpectedStatus' in result) &&
       !('modelNotFound' in result)
     ) {
-      let _proxy: { providerId: () => string } | null = null
-      if (toRun) {
-        if ('providerId' in toRun) {
-          _proxy = { providerId: () => (toRun as DefaultProviderProxy).providerId() }
-        } else if ('provider' in toRun) {
-          _proxy = { providerId: () => (toRun as RequestHandler).provider.providerId() }
-        }
-      }
-      if (_proxy) {
-        const [spanName, attributes, level] = genAiOtelAttributes(result, _proxy)
-        otelSpan.end(spanName, attributes, { level })
-      }
+      const _proxy = { providerId: () => handler.provider.providerId() }
+      const [spanName, attributes, level] = genAiOtelAttributes(result, _proxy)
+      otelSpan.end(spanName, attributes, { level })
     }
 
     // Check if we should retry with the next provider.

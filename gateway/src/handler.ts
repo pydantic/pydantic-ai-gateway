@@ -75,6 +75,10 @@ export class RequestHandler {
       .exhaustive()
   }
 
+  providerId(): string {
+    return this.providerProxy.providerId
+  }
+
   async dispatch(): Promise<HandlerResponse> {
     const layers = this.middlewares.reduceRight(
       (next, middleware) => middleware.dispatch(next),
@@ -95,21 +99,28 @@ export class RequestHandler {
       return authError
     }
 
+    // Check if this is a whitelisted endpoint (bypass usage tracking)
+    if (this.provider.isWhitelistedEndpoint()) {
+      return await this.handleWhitelistedEndpoint(requestHeaders)
+    }
+
     // Extract request info (generic parsing)
     const extracted = await this.extractRequestInfo(this.request)
     if ('error' in extracted) return extracted
 
-    // Get request model from provider (provider-specific interpretation)
+    // Get request model from original extracted data
     const requestModel = this.provider.getRequestModel(extracted)
 
-    // Get ModelAPI from provider (provider-specific selection)
-    const modelAPI = this.provider.getModelAPI(extracted)
+    // Prepare request body (provider may modify it)
+    const prepared = this.provider.requestBody(extracted)
+    if ('error' in prepared) return prepared
 
-    // Get URL from provider (provider-specific construction)
-    const url = this.provider.url(extracted)
+    // Get ModelAPI and URL using prepared data
+    const modelAPI = this.provider.getModelAPI(prepared)
+    const url = this.provider.url(prepared, requestModel)
 
     const method = this.request.method
-    const { requestBodyText, requestBodyData } = extracted
+    const { requestBodyText, requestBodyData } = prepared
 
     // Validate that it's possible to calculate the price for the request model
     if (requestModel && this.providerProxy.disableKey && this.providerProxy.providerId !== 'huggingface') {
@@ -120,10 +131,10 @@ export class RequestHandler {
       }
     }
 
-    // Make the HTTP request
     const response = await this.fetch(url, { method, headers: requestHeaders, body: requestBodyText })
 
     const responseHeaders = new Headers(response.headers)
+    this.provider.filterResponseHeaders(responseHeaders)
 
     if (!response.ok) {
       const responseBody = await response.text()
@@ -153,7 +164,7 @@ export class RequestHandler {
     }
 
     // Extract usage from response
-    const processResponse = await this.extractUsage(response)
+    const processResponse = await this.extractUsage(response, extracted)
     if ('error' in processResponse) {
       return { ...processResponse, disableKey: this.providerProxy.disableKey ?? true, requestModel }
     }
@@ -197,24 +208,50 @@ export class RequestHandler {
   }
 
   private fetch(url: string, init: RequestInit): Promise<Response> {
-    return this.gatewayOptions.subFetch(url, init)
+    // Use provider's custom fetch if available (e.g., TestProvider)
+    if (this.provider.fetch) {
+      return this.provider.fetch(url, init)
+    }
+    const { subFetch } = this.gatewayOptions
+    return subFetch(url, init)
+  }
+
+  private async handleWhitelistedEndpoint(headers: Headers): Promise<HandlerResponse> {
+    const url = this.provider.url({ requestBodyText: '', requestBodyData: {} })
+    const response = await this.fetch(url, { method: this.request.method, headers, body: this.request.body })
+
+    const responseHeaders = new Headers(response.headers)
+    this.provider.filterResponseHeaders(responseHeaders)
+
+    this.otelSpan.end(
+      `${this.request.method} ${this.restOfPath}`,
+      { ...attributesFromRequest(this.request), ...attributesFromResponse(response) },
+      { level: 'info' },
+    )
+
+    return { response }
   }
 
   private usageProvider(): UsageProvider {
-    const provider = findProvider({ providerId: this.providerProxy.providerId })
+    const providerId = this.provider.usageProviderId()
+    const provider = findProvider({ providerId })
     if (!provider) {
-      throw new Error(`Usage provider not found for ${this.providerProxy.providerId}`)
+      throw new Error(`Usage provider not found for ${providerId}`)
     }
     return provider
   }
 
-  private async extractUsage(response: Response): Promise<ProcessResponse | ErrorResponse> {
+  private async extractUsage(response: Response, extracted?: ExtractedInfo): Promise<ProcessResponse | ErrorResponse> {
     const bodyText = await response.text()
     try {
       const responseBody = JSON.parse(bodyText) as unknown as JsonData
       const usageProvider = this.usageProvider()
 
-      const { model: responseModel, usage } = extractUsage(usageProvider, responseBody, undefined)
+      let { model: responseModel, usage } = extractUsage(usageProvider, responseBody, this.provider.apiFlavor)
+      if (!responseModel && extracted) {
+        // If the response model cannot be extracted from the response body, try to get it from the request
+        responseModel = this.provider.getRequestModel(extracted) ?? null
+      }
       if (!responseModel) {
         return { error: 'Unable to infer response model' }
       }
@@ -223,6 +260,10 @@ export class RequestHandler {
       if (price) {
         return { responseBody, responseModel, usage, cost: price.total_price }
       } else {
+        // For HuggingFace, pricing may not be available, but we still allow the request
+        if (this.providerProxy.providerId === 'huggingface') {
+          return { responseBody, responseModel, usage, cost: 0 }
+        }
         logfire.error('Unable to calculate spend', { responseModel, usage, provider: usageProvider })
         return { error: 'Unable to calculate spend' }
       }
@@ -331,6 +372,10 @@ export class RequestHandler {
     if (price) {
       return { cost: price.total_price }
     } else {
+      // For HuggingFace, pricing may not be available, but we still allow the request
+      if (this.providerProxy.providerId === 'huggingface') {
+        return { cost: 0 }
+      }
       return {
         error: new Error(`Unable to calculate cost for model ${responseModel} and provider ${usageProvider.name}`),
         disableKey: this.providerProxy.disableKey ?? true,

@@ -17,14 +17,14 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 import logfire from 'logfire'
 import type { KeysDb, LimitDb } from './db'
 import { gateway } from './gateway'
-import type { DefaultProviderProxy, Middleware, Next } from './providers/default'
+import type { Middleware, Next } from './handler'
 import type { RateLimiter } from './rateLimiter'
 import { refreshGenaiPrices } from './refreshGenaiPrices'
 import type { SubFetch } from './types'
 import { ctHeader, response405, runAfter, textResponse } from './utils'
 
 export { changeProjectState as setProjectState, deleteApiKeyCache, setApiKeyCache } from './auth'
-export type { DefaultProviderProxy, Middleware, Next }
+export type { Middleware, Next }
 export * from './db'
 export * from './rateLimiter'
 export * from './types'

@@ -24,4 +24,9 @@ export class GroqProvider extends BaseProvider {
     headers.set('Authorization', `Bearer ${this.providerProxy.credentials}`)
     return Promise.resolve(null)
   }
+
+  protected initializeAPIFlavor(): string | undefined {
+    // Groq uses 'default' flavor - see workaround in getModelAPI()
+    return 'default'
+  }
 }

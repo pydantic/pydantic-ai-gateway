@@ -16,9 +16,19 @@ export class BedrockProvider extends BaseProvider {
       }
     } else {
       // Try to extract model from URL path: model/{model}/(converse|invoke)
-      const m = this.restOfPath.match(/model\/(.+?)\/(converse|invoke)/)
-      if (m) {
-        return m[1]
+      // Need to decode the path because it may contain encoded characters like "%3A" (:)
+      try {
+        const decodedPath = decodeURIComponent(this.restOfPath)
+        const m = decodedPath.match(/model\/(.+?)\/(converse|invoke)/)
+        if (m) {
+          return m[1]
+        }
+      } catch {
+        // If decoding fails, try without decoding
+        const m = this.restOfPath.match(/model\/(.+?)\/(converse|invoke)/)
+        if (m) {
+          return m[1]
+        }
       }
     }
 
@@ -47,13 +57,78 @@ export class BedrockProvider extends BaseProvider {
     return Promise.resolve(null)
   }
 
-  url(extracted: ExtractedInfo): string {
+  protected initializeAPIFlavor(): string | undefined {
+    const pathWithoutQuery = this.restOfPath.split('?')[0]
+
+    // Anthropic format through Bedrock
+    if (pathWithoutQuery === 'v1/messages') {
+      return 'anthropic'
+    }
+
+    // Check if it's invoke API with anthropic model
+    // Need to decode the path because it may contain encoded characters
+    try {
+      const decodedPath = decodeURIComponent(this.restOfPath)
+      const m = decodedPath.match(/model\/(.+?)\/(converse|invoke)/)
+      if (m) {
+        const api = m[2]
+        const model = m[1]
+        if (api === 'invoke' && model?.startsWith('anthropic.')) {
+          return 'anthropic'
+        }
+      }
+    } catch {
+      // If decoding fails, try without decoding
+      const m = this.restOfPath.match(/model\/(.+?)\/(converse|invoke)/)
+      if (m) {
+        const api = m[2]
+        const model = m[1]
+        if (api === 'invoke' && model?.startsWith('anthropic.')) {
+          return 'anthropic'
+        }
+      }
+    }
+
+    // Default is converse
+    return 'default'
+  }
+
+  requestBody(extracted: ExtractedInfo): ExtractedInfo | ErrorResponse {
+    const pathWithoutQuery = this.restOfPath.split('?')[0]
+
+    // Handle Anthropic client format: v1/messages
+    if (pathWithoutQuery === 'v1/messages') {
+      const { requestBodyData } = extracted
+
+      // Add anthropic_version if not present
+      const modified = { ...requestBodyData } as Record<string, unknown>
+      if (!('anthropic_version' in modified)) {
+        modified.anthropic_version = 'bedrock-2023-05-31'
+      }
+
+      // Remove stream field (Bedrock doesn't expect it)
+      if ('stream' in modified) {
+        delete modified.stream
+      }
+
+      // Remove model field (Bedrock doesn't expect it)
+      delete modified.model
+
+      return {
+        requestBodyText: JSON.stringify(modified),
+        requestBodyData: modified,
+      }
+    }
+
+    return extracted
+  }
+
+  url(extracted: ExtractedInfo, requestModel?: string): string {
     const pathWithoutQuery = this.restOfPath.split('?')[0]
     const { requestBodyData } = extracted
 
     // Handle Anthropic client format: v1/messages
     if (pathWithoutQuery === 'v1/messages') {
-      const requestModel = this.getRequestModel(extracted)
       if (requestModel) {
         const shouldStream = 'stream' in requestBodyData && requestBodyData.stream === true
         const path = `model/${requestModel}/${shouldStream ? 'invoke-with-response-stream' : 'invoke'}`
@@ -62,12 +137,25 @@ export class BedrockProvider extends BaseProvider {
     }
 
     // Handle model extraction in existing paths
-    const m = this.restOfPath.match(/model\/(.+?)\/(converse|invoke)/)
-    if (m) {
-      const model = m[1]
-      const api = m[2]
-      const newPath = this.restOfPath.replace(/model\/(.+?)\/(converse|invoke)/, `model/${model}/${api}`)
-      return `${this.providerProxy.baseUrl}/${newPath}`
+    // Need to decode the path because it may contain encoded characters like "%3A" (:)
+    try {
+      const decodedPath = decodeURIComponent(this.restOfPath)
+      const m = decodedPath.match(/model\/(.+?)\/(converse|invoke)/)
+      if (m) {
+        const model = m[1]
+        const api = m[2]
+        const newPath = decodedPath.replace(/model\/(.+?)\/(converse|invoke)/, `model/${model}/${api}`)
+        return `${this.providerProxy.baseUrl}/${newPath}`
+      }
+    } catch {
+      // If decoding fails, try without decoding
+      const m = this.restOfPath.match(/model\/(.+?)\/(converse|invoke)/)
+      if (m) {
+        const model = m[1]
+        const api = m[2]
+        const newPath = this.restOfPath.replace(/model\/(.+?)\/(converse|invoke)/, `model/${model}/${api}`)
+        return `${this.providerProxy.baseUrl}/${newPath}`
+      }
     }
 
     return super.url(extracted)

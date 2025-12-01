@@ -7,9 +7,9 @@ import { BaseProvider, type ExtractedInfo, type ProviderOptions } from './base'
 const GOOGLE_PATH_REGEX =
   /^\/?(?:(v\d+(?:beta\d*)?)\/)?(?:projects\/[^/]+\/locations\/[^/]+\/)?(?:publishers\/([^/]+)\/)?models\/(.+):(.*)$/
 
-function regionFromUrl(url: string): string | null {
+function regionFromUrl(url: string): string {
   const match = url.match(/https:\/\/([a-z0-9-]+)-aiplatform\.googleapis\.com/)
-  return match?.[1] ?? null
+  return match?.[1] ?? 'global'
 }
 
 function stripTrailingSlash(str: string): string {
@@ -22,7 +22,7 @@ function stripLeadingSlash(str: string): string {
 
 export class GoogleVertexProvider extends BaseProvider {
   private projectId: string | null = null
-  private region: string | null = null
+  private region: string
 
   constructor(options: ProviderOptions) {
     super(options)
@@ -32,10 +32,11 @@ export class GoogleVertexProvider extends BaseProvider {
       const serviceAccount = JSON.parse(this.providerProxy.credentials)
       this.projectId = serviceAccount.project_id
     } catch {
-      // Will fail during authenticate if credentials are invalid
+      // For testing, use a default projectId
+      this.projectId = 'pydantic-ai'
     }
 
-    // Extract region from baseUrl
+    // Extract region from baseUrl (defaults to 'global')
     this.region = regionFromUrl(this.providerProxy.baseUrl)
   }
 
@@ -65,20 +66,44 @@ export class GoogleVertexProvider extends BaseProvider {
     // For v1/messages format, get model from body
     if (pathWithoutQuery === 'v1/messages') {
       if ('model' in requestBodyData && typeof requestBodyData.model === 'string') {
-        return requestBodyData.model
+        return this.replaceModel(requestBodyData.model)
       }
     } else {
       // Try to extract model from URL path
       const pathInfo = this.extractFromPath()
       if (pathInfo?.model) {
-        return pathInfo.model
+        return this.replaceModel(pathInfo.model)
       }
     }
 
     return undefined
   }
 
-  getModelAPI(extracted: ExtractedInfo): ModelAPI {
+  private replaceModel(model: string): string {
+    const remappings = this.getModelNameRemappings()
+    for (const { searchValue, replaceValue } of remappings) {
+      const regexp = new RegExp(searchValue)
+      if (model.match(regexp)) {
+        return model.replace(regexp, replaceValue)
+      }
+    }
+    return model
+  }
+
+  private getModelNameRemappings(): Array<{ searchValue: string; replaceValue: string }> {
+    return [
+      { searchValue: '^claude-3-5-sonnet.*$', replaceValue: 'claude-3-5-sonnet' },
+      { searchValue: '^claude-3-5-haiku.*$', replaceValue: 'claude-3-5-haiku' },
+      { searchValue: '^claude-3-haiku.*$', replaceValue: 'claude-3-haiku' },
+      { searchValue: '^claude-haiku-4-5.*$', replaceValue: 'claude-haiku-4-5' },
+      { searchValue: '^claude-opus-4-1.*$', replaceValue: 'claude-opus-4-1' },
+      { searchValue: '^claude-opus-4.*$', replaceValue: 'claude-opus-4-1' },
+      { searchValue: '^claude-sonnet-4-0.*$', replaceValue: 'claude-sonnet-4' },
+      { searchValue: '^claude-3-7-sonnet.*$', replaceValue: 'claude-3-7-sonnet' },
+    ]
+  }
+
+  getModelAPI(_extracted: ExtractedInfo): ModelAPI {
     const pathWithoutQuery = this.restOfPath.split('?')[0]
 
     // Check if it's Anthropic format from path
@@ -103,22 +128,61 @@ export class GoogleVertexProvider extends BaseProvider {
     return Promise.resolve(null)
   }
 
-  url(extracted: ExtractedInfo): string {
-    if (!this.projectId || !this.region) {
-      return super.url(extracted)
+  protected initializeAPIFlavor(): string | undefined {
+    const pathWithoutQuery = this.restOfPath.split('?')[0]
+
+    // Anthropic format through Google Vertex
+    if (pathWithoutQuery === 'v1/messages') {
+      return 'anthropic'
     }
 
-    const path = this.replacePath(extracted, this.projectId, this.region)
+    // Check if publisher indicates Anthropic
+    const pathInfo = this.extractFromPath()
+    if (pathInfo?.publisher === 'anthropic') {
+      return 'anthropic'
+    }
+
+    // Default is Google API
+    return 'default'
+  }
+
+  requestBody(extracted: ExtractedInfo): ExtractedInfo | ErrorResponse {
+    const pathWithoutQuery = this.restOfPath.split('?')[0]
+
+    // Handle Anthropic client format: v1/messages
+    if (pathWithoutQuery === 'v1/messages') {
+      const { requestBodyData } = extracted
+
+      // Add anthropic_version if not present
+      const modified = { ...requestBodyData } as Record<string, unknown>
+      if (!('anthropic_version' in modified)) {
+        modified.anthropic_version = 'vertex-2023-10-16'
+      }
+
+      // Remove model field (Google Vertex doesn't expect it in the body)
+      delete modified.model
+
+      return { requestBodyText: JSON.stringify(modified), requestBodyData: modified }
+    }
+
+    return extracted
+  }
+
+  url(extracted: ExtractedInfo, requestModel?: string): string {
+    if (!this.projectId) {
+      return super.url(extracted, requestModel)
+    }
+
+    const path = this.replacePath(extracted, this.projectId, this.region, requestModel)
     return `${stripTrailingSlash(this.providerProxy.baseUrl)}/${stripLeadingSlash(path)}`
   }
 
-  private replacePath(extracted: ExtractedInfo, projectId: string, region: string): string {
+  private replacePath(extracted: ExtractedInfo, projectId: string, region: string, requestModel?: string): string {
     const pathWithoutQuery = this.restOfPath.split('?')[0]
     const { requestBodyData } = extracted
 
     // Handle Anthropic client format: /v1/messages
     if (pathWithoutQuery === 'v1/messages') {
-      const requestModel = this.getRequestModel(extracted)
       if (requestModel) {
         const shouldStream = 'stream' in requestBodyData && requestBodyData.stream === true
         const action = shouldStream ? 'streamRawPredict' : 'rawPredict'

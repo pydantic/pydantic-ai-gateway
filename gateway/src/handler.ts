@@ -77,6 +77,20 @@ export class RequestHandler {
     return this.provider.providerId()
   }
 
+  disableKey(): boolean {
+    return this.providerProxy.disableKey ?? true
+  }
+
+  /**
+   * Run a promise after the dispatch is complete.
+   * This is useful for running code that should be executed after the response is sent.
+   * @param name - The name of the function to run. It's used for logging and error reporting.
+   * @param promise - The promise to run.
+   */
+  runAfter(name: string, promise: Promise<unknown>) {
+    runAfter(this.ctx, name, promise)
+  }
+
   async dispatch(): Promise<HandlerResponse> {
     const layers = this.middlewares.reduceRight(
       (next, middleware) => middleware.dispatch(next),
@@ -133,6 +147,7 @@ export class RequestHandler {
     this.provider.filterResponseHeaders(responseHeaders)
 
     if (!response.ok) {
+      // CAUTION: can we be charged in any way for failed requests?
       const responseBody = await response.text()
       this.otelSpan.end(
         `chat ${requestModel ?? 'unknown-model'}, unexpected response: {http.response.status_code}`,
@@ -163,7 +178,7 @@ export class RequestHandler {
 
     const processResponse = await this.extractUsage(response, extracted)
     if ('error' in processResponse) {
-      return { ...processResponse, disableKey: this.providerProxy.disableKey ?? true, requestModel }
+      return { ...processResponse, disableKey: this.disableKey(), requestModel }
     }
     const { responseBody, usage, responseModel, cost } = processResponse
 
@@ -294,7 +309,11 @@ export class RequestHandler {
       return { requestModel, error: 'No response body' }
     }
 
-    const usageProvider = this.usageProvider()
+    const provider = this.usageProvider()
+    if (!provider) {
+      return { error: 'No usage provider found' }
+    }
+
     const { requestBodyText, requestBodyData } = extracted
 
     // @ts-expect-error: requestBodyData is a JsonData, but the `processRequest` receives the proper type.
@@ -314,10 +333,11 @@ export class RequestHandler {
     const extractionPromise = this.processChunks(modelAPI, events, usageProvider)
 
     // Track completion but don't wait for it before returning
-    runAfter(this.ctx, 'extract-stream', extractionPromise)
+    this.runAfter('extract-stream', extractionPromise)
 
     const onStreamComplete = extractionPromise
       .then((result) => {
+        // TODO(Marcelo): I think we actually need to emit 2 spans: one for HTTP, and another for the LLM.
         this.otelSpan.end(
           `chat ${modelAPI.extractedRequest?.requestModel ?? 'streaming'}`,
           {
@@ -355,10 +375,7 @@ export class RequestHandler {
     const { usage, responseModel } = modelAPI.extractedResponse
 
     if (!usage || !responseModel) {
-      return {
-        error: new Error(`Unable to calculate cost for model ${responseModel}`),
-        disableKey: this.providerProxy.disableKey ?? true,
-      }
+      return { error: new Error(`Unable to calculate cost for model ${responseModel}`), disableKey: this.disableKey() }
     }
 
     const price = calcPrice(usage, responseModel, { provider })
@@ -367,7 +384,7 @@ export class RequestHandler {
     } else {
       return {
         error: new Error(`Unable to calculate cost for model ${responseModel} and provider ${usageProvider.name}`),
-        disableKey: this.providerProxy.disableKey ?? true,
+        disableKey: this.disableKey(),
       }
     }
   }

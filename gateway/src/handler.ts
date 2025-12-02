@@ -1,10 +1,4 @@
-import {
-  calcPrice,
-  extractUsage,
-  findProvider,
-  type Usage,
-  type Provider as UsageProvider,
-} from '@pydantic/genai-prices'
+import { calcPrice, extractUsage, type Usage, type Provider as UsageProvider } from '@pydantic/genai-prices'
 import { EventStreamCodec } from '@smithy/eventstream-codec'
 import { createParser, type EventSourceMessage } from 'eventsource-parser'
 import logfire from 'logfire'
@@ -57,7 +51,6 @@ export class RequestHandler {
     this.restOfPath = options.restOfPath
     this.middlewares = options.middlewares ?? []
 
-    // Create provider instance
     this.provider = RequestHandler.getProvider({
       restOfPath: this.restOfPath,
       providerProxy: this.providerProxy,
@@ -81,7 +74,7 @@ export class RequestHandler {
   }
 
   providerId(): string {
-    return this.providerProxy.providerId
+    return this.provider.providerId()
   }
 
   async dispatch(): Promise<HandlerResponse> {
@@ -120,8 +113,6 @@ export class RequestHandler {
     const prepared = this.provider.requestBody(extracted)
     if ('error' in prepared) return prepared
 
-    // Get ModelAPI and URL using prepared data
-    const modelAPI = this.provider.getModelAPI(prepared)
     const url = this.provider.url(prepared, requestModel)
 
     const method = this.request.method
@@ -163,12 +154,13 @@ export class RequestHandler {
       }
     }
 
+    const modelAPI = this.provider.getModelAPI(prepared)
+
     const isStreaming = this.isStreaming(responseHeaders, requestBodyData)
     if (isStreaming) {
       return this.dispatchStreaming(extracted, response, responseHeaders, modelAPI, requestModel)
     }
 
-    // Extract usage from response
     const processResponse = await this.extractUsage(response, extracted)
     if ('error' in processResponse) {
       return { ...processResponse, disableKey: this.providerProxy.disableKey ?? true, requestModel }
@@ -237,12 +229,8 @@ export class RequestHandler {
     return { response }
   }
 
-  private usageProvider(): UsageProvider {
-    const providerId = this.provider.usageProviderId()
-    const provider = findProvider({ providerId })
-    if (!provider) {
-      throw new Error(`Usage provider not found for ${providerId}`)
-    }
+  private usageProvider(): UsageProvider | undefined {
+    const provider = this.provider.usageProvider()
     return provider
   }
 
@@ -251,6 +239,10 @@ export class RequestHandler {
     try {
       const responseBody = JSON.parse(bodyText) as unknown as JsonData
       const usageProvider = this.usageProvider()
+      // TODO(Marcelo): Check if the next line is ever reached. I think `usageProvider` is always a valid provider at this point.
+      if (!usageProvider) {
+        return { error: 'invalid response JSON, provider not found' }
+      }
 
       let { model: responseModel, usage } = extractUsage(usageProvider, responseBody, this.provider.apiFlavor)
       if (!responseModel && extracted) {
@@ -265,10 +257,6 @@ export class RequestHandler {
       if (price) {
         return { responseBody, responseModel, usage, cost: price.total_price }
       } else {
-        // For HuggingFace, pricing may not be available, but we still allow the request
-        if (this.providerProxy.providerId === 'huggingface') {
-          return { responseBody, responseModel, usage, cost: 0 }
-        }
         logfire.error('Unable to calculate spend', { responseModel, usage, provider: usageProvider })
         return { error: 'Unable to calculate spend' }
       }
@@ -363,8 +351,8 @@ export class RequestHandler {
       modelAPI.processChunk(chunk)
     }
 
-    const usage = modelAPI.extractedResponse.usage
-    const responseModel = modelAPI.extractedResponse.responseModel
+    const provider = this.usageProvider()
+    const { usage, responseModel } = modelAPI.extractedResponse
 
     if (!usage || !responseModel) {
       return {
@@ -373,14 +361,10 @@ export class RequestHandler {
       }
     }
 
-    const price = calcPrice(usage, responseModel, { provider: usageProvider })
+    const price = calcPrice(usage, responseModel, { provider })
     if (price) {
       return { cost: price.total_price }
     } else {
-      // For HuggingFace, pricing may not be available, but we still allow the request
-      if (this.providerProxy.providerId === 'huggingface') {
-        return { cost: 0 }
-      }
       return {
         error: new Error(`Unable to calculate cost for model ${responseModel} and provider ${usageProvider.name}`),
         disableKey: this.providerProxy.disableKey ?? true,

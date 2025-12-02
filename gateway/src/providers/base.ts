@@ -1,3 +1,4 @@
+import { findProvider, type Provider as UsageProvider } from '@pydantic/genai-prices'
 import type { ModelAPI } from '../api'
 import type { ErrorResponse } from '../handler'
 import type { ProviderProxy, SubFetch } from '../types'
@@ -40,13 +41,8 @@ export abstract class BaseProvider {
     return this.providerProxy.providerId
   }
 
-  /**
-   * Get the provider ID to use for usage calculation.
-   * This can be overridden by providers that need to use a different ID
-   * based on response headers (e.g., HuggingFace uses different providers).
-   */
-  usageProviderId(): string {
-    return this.providerProxy.providerId
+  usageProvider(): UsageProvider | undefined {
+    return findProvider({ providerId: this.providerId() })
   }
 
   requestBody(extracted: ExtractedInfo): ExtractedInfo | ErrorResponse {
@@ -57,6 +53,8 @@ export abstract class BaseProvider {
     return `${this.providerProxy.baseUrl}/${this.restOfPath}`
   }
 
+  // Every provider probably has some response headers that we want to filter out.
+  // TODO(Marcelo): We should make this an abstract method and require all providers to implement it.
   filterResponseHeaders(_headers: Headers): void {}
 
   isWhitelistedEndpoint(): boolean {

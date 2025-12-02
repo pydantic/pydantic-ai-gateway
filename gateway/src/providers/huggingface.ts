@@ -1,3 +1,4 @@
+import { findProvider, type Provider as UsageProvider } from '@pydantic/genai-prices'
 import type { ModelAPI } from '../api'
 import { ChatCompletionAPI } from '../api/chat'
 import type { ErrorResponse } from '../handler'
@@ -17,7 +18,7 @@ export class HuggingFaceProvider extends BaseProvider {
   }
 
   getModelAPI(_extracted: ExtractedInfo): ModelAPI {
-    return new ChatCompletionAPI('huggingface')
+    return new ChatCompletionAPI('huggingface', undefined, { usageProvider: this.usageProvider() })
   }
 
   authenticate(headers: Headers): Promise<ErrorResponse | null> {
@@ -34,11 +35,8 @@ export class HuggingFaceProvider extends BaseProvider {
     this.inferenceProvider = headers.get('x-inference-provider')
   }
 
-  // Override usageProviderId to return the actual provider used (e.g., huggingface-together)
-  usageProviderId(): string {
-    if (this.inferenceProvider) {
-      return `${this.providerProxy.providerId}-${this.inferenceProvider}`
-    }
-    return this.providerProxy.providerId
+  usageProvider(): UsageProvider | undefined {
+    if (!this.inferenceProvider) return undefined
+    return findProvider({ providerId: `${this.providerId()}-${this.inferenceProvider}` })
   }
 }

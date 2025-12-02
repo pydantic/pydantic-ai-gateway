@@ -61,6 +61,10 @@ export abstract class BaseProvider {
     return false
   }
 
+  isBuiltin(): boolean {
+    return this.providerProxy.isBuiltIn ?? false
+  }
+
   /**
    * Override this method to provide custom fetch behavior (e.g., for testing).
    * If not implemented, the default fetch from gatewayOptions will be used.

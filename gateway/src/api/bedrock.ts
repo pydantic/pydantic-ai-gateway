@@ -46,14 +46,7 @@ export class ConverseAPI extends BaseAPI<ConverseRequest, ConverseResponse, Conv
     },
   }
 
-  responseExtractors: ExtractorConfig<ConverseResponse, ExtractedResponse> = {
-    usage: (response: ConverseResponse) => {
-      this.extractedResponse.usage = this.extractUsage(response)
-    },
-    responseModel: (_response: ConverseResponse) => {
-      this.extractedResponse.responseModel = this.requestModel
-    },
-  }
+  responseExtractors: ExtractorConfig<ConverseResponse, ExtractedResponse> = {}
 
   chunkExtractors: ExtractorConfig<ConverseStreamOutput, ExtractedResponse> = {
     usage: (chunk: ConverseStreamOutput) => {

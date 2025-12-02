@@ -330,7 +330,7 @@ export class RequestHandler {
     }
 
     // @ts-expect-error: TODO(Marcelo): Fix this type error.
-    const extractionPromise = this.processChunks(modelAPI, events, usageProvider)
+    const extractionPromise = this.processChunks(modelAPI, events, provider)
 
     // Track completion but don't wait for it before returning
     this.runAfter('extract-stream', extractionPromise)

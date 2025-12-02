@@ -26,7 +26,7 @@ export class TestProvider extends BaseProvider {
   }
 
   // Use OpenAI for pricing/usage calculations since test provider uses OpenAI-compatible models
-  usageProviderId(): string {
+  providerId(): string {
     return 'openai'
   }
 

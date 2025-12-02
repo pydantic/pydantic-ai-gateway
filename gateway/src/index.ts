@@ -26,6 +26,7 @@ import { ctHeader, response405, runAfter, textResponse } from './utils'
 export { changeProjectState as setProjectState, deleteApiKeyCache, setApiKeyCache } from './auth'
 export type { Middleware, Next }
 export * from './db'
+export type { RequestHandler } from './handler'
 export * from './rateLimiter'
 export * from './types'
 

@@ -204,8 +204,7 @@ export async function gatewayWithLimiter(
       !('unexpectedStatus' in result) &&
       !('modelNotFound' in result)
     ) {
-      const _proxy = { providerId: () => handler.provider.providerId() }
-      const [spanName, attributes, level] = genAiOtelAttributes(result, _proxy)
+      const [spanName, attributes, level] = genAiOtelAttributes(result, handler)
       otelSpan.end(spanName, attributes, { level })
     }
 

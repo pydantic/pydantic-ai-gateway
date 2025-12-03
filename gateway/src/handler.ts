@@ -9,7 +9,7 @@ import type { BaseAPI } from './api/base'
 import type { OtelSpan } from './otel'
 import { attributesFromRequest, attributesFromResponse, type GenAIAttributes } from './otel/attributes'
 import { AnthropicProvider } from './providers/anthropic'
-import { AzureProvider } from './providers/azure'
+import { createAzureProvider } from './providers/azure'
 import type { BaseProvider, ExtractedInfo, ProviderOptions } from './providers/base'
 import { BedrockProvider } from './providers/bedrock'
 import { GoogleVertexProvider } from './providers/google'
@@ -63,7 +63,7 @@ export class RequestHandler {
     return match(options.providerProxy.providerId)
       .returnType<BaseProvider>()
       .with('openai', () => new OpenAIProvider(options))
-      .with('azure', () => new AzureProvider(options))
+      .with('azure', () => createAzureProvider(options))
       .with('groq', () => new GroqProvider(options))
       .with('google-vertex', () => new GoogleVertexProvider(options))
       .with('anthropic', () => new AnthropicProvider(options))

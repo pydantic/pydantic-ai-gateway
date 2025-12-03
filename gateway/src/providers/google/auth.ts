@@ -1,10 +1,10 @@
-import type { ProxyInvalidRequest } from '../default'
+import type { ErrorResponse } from '../../handler'
 
 export async function authToken(
   credentials: string,
   kv: KVNamespace,
   subFetch: typeof fetch,
-): Promise<{ token: string } | ProxyInvalidRequest> {
+): Promise<{ token: string } | ErrorResponse> {
   const serviceAccountHash = await hash(credentials)
   const cacheKey = `gcp-auth:${serviceAccountHash}`
   const cachedToken = await kv.get(cacheKey, { cacheTtl: 300 })
@@ -24,7 +24,7 @@ export async function authToken(
   return tokenResult
 }
 
-export function getServiceAccount(credentials: string): ServiceAccount | ProxyInvalidRequest {
+export function getServiceAccount(credentials: string): ServiceAccount | ErrorResponse {
   let sa: ServiceAccount
   try {
     sa = JSON.parse(credentials)
@@ -85,7 +85,7 @@ async function jwtSign(serviceAccount: ServiceAccount): Promise<string> {
   return `${signingInput}.${b64UrlEncodeArray(signature)}`
 }
 
-async function getAccessToken(jwt: string, subFetch: typeof fetch): Promise<{ token: string } | ProxyInvalidRequest> {
+async function getAccessToken(jwt: string, subFetch: typeof fetch): Promise<{ token: string } | ErrorResponse> {
   const body = new URLSearchParams({ grant_type: 'urn:ietf:params:oauth:grant-type:jwt-bearer', assertion: jwt })
 
   const response = await subFetch(tokenUrl, {

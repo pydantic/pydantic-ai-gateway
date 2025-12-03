@@ -2,15 +2,7 @@ import { createExecutionContext, env, waitOnExecutionContext } from 'cloudflare:
 import { gatewayFetch, LimitDbD1, type Middleware, type Next, type SpendStatus } from '@pydantic/ai-gateway'
 import OpenAI from 'openai'
 import { describe, expect, it } from 'vitest'
-import type {
-  DefaultProviderProxy,
-  ProxyInvalidRequest,
-  ProxyRequestModelNotFound,
-  ProxyStreamingSuccess,
-  ProxySuccess,
-  ProxyUnexpectedResponse,
-  ProxyWhitelistedEndpoint,
-} from '../src/providers/default'
+import type { HandlerResponse, RequestHandler } from '../src/handler'
 import { test } from './setup'
 import { buildGatewayEnv, type DisableEvent, IDS } from './worker'
 
@@ -239,14 +231,7 @@ describe('custom proxyPrefixLength', () => {
 
 describe('custom middleware', () => {
   it('middleware', async () => {
-    const responses: (
-      | ProxySuccess
-      | ProxyInvalidRequest
-      | ProxyUnexpectedResponse
-      | ProxyStreamingSuccess
-      | ProxyWhitelistedEndpoint
-      | ProxyRequestModelNotFound
-    )[] = []
+    const responses: HandlerResponse[] = []
 
     const ctx = createExecutionContext()
     const request = new Request<unknown, IncomingRequestCfProperties>('https://example.com/openai/gpt-5', {
@@ -255,8 +240,8 @@ describe('custom middleware', () => {
 
     class CollectMiddleware implements Middleware {
       dispatch(next: Next): Next {
-        return async (proxy: DefaultProviderProxy) => {
-          const response = await next(proxy)
+        return async (handler: RequestHandler) => {
+          const response = await next(handler)
           responses.push(response)
           return response
         }
@@ -276,9 +261,9 @@ describe('routing group fallback', () => {
 
     class FailFirstMiddleware implements Middleware {
       dispatch(next: Next): Next {
-        return async (proxy: DefaultProviderProxy) => {
+        return async (handler: RequestHandler) => {
           attemptCount++
-          const baseUrl = (proxy as unknown as { providerProxy: { baseUrl: string } }).providerProxy.baseUrl
+          const baseUrl = handler.providerProxy.baseUrl
           providerAttempts.push(baseUrl)
 
           // First provider should fail with 503
@@ -293,7 +278,7 @@ describe('routing group fallback', () => {
           }
 
           // Second provider should succeed
-          return await next(proxy)
+          return await next(handler)
         }
       }
     }
@@ -326,9 +311,9 @@ describe('routing group fallback', () => {
 
     class Fail403FirstMiddleware implements Middleware {
       dispatch(next: Next): Next {
-        return async (proxy: DefaultProviderProxy) => {
+        return async (handler: RequestHandler) => {
           attemptCount++
-          const baseUrl = (proxy as unknown as { providerProxy: { baseUrl: string } }).providerProxy.baseUrl
+          const baseUrl = handler.providerProxy.baseUrl
           providerAttempts.push(baseUrl)
 
           // First provider should fail with 403
@@ -343,7 +328,7 @@ describe('routing group fallback', () => {
           }
 
           // Second provider should succeed
-          return await next(proxy)
+          return await next(handler)
         }
       }
     }
@@ -375,7 +360,7 @@ describe('routing group fallback', () => {
 
     class FailWithBadRequestMiddleware implements Middleware {
       dispatch(_next: Next): Next {
-        return (_proxy: DefaultProviderProxy) => {
+        return (_handler: RequestHandler) => {
           attemptCount++
           // Return 400 error (non-retryable)
           return Promise.resolve({
@@ -410,7 +395,7 @@ describe('routing group fallback', () => {
 
     class FailAllMiddleware implements Middleware {
       dispatch(_next: Next): Next {
-        return (_proxy: DefaultProviderProxy) => {
+        return (_handler: RequestHandler) => {
           attemptCount++
           // Always return 503
           return Promise.resolve({
@@ -448,13 +433,13 @@ describe('routing group fallback', () => {
 
     class FailAnthropicMiddleware implements Middleware {
       dispatch(next: Next): Next {
-        return async (proxy: DefaultProviderProxy) => {
+        return async (handler: RequestHandler) => {
           attemptCount++
-          const providerId = proxy.providerId()
+          const providerId = handler.providerId()
           providerAttempts.push(providerId)
 
           // Extract model from request
-          const requestBody = await proxy.request.clone().text()
+          const requestBody = await handler.request.clone().text()
           const body = JSON.parse(requestBody)
           if ('model' in body) {
             modelAttempts.push(body.model as string)
@@ -472,7 +457,7 @@ describe('routing group fallback', () => {
           }
 
           // Second provider (google-vertex) should succeed
-          return await next(proxy)
+          return await next(handler)
         }
       }
     }

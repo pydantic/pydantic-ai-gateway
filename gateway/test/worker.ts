@@ -5,11 +5,11 @@ import {
   type KeyStatus,
   KeysDbD1,
   LimitDbD1,
+  type Middleware,
   type ProviderProxy,
   type RateLimiter,
   type SubFetch,
 } from '@pydantic/ai-gateway'
-import type { Middleware } from '../src/providers/default'
 
 export default {
   async fetch(request, env, ctx): Promise<Response> {

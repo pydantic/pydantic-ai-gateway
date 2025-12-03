@@ -2,9 +2,9 @@ import logfire from 'logfire'
 import { type GatewayOptions, noopLimiter } from '.'
 import { apiKeyAuth, setApiKeyCache } from './auth'
 import { currentScopeIntervals, type ExceededScope, endOfMonth, endOfWeek, type SpendScope } from './db'
+import { type HandlerResponse, RequestHandler } from './handler'
 import { OtelTrace } from './otel'
 import { genAiOtelAttributes } from './otel/attributes'
-import { getProvider } from './providers'
 import type { ApiKeyInfo, ProviderProxy } from './types'
 import { runAfter, textResponse } from './utils'
 
@@ -174,27 +174,24 @@ export async function gatewayWithLimiter(
 
   const otel = new OtelTrace(request, apiKeyInfo.otelSettings, options)
 
-  // The AI did this, but I actually find it nice.
-  let result: Awaited<ReturnType<InstanceType<ReturnType<typeof getProvider>>['dispatch']>> | null = null
+  let result: HandlerResponse | null = null
 
   for (const providerProxy of providerProxies) {
-    const ProxyCls = getProvider(providerProxy.providerId)
-
     const otelSpan = otel.startSpan()
-    const proxy = new ProxyCls({
-      // Since the body is consumed by the proxy, we need to clone the request.
+
+    const handler = new RequestHandler({
       request: request.clone(),
+      providerProxy,
+      ctx,
       gatewayOptions: options,
       apiKeyInfo,
-      providerProxy,
       restOfPath,
-      ctx,
-      middlewares: options.proxyMiddlewares,
       otelSpan,
+      middlewares: options.proxyMiddlewares,
     })
 
     try {
-      result = await proxy.dispatch()
+      result = await handler.dispatch()
     } catch (error) {
       logfire.reportError('Connection error', error as Error, { providerId: providerProxy.providerId, route })
       continue
@@ -207,7 +204,7 @@ export async function gatewayWithLimiter(
       !('unexpectedStatus' in result) &&
       !('modelNotFound' in result)
     ) {
-      const [spanName, attributes, level] = genAiOtelAttributes(result, proxy)
+      const [spanName, attributes, level] = genAiOtelAttributes(result, handler)
       otelSpan.end(spanName, attributes, { level })
     }
 

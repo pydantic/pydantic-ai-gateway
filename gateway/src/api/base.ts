@@ -2,7 +2,7 @@ import type { Provider as UsageProvider } from '@pydantic/genai-prices'
 import { extractUsage, findProvider, type Usage } from '@pydantic/genai-prices'
 import type { GenAIAttributes, GenAIAttributesExtractor } from '../otel/attributes'
 import type { InputMessages, OutputMessages, TextPart } from '../otel/genai'
-import { type JsonData, safe } from '../providers/default'
+import { type JsonData, safe } from '../providers/utils'
 import type { ProviderID } from '../types'
 
 export interface ExtractedRequest {

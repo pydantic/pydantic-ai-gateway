@@ -1,20 +1,36 @@
 import type { ModelAPI } from '../api'
 import { ChatCompletionAPI } from '../api/chat'
-import { DefaultProviderProxy } from './default'
+import type { ErrorResponse } from '../handler'
+import { BaseProvider, type ExtractedInfo } from './base'
 
-export class TestProvider extends DefaultProviderProxy {
+export class TestProvider extends BaseProvider {
+  getRequestModel(extracted: ExtractedInfo): string | undefined {
+    const { requestBodyData } = extracted
+    if ('model' in requestBodyData && typeof requestBodyData.model === 'string') {
+      return requestBodyData.model
+    }
+    return undefined
+  }
+
+  getModelAPI(_extracted: ExtractedInfo): ModelAPI {
+    return new ChatCompletionAPI('test')
+  }
+
+  authenticate(headers: Headers): Promise<ErrorResponse | null> {
+    headers.set('Authorization', `Bearer ${this.providerProxy.credentials}`)
+    return Promise.resolve(null)
+  }
+
+  protected initializeAPIFlavor(): string | undefined {
+    return 'chat'
+  }
+
+  // Use OpenAI for pricing/usage calculations since test provider uses OpenAI-compatible models
   providerId(): string {
     return 'openai'
   }
 
-  protected modelAPI(): ModelAPI {
-    return new ChatCompletionAPI('test')
-  }
-
-  apiFlavor(): string | undefined {
-    return 'chat'
-  }
-
+  // Mock fetch for testing - returns synthetic response instead of making real HTTP call
   async fetch(url: string, init: RequestInit): Promise<Response> {
     if (typeof init.body === 'string') {
       const sleepTime = /sleep=(?<sleep>\d+)/.exec(init.body)?.groups?.sleep

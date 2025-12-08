@@ -36,6 +36,7 @@ export interface ApiKeyInfo<ProviderKey extends string = string> {
   // among values with same priority, use weight for randomized load balancing; if missing, treat as 1
   routingGroups: Record<string, { key: ProviderKey; priority?: number; weight?: number }[]>
   otelSettings?: OtelSettings
+  cacheEnabled?: boolean
 }
 
 export type ProviderID =

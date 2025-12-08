@@ -3,6 +3,7 @@ import { type GatewayOptions, noopLimiter } from '.'
 import { apiKeyAuth, setApiKeyCache } from './auth'
 import { currentScopeIntervals, type ExceededScope, endOfMonth, endOfWeek, type SpendScope } from './db'
 import { type HandlerResponse, RequestHandler } from './handler'
+import { CacheMiddleware } from './middleware/cache'
 import { OtelTrace } from './otel'
 import { genAiOtelAttributes } from './otel/attributes'
 import type { ApiKeyInfo, ProviderProxy } from './types'
@@ -174,6 +175,11 @@ export async function gatewayWithLimiter(
 
   const otel = new OtelTrace(request, apiKeyInfo.otelSettings, options)
 
+  const middlewares = options.proxyMiddlewares ?? []
+  if (options.cache) {
+    middlewares.push(new CacheMiddleware({ storage: options.cache.storage }))
+  }
+
   let result: HandlerResponse | null = null
 
   for (const providerProxy of providerProxies) {
@@ -187,7 +193,7 @@ export async function gatewayWithLimiter(
       apiKeyInfo,
       restOfPath,
       otelSpan,
-      middlewares: options.proxyMiddlewares,
+      middlewares,
     })
 
     try {

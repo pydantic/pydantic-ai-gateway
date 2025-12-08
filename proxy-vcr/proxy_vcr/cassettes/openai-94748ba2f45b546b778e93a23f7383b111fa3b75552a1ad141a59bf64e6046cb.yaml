@@ -1,0 +1,95 @@
+interactions:
+- request:
+    body: '{"model":"gpt-5","messages":[{"role":"user","content":"What is the capital
+      of France?"}],"max_completion_tokens":1200,"stream":true,"stream_options":{"include_usage":true}}'
+    headers:
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '172'
+      content-type:
+      - application/json
+      host:
+      - api.openai.com
+      user-agent:
+      - python-httpx/0.28.1
+    method: POST
+    uri: https://api.openai.com/v1/chat/completions
+  response:
+    body:
+      string: 'data: {"id":"chatcmpl-CkVmZ8JZ8oof5i1bL0G7ixPcF9J7h","object":"chat.completion.chunk","created":1765201295,"model":"gpt-5-2025-08-07","service_tier":"default","system_fingerprint":null,"choices":[{"index":0,"delta":{"role":"assistant","content":"","refusal":null},"finish_reason":null}],"usage":null,"obfuscation":"PIQTUtyOdh"}
+
+
+        data: {"id":"chatcmpl-CkVmZ8JZ8oof5i1bL0G7ixPcF9J7h","object":"chat.completion.chunk","created":1765201295,"model":"gpt-5-2025-08-07","service_tier":"default","system_fingerprint":null,"choices":[{"index":0,"delta":{"content":"Paris"},"finish_reason":null}],"usage":null,"obfuscation":"re3rLzM"}
+
+
+        data: {"id":"chatcmpl-CkVmZ8JZ8oof5i1bL0G7ixPcF9J7h","object":"chat.completion.chunk","created":1765201295,"model":"gpt-5-2025-08-07","service_tier":"default","system_fingerprint":null,"choices":[{"index":0,"delta":{"content":"."},"finish_reason":null}],"usage":null,"obfuscation":"sRTMX9sXRGg"}
+
+
+        data: {"id":"chatcmpl-CkVmZ8JZ8oof5i1bL0G7ixPcF9J7h","object":"chat.completion.chunk","created":1765201295,"model":"gpt-5-2025-08-07","service_tier":"default","system_fingerprint":null,"choices":[{"index":0,"delta":{},"finish_reason":"stop"}],"usage":null,"obfuscation":"q16gDt"}
+
+
+        data: {"id":"chatcmpl-CkVmZ8JZ8oof5i1bL0G7ixPcF9J7h","object":"chat.completion.chunk","created":1765201295,"model":"gpt-5-2025-08-07","service_tier":"default","system_fingerprint":null,"choices":[],"usage":{"prompt_tokens":13,"completion_tokens":11,"total_tokens":24,"prompt_tokens_details":{"cached_tokens":0,"audio_tokens":0},"completion_tokens_details":{"reasoning_tokens":0,"audio_tokens":0,"accepted_prediction_tokens":0,"rejected_prediction_tokens":0}},"obfuscation":"xR2uRrbBUrh"}
+
+
+        data: [DONE]
+
+
+        '
+    headers:
+      CF-RAY:
+      - 9aacae5afd4e3ed1-MAD
+      Connection:
+      - keep-alive
+      Content-Type:
+      - text/event-stream; charset=utf-8
+      Date:
+      - Mon, 08 Dec 2025 13:41:36 GMT
+      Server:
+      - cloudflare
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains; preload
+      Transfer-Encoding:
+      - chunked
+      X-Content-Type-Options:
+      - nosniff
+      access-control-expose-headers:
+      - X-Request-ID
+      alt-svc:
+      - h3=":443"; ma=86400
+      cf-cache-status:
+      - DYNAMIC
+      openai-organization:
+      - pydantic-28gund
+      openai-processing-ms:
+      - '1135'
+      openai-project:
+      - proj_dKobscVY9YJxeEaDJen54e3d
+      openai-version:
+      - '2020-10-01'
+      x-envoy-upstream-service-time:
+      - '1282'
+      x-openai-proxy-wasm:
+      - v0.1
+      x-ratelimit-limit-requests:
+      - '15000'
+      x-ratelimit-limit-tokens:
+      - '40000000'
+      x-ratelimit-remaining-requests:
+      - '14999'
+      x-ratelimit-remaining-tokens:
+      - '39999990'
+      x-ratelimit-reset-requests:
+      - 4ms
+      x-ratelimit-reset-tokens:
+      - 0s
+      x-request-id:
+      - req_33fa052094294105968f87c4e65778f4
+    status:
+      code: 200
+      message: OK
+version: 1

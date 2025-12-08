@@ -44,4 +44,5 @@ export interface ApiKey<ProviderKey extends string> {
   spendingLimitMonthly?: number
   spendingLimitTotal?: number
   providers: ProviderKey[] | '__all__'
+  cacheEnabled?: boolean
 }

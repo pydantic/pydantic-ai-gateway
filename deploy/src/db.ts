@@ -66,6 +66,7 @@ export class ConfigDB extends KeysDbD1 {
       providers: providersWithKeys,
       routingGroups,
       otelSettings: user?.otel ?? project.otel,
+      cacheEnabled: keyInfo.cacheEnabled,
     }
   }
 }

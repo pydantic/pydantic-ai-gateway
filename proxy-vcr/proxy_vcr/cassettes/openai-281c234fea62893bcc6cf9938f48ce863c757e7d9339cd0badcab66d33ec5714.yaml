@@ -1,0 +1,88 @@
+interactions:
+- request:
+    body: '{"model":"gpt-5","messages":[{"role":"user","content":"Message A"}],"max_completion_tokens":1200}'
+    headers:
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '97'
+      content-type:
+      - application/json
+      host:
+      - api.openai.com
+      user-agent:
+      - python-httpx/0.28.1
+    method: POST
+    uri: https://api.openai.com/v1/chat/completions
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAAA3STz04bMRDG73mKkU+tlKBk2/Anl4pSlapSVYlWtFJB0dQ7mxi8thnPQhcUiQcp
+        L8eTVHYCu6hw8WF+nm/G841vBgDKlGoGSi9RdB3s6OD8OB4eXRz/bL9XxZuz6Wcz4eKQ8OuF/DhS
+        w5Thf5+RloesLe3rYEmMd2usmVAoqU52tqfFeLL9djeD2pdkU9oiyGg6KsbFdDTeHY13NnlLbzRF
+        NYNfAwCAm3ymDl1Jf9QMxsOHSE0x4oLU7PESgGJvU0RhjCYKOlHDDmrvhFxu+pO/givf2BJa34A1
+        5wQ1gXhYoistwf3t3y9rfdi/v717ByduBB8YKwHPYOrA/pLASAp/a+oa2VxTQsLookV5gPsObXud
+        pF3m2iIbaRM6yDMCBKZgW3jVq/n+/vbuddYWz0kKKs+QZBmYKmJymk7ciftIZKFiyr0HjEIgS4Kq
+        sRY2A0pVYyBtqjazhUe71R8LU9VETKa4xtoeQOe8YDI1G3K6IatHCyrjTFzOmTB6l8YaxQeV6WoA
+        cJotbZ64pAL7Oshc/Dll2d21muo2qGPF9mRDxQvaPtgbPiM3L0nQ2NjbCaVRL6nsUrsFwqY0vgcG
+        vcf9385z2uuHG7foVCZ7xYsFOqA1BaFyHphKo58+urvGlP7YS9cex5xbVpH40miaiyFOVpRUYWPX
+        +69iG4XqeWXcgjiwyZ8guT1YDf4BAAD//wMApzAU5wEEAAA=
+    headers:
+      CF-RAY:
+      - 9aacb6fae9ca24b7-MAD
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json
+      Date:
+      - Mon, 08 Dec 2025 13:47:35 GMT
+      Server:
+      - cloudflare
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains; preload
+      Transfer-Encoding:
+      - chunked
+      X-Content-Type-Options:
+      - nosniff
+      access-control-expose-headers:
+      - X-Request-ID
+      alt-svc:
+      - h3=":443"; ma=86400
+      cf-cache-status:
+      - DYNAMIC
+      openai-organization:
+      - pydantic-28gund
+      openai-processing-ms:
+      - '7188'
+      openai-project:
+      - proj_dKobscVY9YJxeEaDJen54e3d
+      openai-version:
+      - '2020-10-01'
+      x-envoy-upstream-service-time:
+      - '7427'
+      x-openai-proxy-wasm:
+      - v0.1
+      x-ratelimit-limit-requests:
+      - '15000'
+      x-ratelimit-limit-tokens:
+      - '40000000'
+      x-ratelimit-remaining-requests:
+      - '14999'
+      x-ratelimit-remaining-tokens:
+      - '39999994'
+      x-ratelimit-reset-requests:
+      - 4ms
+      x-ratelimit-reset-tokens:
+      - 0s
+      x-request-id:
+      - req_6fe764a946564a8e990747a7b308de1e
+    status:
+      code: 200
+      message: OK
+version: 1

@@ -1,0 +1,86 @@
+interactions:
+- request:
+    body: '{"model":"gpt-5","messages":[{"role":"user","content":"What is the capital
+      of France?"}],"max_completion_tokens":1200}'
+    headers:
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '118'
+      content-type:
+      - application/json
+      host:
+      - api.openai.com
+      user-agent:
+      - python-httpx/0.28.1
+    method: POST
+    uri: https://api.openai.com/v1/chat/completions
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAAA3SSTU8CMRCG7/srmp53yYLyEW5ITFAveCFRQza1HaDQbZt21qiE/25aPrpGvPQw
+        z8yb953OPiOESkHHhPINQ15bVUx3i+3L3WT7PnlUg9nzN586qxf3D/O7p9cZzcOEed8Cx/NUh5va
+        KkBp9BFzBwwhqHaHg36v7HbLUQS1EaDC2Npi0S96Za9flKOiHJ7mNkZy8HRM3jJCCNnHNzjUAj7p
+        mJT5uVKD92wNdHxpIoQ6o0KFMu+lR6aR5glyoxF0ND1nTvpOGzpYNZ4Fa7pRqgWY1gZZiBZtLU/k
+        cDGyklr6TeWAeaODuEdjaaSHjJBlDNb88kqtM7XFCs0Oomz35ihH0yITHPZPEA0yleqjUX5FrRKA
+        TCrfWgzljG9ApMm0RdYIaVoga2X7a+aa9jG31OukMrj9Vz8BzsEiiMo6EJL/TpzaHIQ7+6/tsuTo
+        mHpwH5JDhRJc+AgBK9ao4w1Q/+UR6mol9RqcdTIeQvjr7JD9AAAA//8DAOJaZgUFAwAA
+    headers:
+      CF-RAY:
+      - 9aaca9d12fb3cc4d-MAD
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json
+      Date:
+      - Mon, 08 Dec 2025 13:38:31 GMT
+      Server:
+      - cloudflare
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains; preload
+      Transfer-Encoding:
+      - chunked
+      X-Content-Type-Options:
+      - nosniff
+      access-control-expose-headers:
+      - X-Request-ID
+      alt-svc:
+      - h3=":443"; ma=86400
+      cf-cache-status:
+      - DYNAMIC
+      openai-organization:
+      - pydantic-28gund
+      openai-processing-ms:
+      - '2410'
+      openai-project:
+      - proj_dKobscVY9YJxeEaDJen54e3d
+      openai-version:
+      - '2020-10-01'
+      x-envoy-upstream-service-time:
+      - '2428'
+      x-openai-proxy-wasm:
+      - v0.1
+      x-ratelimit-limit-requests:
+      - '15000'
+      x-ratelimit-limit-tokens:
+      - '40000000'
+      x-ratelimit-remaining-requests:
+      - '14999'
+      x-ratelimit-remaining-tokens:
+      - '39999990'
+      x-ratelimit-reset-requests:
+      - 4ms
+      x-ratelimit-reset-tokens:
+      - 0s
+      x-request-id:
+      - req_276a4c432c6c4f04902eca21289abb10
+    status:
+      code: 200
+      message: OK
+version: 1

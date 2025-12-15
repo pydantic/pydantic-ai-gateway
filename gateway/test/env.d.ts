@@ -9,6 +9,7 @@ interface Env {
   AWS_BEARER_TOKEN_BEDROCK: string
   GOOGLE_SERVICE_ACCOUNT_KEY: string
   HF_TOKEN: string
+  OVHCLOUD_API_KEY: string
 }
 
 declare module 'cloudflare:test' {

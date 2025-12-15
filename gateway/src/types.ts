@@ -47,6 +47,7 @@ export type ProviderID =
   | 'test'
   | 'bedrock'
   | 'huggingface'
+  | 'ovhcloud'
 // TODO | 'fireworks' | 'mistral' | 'cohere'
 
 const providerIds: Record<ProviderID, boolean> = {
@@ -58,6 +59,7 @@ const providerIds: Record<ProviderID, boolean> = {
   bedrock: true,
   huggingface: true,
   azure: true,
+  ovhcloud: true,
 }
 
 export const providerIdsArray = Object.keys(providerIds) as ProviderID[]

@@ -24,6 +24,7 @@ GOOGLE_BASE_URL = 'https://aiplatform.googleapis.com'
 # The Azure URL is not a secret, we can commit it.
 AZURE_BASE_URL = 'https://marcelo-0665-resource.openai.azure.com/openai/v1'
 HF_BASE_URL = 'https://router.huggingface.co/v1'
+OVHCLOUD_BASE_URL = 'https://oai.endpoints.kepler.ai.cloud.ovh.net/v1'
 
 current_file_dir = pathlib.Path(__file__).parent
 
@@ -121,6 +122,12 @@ async def proxy(request: Request) -> Response:
         }
         with vcr.use_cassette(cassette_name('google-vertex', vcr_suffix)):  # type: ignore[reportUnknownReturnType]
             response = await client.post(url, content=body, headers=headers)
+    elif provider == 'ovhcloud':
+        client = cast(httpx.AsyncClient, request.scope['state']['httpx_client'])
+        url = OVHCLOUD_BASE_URL + request.url.path[len('/ovhcloud') :]
+        with vcr.use_cassette(cassette_name('ovhcloud', vcr_suffix)):  # type: ignore[reportUnknownReturnType]
+            headers = {'Authorization': auth_header, 'content-type': 'application/json'}
+            response = await client.post(url, content=body, headers=headers)
     else:
         raise HTTPException(status_code=404, detail=f'Path {request.url.path} not supported')
     content_type = cast(str, response.headers.get('content-type'))
@@ -183,5 +190,7 @@ def select_provider(request: Request) -> str:
         return 'google-vertex'
     elif request.url.path.startswith('/azure'):
         return 'azure'
+    elif request.url.path.startswith('/ovhcloud'):
+        return 'ovhcloud'
     else:
         raise HTTPException(status_code=404, detail=f'Path {request.url.path} not supported')

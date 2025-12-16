@@ -11,7 +11,7 @@ describe('ovhcloud', () => {
     const completion = await client.chat.completions.create({
       model: 'gpt-oss-120b',
       messages: [
-        { role: 'developer', content: 'You are a helpful assistant.' },
+        { role: 'system', content: 'You are a helpful assistant.' },
         { role: 'user', content: 'What is the capital of France?' },
       ],
       top_p: 0.95,
@@ -33,7 +33,7 @@ describe('ovhcloud', () => {
       stream: true,
       model: 'gpt-oss-120b',
       messages: [
-        { role: 'developer', content: 'You are a helpful assistant.' },
+        { role: 'system', content: 'You are a helpful assistant.' },
         { role: 'user', content: 'What is the capital of France?' },
       ],
       max_completion_tokens: 1024,

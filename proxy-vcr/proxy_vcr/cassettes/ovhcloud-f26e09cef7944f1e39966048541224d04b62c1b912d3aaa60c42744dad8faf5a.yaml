@@ -1,0 +1,68 @@
+interactions:
+- request:
+    body: "{\n  \"model\": \"gpt-oss-120b\",\n  \"messages\": [\n    {\n      \"role\":
+      \"system\",\n      \"content\": \"You are a helpful assistant.\"\n    },\n    {\n
+      \     \"role\": \"user\",\n      \"content\": \"What is the capital of France?\"\n
+      \   }\n  ],\n  \"top_p\": 0.95,\n  \"temperature\": 0.5,\n  \"stop\": [\n    \"potato\"\n
+      \ ],\n  \"max_completion_tokens\": 1024\n}"
+    headers:
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '321'
+      content-type:
+      - application/json
+      host:
+      - oai.endpoints.kepler.ai.cloud.ovh.net
+      user-agent:
+      - python-httpx/0.28.1
+    method: POST
+    uri: https://oai.endpoints.kepler.ai.cloud.ovh.net/v1/chat/completions
+  response:
+    body:
+      string: '{"id":"chatcmpl-c5335980403044c3a11346c01097da8a","choices":[{"index":0,"message":{"role":"assistant","content":"The
+        capital of France is **Paris**.","reasoning_content":"The user asks: \"What
+        is the capital of France?\" It''s a straightforward question. Answer: Paris.","tool_calls":[]},"finish_reason":"stop"}],"created":1765900537,"model":"gpt-oss-120b","object":"chat.completion","usage":{"prompt_tokens":86,"completion_tokens":40,"total_tokens":126}}'
+    headers:
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '454'
+      Content-Type:
+      - application/json
+      access-control-allow-origin:
+      - '*'
+      date:
+      - Tue, 16 Dec 2025 15:55:37 GMT
+      inference-id:
+      - 4359a93f5ef6bf5721596e008b8cd12b
+      ratelimit-limit:
+      - '2'
+      ratelimit-remaining:
+      - '1'
+      ratelimit-reset:
+      - '23'
+      server:
+      - kong/3.9.1
+      vary:
+      - origin, access-control-request-method, access-control-request-headers
+      via:
+      - 1.1 kong/3.9.1, 1.1 kong/3.9.1
+      x-kong-proxy-latency:
+      - '1'
+      x-kong-request-id:
+      - d3a56b547668e731298cc306ccb64965
+      x-kong-upstream-latency:
+      - '297'
+      x-ratelimit-limit-minute:
+      - '2'
+      x-ratelimit-remaining-minute:
+      - '1'
+    status:
+      code: 200
+      message: OK
+version: 1

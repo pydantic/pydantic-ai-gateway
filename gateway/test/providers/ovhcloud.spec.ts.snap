@@ -1,0 +1,711 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`ovhcloud > ovhcloud chat stream > chunks 1`] = `
+[
+  {
+    "choices": [
+      {
+        "delta": {
+          "content": "",
+          "role": "assistant",
+        },
+        "index": 0,
+      },
+    ],
+    "created": 1765900537,
+    "id": "chatcmpl-41eca8dba5b14571a53b4e3d71a334b3",
+    "model": "gpt-oss-120b",
+    "object": "chat.completion.chunk",
+  },
+  {
+    "choices": [
+      {
+        "delta": {
+          "name": "assistant",
+          "reasoning_content": "",
+          "role": "assistant",
+        },
+        "index": 0,
+      },
+    ],
+    "created": 1765900537,
+    "id": "chatcmpl-41eca8dba5b14571a53b4e3d71a334b3",
+    "model": "gpt-oss-120b",
+    "object": "chat.completion.chunk",
+  },
+  {
+    "choices": [
+      {
+        "delta": {
+          "name": "assistant",
+          "reasoning_content": "The",
+          "role": "assistant",
+        },
+        "index": 0,
+      },
+    ],
+    "created": 1765900537,
+    "id": "chatcmpl-41eca8dba5b14571a53b4e3d71a334b3",
+    "model": "gpt-oss-120b",
+    "object": "chat.completion.chunk",
+  },
+  {
+    "choices": [
+      {
+        "delta": {
+          "name": "assistant",
+          "reasoning_content": " user",
+          "role": "assistant",
+        },
+        "index": 0,
+      },
+    ],
+    "created": 1765900537,
+    "id": "chatcmpl-41eca8dba5b14571a53b4e3d71a334b3",
+    "model": "gpt-oss-120b",
+    "object": "chat.completion.chunk",
+  },
+  {
+    "choices": [
+      {
+        "delta": {
+          "name": "assistant",
+          "reasoning_content": " asks",
+          "role": "assistant",
+        },
+        "index": 0,
+      },
+    ],
+    "created": 1765900537,
+    "id": "chatcmpl-41eca8dba5b14571a53b4e3d71a334b3",
+    "model": "gpt-oss-120b",
+    "object": "chat.completion.chunk",
+  },
+  {
+    "choices": [
+      {
+        "delta": {
+          "name": "assistant",
+          "reasoning_content": ":",
+          "role": "assistant",
+        },
+        "index": 0,
+      },
+    ],
+    "created": 1765900537,
+    "id": "chatcmpl-41eca8dba5b14571a53b4e3d71a334b3",
+    "model": "gpt-oss-120b",
+    "object": "chat.completion.chunk",
+  },
+  {
+    "choices": [
+      {
+        "delta": {
+          "name": "assistant",
+          "reasoning_content": " "",
+          "role": "assistant",
+        },
+        "index": 0,
+      },
+    ],
+    "created": 1765900537,
+    "id": "chatcmpl-41eca8dba5b14571a53b4e3d71a334b3",
+    "model": "gpt-oss-120b",
+    "object": "chat.completion.chunk",
+  },
+  {
+    "choices": [
+      {
+        "delta": {
+          "name": "assistant",
+          "reasoning_content": "What",
+          "role": "assistant",
+        },
+        "index": 0,
+      },
+    ],
+    "created": 1765900537,
+    "id": "chatcmpl-41eca8dba5b14571a53b4e3d71a334b3",
+    "model": "gpt-oss-120b",
+    "object": "chat.completion.chunk",
+  },
+  {
+    "choices": [
+      {
+        "delta": {
+          "name": "assistant",
+          "reasoning_content": " is",
+          "role": "assistant",
+        },
+        "index": 0,
+      },
+    ],
+    "created": 1765900537,
+    "id": "chatcmpl-41eca8dba5b14571a53b4e3d71a334b3",
+    "model": "gpt-oss-120b",
+    "object": "chat.completion.chunk",
+  },
+  {
+    "choices": [
+      {
+        "delta": {
+          "name": "assistant",
+          "reasoning_content": " the",
+          "role": "assistant",
+        },
+        "index": 0,
+      },
+    ],
+    "created": 1765900537,
+    "id": "chatcmpl-41eca8dba5b14571a53b4e3d71a334b3",
+    "model": "gpt-oss-120b",
+    "object": "chat.completion.chunk",
+  },
+  {
+    "choices": [
+      {
+        "delta": {
+          "name": "assistant",
+          "reasoning_content": " capital",
+          "role": "assistant",
+        },
+        "index": 0,
+      },
+    ],
+    "created": 1765900537,
+    "id": "chatcmpl-41eca8dba5b14571a53b4e3d71a334b3",
+    "model": "gpt-oss-120b",
+    "object": "chat.completion.chunk",
+  },
+  {
+    "choices": [
+      {
+        "delta": {
+          "name": "assistant",
+          "reasoning_content": " of",
+          "role": "assistant",
+        },
+        "index": 0,
+      },
+    ],
+    "created": 1765900537,
+    "id": "chatcmpl-41eca8dba5b14571a53b4e3d71a334b3",
+    "model": "gpt-oss-120b",
+    "object": "chat.completion.chunk",
+  },
+  {
+    "choices": [
+      {
+        "delta": {
+          "name": "assistant",
+          "reasoning_content": " France",
+          "role": "assistant",
+        },
+        "index": 0,
+      },
+    ],
+    "created": 1765900537,
+    "id": "chatcmpl-41eca8dba5b14571a53b4e3d71a334b3",
+    "model": "gpt-oss-120b",
+    "object": "chat.completion.chunk",
+  },
+  {
+    "choices": [
+      {
+        "delta": {
+          "name": "assistant",
+          "reasoning_content": "?"",
+          "role": "assistant",
+        },
+        "index": 0,
+      },
+    ],
+    "created": 1765900537,
+    "id": "chatcmpl-41eca8dba5b14571a53b4e3d71a334b3",
+    "model": "gpt-oss-120b",
+    "object": "chat.completion.chunk",
+  },
+  {
+    "choices": [
+      {
+        "delta": {
+          "name": "assistant",
+          "reasoning_content": " Straight",
+          "role": "assistant",
+        },
+        "index": 0,
+      },
+    ],
+    "created": 1765900537,
+    "id": "chatcmpl-41eca8dba5b14571a53b4e3d71a334b3",
+    "model": "gpt-oss-120b",
+    "object": "chat.completion.chunk",
+  },
+  {
+    "choices": [
+      {
+        "delta": {
+          "name": "assistant",
+          "reasoning_content": "forward",
+          "role": "assistant",
+        },
+        "index": 0,
+      },
+    ],
+    "created": 1765900537,
+    "id": "chatcmpl-41eca8dba5b14571a53b4e3d71a334b3",
+    "model": "gpt-oss-120b",
+    "object": "chat.completion.chunk",
+  },
+  {
+    "choices": [
+      {
+        "delta": {
+          "name": "assistant",
+          "reasoning_content": ".",
+          "role": "assistant",
+        },
+        "index": 0,
+      },
+    ],
+    "created": 1765900537,
+    "id": "chatcmpl-41eca8dba5b14571a53b4e3d71a334b3",
+    "model": "gpt-oss-120b",
+    "object": "chat.completion.chunk",
+  },
+  {
+    "choices": [
+      {
+        "delta": {
+          "name": "assistant",
+          "reasoning_content": " Answer",
+          "role": "assistant",
+        },
+        "index": 0,
+      },
+    ],
+    "created": 1765900537,
+    "id": "chatcmpl-41eca8dba5b14571a53b4e3d71a334b3",
+    "model": "gpt-oss-120b",
+    "object": "chat.completion.chunk",
+  },
+  {
+    "choices": [
+      {
+        "delta": {
+          "name": "assistant",
+          "reasoning_content": ":",
+          "role": "assistant",
+        },
+        "index": 0,
+      },
+    ],
+    "created": 1765900537,
+    "id": "chatcmpl-41eca8dba5b14571a53b4e3d71a334b3",
+    "model": "gpt-oss-120b",
+    "object": "chat.completion.chunk",
+  },
+  {
+    "choices": [
+      {
+        "delta": {
+          "name": "assistant",
+          "reasoning_content": " Paris",
+          "role": "assistant",
+        },
+        "index": 0,
+      },
+    ],
+    "created": 1765900537,
+    "id": "chatcmpl-41eca8dba5b14571a53b4e3d71a334b3",
+    "model": "gpt-oss-120b",
+    "object": "chat.completion.chunk",
+  },
+  {
+    "choices": [
+      {
+        "delta": {
+          "name": "assistant",
+          "reasoning_content": ".",
+          "role": "assistant",
+        },
+        "index": 0,
+      },
+    ],
+    "created": 1765900537,
+    "id": "chatcmpl-41eca8dba5b14571a53b4e3d71a334b3",
+    "model": "gpt-oss-120b",
+    "object": "chat.completion.chunk",
+  },
+  {
+    "choices": [
+      {
+        "delta": {
+          "content": "",
+          "name": "assistant",
+          "role": "assistant",
+        },
+        "index": 0,
+      },
+    ],
+    "created": 1765900537,
+    "id": "chatcmpl-41eca8dba5b14571a53b4e3d71a334b3",
+    "model": "gpt-oss-120b",
+    "object": "chat.completion.chunk",
+  },
+  {
+    "choices": [
+      {
+        "delta": {
+          "content": "The",
+          "name": "assistant",
+          "role": "assistant",
+        },
+        "index": 0,
+      },
+    ],
+    "created": 1765900537,
+    "id": "chatcmpl-41eca8dba5b14571a53b4e3d71a334b3",
+    "model": "gpt-oss-120b",
+    "object": "chat.completion.chunk",
+  },
+  {
+    "choices": [
+      {
+        "delta": {
+          "content": " capital",
+          "name": "assistant",
+          "role": "assistant",
+        },
+        "index": 0,
+      },
+    ],
+    "created": 1765900537,
+    "id": "chatcmpl-41eca8dba5b14571a53b4e3d71a334b3",
+    "model": "gpt-oss-120b",
+    "object": "chat.completion.chunk",
+  },
+  {
+    "choices": [
+      {
+        "delta": {
+          "content": " of",
+          "name": "assistant",
+          "role": "assistant",
+        },
+        "index": 0,
+      },
+    ],
+    "created": 1765900537,
+    "id": "chatcmpl-41eca8dba5b14571a53b4e3d71a334b3",
+    "model": "gpt-oss-120b",
+    "object": "chat.completion.chunk",
+  },
+  {
+    "choices": [
+      {
+        "delta": {
+          "content": " France",
+          "name": "assistant",
+          "role": "assistant",
+        },
+        "index": 0,
+      },
+    ],
+    "created": 1765900537,
+    "id": "chatcmpl-41eca8dba5b14571a53b4e3d71a334b3",
+    "model": "gpt-oss-120b",
+    "object": "chat.completion.chunk",
+  },
+  {
+    "choices": [
+      {
+        "delta": {
+          "content": " is",
+          "name": "assistant",
+          "role": "assistant",
+        },
+        "index": 0,
+      },
+    ],
+    "created": 1765900537,
+    "id": "chatcmpl-41eca8dba5b14571a53b4e3d71a334b3",
+    "model": "gpt-oss-120b",
+    "object": "chat.completion.chunk",
+  },
+  {
+    "choices": [
+      {
+        "delta": {
+          "content": " **",
+          "name": "assistant",
+          "role": "assistant",
+        },
+        "index": 0,
+      },
+    ],
+    "created": 1765900537,
+    "id": "chatcmpl-41eca8dba5b14571a53b4e3d71a334b3",
+    "model": "gpt-oss-120b",
+    "object": "chat.completion.chunk",
+  },
+  {
+    "choices": [
+      {
+        "delta": {
+          "content": "Paris",
+          "name": "assistant",
+          "role": "assistant",
+        },
+        "index": 0,
+      },
+    ],
+    "created": 1765900537,
+    "id": "chatcmpl-41eca8dba5b14571a53b4e3d71a334b3",
+    "model": "gpt-oss-120b",
+    "object": "chat.completion.chunk",
+  },
+  {
+    "choices": [
+      {
+        "delta": {
+          "content": "**",
+          "name": "assistant",
+          "role": "assistant",
+        },
+        "index": 0,
+      },
+    ],
+    "created": 1765900537,
+    "id": "chatcmpl-41eca8dba5b14571a53b4e3d71a334b3",
+    "model": "gpt-oss-120b",
+    "object": "chat.completion.chunk",
+  },
+  {
+    "choices": [
+      {
+        "delta": {
+          "content": ".",
+          "name": "assistant",
+          "role": "assistant",
+        },
+        "index": 0,
+      },
+    ],
+    "created": 1765900537,
+    "id": "chatcmpl-41eca8dba5b14571a53b4e3d71a334b3",
+    "model": "gpt-oss-120b",
+    "object": "chat.completion.chunk",
+  },
+  {
+    "choices": [
+      {
+        "delta": {
+          "name": "assistant",
+          "role": "assistant",
+        },
+        "finish_reason": "stop",
+        "index": 0,
+      },
+    ],
+    "created": 1765900537,
+    "id": "chatcmpl-41eca8dba5b14571a53b4e3d71a334b3",
+    "model": "gpt-oss-120b",
+    "object": "chat.completion.chunk",
+  },
+  {
+    "choices": [],
+    "created": 1765900537,
+    "id": "chatcmpl-41eca8dba5b14571a53b4e3d71a334b3",
+    "model": "gpt-oss-120b",
+    "object": "chat.completion.chunk",
+    "usage": {
+      "completion_tokens": 38,
+      "prompt_tokens": 86,
+      "total_tokens": 124,
+    },
+  },
+]
+`;
+
+exports[`ovhcloud > ovhcloud chat stream > span 1`] = `
+[
+  {
+    "attributes": {
+      "gen_ai.operation.name": "chat",
+      "gen_ai.request.max_tokens": 1024,
+      "gen_ai.request.model": "gpt-oss-120b",
+      "gen_ai.response.id": "chatcmpl-41eca8dba5b14571a53b4e3d71a334b3",
+      "gen_ai.response.model": "gpt-oss-120b",
+      "gen_ai.system": "ovhcloud",
+      "gen_ai.usage.input_tokens": 86,
+      "gen_ai.usage.output_tokens": 38,
+      "http.request.header.accept": "application/json",
+      "http.request.header.content-length": "270",
+      "http.request.header.content-type": "application/json",
+      "http.request.header.user-agent": "OpenAI/JS 4.104.0",
+      "http.request.header.x-stainless-arch": "unknown",
+      "http.request.header.x-stainless-lang": "js",
+      "http.request.header.x-stainless-os": "Unknown",
+      "http.request.header.x-stainless-package-version": "4.104.0",
+      "http.request.header.x-stainless-retry-count": "0",
+      "http.request.header.x-stainless-runtime": "unknown",
+      "http.request.header.x-stainless-runtime-version": "unknown",
+      "http.request.header.x-stainless-timeout": "600",
+      "http.request.method": "POST",
+      "http.response.header.content-type": "text/event-stream",
+      "http.response.header.server": "uvicorn",
+      "http.response.header.transfer-encoding": "chunked",
+      "http.response.status_code": 200,
+      "logfire.json_schema": "{"type":"object","properties":{"gen_ai.system":{"type":"string"},"gen_ai.operation.name":{"type":"string"},"gen_ai.request.model":{"type":"string"},"gen_ai.request.max_tokens":{"type":"number"},"gen_ai.response.model":{"type":"string"},"gen_ai.response.id":{"type":"string"},"gen_ai.usage.input_tokens":{"type":"number"},"gen_ai.usage.output_tokens":{"type":"number"},"http.request.method":{"type":"string"},"url.full":{"type":"string"},"http.request.header.accept":{"type":"string"},"http.request.header.content-length":{"type":"string"},"http.request.header.content-type":{"type":"string"},"http.request.header.user-agent":{"type":"string"},"http.request.header.x-stainless-arch":{"type":"string"},"http.request.header.x-stainless-lang":{"type":"string"},"http.request.header.x-stainless-os":{"type":"string"},"http.request.header.x-stainless-package-version":{"type":"string"},"http.request.header.x-stainless-retry-count":{"type":"string"},"http.request.header.x-stainless-runtime":{"type":"string"},"http.request.header.x-stainless-runtime-version":{"type":"string"},"http.request.header.x-stainless-timeout":{"type":"string"},"http.response.status_code":{"type":"number"},"http.response.header.content-type":{"type":"string"},"http.response.header.server":{"type":"string"},"http.response.header.transfer-encoding":{"type":"string"}}}",
+      "logfire.level_num": 9,
+      "logfire.msg": "chat gpt-oss-120b",
+      "url.full": "https://example.com/ovhcloud/chat/completions",
+    },
+    "events": [],
+    "kind": 1,
+    "links": [],
+    "name": "chat gpt-oss-120b",
+    "parentSpanId": undefined,
+    "resource": {
+      "service.name": "PAIG",
+      "service.version": "test",
+    },
+    "scope": "pydantic-ai-gateway",
+    "status": {
+      "code": 1,
+    },
+  },
+]
+`;
+
+exports[`ovhcloud > should call ovhcloud via gateway > llm 1`] = `
+{
+  "choices": [
+    {
+      "finish_reason": "stop",
+      "index": 0,
+      "message": {
+        "content": "The capital of France is **Paris**.",
+        "reasoning_content": "The user asks: "What is the capital of France?" It's a straightforward question. Answer: Paris.",
+        "role": "assistant",
+        "tool_calls": [],
+      },
+    },
+  ],
+  "created": 1765900537,
+  "id": "chatcmpl-c5335980403044c3a11346c01097da8a",
+  "model": "gpt-oss-120b",
+  "object": "chat.completion",
+  "usage": {
+    "completion_tokens": 40,
+    "prompt_tokens": 86,
+    "pydantic_ai_gateway": {
+      "cost_estimate": 0.000026539999999999993,
+    },
+    "total_tokens": 126,
+  },
+}
+`;
+
+exports[`ovhcloud > should call ovhcloud via gateway > span 1`] = `
+[
+  {
+    "attributes": {
+      "gen_ai.input.messages": [
+        {
+          "parts": [
+            {
+              "content": "You are a helpful assistant.",
+              "type": "text",
+            },
+          ],
+          "role": "system",
+        },
+        {
+          "parts": [
+            {
+              "content": "What is the capital of France?",
+              "type": "text",
+            },
+          ],
+          "role": "user",
+        },
+      ],
+      "gen_ai.operation.name": "chat",
+      "gen_ai.output.messages": [
+        {
+          "finish_reason": "stop",
+          "parts": [
+            {
+              "content": "The capital of France is **Paris**.",
+              "type": "text",
+            },
+          ],
+          "role": "assistant",
+        },
+      ],
+      "gen_ai.request.max_tokens": 1024,
+      "gen_ai.request.model": "gpt-oss-120b",
+      "gen_ai.request.seed": {},
+      "gen_ai.request.stop_sequences": [
+        "potato",
+      ],
+      "gen_ai.request.temperature": 0.5,
+      "gen_ai.request.top_k": {},
+      "gen_ai.request.top_p": 0.95,
+      "gen_ai.response.finish_reasons": [
+        "stop",
+      ],
+      "gen_ai.response.id": "chatcmpl-c5335980403044c3a11346c01097da8a",
+      "gen_ai.response.model": "gpt-oss-120b",
+      "gen_ai.system": "ovhcloud",
+      "gen_ai.system_instructions": {},
+      "gen_ai.usage.cache_audio_read_tokens": {},
+      "gen_ai.usage.cache_read_tokens": {},
+      "gen_ai.usage.cache_write_tokens": {},
+      "gen_ai.usage.input_audio_tokens": {},
+      "gen_ai.usage.input_tokens": 86,
+      "gen_ai.usage.output_audio_tokens": {},
+      "gen_ai.usage.output_tokens": 40,
+      "http.request.body.text": "{
+  "model": "gpt-oss-120b",
+  "messages": [
+    {
+      "role": "system",
+      "content": "You are a helpful assistant."
+    },
+    {
+      "role": "user",
+      "content": "What is the capital of France?"
+    }
+  ],
+  "top_p": 0.95,
+  "temperature": 0.5,
+  "stop": [
+    "potato"
+  ],
+  "max_completion_tokens": 1024
+}",
+      "http.response.body.text": "{"id":"chatcmpl-c5335980403044c3a11346c01097da8a","choices":[{"index":0,"message":{"role":"assistant","content":"The capital of France is **Paris**.","reasoning_content":"The user asks: \\"What is the capital of France?\\" It's a straightforward question. Answer: Paris.","tool_calls":[]},"finish_reason":"stop"}],"created":1765900537,"model":"gpt-oss-120b","object":"chat.completion","usage":{"prompt_tokens":86,"completion_tokens":40,"total_tokens":126,"pydantic_ai_gateway":{"cost_estimate":0.000026539999999999993}}}",
+      "http.response.status_code": 200,
+      "logfire.json_schema": "{"type":"object","properties":{"gen_ai.operation.name":{"type":"string"},"gen_ai.request.model":{"type":"string"},"gen_ai.system":{"type":"string"},"gen_ai.request.max_tokens":{"type":"number"},"gen_ai.request.top_k":{},"gen_ai.request.top_p":{"type":"number"},"gen_ai.request.temperature":{"type":"number"},"gen_ai.request.stop_sequences":{},"gen_ai.request.seed":{},"gen_ai.response.finish_reasons":{},"gen_ai.response.id":{"type":"string"},"gen_ai.input.messages":{},"gen_ai.output.messages":{},"gen_ai.system_instructions":{},"http.response.status_code":{"type":"number"},"http.request.body.text":{"type":"string"},"http.response.body.text":{"type":"string"},"gen_ai.response.model":{"type":"string"},"gen_ai.usage.input_tokens":{"type":"number"},"gen_ai.usage.cache_read_tokens":{},"gen_ai.usage.cache_write_tokens":{},"gen_ai.usage.output_tokens":{"type":"number"},"gen_ai.usage.input_audio_tokens":{},"gen_ai.usage.cache_audio_read_tokens":{},"gen_ai.usage.output_audio_tokens":{}}}",
+      "logfire.level_num": 9,
+      "logfire.msg": "chat gpt-oss-120b",
+    },
+    "events": [],
+    "kind": 1,
+    "links": [],
+    "name": "chat gpt-oss-120b",
+    "parentSpanId": undefined,
+    "resource": {
+      "service.name": "PAIG",
+      "service.version": "test",
+    },
+    "scope": "pydantic-ai-gateway",
+    "status": {
+      "code": 1,
+    },
+  },
+]
+`;

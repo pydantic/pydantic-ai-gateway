@@ -74,8 +74,9 @@ export const config: Config<ProviderKeys> = {
     },
     azure: {
       providerId: 'azure',
-      // NOTE: For now, you need to specify the family of models you want to use.
-      baseUrl: 'https://marcelo-0665-resource.openai.azure.com/openai/v1',
+      // NOTE: baseUrl should NOT include /openai or /anthropic - the provider adds these automatically
+      // Use 'anthropic/' prefix in the path for Anthropic API, otherwise OpenAI API is used
+      baseUrl: 'https://marcelo-0665-resource.openai.azure.com',
       injectCost: true,
       credentials: env.AZURE_API_KEY,
     },

@@ -128,33 +128,36 @@ export class BedrockProvider extends BaseProvider {
     if (pathWithoutQuery === 'v1/messages') {
       if (requestModel) {
         const shouldStream = 'stream' in requestBodyData && requestBodyData.stream === true
-        const path = `model/${requestModel}/${shouldStream ? 'invoke-with-response-stream' : 'invoke'}`
+        const model = this.replaceModel(requestModel)
+        console.log('model', model)
+        const path = `model/${model}/${shouldStream ? 'invoke-with-response-stream' : 'invoke'}`
+        console.log('path', path)
         return `${this.providerProxy.baseUrl}/${path}`
       }
-    }
-
-    // Handle model extraction in existing paths
-    // Need to decode the path because it may contain encoded characters like "%3A" (:)
-    try {
-      const decodedPath = decodeURIComponent(this.restOfPath)
-      const m = decodedPath.match(/model\/(.+?)\/(converse|invoke)/)
-      if (m) {
-        const model = m[1]
-        const api = m[2]
-        const newPath = decodedPath.replace(/model\/(.+?)\/(converse|invoke)/, `model/${model}/${api}`)
-        return `${this.providerProxy.baseUrl}/${newPath}`
+    } else {
+      // Handle model extraction in existing paths
+      // Need to decode the path because it may contain encoded characters like "%3A" (:)
+      let path: string | undefined
+      let m: RegExpMatchArray | null = null
+      try {
+        path = decodeURIComponent(this.restOfPath)
+        m = path.match(/model\/(.+?)\/(converse|invoke)/)
+      } catch {
+        path = this.restOfPath
+        m = this.restOfPath.match(/model\/(.+?)\/(converse|invoke)/)
       }
-    } catch {
-      // If decoding fails, try without decoding
-      const m = this.restOfPath.match(/model\/(.+?)\/(converse|invoke)/)
       if (m) {
-        const model = m[1]
+        const model = m[1] && this.replaceModel(m[1])
         const api = m[2]
-        const newPath = this.restOfPath.replace(/model\/(.+?)\/(converse|invoke)/, `model/${model}/${api}`)
+        const newPath = path.replace(/model\/(.+?)\/(converse|invoke)/, `model/${model}/${api}`)
         return `${this.providerProxy.baseUrl}/${newPath}`
       }
     }
 
     return super.url(extracted)
+  }
+
+  protected getModelNameRemappings(): { searchValue: string; replaceValue: string }[] {
+    return [{ searchValue: '^claude-(.*)$', replaceValue: 'anthropic.claude-$1-v1:0' }]
   }
 }

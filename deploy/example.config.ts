@@ -2,7 +2,15 @@ import { env } from 'cloudflare:workers'
 import type { Config } from '@deploy/types'
 
 // can be whatever you want, just used to make linking apiKeys to providers typesafe.
-type ProviderKeys = 'openai' | 'anthropic' | 'google-vertex' | 'bedrock' | 'groq' | 'azure' | 'huggingface'
+type ProviderKeys =
+  | 'openai'
+  | 'anthropic'
+  | 'google-vertex'
+  | 'bedrock'
+  | 'groq'
+  | 'azure'
+  | 'huggingface'
+  | 'ovhcloud'
 
 // projects, users and keys must have numeric keys, using constants here to make it easier to understand
 // of course, keys must be unique within a type (e.g. project ids must be unique) but users and projects can have the same id
@@ -57,6 +65,7 @@ export const config: Config<ProviderKeys> = {
       { key: 'google-vertex' },
       { key: 'anthropic' },
       { key: 'bedrock' },
+      { key: 'ovhcloud' },
     ],
   },
   // providers
@@ -103,6 +112,12 @@ export const config: Config<ProviderKeys> = {
       baseUrl: 'https://router.huggingface.co/v1',
       injectCost: true,
       credentials: env.HF_TOKEN,
+    },
+    ovhcloud: {
+      providerId: 'ovhcloud',
+      baseUrl: 'https://oai.endpoints.kepler.ai.cloud.ovh.net/v1',
+      injectCost: true,
+      credentials: env.OVHCLOUD_API_KEY,
     },
   },
   // individual apiKeys

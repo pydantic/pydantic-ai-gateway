@@ -128,6 +128,14 @@ class TestKeysDB extends KeysDbD1 {
         credentials: env.HF_TOKEN,
         disableKey: true,
       },
+      {
+        key: 'ovhcloud',
+        baseUrl: 'http://localhost:8005/ovhcloud',
+        providerId: 'ovhcloud',
+        injectCost: true,
+        credentials: env.OVHCLOUD_API_KEY,
+        disableKey: true,
+      },
     ]
   }
 
@@ -161,6 +169,7 @@ class TestKeysDB extends KeysDbD1 {
             gemini: [{ key: 'google-vertex' }],
             'google-vertex': [{ key: 'google-vertex' }],
             huggingface: [{ key: 'huggingface' }],
+            ovhcloud: [{ key: 'ovhcloud' }],
           },
           otelSettings: {
             writeToken: 'write-token',
@@ -183,6 +192,7 @@ class TestKeysDB extends KeysDbD1 {
             anthropic: [{ key: 'anthropic' }],
             converse: [{ key: 'bedrock' }],
             gemini: [{ key: 'google-vertex' }],
+            ovhcloud: [{ key: 'ovhcloud' }],
           },
         }
       case 'tiny-limit':

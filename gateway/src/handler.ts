@@ -16,6 +16,7 @@ import { GoogleVertexProvider } from './providers/google'
 import { GroqProvider } from './providers/groq'
 import { HuggingFaceProvider } from './providers/huggingface'
 import { OpenAIProvider } from './providers/openai'
+import { OVHcloudProvider } from './providers/ovhcloud'
 import { TestProvider } from './providers/test'
 import { runAfter } from './utils'
 
@@ -69,6 +70,7 @@ export class RequestHandler {
       .with('anthropic', () => new AnthropicProvider(options))
       .with('bedrock', () => new BedrockProvider(options))
       .with('huggingface', () => new HuggingFaceProvider(options))
+      .with('ovhcloud', () => new OVHcloudProvider(options))
       .with('test', () => new TestProvider(options))
       .exhaustive()
   }

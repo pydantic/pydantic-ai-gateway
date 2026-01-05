@@ -4,6 +4,7 @@ import {
   gatewayFetch,
   type KeyStatus,
   KeysDbD1,
+  KVCacheStorage,
   LimitDbD1,
   type Middleware,
   type ProviderProxy,
@@ -43,6 +44,7 @@ export function buildGatewayEnv(
     proxyPrefixLength,
     proxyMiddlewares,
     rateLimiter,
+    cache: { storage: new KVCacheStorage(env.KV) },
   }
 }
 
@@ -55,6 +57,7 @@ export namespace IDS {
   export const keyTinyLimit = 6
   export const keyFallbackTest = 7
   export const keyFallbackAnthropicGoogleVertex = 8
+  export const keyCacheEnabled = 9
 }
 
 class TestKeysDB extends KeysDbD1 {
@@ -256,6 +259,23 @@ class TestKeysDB extends KeysDbD1 {
             },
           ],
           routingGroups: { anthropic: [{ key: 'anthropic' }, { key: 'google-vertex' }] },
+        }
+      case 'cache-enabled':
+        return {
+          id: IDS.keyCacheEnabled,
+          user: IDS.userDefault,
+          project: IDS.projectDefault,
+          org: IDS.orgDefault,
+          key,
+          status: 'active',
+          providers: this.allProviders,
+          routingGroups: { openai: [{ key: 'openai' }] },
+          cacheEnabled: true,
+          otelSettings: {
+            writeToken: 'write-token',
+            baseUrl: 'https://logfire.pydantic.dev',
+            exporterProtocol: 'http/json',
+          },
         }
       default:
         return null

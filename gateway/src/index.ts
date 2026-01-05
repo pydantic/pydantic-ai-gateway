@@ -18,6 +18,7 @@ import logfire from 'logfire'
 import type { KeysDb, LimitDb } from './db'
 import { gateway } from './gateway'
 import type { Middleware, Next } from './handler'
+import type { CacheStorage as GatewayCacheStorage } from './middleware/storage'
 import type { RateLimiter } from './rateLimiter'
 import { refreshGenaiPrices } from './refreshGenaiPrices'
 import type { SubFetch } from './types'
@@ -27,6 +28,8 @@ export { changeProjectState as setProjectState, deleteApiKeyCache, setApiKeyCach
 export type { Middleware, Next }
 export * from './db'
 export type { RequestHandler } from './handler'
+export { CacheMiddleware, type CacheOptions } from './middleware/cache'
+export { type CachedResponse, type CacheStorage, KVCacheStorage } from './middleware/storage'
 export * from './rateLimiter'
 export * from './types'
 
@@ -42,6 +45,8 @@ export interface GatewayOptions {
   proxyPrefixLength?: number
   /** proxyMiddlewares: perform actions before and after the request is made to the providers */
   proxyMiddlewares?: Middleware[]
+  /** Cache configuration */
+  cache?: { storage: GatewayCacheStorage }
 }
 
 export async function gatewayFetch(

@@ -16,7 +16,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 import { env } from 'cloudflare:workers'
-import { type GatewayOptions, gatewayFetch, LimitDbD1 } from '@pydantic/ai-gateway'
+import { type GatewayOptions, gatewayFetch, KVCacheStorage, LimitDbD1 } from '@pydantic/ai-gateway'
 import { instrument } from '@pydantic/logfire-cf-workers'
 import logfire from 'logfire'
 import { config } from './config'
@@ -40,6 +40,7 @@ const handler = {
       kv: env.KV,
       kvVersion: await hash(JSON.stringify(config)),
       subFetch: fetch,
+      cache: { storage: new KVCacheStorage(env.KV) },
     }
     try {
       return await gatewayFetch(request, url, ctx, gatewayEnv)

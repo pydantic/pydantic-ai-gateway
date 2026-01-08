@@ -1,16 +1,15 @@
 import { env } from 'cloudflare:test'
 import { KVCacheAdapter, RedisCacheAdapter, type RedisClient } from '@pydantic/ai-gateway'
+import type { Redis as IORedisClient } from 'ioredis'
 import { afterAll, beforeAll, describe, expect, it } from 'vitest'
-
-type Redis = any
 
 /**
  * Adapter to make ioredis compatible with our RedisClient interface
  */
 class IORedisAdapter implements RedisClient {
-  constructor(private readonly client: Redis) {}
+  constructor(private readonly client: IORedisClient) {}
 
-  async get(key: string): Promise<string | null> {
+  get(key: string): Promise<string | null> {
     return this.client.get(key)
   }
 
@@ -25,12 +24,12 @@ class IORedisAdapter implements RedisClient {
     return 'OK'
   }
 
-  async del(key: string): Promise<number> {
+  del(key: string): Promise<number> {
     return this.client.del(key)
   }
 }
 
-let ioredis: Redis | null = null
+let ioredis: IORedisClient | null = null
 let redis: RedisClient | null = null
 let redisAvailable = false
 
@@ -55,7 +54,9 @@ beforeAll(async () => {
     redisAvailable = true
     console.log('✓ Connected to Redis for testing')
   } catch (_error) {
-    console.warn('⚠ Redis not available, skipping Redis tests. Start Redis with: docker-compose -f docker-compose.test.yml up -d')
+    console.warn(
+      '⚠ Redis not available, skipping Redis tests. Start Redis with: docker-compose -f docker-compose.test.yml up -d',
+    )
     redisAvailable = false
     if (ioredis) {
       ioredis.disconnect()

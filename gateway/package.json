@@ -21,8 +21,10 @@
     "@anthropic-ai/sdk": "^0.62.0",
     "@aws-sdk/client-bedrock-runtime": "^3.906.0",
     "@google/genai": "^1.15.0",
+    "@types/ioredis": "^4.28.10",
     "@types/mime-types": "^3.0.1",
     "groq-sdk": "^0.30.0",
+    "ioredis": "^5.9.1",
     "openai": "^4.104.0"
   }
 }

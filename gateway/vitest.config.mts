@@ -40,6 +40,7 @@ export default defineWorkersConfig({
         ssr: {
           enabled: true,
           include: ['@pydantic/logfire-cf-workers', '@opentelemetry/resources', 'mime-types', 'mime-db'],
+          exclude: ['ioredis', '@ioredis/commands'],
         },
       },
     },

@@ -73,3 +73,37 @@ Once you're happy with the setup, you can deploy it to CloudFlare workers:
 - finally, deploy the worker with `npm run deploy`
 
 Whenever you make changes to the gateway config (`./deploy/src/config.ts`) you'll need to re-run `npm run deploy` to update the worker.
+
+## Development
+
+### Setup
+
+```bash
+# Install dependencies
+make install
+
+# Start required services (Redis + proxy-vcr)
+make services-up
+```
+
+### Running Tests
+
+```bash
+# Run all tests
+make test
+
+# Run only cache tests
+npm run test -- cache.spec.ts
+
+# View service logs
+make services-logs
+```
+
+### Stopping Services
+
+```bash
+# Stop all services
+make services-down
+```
+
+For more details on testing, see [gateway/test/README.md](gateway/test/README.md).

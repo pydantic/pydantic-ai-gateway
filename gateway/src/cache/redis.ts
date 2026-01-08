@@ -3,10 +3,6 @@ import type { CacheAdapter, CacheGetOptions, CacheGetWithMetadataResult, CachePu
 /**
  * Minimal Redis client interface required by the adapter.
  * This allows compatibility with various Redis clients (ioredis, node-redis, upstash, etc.)
- *
- * IMPORTANT: This adapter uses RedisJSON commands internally to store metadata.
- * Your Redis instance must have the RedisJSON module enabled.
- * The client must support JSON.GET and JSON.SET commands.
  */
 export interface RedisClient {
   get(key: string): Promise<string | null>

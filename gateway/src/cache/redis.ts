@@ -18,6 +18,15 @@ export interface RedisClient {
  * - Since Redis doesn't natively support metadata like KV, we store metadata
  *   as a separate key: `{originalKey}:metadata`
  * - This maintains compatibility with the cache invalidation strategy used in auth.ts
+ *
+ * ArrayBuffer Support:
+ * - The `get` method supports reading base64-encoded strings as ArrayBuffers
+ * - When using `put`, ArrayBuffer values must be pre-encoded to base64 strings
+ * - This is necessary because Redis stores string values, not binary data
+ *
+ * CacheTtl Option:
+ * - The `cacheTtl` option in CacheGetOptions is KV-specific for Cloudflare's edge caching
+ * - This option is ignored by the Redis adapter as it only affects KV behavior
  */
 export class RedisCacheAdapter implements CacheAdapter {
   private readonly redis: RedisClient
@@ -64,7 +73,7 @@ export class RedisCacheAdapter implements CacheAdapter {
     // Fetch both value and metadata in parallel
     const [value, metadata] = await Promise.all([this.get<T>(key, options), this.redis.get(`${key}:metadata`)])
 
-    return { value: value ?? undefined, metadata: metadata ? (metadata as M) : undefined }
+    return { value: value ?? undefined, metadata: (metadata ?? undefined) as M | undefined }
   }
 
   async put(key: string, value: string, options?: CachePutOptions): Promise<void> {

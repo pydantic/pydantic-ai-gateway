@@ -54,9 +54,7 @@ beforeAll(async () => {
     redisAvailable = true
     console.log('✓ Connected to Redis for testing')
   } catch (_error) {
-    console.warn(
-      '⚠ Redis not available, skipping Redis tests. Start Redis with: docker-compose -f docker-compose.test.yml up -d',
-    )
+    console.warn('⚠ Redis not available, skipping Redis tests. Start Redis with: docker-compose up -d')
     redisAvailable = false
     if (ioredis) {
       ioredis.disconnect()

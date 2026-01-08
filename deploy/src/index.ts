@@ -16,7 +16,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 import { env } from 'cloudflare:workers'
-import { type GatewayOptions, gatewayFetch, LimitDbD1 } from '@pydantic/ai-gateway'
+import { type GatewayOptions, gatewayFetch, KVCacheAdapter, LimitDbD1 } from '@pydantic/ai-gateway'
 import { instrument } from '@pydantic/logfire-cf-workers'
 import logfire from 'logfire'
 import { config } from './config'
@@ -37,7 +37,7 @@ const handler = {
       githubSha: env.GITHUB_SHA,
       keysDb: new ConfigDB(env.limitsDB),
       limitDb,
-      kv: env.KV,
+      cache: new KVCacheAdapter(env.KV),
       kvVersion: await hash(JSON.stringify(config)),
       subFetch: fetch,
     }

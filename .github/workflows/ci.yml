@@ -57,14 +57,14 @@ jobs:
       - run: npm run typegen
 
       - name: Start Redis and proxy-vcr services
-        run: docker-compose up -d --wait
+        run: docker compose up -d --wait
 
       - run: npm run test-gateway
       - run: npm run test-deploy
 
       - name: Stop services
         if: always()
-        run: docker-compose down
+        run: docker compose down
 
   # https://github.com/marketplace/actions/alls-green#why used for branch protection checks
   check:

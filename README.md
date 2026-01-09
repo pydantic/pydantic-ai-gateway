@@ -105,5 +105,3 @@ make services-logs
 # Stop all services
 make services-down
 ```
-
-For more details on testing, see [gateway/test/README.md](gateway/test/README.md).

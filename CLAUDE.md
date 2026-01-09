@@ -39,7 +39,13 @@ npm run typecheck         # Type-check all workspaces (uses tsgo)
 
 ### Testing
 
-To run tests you MUST have the VCR proxy running, run it with `make run-proxy-vcr` or ask the user to run it in a different terminal.
+To run tests, you need Redis and the VCR proxy running. Start them with:
+
+```bash
+docker-compose up -d
+```
+
+Then run tests:
 
 ```bash
 make test                 # Run all tests

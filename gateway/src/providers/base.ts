@@ -1,12 +1,13 @@
 import { findProvider, type Provider as UsageProvider } from '@pydantic/genai-prices'
 import type { ModelAPI } from '../api'
+import type { CacheAdapter } from '../cache'
 import type { ErrorResponse } from '../handler'
 import type { ProviderProxy, SubFetch } from '../types'
 
 export interface ProviderOptions {
   restOfPath: string
   providerProxy: ProviderProxy
-  kv: KVNamespace
+  cache: CacheAdapter
   subFetch: SubFetch
 }
 
@@ -21,13 +22,13 @@ export abstract class BaseProvider {
   readonly restOfPath: string
   readonly providerProxy: ProviderProxy
   readonly apiFlavor: string | undefined
-  readonly kv: KVNamespace
+  readonly cache: CacheAdapter
   readonly subFetch: SubFetch
 
   constructor(options: ProviderOptions) {
     this.restOfPath = options.restOfPath
     this.providerProxy = options.providerProxy
-    this.kv = options.kv
+    this.cache = options.cache
     this.subFetch = options.subFetch
     this.apiFlavor = this.initializeAPIFlavor()
   }

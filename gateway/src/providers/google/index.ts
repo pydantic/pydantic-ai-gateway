@@ -111,7 +111,7 @@ export class GoogleVertexProvider extends BaseProvider {
   }
 
   async authenticate(headers: Headers): Promise<ErrorResponse | null> {
-    const tokenResult = await authToken(this.providerProxy.credentials, this.kv, this.subFetch)
+    const tokenResult = await authToken(this.providerProxy.credentials, this.cache, this.subFetch)
     if ('error' in tokenResult) {
       return tokenResult
     }

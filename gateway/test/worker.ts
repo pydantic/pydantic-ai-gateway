@@ -3,14 +3,13 @@ import {
   type GatewayOptions,
   gatewayFetch,
   type KeyStatus,
-  KeysDbD1,
   KVCacheAdapter,
-  LimitDbD1,
   type Middleware,
   type ProviderProxy,
   type RateLimiter,
   type SubFetch,
 } from '@pydantic/ai-gateway'
+import { KeysDbD1, LimitDbD1 } from './db'
 
 export default {
   async fetch(request, env, ctx): Promise<Response> {

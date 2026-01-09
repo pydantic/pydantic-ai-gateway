@@ -1,15 +1,14 @@
+// Test-specific D1 database implementations
+import type { ApiKeyInfo, KeyLimitUpdate } from '@pydantic/ai-gateway'
 import {
-  type ApiKeyInfo,
   DISTANT_FUTURE,
   type EntityType,
   type ExceededScope,
   entityTypeLookup,
-  type KeyLimitUpdate,
   type KeyStatus,
   KeysDb,
   LimitDb,
   type LimitUpdate,
-  type ProviderProxy,
   reverseEntityTypeLookup,
   reverseScopeLookup,
   type Scope,
@@ -17,9 +16,7 @@ import {
   type SpendStatus,
   scopeLookup,
 } from '@pydantic/ai-gateway'
-import { config } from './config'
 
-// D1 implementations for Cloudflare Workers
 export class KeysDbD1 extends KeysDb {
   protected db: D1Database
 
@@ -214,79 +211,4 @@ export function dateAsInt(date: Date): number {
 
 export function intAsDate(days: number): Date {
   return new Date(days * MS_PER_DAY)
-}
-
-export class ConfigDB extends KeysDbD1 {
-  async getApiKey(key: string): Promise<ApiKeyInfo | null> {
-    const keyInfo = config.apiKeys[key]
-    if (!keyInfo) {
-      return null
-    }
-    const project = config.projects[keyInfo.project]!
-    const user = keyInfo.user ? project.users[keyInfo.user] : undefined
-
-    let providersWithKeys: (ProviderProxy & { key: string })[]
-    if (keyInfo.providers === '__all__') {
-      providersWithKeys = Object.entries(config.providers).map(([key, provider]) => ({ ...provider, key }))
-    } else {
-      providersWithKeys = keyInfo.providers.map((key) => ({ ...config.providers[key], key }))
-    }
-
-    // Transform routes/routingGroups to the ApiKeyInfo format
-    const routingGroups: Record<string, { key: string; priority?: number; weight?: number }[]> = {}
-
-    // First, use the new routingGroups if available
-    if (config.routingGroups) {
-      for (const [routeName, routeItems] of Object.entries(config.routingGroups)) {
-        routingGroups[routeName] = routeItems.map((item) => ({
-          key: item.key,
-          priority: item.priority,
-          weight: item.weight,
-        }))
-      }
-    }
-
-    // if keyInfo.id is unset, hash the API key to give something unique without explicitly using the key directly
-    const keyId = keyInfo.id
-
-    let status: KeyStatus = Date.now() < (keyInfo.expires ?? Infinity) ? 'active' : 'expired'
-    if (status === 'active') {
-      const dbStatus = await this.getDbKeyStatus(keyId)
-      if (dbStatus) {
-        status = dbStatus
-      }
-    }
-
-    return {
-      id: keyId,
-      user: keyInfo.user,
-      project: keyInfo.project,
-      // org doesn't really make sense for self-hosted deployments, so we just set it to 1
-      org: 'org1',
-      key,
-      status,
-      // key limits
-      keySpendingLimitDaily: keyInfo.spendingLimitDaily,
-      keySpendingLimitWeekly: keyInfo.spendingLimitWeekly,
-      keySpendingLimitMonthly: keyInfo.spendingLimitMonthly,
-      keySpendingLimitTotal: keyInfo.spendingLimitTotal,
-      // project limits
-      projectSpendingLimitDaily: project.spendingLimitDaily,
-      projectSpendingLimitWeekly: project.spendingLimitWeekly,
-      projectSpendingLimitMonthly: project.spendingLimitMonthly,
-      // user limits
-      userSpendingLimitDaily: user?.spendingLimitDaily,
-      userSpendingLimitWeekly: user?.spendingLimitWeekly,
-      userSpendingLimitMonthly: user?.spendingLimitMonthly,
-      providers: providersWithKeys,
-      routingGroups,
-      otelSettings: user?.otel ?? project.otel,
-    }
-  }
-}
-
-export async function hash(input: string): Promise<string> {
-  const hashBuffer = await crypto.subtle.digest('SHA-1', new TextEncoder().encode(input))
-  const hashArray = Array.from(new Uint8Array(hashBuffer))
-  return hashArray.map((byte) => byte.toString(16).padStart(2, '0')).join('')
 }

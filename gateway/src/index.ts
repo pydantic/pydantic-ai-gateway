@@ -15,6 +15,7 @@ You should have received a copy of the GNU Affero General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 import logfire from 'logfire'
+import type { CacheAdapter } from './cache'
 import type { KeysDb, LimitDb } from './db'
 import { gateway } from './gateway'
 import type { Middleware, Next } from './handler'
@@ -25,6 +26,7 @@ import { ctHeader, response405, runAfter, textResponse } from './utils'
 
 export { changeProjectState as setProjectState, deleteApiKeyCache, setApiKeyCache } from './auth'
 export type { Middleware, Next }
+export * from './cache'
 export * from './db'
 export type { RequestHandler } from './handler'
 export * from './rateLimiter'
@@ -35,7 +37,7 @@ export interface GatewayOptions {
   keysDb: KeysDb
   limitDb: LimitDb
   rateLimiter?: RateLimiter
-  kv: KVNamespace
+  cache: CacheAdapter
   kvVersion: string
   subFetch: SubFetch
   /** number of characters to strip from the beginning of the path */

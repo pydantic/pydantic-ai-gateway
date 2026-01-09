@@ -55,7 +55,7 @@ export class RequestHandler {
     this.provider = RequestHandler.getProvider({
       restOfPath: this.restOfPath,
       providerProxy: this.providerProxy,
-      kv: this.gatewayOptions.kv,
+      cache: this.gatewayOptions.cache,
       subFetch: this.gatewayOptions.subFetch,
     })
   }

@@ -1,0 +1,35 @@
+services:
+  redis:
+    image: redis:7-alpine
+    ports:
+      - '6379:6379'
+    command: redis-server --save "" --appendonly no
+    healthcheck:
+      test: ['CMD', 'redis-cli', 'ping']
+      interval: 1s
+      timeout: 3s
+      retries: 5
+
+  proxy-vcr:
+    image: ghcr.io/astral-sh/uv:python3.12-bookworm-slim
+    working_dir: /app
+    volumes:
+      - ./:/app
+      - uv-cache:/root/.cache/uv
+    ports:
+      - '8005:8005'
+    command: >
+      sh -c "
+        apt-get update -qq && apt-get install -y -qq curl > /dev/null &&
+        uv sync --frozen --package proxy-vcr &&
+        uv run --package proxy-vcr -m proxy_vcr.main
+      "
+    healthcheck:
+      test: ['CMD', 'curl', '-f', 'http://localhost:8005']
+      interval: 5s
+      timeout: 3s
+      retries: 10
+      start_period: 10s
+
+volumes:
+  uv-cache:

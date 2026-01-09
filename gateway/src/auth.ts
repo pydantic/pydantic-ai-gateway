@@ -22,14 +22,14 @@ export async function apiKeyAuth(
   }
 
   const cacheKey = apiKeyCacheKey(key, options.kvVersion)
-  const cacheResult = await options.kv.getWithMetadata<ApiKeyInfo, string>(cacheKey, { type: 'json' })
+  const cacheResult = await options.cache.getWithMetadata<ApiKeyInfo, string>(cacheKey, { type: 'json' })
   let rateLimiterStarted = false
 
   // if we have a cached api key, use that
   if (cacheResult?.value) {
     const apiKeyInfo = cacheResult.value
     const [projectState, limiterResult] = await Promise.all([
-      options.kv.get(projectStateCacheKey(apiKeyInfo.project, options.kvVersion)),
+      options.cache.get(projectStateCacheKey(apiKeyInfo.project, options.kvVersion)),
       rateLimiter.requestStart(apiKeyInfo),
     ])
     const limiterResponse = processLimiterResult(limiterResult)
@@ -61,13 +61,13 @@ export async function apiKeyAuth(
 
 export async function setApiKeyCache(
   apiKey: ApiKeyInfo,
-  options: Pick<GatewayOptions, 'kv' | 'kvVersion'>,
+  options: Pick<GatewayOptions, 'cache' | 'kvVersion'>,
   expirationTtl?: number,
 ) {
-  const projectState = await options.kv.get(projectStateCacheKey(apiKey.project, options.kvVersion))
+  const projectState = await options.cache.get(projectStateCacheKey(apiKey.project, options.kvVersion))
 
-  await options.kv.put(apiKeyCacheKey(apiKey.key, options.kvVersion), JSON.stringify(apiKey), {
-    metadata: projectState,
+  await options.cache.put(apiKeyCacheKey(apiKey.key, options.kvVersion), JSON.stringify(apiKey), {
+    metadata: projectState ?? undefined,
     // Note: 0 is a valid expirationTtl (for immediate cache expiry if, e.g., the user hits a limit at the end of an interval).
     // Do not use logical OR (||) for a fallback, as it would treat 0 as false and incorrectly default to CACHE_TTL,
     // potentially locking out the user much longer than intended.
@@ -77,14 +77,14 @@ export async function setApiKeyCache(
 
 export async function deleteApiKeyCache(
   apiKey: Pick<ApiKeyInfo, 'key'>,
-  options: Pick<GatewayOptions, 'kv' | 'kvVersion'>,
+  options: Pick<GatewayOptions, 'cache' | 'kvVersion'>,
 ) {
-  await options.kv.delete(apiKeyCacheKey(apiKey.key, options.kvVersion))
+  await options.cache.delete(apiKeyCacheKey(apiKey.key, options.kvVersion))
 }
 
-export async function changeProjectState(project: number, options: Pick<GatewayOptions, 'kv' | 'kvVersion'>) {
+export async function changeProjectState(project: number, options: Pick<GatewayOptions, 'cache' | 'kvVersion'>) {
   const cacheKey = projectStateCacheKey(project, options.kvVersion)
-  await options.kv.put(cacheKey, crypto.randomUUID(), { expirationTtl: CACHE_TTL })
+  await options.cache.put(cacheKey, crypto.randomUUID(), { expirationTtl: CACHE_TTL })
 }
 
 function getApiKey(request: Request): Response | string {

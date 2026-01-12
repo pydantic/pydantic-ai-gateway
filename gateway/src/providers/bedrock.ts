@@ -15,17 +15,17 @@ export class BedrockProvider extends BaseProvider {
         return this.replaceModel(requestBodyData.model)
       }
     } else {
-      // Try to extract model from URL path: model/{model}/(converse|invoke)
+      // Try to extract model from URL path: model/{model}/(converse|converse-stream|invoke|invoke-with-response-stream)
       // Need to decode the path because it may contain encoded characters like "%3A" (:)
       try {
         const decodedPath = decodeURIComponent(this.restOfPath)
-        const m = decodedPath.match(/model\/(.+?)\/(converse|invoke)/)
+        const m = decodedPath.match(/model\/(.+?)\/(converse|converse-stream|invoke|invoke-with-response-stream)/)
         if (m) {
           return m[1]
         }
       } catch {
         // If decoding fails, try without decoding
-        const m = this.restOfPath.match(/model\/(.+?)\/(converse|invoke)/)
+        const m = this.restOfPath.match(/model\/(.+?)\/(converse|converse-stream|invoke|invoke-with-response-stream)/)
         if (m) {
           return m[1]
         }
@@ -69,21 +69,21 @@ export class BedrockProvider extends BaseProvider {
     // Need to decode the path because it may contain encoded characters
     try {
       const decodedPath = decodeURIComponent(this.restOfPath)
-      const m = decodedPath.match(/model\/(.+?)\/(converse|invoke)/)
+      const m = decodedPath.match(/model\/(.+?)\/(converse|converse-stream|invoke|invoke-with-response-stream)/)
       if (m) {
         const api = m[2]
         const model = m[1]
-        if (api === 'invoke' && model?.startsWith('anthropic.')) {
+        if (api?.startsWith('invoke') && model?.startsWith('anthropic.')) {
           return 'anthropic'
         }
       }
     } catch {
       // If decoding fails, try without decoding
-      const m = this.restOfPath.match(/model\/(.+?)\/(converse|invoke)/)
+      const m = this.restOfPath.match(/model\/(.+?)\/(converse|converse-stream|invoke|invoke-with-response-stream)/)
       if (m) {
         const api = m[2]
         const model = m[1]
-        if (api === 'invoke' && model?.startsWith('anthropic.')) {
+        if (api?.startsWith('invoke') && model?.startsWith('anthropic.')) {
           return 'anthropic'
         }
       }
@@ -137,17 +137,18 @@ export class BedrockProvider extends BaseProvider {
       // Need to decode the path because it may contain encoded characters like "%3A" (:)
       let path: string | undefined
       let m: RegExpMatchArray | null = null
+      const apiPattern = /model\/(.+?)\/(converse|converse-stream|invoke|invoke-with-response-stream)/
       try {
         path = decodeURIComponent(this.restOfPath)
-        m = path.match(/model\/(.+?)\/(converse|invoke)/)
+        m = path.match(apiPattern)
       } catch {
         path = this.restOfPath
-        m = this.restOfPath.match(/model\/(.+?)\/(converse|invoke)/)
+        m = this.restOfPath.match(apiPattern)
       }
       if (m) {
         const model = m[1] && this.replaceModel(m[1])
         const api = m[2]
-        const newPath = path.replace(/model\/(.+?)\/(converse|invoke)/, `model/${model}/${api}`)
+        const newPath = path.replace(apiPattern, `model/${model}/${api}`)
         return `${this.providerProxy.baseUrl}/${newPath}`
       }
     }

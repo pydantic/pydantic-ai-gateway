@@ -445,7 +445,13 @@ export class RequestHandler {
         try {
           const message = codec.decode(buffer.subarray(0, messageLength))
           if (message.body?.length > 0) {
-            yield JSON.parse(atob(JSON.parse(decoder.decode(message.body)).bytes))
+            const bodyJson = JSON.parse(decoder.decode(message.body))
+            // Handle both formats: raw JSON (Converse API) and {"bytes": "base64-json"} (Invoke API)
+            if ('bytes' in bodyJson) {
+              yield JSON.parse(atob(bodyJson.bytes))
+            } else {
+              yield bodyJson
+            }
           }
           buffer = buffer.subarray(messageLength)
         } catch (error) {

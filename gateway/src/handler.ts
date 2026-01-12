@@ -270,6 +270,7 @@ export class RequestHandler {
         return { error: 'Unable to infer response model' }
       }
 
+      responseModel = this.provider.replaceModel(responseModel)
       const price = calcPrice(usage, responseModel, { provider: usageProvider })
       if (price) {
         return { responseBody, responseModel, usage, cost: price.total_price }

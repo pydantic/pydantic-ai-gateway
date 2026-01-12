@@ -77,7 +77,7 @@ export abstract class BaseProvider {
    * This is used by providers that need to transform model names
    * (e.g., Google Vertex transforms claude-sonnet-4-0 -> claude-sonnet-4).
    */
-  protected replaceModel(model: string): string {
+  replaceModel(model: string): string {
     const remappings = this.getModelNameRemappings()
     for (const { searchValue, replaceValue } of remappings) {
       const regexp = new RegExp(searchValue)

@@ -26,7 +26,7 @@ class Person(BaseModel, use_attribute_docstrings=True):
 
 
 person_agent = Agent(
-    'gateway/anthropic:claude-sonnet-4',
+    'gateway/anthropic:claude-opus-4-1-20250805',
     output_type=Person,
     instructions='Extract information about the person',
     model_settings=AnthropicModelSettings(max_tokens=1024),

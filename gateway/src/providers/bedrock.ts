@@ -12,7 +12,7 @@ export class BedrockProvider extends BaseProvider {
     // For v1/messages format, get model from body
     if (pathWithoutQuery === 'v1/messages') {
       if ('model' in requestBodyData && typeof requestBodyData.model === 'string') {
-        return requestBodyData.model
+        return this.replaceModel(requestBodyData.model)
       }
     } else {
       // Try to extract model from URL path: model/{model}/(converse|invoke)
@@ -158,6 +158,6 @@ export class BedrockProvider extends BaseProvider {
   }
 
   protected getModelNameRemappings(): { searchValue: string; replaceValue: string }[] {
-    return [{ searchValue: '^claude-(.*)$', replaceValue: 'anthropic.claude-$1-v1:0' }]
+    return [{ searchValue: '^claude-(.*)$', replaceValue: 'us.anthropic.claude-$1-v1:0' }]
   }
 }

@@ -80,19 +80,33 @@ export class AnthropicAPI extends BaseAPI<MessageCreateParams, BetaMessage, Beta
 
   chunkExtractors: ExtractorConfig<BetaRawMessageStreamEvent, ExtractedResponse> = {
     usage: (chunk: BetaRawMessageStreamEvent) => {
-      if ('usage' in chunk && chunk.usage) {
-        // Need to sum up usage instead of replacing it.
-        if (!('input_tokens' in chunk.usage)) {
-          // @ts-expect-error
-          chunk.usage.input_tokens = 0
-        }
-        if (this.extractedResponse.usage === undefined) {
-          this.extractedResponse.usage = this.extractUsage(chunk)
-        } else {
-          const extractedUsage = this.extractUsage(chunk)
-          if (extractedUsage !== undefined) {
-            this.extractedResponse.usage = sumUsage(this.extractedResponse.usage, extractedUsage)
+      if (this.providerId === 'bedrock') {
+        let usage: Usage | undefined
+        if ('usage' in chunk && chunk.usage) {
+          if (!('input_tokens' in chunk.usage)) {
+            // @ts-expect-error
+            chunk.usage.input_tokens = 0
           }
+          usage = this.extractUsage(chunk)
+        } else if ('message' in chunk && chunk.message.usage) {
+          if (!('input_tokens' in chunk.message.usage)) {
+            // @ts-expect-error
+            chunk.usage.input_tokens = 0
+          }
+          usage = this.extractUsage(chunk.message)
+        }
+
+        if (usage) {
+          // Need to sum up usage instead of replacing it.
+          if (this.extractedResponse.usage === undefined) {
+            this.extractedResponse.usage = usage
+          } else {
+            this.extractedResponse.usage = sumUsage(this.extractedResponse.usage, usage)
+          }
+        }
+      } else {
+        if ('usage' in chunk && chunk.usage) {
+          this.extractedResponse.usage = this.extractUsage(chunk)
         }
       }
     },

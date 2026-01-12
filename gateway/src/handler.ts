@@ -445,7 +445,7 @@ export class RequestHandler {
         try {
           const message = codec.decode(buffer.subarray(0, messageLength))
           if (message.body?.length > 0) {
-            yield JSON.parse(decoder.decode(message.body))
+            yield JSON.parse(atob(JSON.parse(decoder.decode(message.body)).bytes))
           }
           buffer = buffer.subarray(messageLength)
         } catch (error) {

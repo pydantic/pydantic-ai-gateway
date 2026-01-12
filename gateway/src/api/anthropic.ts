@@ -5,6 +5,7 @@ import type {
   BetaRawMessageStreamEvent,
   MessageCreateParams,
 } from '@anthropic-ai/sdk/resources/beta'
+import type { Usage } from '@pydantic/genai-prices'
 import type { InputMessages, JsonValue, MessagePart, OutputMessages, TextPart } from '../otel/genai'
 import { BaseAPI, type ExtractedRequest, type ExtractedResponse, type ExtractorConfig } from './base'
 
@@ -80,7 +81,19 @@ export class AnthropicAPI extends BaseAPI<MessageCreateParams, BetaMessage, Beta
   chunkExtractors: ExtractorConfig<BetaRawMessageStreamEvent, ExtractedResponse> = {
     usage: (chunk: BetaRawMessageStreamEvent) => {
       if ('usage' in chunk && chunk.usage) {
-        this.extractedResponse.usage = this.extractUsage(chunk)
+        // Need to sum up usage instead of replacing it.
+        if (!('input_tokens' in chunk.usage)) {
+          // @ts-expect-error
+          chunk.usage.input_tokens = 0
+        }
+        if (this.extractedResponse.usage === undefined) {
+          this.extractedResponse.usage = this.extractUsage(chunk)
+        } else {
+          const extractedUsage = this.extractUsage(chunk)
+          if (extractedUsage !== undefined) {
+            this.extractedResponse.usage = sumUsage(this.extractedResponse.usage, extractedUsage)
+          }
+        }
       }
     },
     responseModel: (chunk: BetaRawMessageStreamEvent) => {
@@ -146,4 +159,28 @@ function mapParts(content: string | BetaContentBlockParam[] | BetaContentBlock[]
     }
   }
   return parts
+}
+
+// TODO(Marcelo): Move this to genai-prices
+function sumUsage(u1: Usage, u2: Usage): Usage {
+  // Only add the field if values exist on either side.
+  const result: Usage = {}
+  const fields: (keyof Usage)[] = [
+    'input_tokens',
+    'output_tokens',
+    'cache_read_tokens',
+    'cache_write_tokens',
+    'input_audio_tokens',
+    'output_audio_tokens',
+    'cache_audio_read_tokens',
+  ]
+  for (const field of fields) {
+    const val1 = u1[field] ?? 0
+    const val2 = u2[field] ?? 0
+    const sum = val1 + val2
+    if (sum > 0) {
+      result[field] = sum
+    }
+  }
+  return result
 }

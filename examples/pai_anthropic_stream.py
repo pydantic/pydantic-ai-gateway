@@ -8,7 +8,7 @@ logfire.instrument_pydantic_ai()
 logfire.instrument_httpx(capture_all=True)
 
 person_agent = Agent(
-    'gateway/anthropic:claude-sonnet-4-0',
+    'gateway/anthropic:claude-haiku-4-5',
     instructions='You are a helpful assistant.',
     model_settings={'max_tokens': 1024},
     retries=0,

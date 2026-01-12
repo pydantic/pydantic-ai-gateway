@@ -106,15 +106,17 @@ export class BedrockProvider extends BaseProvider {
         modified.anthropic_version = 'bedrock-2023-05-31'
       }
 
+      let isStream: boolean | undefined
       // Remove stream field (Bedrock doesn't expect it)
       if ('stream' in modified) {
+        isStream = modified.stream === true
         delete modified.stream
       }
 
       // Remove model field (Bedrock doesn't expect it)
       delete modified.model
 
-      return { requestBodyText: JSON.stringify(modified), requestBodyData: modified }
+      return { requestBodyText: JSON.stringify(modified), requestBodyData: modified, isStream }
     }
 
     return extracted
@@ -122,16 +124,12 @@ export class BedrockProvider extends BaseProvider {
 
   url(extracted: ExtractedInfo, requestModel?: string): string {
     const pathWithoutQuery = this.restOfPath.split('?')[0]
-    const { requestBodyData } = extracted
 
     // Handle Anthropic client format: v1/messages
     if (pathWithoutQuery === 'v1/messages') {
       if (requestModel) {
-        const shouldStream = 'stream' in requestBodyData && requestBodyData.stream === true
         const model = this.replaceModel(requestModel)
-        console.log('model', model)
-        const path = `model/${model}/${shouldStream ? 'invoke-with-response-stream' : 'invoke'}`
-        console.log('path', path)
+        const path = `model/${model}/${extracted.isStream ? 'invoke-with-response-stream' : 'invoke'}`
         return `${this.providerProxy.baseUrl}/${path}`
       }
     } else {

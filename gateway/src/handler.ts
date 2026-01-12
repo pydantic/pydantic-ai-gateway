@@ -328,7 +328,12 @@ export class RequestHandler {
     let responseStream: ReadableStream
     if (responseHeaders.get('content-type')?.toLowerCase().startsWith('application/vnd.amazon.eventstream')) {
       events = this.parseAmazonEventStream(processingStream)
-      responseStream = this.convertAmazonEventStream(rawResponseStream)
+      // Only convert to SSE format when using Anthropic API through Bedrock
+      if (modelAPI.apiFlavor === 'anthropic') {
+        responseStream = this.convertAmazonEventStream(rawResponseStream)
+      } else {
+        responseStream = rawResponseStream
+      }
     } else {
       events = this.parseSSE(processingStream)
       responseStream = rawResponseStream

@@ -30,9 +30,17 @@ format-py: ## Format Python code
 	uv run ruff format
 	uv run ruff check --fix --fix-only
 
-.PHONY: run-proxy-vcr
-run-proxy-vcr: ## Start the proxy-vcr
-	uv run --package proxy-vcr -m proxy_vcr.main
+.PHONY: services-up
+services-up: ## Start Redis and proxy-vcr services via docker-compose
+	docker-compose up -d --wait
+
+.PHONY: services-down
+services-down: ## Stop Redis and proxy-vcr services
+	docker-compose down
+
+.PHONY: services-logs
+services-logs: ## Show logs from Redis and proxy-vcr services
+	docker-compose logs -f
 
 .PHONY: format
 format: format-ts format-py ## Format all code

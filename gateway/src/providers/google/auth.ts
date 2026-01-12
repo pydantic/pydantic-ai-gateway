@@ -1,13 +1,14 @@
+import type { CacheAdapter } from '../../cache'
 import type { ErrorResponse } from '../../handler'
 
 export async function authToken(
   credentials: string,
-  kv: KVNamespace,
+  cache: CacheAdapter,
   subFetch: typeof fetch,
 ): Promise<{ token: string } | ErrorResponse> {
   const serviceAccountHash = await hash(credentials)
   const cacheKey = `gcp-auth:${serviceAccountHash}`
-  const cachedToken = await kv.get(cacheKey, { cacheTtl: 300 })
+  const cachedToken = await cache.get(cacheKey, { cacheTtl: 300 })
   if (cachedToken) {
     return { token: cachedToken }
   }
@@ -20,7 +21,7 @@ export async function authToken(
   if ('error' in tokenResult) {
     return tokenResult
   }
-  await kv.put(cacheKey, tokenResult.token, { expirationTtl: 3000 })
+  await cache.put(cacheKey, tokenResult.token, { expirationTtl: 3000 })
   return tokenResult
 }
 

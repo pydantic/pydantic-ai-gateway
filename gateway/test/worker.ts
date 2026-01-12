@@ -3,13 +3,13 @@ import {
   type GatewayOptions,
   gatewayFetch,
   type KeyStatus,
-  KeysDbD1,
-  LimitDbD1,
+  KVCacheAdapter,
   type Middleware,
   type ProviderProxy,
   type RateLimiter,
   type SubFetch,
 } from '@pydantic/ai-gateway'
+import { KeysDbD1, LimitDbD1 } from './db'
 
 export default {
   async fetch(request, env, ctx): Promise<Response> {
@@ -37,7 +37,7 @@ export function buildGatewayEnv(
     githubSha: 'test',
     keysDb: new TestKeysDB(env, disableEvents),
     limitDb: new LimitDbD1(env.limitsDB),
-    kv: env.KV,
+    cache: new KVCacheAdapter(env.KV),
     kvVersion: 'test',
     subFetch,
     proxyPrefixLength,

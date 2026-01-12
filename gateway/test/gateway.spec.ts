@@ -1,8 +1,9 @@
 import { createExecutionContext, env, waitOnExecutionContext } from 'cloudflare:test'
-import { gatewayFetch, LimitDbD1, type Middleware, type Next, type SpendStatus } from '@pydantic/ai-gateway'
+import { gatewayFetch, type Middleware, type Next, type SpendStatus } from '@pydantic/ai-gateway'
 import OpenAI from 'openai'
 import { describe, expect, it } from 'vitest'
 import type { HandlerResponse, RequestHandler } from '../src/handler'
+import { LimitDbD1 } from './db'
 import { test } from './setup'
 import { buildGatewayEnv, type DisableEvent, IDS } from './worker'
 

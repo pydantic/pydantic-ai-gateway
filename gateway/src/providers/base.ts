@@ -15,6 +15,7 @@ export type JsonData = object
 export interface ExtractedInfo {
   requestBodyText: string
   requestBodyData: JsonData
+  isStream?: boolean
 }
 
 export abstract class BaseProvider {
@@ -33,9 +34,17 @@ export abstract class BaseProvider {
   }
 
   protected abstract initializeAPIFlavor(): string | undefined
+  protected abstract getModelAPI(extracted: ExtractedInfo): ModelAPI
   abstract getRequestModel(extracted: ExtractedInfo): string | undefined
-  abstract getModelAPI(extracted: ExtractedInfo): ModelAPI
   abstract authenticate(headers: Headers): Promise<ErrorResponse | null>
+
+  getModelAPIWithFlavor(extracted: ExtractedInfo): ModelAPI {
+    const modelAPI = this.getModelAPI(extracted)
+    if (this.apiFlavor) {
+      modelAPI.apiFlavor = this.apiFlavor
+    }
+    return modelAPI
+  }
 
   providerId(): string {
     return this.providerProxy.providerId

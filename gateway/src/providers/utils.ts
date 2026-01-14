@@ -11,7 +11,7 @@ export function safe<Args extends unknown[], T>(fn: Fn<Args, T>): Fn<Args, T> {
     try {
       return fn(...args)
     } catch (error) {
-      console.warn(`Error in ${fn.name}`, error)
+      console.error(`Error in ${fn.name}`, error)
       return undefined
     }
   }

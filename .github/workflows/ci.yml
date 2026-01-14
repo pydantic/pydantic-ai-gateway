@@ -6,7 +6,10 @@ on:
       - main
     tags:
       - "**"
-  pull_request: {}
+  pull_request:
+    branches:
+      - main
+      - bedrock-fix
 
 env:
   COLUMNS: 150

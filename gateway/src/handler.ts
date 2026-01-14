@@ -137,7 +137,8 @@ export class RequestHandler {
     // Validate that it's possible to calculate the price for the request model
     if (requestModel && this.providerProxy.disableKey && this.providerProxy.providerId !== 'huggingface') {
       const usageProvider = this.usageProvider()
-      const price = calcPrice({ input_tokens: 0, output_tokens: 0 }, requestModel, { provider: usageProvider })
+      const remappedModel = this.provider.replaceModel(requestModel)
+      const price = calcPrice({ input_tokens: 0, output_tokens: 0 }, remappedModel, { provider: usageProvider })
       if (!price) {
         return { modelNotFound: true, requestModel }
       }
@@ -171,10 +172,9 @@ export class RequestHandler {
       }
     }
 
-    const modelAPI = this.provider.getModelAPI(prepared)
+    const modelAPI = this.provider.getModelAPIWithFlavor(prepared)
 
-    const isStreaming = this.isStreaming(responseHeaders, requestBodyData)
-    if (isStreaming) {
+    if (this.isStreaming(responseHeaders, requestBodyData)) {
       return this.dispatchStreaming(extracted, response, responseHeaders, modelAPI, requestModel)
     }
 
@@ -323,13 +323,21 @@ export class RequestHandler {
     modelAPI.processRequest(requestBodyData)
 
     // Start consuming BOTH streams immediately to prevent tee() from buffering
-    const [responseStream, processingStream] = response.body.tee()
+    const [rawResponseStream, processingStream] = response.body.tee()
 
     let events: AsyncIterable<JsonData>
+    let responseStream: ReadableStream
     if (responseHeaders.get('content-type')?.toLowerCase().startsWith('application/vnd.amazon.eventstream')) {
       events = this.parseAmazonEventStream(processingStream)
+      // Only convert to SSE format when using Anthropic API through Bedrock
+      if (modelAPI.apiFlavor === 'anthropic') {
+        responseStream = this.convertAmazonEventStream(rawResponseStream)
+      } else {
+        responseStream = rawResponseStream
+      }
     } else {
       events = this.parseSSE(processingStream)
+      responseStream = rawResponseStream
     }
 
     // @ts-expect-error: TODO(Marcelo): Fix this type error.
@@ -381,7 +389,8 @@ export class RequestHandler {
       return { error: new Error(`Unable to calculate cost for model ${responseModel}`), disableKey: this.disableKey() }
     }
 
-    const price = calcPrice(usage, responseModel, { provider })
+    const remappedModel = this.provider.replaceModel(responseModel)
+    const price = calcPrice(usage, remappedModel, { provider })
     if (price) {
       return { cost: price.total_price }
     } else {
@@ -438,7 +447,13 @@ export class RequestHandler {
         try {
           const message = codec.decode(buffer.subarray(0, messageLength))
           if (message.body?.length > 0) {
-            yield JSON.parse(decoder.decode(message.body))
+            const bodyJson = JSON.parse(decoder.decode(message.body))
+            // Handle both formats: raw JSON (Converse API) and {"bytes": "base64-json"} (Invoke API)
+            if ('bytes' in bodyJson) {
+              yield JSON.parse(atob(bodyJson.bytes))
+            } else {
+              yield bodyJson
+            }
           }
           buffer = buffer.subarray(messageLength)
         } catch (error) {
@@ -447,6 +462,69 @@ export class RequestHandler {
         }
       }
     }
+  }
+
+  private convertAmazonEventStream(stream: ReadableStream<Uint8Array>): ReadableStream<Uint8Array> {
+    // Convert the amazon event stream to be API-compatible with Anthropic
+    const encoder = new TextEncoder()
+    const codec = new EventStreamCodec((str) => str, encoder.encode)
+    const decoder = new TextDecoder()
+    let buffer = new Uint8Array(0)
+    const reader = stream.getReader()
+
+    return new ReadableStream({
+      async pull(controller) {
+        try {
+          // Keep reading until we emit something or the stream ends
+          while (true) {
+            const { done, value: chunk } = await reader.read()
+
+            if (done) {
+              controller.close()
+              return
+            }
+
+            if (chunk) {
+              const combined = new Uint8Array(buffer.length + chunk.length)
+              combined.set(buffer, 0)
+              combined.set(chunk, buffer.length)
+              buffer = combined
+
+              let emitted = false
+              while (buffer.length >= 4) {
+                const messageLength = new DataView(buffer.buffer, buffer.byteOffset).getUint32(0, false)
+                if (buffer.length < messageLength) break
+
+                try {
+                  const message = codec.decode(buffer.subarray(0, messageLength))
+                  if (message.body?.length > 0) {
+                    const decoded = JSON.parse(decoder.decode(message.body))
+                    const payload = atob(decoded.bytes)
+                    const parsed = JSON.parse(payload)
+                    // Format as SSE with event type to match Anthropic API format
+                    const sseData = `event: ${parsed.type}\ndata: ${payload}\n\n`
+                    controller.enqueue(encoder.encode(sseData))
+                    emitted = true
+                  }
+                  buffer = buffer.subarray(messageLength)
+                } catch (error) {
+                  logfire.reportError('Error parsing Amazon EventStream', error as Error)
+                  break
+                }
+              }
+
+              // Only return once we've emitted data
+              if (emitted) return
+            }
+          }
+        } catch (error) {
+          controller.error(error)
+        }
+      },
+      cancel() {
+        reader.cancel()
+      },
+    })
   }
 }
 

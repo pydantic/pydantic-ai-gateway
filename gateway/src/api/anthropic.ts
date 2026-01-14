@@ -91,7 +91,7 @@ export class AnthropicAPI extends BaseAPI<MessageCreateParams, BetaMessage, Beta
         } else if ('message' in chunk && chunk.message.usage) {
           if (!('input_tokens' in chunk.message.usage)) {
             // @ts-expect-error
-            chunk.usage.input_tokens = 0
+            chunk.message.usage.input_tokens = 0
           }
           usage = this.extractUsage(chunk.message)
         }

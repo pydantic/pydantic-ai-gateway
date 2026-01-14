@@ -137,7 +137,8 @@ export class RequestHandler {
     // Validate that it's possible to calculate the price for the request model
     if (requestModel && this.providerProxy.disableKey && this.providerProxy.providerId !== 'huggingface') {
       const usageProvider = this.usageProvider()
-      const price = calcPrice({ input_tokens: 0, output_tokens: 0 }, requestModel, { provider: usageProvider })
+      const remappedModel = this.provider.replaceModel(requestModel)
+      const price = calcPrice({ input_tokens: 0, output_tokens: 0 }, remappedModel, { provider: usageProvider })
       if (!price) {
         return { modelNotFound: true, requestModel }
       }
@@ -388,7 +389,8 @@ export class RequestHandler {
       return { error: new Error(`Unable to calculate cost for model ${responseModel}`), disableKey: this.disableKey() }
     }
 
-    const price = calcPrice(usage, responseModel, { provider })
+    const remappedModel = this.provider.replaceModel(responseModel)
+    const price = calcPrice(usage, remappedModel, { provider })
     if (price) {
       return { cost: price.total_price }
     } else {

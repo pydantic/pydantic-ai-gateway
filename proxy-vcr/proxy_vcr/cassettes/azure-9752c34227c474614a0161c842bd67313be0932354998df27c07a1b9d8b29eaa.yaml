@@ -1,0 +1,40 @@
+interactions:
+- request:
+    body: '{"model":"claude-sonnet-4-20250514","max_tokens":1024,"top_p":0.95,"top_k":1,"temperature":0.5,"stop_sequences":["potato"],"system":"You
+      are a helpful assistant.","messages":[{"role":"user","content":"What is the
+      capital of France?"}]}'
+    headers:
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '235'
+      content-type:
+      - application/json
+      host:
+      - marcelo-0665-resource.openai.azure.com
+      user-agent:
+      - python-httpx/0.28.1
+    method: POST
+    uri: https://marcelo-0665-resource.openai.azure.com/anthropic/v1/messages
+  response:
+    body:
+      string: '{"error":{"code":"401","message":"Access denied due to invalid subscription
+        key or wrong API endpoint. Make sure to provide a valid key for an active
+        subscription and use a correct regional API endpoint for your resource."}}'
+    headers:
+      Content-Length:
+      - '224'
+      Content-Type:
+      - application/json
+      Date:
+      - Wed, 03 Dec 2025 12:57:22 GMT
+      apim-request-id:
+      - 04fea0f2-7241-45f9-9a1c-3fd7fe450be7
+    status:
+      code: 401
+      message: PermissionDenied
+version: 1

@@ -159,6 +159,8 @@ export class BedrockProvider extends BaseProvider {
 
   protected getModelNameRemappings(): { searchValue: string; replaceValue: string }[] {
     return [
+      { searchValue: '^claude-sonnet-4[-.]6$', replaceValue: 'us.anthropic.claude-sonnet-4-6-20260301-v1:0' },
+      { searchValue: '^claude-opus-4[-.]6$', replaceValue: 'us.anthropic.claude-opus-4-6-20260301-v1:0' },
       { searchValue: '^claude-sonnet-4[-.]5$', replaceValue: 'us.anthropic.claude-sonnet-4-5-20250929-v1:0' },
       { searchValue: '^claude-opus-4[-.]5$', replaceValue: 'us.anthropic.claude-opus-4-5-20251101-v1:0' },
       { searchValue: '^claude-opus-4[-.]1$', replaceValue: 'us.anthropic.claude-opus-4-1-20250805-v1:0' },
@@ -168,6 +170,8 @@ export class BedrockProvider extends BaseProvider {
       { searchValue: '^claude-sonnet-4$', replaceValue: 'us.anthropic.claude-sonnet-4-20250514-v1:0' },
       { searchValue: '^claude-opus-4$', replaceValue: 'us.anthropic.claude-opus-4-20250514-v1:0' },
       { searchValue: '^claude-haiku-3$', replaceValue: 'us.anthropic.claude-3-haiku-20240307-v1:0' },
+      { searchValue: '^claude-4[-.]6-sonnet$', replaceValue: 'us.anthropic.claude-sonnet-4-6-20260301-v1:0' },
+      { searchValue: '^claude-4[-.]6-opus$', replaceValue: 'us.anthropic.claude-opus-4-6-20260301-v1:0' },
       { searchValue: '^claude-4[-.]5-sonnet$', replaceValue: 'us.anthropic.claude-sonnet-4-5-20250929-v1:0' },
       { searchValue: '^claude-4[-.]5-opus$', replaceValue: 'us.anthropic.claude-opus-4-5-20251101-v1:0' },
       { searchValue: '^claude-4[-.]1-opus$', replaceValue: 'us.anthropic.claude-opus-4-1-20250805-v1:0' },

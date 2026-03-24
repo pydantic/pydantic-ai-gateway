@@ -86,6 +86,8 @@ export class GoogleVertexProvider extends BaseProvider {
       { searchValue: '^claude-3-5-haiku.*$', replaceValue: 'claude-3-5-haiku' },
       { searchValue: '^claude-3-haiku.*$', replaceValue: 'claude-3-haiku' },
       { searchValue: '^claude-haiku-4-5.*$', replaceValue: 'claude-haiku-4-5' },
+      { searchValue: '^claude-sonnet-4-6.*$', replaceValue: 'claude-sonnet-4-6' },
+      { searchValue: '^claude-opus-4-6.*$', replaceValue: 'claude-opus-4-6' },
       { searchValue: '^claude-opus-4-1.*$', replaceValue: 'claude-opus-4-1' },
       { searchValue: '^claude-opus-4.*$', replaceValue: 'claude-opus-4-1' },
       { searchValue: '^claude-sonnet-4-0.*$', replaceValue: 'claude-sonnet-4' },

@@ -224,6 +224,7 @@ exports[`bedrock > bedrock/stream > span 1`] = `
     "attributes": {
       "gen_ai.operation.name": "chat",
       "gen_ai.request.model": "amazon.nova-premier-v1:0",
+      "gen_ai.response.model": "amazon.nova-micro-v1:0",
       "gen_ai.system": "bedrock",
       "gen_ai.usage.input_tokens": 13,
       "gen_ai.usage.output_tokens": 63,
@@ -234,7 +235,7 @@ exports[`bedrock > bedrock/stream > span 1`] = `
       "http.response.header.server": "uvicorn",
       "http.response.header.transfer-encoding": "chunked",
       "http.response.status_code": 200,
-      "logfire.json_schema": "{"type":"object","properties":{"gen_ai.system":{"type":"string"},"gen_ai.operation.name":{"type":"string"},"gen_ai.request.model":{"type":"string"},"gen_ai.usage.input_tokens":{"type":"number"},"gen_ai.usage.output_tokens":{"type":"number"},"http.request.method":{"type":"string"},"url.full":{"type":"string"},"http.request.header.content-type":{"type":"string"},"http.request.header.x-vcr-filename":{"type":"string"},"http.response.status_code":{"type":"number"},"http.response.header.content-type":{"type":"string"},"http.response.header.server":{"type":"string"},"http.response.header.transfer-encoding":{"type":"string"}}}",
+      "logfire.json_schema": "{"type":"object","properties":{"gen_ai.system":{"type":"string"},"gen_ai.operation.name":{"type":"string"},"gen_ai.request.model":{"type":"string"},"gen_ai.response.model":{"type":"string"},"gen_ai.usage.input_tokens":{"type":"number"},"gen_ai.usage.output_tokens":{"type":"number"},"http.request.method":{"type":"string"},"url.full":{"type":"string"},"http.request.header.content-type":{"type":"string"},"http.request.header.x-vcr-filename":{"type":"string"},"http.response.status_code":{"type":"number"},"http.response.header.content-type":{"type":"string"},"http.response.header.server":{"type":"string"},"http.response.header.transfer-encoding":{"type":"string"}}}",
       "logfire.level_num": 9,
       "logfire.msg": "chat amazon.nova-premier-v1:0",
       "url.full": "https://example.com/converse/model/amazon.nova-micro-v1%3A0/converse-stream",

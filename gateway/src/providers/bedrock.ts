@@ -37,19 +37,19 @@ export class BedrockProvider extends BaseProvider {
 
   getModelAPI(extracted: ExtractedInfo): ModelAPI {
     const pathWithoutQuery = this.restOfPath.split('?')[0]
+    const requestModel = this.getRequestModel(extracted)
 
     // Check if it's Anthropic format from path
     if (pathWithoutQuery === 'v1/messages') {
-      return new AnthropicAPI('bedrock')
+      return new AnthropicAPI('bedrock', requestModel)
     }
 
     // Check if model name indicates Anthropic
-    const requestModel = this.getRequestModel(extracted)
     if (requestModel?.startsWith('anthropic.')) {
-      return new AnthropicAPI('bedrock')
+      return new AnthropicAPI('bedrock', requestModel)
     }
 
-    return new ConverseAPI('bedrock')
+    return new ConverseAPI('bedrock', requestModel)
   }
 
   authenticate(headers: Headers): Promise<ErrorResponse | null> {

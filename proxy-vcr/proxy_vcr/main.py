@@ -22,7 +22,7 @@ ANTHROPIC_BASE_URL = 'https://api.anthropic.com'
 BEDROCK_BASE_URL = 'https://bedrock-runtime.us-east-1.amazonaws.com'
 GOOGLE_BASE_URL = 'https://aiplatform.googleapis.com'
 # The Azure URL is not a secret, we can commit it.
-AZURE_BASE_URL = 'https://marcelo-0665-resource.openai.azure.com/openai/v1'
+AZURE_BASE_URL = 'https://marcelo-0665-resource.openai.azure.com'
 HF_BASE_URL = 'https://router.huggingface.co/v1'
 OVHCLOUD_BASE_URL = 'https://oai.endpoints.kepler.ai.cloud.ovh.net/v1'
 

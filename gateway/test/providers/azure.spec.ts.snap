@@ -1,5 +1,116 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
+exports[`azure > anthropic > llm 1`] = `
+{
+  "content": [
+    {
+      "text": "The capital of France is Paris.",
+      "type": "text",
+    },
+  ],
+  "id": "msg_01Dk1uacDayZhr8zthkRovpM",
+  "model": "claude-sonnet-4-20250514",
+  "role": "assistant",
+  "stop_reason": "end_turn",
+  "stop_sequence": null,
+  "type": "message",
+  "usage": {
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 0,
+      "ephemeral_5m_input_tokens": 0,
+    },
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 0,
+    "input_tokens": 20,
+    "output_tokens": 10,
+    "pydantic_ai_gateway": {
+      "cost_estimate": 0.00020999999999999998,
+    },
+    "service_tier": "standard",
+  },
+}
+`;
+
+exports[`azure > anthropic > span 1`] = `
+[
+  {
+    "attributes": {
+      "gen_ai.input.messages": [
+        {
+          "parts": [
+            {
+              "content": "What is the capital of France?",
+              "type": "text",
+            },
+          ],
+          "role": "user",
+        },
+      ],
+      "gen_ai.operation.name": "chat",
+      "gen_ai.output.messages": [
+        {
+          "finish_reason": "end_turn",
+          "parts": [
+            {
+              "content": "The capital of France is Paris.",
+              "type": "text",
+            },
+          ],
+          "role": "assistant",
+        },
+      ],
+      "gen_ai.request.max_tokens": 1024,
+      "gen_ai.request.model": "claude-sonnet-4-20250514",
+      "gen_ai.request.seed": {},
+      "gen_ai.request.stop_sequences": [
+        "potato",
+      ],
+      "gen_ai.request.temperature": 0.5,
+      "gen_ai.request.top_k": 1,
+      "gen_ai.request.top_p": 0.95,
+      "gen_ai.response.finish_reasons": [
+        "end_turn",
+      ],
+      "gen_ai.response.id": "msg_01Dk1uacDayZhr8zthkRovpM",
+      "gen_ai.response.model": "claude-sonnet-4-20250514",
+      "gen_ai.system": "anthropic",
+      "gen_ai.system_instructions": [
+        {
+          "content": "You are a helpful assistant.",
+          "type": "text",
+        },
+      ],
+      "gen_ai.usage.cache_audio_read_tokens": {},
+      "gen_ai.usage.cache_read_tokens": 0,
+      "gen_ai.usage.cache_write_tokens": 0,
+      "gen_ai.usage.input_audio_tokens": {},
+      "gen_ai.usage.input_tokens": 20,
+      "gen_ai.usage.output_audio_tokens": {},
+      "gen_ai.usage.output_tokens": 10,
+      "http.request.body.text": "{"model":"claude-sonnet-4-20250514","max_tokens":1024,"top_p":0.95,"top_k":1,"temperature":0.5,"stop_sequences":["potato"],"system":"You are a helpful assistant.","messages":[{"role":"user","content":"What is the capital of France?"}]}",
+      "http.response.body.text": "{"model":"claude-sonnet-4-20250514","id":"msg_01Dk1uacDayZhr8zthkRovpM","type":"message","role":"assistant","content":[{"type":"text","text":"The capital of France is Paris."}],"stop_reason":"end_turn","stop_sequence":null,"usage":{"input_tokens":20,"cache_creation_input_tokens":0,"cache_read_input_tokens":0,"cache_creation":{"ephemeral_5m_input_tokens":0,"ephemeral_1h_input_tokens":0},"output_tokens":10,"service_tier":"standard","pydantic_ai_gateway":{"cost_estimate":0.00020999999999999998}}}",
+      "http.response.status_code": 200,
+      "logfire.json_schema": "{"type":"object","properties":{"gen_ai.operation.name":{"type":"string"},"gen_ai.request.model":{"type":"string"},"gen_ai.system":{"type":"string"},"gen_ai.request.max_tokens":{"type":"number"},"gen_ai.request.top_k":{"type":"number"},"gen_ai.request.top_p":{"type":"number"},"gen_ai.request.temperature":{"type":"number"},"gen_ai.request.stop_sequences":{},"gen_ai.request.seed":{},"gen_ai.response.finish_reasons":{},"gen_ai.response.id":{"type":"string"},"gen_ai.input.messages":{},"gen_ai.output.messages":{},"gen_ai.system_instructions":{},"http.response.status_code":{"type":"number"},"http.request.body.text":{"type":"string"},"http.response.body.text":{"type":"string"},"gen_ai.response.model":{"type":"string"},"gen_ai.usage.input_tokens":{"type":"number"},"gen_ai.usage.cache_read_tokens":{"type":"number"},"gen_ai.usage.cache_write_tokens":{"type":"number"},"gen_ai.usage.output_tokens":{"type":"number"},"gen_ai.usage.input_audio_tokens":{},"gen_ai.usage.cache_audio_read_tokens":{},"gen_ai.usage.output_audio_tokens":{}}}",
+      "logfire.level_num": 9,
+      "logfire.msg": "chat claude-sonnet-4-20250514",
+    },
+    "events": [],
+    "kind": 1,
+    "links": [],
+    "name": "chat claude-sonnet-4-20250514",
+    "parentSpanId": undefined,
+    "resource": {
+      "service.name": "PAIG",
+      "service.version": "test",
+    },
+    "scope": "pydantic-ai-gateway",
+    "status": {
+      "code": 1,
+    },
+  },
+]
+`;
+
 exports[`azure > chat > llm 1`] = `
 {
   "choices": [
